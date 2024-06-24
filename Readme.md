@@ -1,124 +1,36 @@
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-# Project Name
+## Getting Started
 
-## Description
-
-Description of your project. For example, "This is a web application built using React for the frontend, Django REST Framework for the backend, and PostgreSQL as the database."
-
-## Requirements
-
-Make sure you have the following software versions installed:
-
-- Node.js: ^18.18.0
-- npm: ^9.8.1
-- yarn: ^1.22.0 (optional)
-
-## Installation
-
-### Clone the repository
+First, run the development server:
 
 ```bash
-git clone https://gitlab.valuebridge.solutions/team-challenge/e-com/e-com-front.git
-cd e-com-front
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-### Install dependencies
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can use npm or yarn to install dependencies.
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-With npm:
-```bash
-npm install
-```
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-With yarn:
-```bash
-yarn install
-```
+## Learn More
 
-## Local Development
+To learn more about Next.js, take a look at the following resources:
 
-### Start the project
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-With npm:
-```bash
-npm start
-```
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-With yarn:
-```bash
-yarn start
-```
+## Deploy on Vercel
 
-The application will be running at [http://localhost:3000](http://localhost:3000).
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-### Build for production
-
-With npm:
-```bash
-npm run build
-```
-
-With yarn:
-```bash
-yarn build
-```
-
-The built project will be located in the `build` folder.
-
-## Production
-
-### Deploy to production server
-
-1. Make sure you have a web server (e.g., Nginx) set up to serve static files.
-2. Build the project for production (see above).
-3. Copy the contents of the `build` folder to your production server.
-
-Example Nginx configuration:
-```nginx
-server {
-    listen 80;
-    server_name yourdomain.com;
-
-    location / {
-        root /path/to/your/build;
-        try_files $uri /index.html;
-    }
-}
-```
-
-## Useful Commands
-
-### Testing
-
-With npm:
-```bash
-npm test
-```
-
-With yarn:
-```bash
-yarn test
-```
-
-### Linting
-
-With npm:
-```bash
-npm run lint
-```
-
-With yarn:
-```bash
-yarn lint
-```
-
-## Additional Resources
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [React Documentation](https://reactjs.org/docs/getting-started.html)
-- [Node.js Guide](https://nodejs.org/en/docs/)
-
-## Contact
-
-If you have any questions or suggestions, please contact[contact](alex.sanders@ukr.net).
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
