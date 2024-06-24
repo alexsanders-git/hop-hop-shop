@@ -1,0 +1,77 @@
+@import "src/styles/media.scss";
+
+.inputWrapper {
+	.button {
+		text-align: center;
+	}
+}
+
+.deliveryImages {
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 40px;
+	gap: 20px;
+
+	.deliveryImage {
+		cursor: pointer;
+	}
+
+	@media only screen and (max-width: $media-xxl) {
+		.deliveryImage {
+			object-fit: contain;
+			width: 70px;
+			height: 40px;
+		}
+	}
+	@media only screen and (max-width: $media-lg) {
+		margin-bottom: 16px;
+		gap: 16px;
+	}
+	@media only screen and (max-width: $media-sm) {
+		flex-wrap: wrap;
+		gap: 13px;
+		.deliveryImage {
+			object-fit: contain;
+			width: 60px;
+			height: 40px;
+		}
+	}
+}
+
+.inputContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+
+	.input:nth-child(1), .input:nth-child(3) {
+		margin-right: 20px;
+	}
+
+}
+
+.button {
+	width: 100%;
+}
+
+.readyData {
+	display: flex;
+}
+
+.userInfo {
+	width: 100%;
+	font-size: 24px;
+	font-weight: 300;
+	line-height: 36px;
+	display: flex;
+	flex-direction: column;
+}
+
+
+.imgWrapper {
+	cursor: pointer;
+
+	.img {
+		width: 32px;
+		height: 32px;
+	}
+}

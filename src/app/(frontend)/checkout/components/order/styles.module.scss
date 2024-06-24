@@ -1,0 +1,123 @@
+@import "src/styles/media.scss";
+
+.wrapper {
+	width: 100%;
+}
+
+.buttonWrapper {
+	display: flex;
+	justify-content: flex-end;
+	@media only screen and (max-width: $media-lg) {
+		display: none;
+	}
+}
+
+.button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 36px;
+	width: 182px;
+	height: 62px;
+	margin-bottom: 70px;
+	margin-top: 15px;
+}
+
+.container {
+	width: 100%;
+	border-bottom: 3px solid var(--primary-color);
+	@media only screen and (max-width: $media-lg) {
+		border-bottom: 2px solid var(--primary-color);
+	}
+}
+
+.title {
+	font-size: 38px;
+	font-weight: 300;
+	line-height: 42px;
+	margin-bottom: 32px;
+	@media only screen and (max-width: $media-xxl) {
+		font-size: 32px;
+		margin-bottom: 25px;
+	}
+	@media only screen and (max-width: $media-lg) {
+		font-size: 28px;
+		line-height: 32px;
+		margin-bottom: 16px;
+	}
+}
+
+
+.productWrapper {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 21px;
+	font-weight: 400;
+	line-height: 26px;
+	margin-bottom: 25px;
+	@media only screen and (max-width: $media-xxl) {
+		font-size: 16px;
+		margin-bottom: 20px;
+	}
+	@media only screen and (max-width: $media-lg) {
+		font-size: 16px;
+		line-height: 20px;
+		margin-bottom: 16px;
+	}
+
+	.productContainer {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: fit-content;
+		gap: 10px;
+	}
+
+	span {
+		display: block;
+	}
+}
+
+
+.productPaymentInfo {
+	width: 100%;
+	color: var(--primary-color);
+
+	@media only screen and (max-width: $media-lg) {
+		border-bottom: 2px solid var(--primary-color);
+		margin-bottom: 16px;
+	}
+
+	.Subtotal, .delivery, .discount, .discountAccept, .total {
+		font-size: 20px;
+		font-weight: 400;
+		line-height: 20px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin: 25px 0;
+		@media only screen and (max-width: $media-xxl) {
+			font-size: 16px;
+			margin: 20px 0;
+		}
+		@media only screen and (max-width: $media-lg) {
+			font-size: 16px;
+			line-height: 20px;
+			margin-bottom: 16px;
+		}
+	}
+
+	.total {
+		&:nth-last-child {
+			font-weight: 400;
+			font-size: 24px;
+
+			@media only screen and (max-width: $media-lg) {
+				font-size: 18px;
+				line-height: 16px;
+			}
+		}
+	}
+}

@@ -1,0 +1,208 @@
+@import "src/styles/media.scss";
+
+@mixin section-heading {
+	font-size: 64px;
+	line-height: 1.1;
+	margin-top: 20px;
+	margin-bottom: 20px;
+
+	@media (max-width: $media-lg) {
+		font-size: 45px;
+	}
+
+	@media (max-width: $media-sm) {
+		font-size: 36px;
+		margin-top: 4px;
+		margin-bottom: 4px;
+	}
+}
+
+@mixin footer-icons-state {
+	transition: all .4s ease;
+
+	&:hover {
+		background-color: #507178;
+
+		svg path {
+			fill: #F2DECD;
+		}
+	}
+
+	&:active {
+		background-color: #192C32;
+		border: 1px solid #F2DECD;
+
+		svg path {
+			fill: #F2DECD;
+		}
+	}
+
+	&:disabled {
+		background-color: #F2DECD;
+		border: 1px solid #507178;
+		box-shadow: 1px 1px 0 1px #507178;
+
+		svg path {
+			fill: #507178;
+		}
+	}
+
+}
+
+@mixin footer-links-states {
+	transition: all .4s ease;
+	&:hover {
+		color: #507178;
+	}
+
+	&:active {
+		color: #192C32;
+	}
+
+	&:disabled {
+		color: #B5C2C8;
+	}
+}
+
+@mixin header-links-states {
+	transition: all .4s ease;
+	&:hover {
+		color: #DFE7EB;
+		background-color: #507178;
+	}
+
+	&:active {
+		color: #F2DECD;
+		background-color: #192C32;
+	}
+
+	&:disabled {
+		background-color: #F2DECD;
+		color: #B5C2C8;
+	}
+}
+
+@mixin button-states-secondary {
+	transition: all .4s ease;
+	background-color: #F2DECD;
+
+	&:hover {
+		color: #507178;
+		background-color: #F2DECD;
+	}
+
+	&:active {
+		color: #DDE8E4;
+		background-color: #507178;
+	}
+
+	&:disabled {
+		color: #192C32;
+		background-color: #7A8E98;
+		opacity: 0.3;
+		pointer-events: none;
+
+	}
+}
+
+@mixin button-states-primary {
+	transition: all .4s ease;
+	background-color: #FFB63B;
+	color: #192C32;
+
+	&:hover {
+		color: #507178;
+		background-color: #FFB63B;
+	}
+
+	&:active {
+		color: #DDE8E4;
+		background-color: #507178;
+	}
+
+	&:disabled {
+		color: #192C32;
+		background-color: #507178;
+		opacity: 0.3;
+		pointer-events: none;
+	}
+}
+
+@mixin like-states {
+	transition: all .4s ease;
+	svg path {
+		fill: #F2DECD;
+		stroke: #192C32;
+	}
+
+	&:hover {
+		svg path {
+			fill: #F2DECD;
+			stroke: #507178;
+		}
+	}
+
+	&:active {
+		svg path {
+			fill: #FFB63B;
+			stroke: #192C32;
+		}
+	}
+
+	&:disabled {
+		svg path {
+			fill: #7A8E98;
+			stroke: #B5C2C8;
+		}
+
+		opacity: 0.3;
+	}
+}
+
+@mixin header-icons-state {
+	transition: all .4s ease;
+
+	&:hover {
+		svg path {
+			stroke: #507178;
+		}
+	}
+
+	&:active {
+		svg path {
+			stroke: #192C32;
+
+		}
+	}
+
+	&:disabled {
+		svg path {
+			stroke: #B5C2C8;
+		}
+
+		opacity: 0.3;
+	}
+}
+
+@mixin icon-cart-state {
+	transition: all .4s ease;
+	&:hover {
+		svg {
+			fill: #507178;
+		}
+	}
+
+	&:active {
+		svg {
+			fill: #192C32;
+		}
+	}
+
+	&:disabled {
+		svg {
+			fill: #B5C2C8;
+		}
+
+		opacity: 0.3;
+	}
+}

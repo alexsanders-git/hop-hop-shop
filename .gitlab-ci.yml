@@ -1,0 +1,103 @@
+image: docker:stable
+
+stages:
+  - build
+  - test
+  - deploy
+
+Build Dev:
+  stage: build
+  only:
+    - develop
+  before_script:
+    - echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL"
+    - echo "NEXTAUTH_URL=$NEXTAUTH_URL"
+    - echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET"
+    - echo "CORS_ALLOWED_ORIGINS=$CORS_ALLOWED_ORIGINS"
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:dev_latest || true
+    - |
+      docker build --cache-from $CI_REGISTRY_IMAGE:dev_latest \
+      --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH \
+      --tag $CI_REGISTRY_IMAGE:dev_latest \
+      --build-arg NEXT_PUBLIC_API_URL="$NEXT_PUBLIC_API_URL" \
+      --build-arg NEXTAUTH_URL="$NEXTAUTH_URL" \
+      --build-arg NEXTAUTH_SECRET="$NEXTAUTH_SECRET" \
+      --build-arg CORS_ALLOWED_ORIGINS="$CORS_ALLOWED_ORIGINS" .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
+    - docker push $CI_REGISTRY_IMAGE:dev_latest
+  environment:
+    name: dev
+
+Deploy Dev:
+  stage: deploy
+  variables:
+    FRONT_DEV_VERSION: dev_latest
+  only:
+    - develop
+  trigger: team-challenge/e-com/e-com-deployment
+  environment:
+    name: dev
+
+Build Stage:
+  stage: build
+  only:
+    - stage
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:stage_latest || true
+    - |
+      docker build --cache-from $CI_REGISTRY_IMAGE:stage_latest \
+      --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH \
+      --tag $CI_REGISTRY_IMAGE:stage_latest \
+      --build-arg NEXT_PUBLIC_API_URL="$NEXT_PUBLIC_API_URL" \
+      --build-arg NEXTAUTH_URL="$NEXTAUTH_URL" \
+      --build-arg NEXTAUTH_SECRET="$NEXTAUTH_SECRET" \
+      --build-arg CORS_ALLOWED_ORIGINS="$CORS_ALLOWED_ORIGINS" .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
+    - docker push $CI_REGISTRY_IMAGE:stage_latest
+  environment:
+    name: stage
+
+Deploy Stage:
+  stage: deploy
+  variables:
+    FRONT_STAGE_VERSION: stage_latest
+  only:
+    - stage
+  trigger: team-challenge/e-com/e-com-deployment
+  environment:
+    name: stage
+
+Build Prod:
+  stage: build
+  only:
+    - main
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:prod_latest || true
+    - |
+      docker build --cache-from $CI_REGISTRY_IMAGE:prod_latest \
+      --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH \
+      --tag $CI_REGISTRY_IMAGE:prod_latest \
+      --build-arg NEXT_PUBLIC_API_URL="$NEXT_PUBLIC_API_URL" \
+      --build-arg NEXTAUTH_URL="$NEXTAUTH_URL" \
+      --build-arg NEXTAUTH_SECRET="$NEXTAUTH_SECRET" \
+      --build-arg CORS_ALLOWED_ORIGINS="$CORS_ALLOWED_ORIGINS" .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
+    - docker push $CI_REGISTRY_IMAGE:prod_latest
+  environment:
+    name: prod
+
+Deploy Prod:
+  stage: deploy
+  variables:
+    FRONT_MAIN_VERSION: prod_latest
+  only:
+    - main
+  trigger: team-challenge/e-com/e-com-deployment
+  environment:
+    name: prod

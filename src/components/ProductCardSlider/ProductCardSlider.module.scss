@@ -1,0 +1,86 @@
+@import "src/styles/media.scss";
+
+
+.card {
+	position: relative;
+	border: 4px solid  var(--primary-color);
+	box-shadow: 4px 6px 0 4px  var(--primary-color);
+	border-radius: 24px;
+	width: 220px;
+	height: 320px;
+}
+
+.imgwrapper {
+	overflow: hidden;
+	border-radius: inherit;
+	
+	@media only screen and (max-width: $media-xs) {
+	}
+}
+
+.img {
+	border-radius: 18px;
+	background-color: var(--gray-color);
+}
+
+.details {
+	position: absolute;
+	left: 16px;
+	bottom: 16px;
+	display: flex;
+	align-items: flex-start;
+	flex-direction: column;
+	align-items: flex-start;
+	color: var(--white-color);
+	-webkit-text-stroke: 0.5px #000000;
+	text-shadow: 1px 1px 2px #000000; 
+	
+}
+
+.name {
+	font-weight: 700;
+	font-size: 16px;
+	line-height: 112%;
+	letter-spacing: -0.02em;
+	text-shadow: 1px 1px 2px #000000;
+	
+	
+
+	// @media only screen and (max-width: $media-xs) {
+	// 	font-size: 28px;
+	// }
+}
+
+.description {
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 114%;
+	letter-spacing: -0.02em;
+	text-shadow: 1px 1px 2px #000000;
+
+	// @media only screen and (max-width: $media-xs) {
+	// 	font-size: 16px;
+	// }
+}
+
+.pricetag {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.icon {
+	filter: drop-shadow(2px 2px 0 var(--primary-color));
+}
+
+.price {
+	position: absolute;
+	font-size: 18px;
+	line-height: 89%;
+	letter-spacing: -0.02em;
+	padding: 5px 10px;
+	font-weight: bold;
+}

@@ -1,0 +1,23 @@
+@import "src/styles/media.scss";
+@import "src/styles/mixins";
+
+.wrapper {
+	width: 100%;
+}
+
+.icons_item {
+	width: 32px;
+	height: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	@include icon-cart-state;
+	@media only screen and (max-width: $media-xl) {
+		width: 24px;
+		height: 24px;
+	}
+	@media only screen and (max-width: $media-xs) {
+		width: 24px;
+		height: 24px;
+	}
+}

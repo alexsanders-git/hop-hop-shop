@@ -1,0 +1,34 @@
+@import "src/styles/media.scss";
+
+.shoppingCart {
+display: flex;
+gap: 36px;
+flex-direction: column;
+width: 95%;
+
+
+@media only screen and (max-width: $media-lg){
+
+}
+
+@media only screen and (max-width: $media-md){
+width: 100%;
+}
+
+@media only screen and (max-width: $media-xs){
+    gap: 20px;
+}
+}
+
+.titleEmptyCart {
+    font-size: 64px;
+    margin: auto;
+
+    @media only screen and (max-width: $media-xl){
+        font-size: 50px;
+    }
+
+    @media only screen and (max-width: $media-md){
+        font-size: 44px;
+    }
+}

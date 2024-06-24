@@ -1,0 +1,37 @@
+@import "src/styles/media.scss";
+
+.button {
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 80px;
+	height: 80px;
+	padding: 16px;
+
+	@media only screen and (max-width: $media-xs) {
+		top: 8px;
+		right: 8px;
+		width: 48px;
+		height: 48px;
+		padding: 12px;
+	}
+}
+
+.buttonLikeOn{
+    padding: 14px;
+
+    @media only screen and (max-width: $media-xs){
+        padding: 10px;
+    }
+}
+
+.icon {
+    filter: drop-shadow(1px 1px 0 var(--black-color));
+}
+
+.iconOn {
+    filter: drop-shadow(1px 2px 0 #507178);
+}

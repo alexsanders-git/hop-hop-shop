@@ -1,0 +1,10 @@
+@import "src/styles/media.scss";
+@import "src/styles/mixins.scss";
+
+.section {
+	margin: 24px 0 80px 0;
+}
+
+.title {
+	@include section-heading;
+}
