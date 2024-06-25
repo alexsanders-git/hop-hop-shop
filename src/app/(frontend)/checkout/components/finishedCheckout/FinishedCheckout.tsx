@@ -3,10 +3,12 @@ import styles from './styles.module.scss';
 import Button from '@/components/Button/Button';
 import Checkbox from '@/sharedComponenst/checkbox/Checkbox';
 import Order from '@/app/(frontend)/checkout/components/order/Order';
+import { useState } from 'react';
 
 export interface InterfaceFinishedCheckout {}
 
 export default function FinishedCheckout(props: InterfaceFinishedCheckout) {
+  const [open, setOpen] = useState<boolean>(false);
   const {} = props;
   return (
     <div className={styles.container}>
@@ -14,6 +16,8 @@ export default function FinishedCheckout(props: InterfaceFinishedCheckout) {
         <Order />
       </div>
       <Checkbox
+        setIsChecked={setOpen}
+        isChecked={open}
         type={'square'}
         className={styles.checkbox}
         label={
@@ -21,7 +25,7 @@ export default function FinishedCheckout(props: InterfaceFinishedCheckout) {
           'and accept our policy.'
         }
       />
-      <Button className={styles.button} text={'Place order'} />
+      <Button disabled={!open} className={styles.button} text={'Place order'} />
     </div>
   );
 }

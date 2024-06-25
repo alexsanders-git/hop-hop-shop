@@ -1,0 +1,35 @@
+@import "src/styles/media.scss";
+
+.readyData {
+	display: flex;
+}
+
+.userInfo {
+	width: 100%;
+	font-size: 24px;
+	font-weight: 300;
+	line-height: 36px;
+	display: flex;
+	flex-direction: column;
+
+	@media only screen and (max-width: $media-lg) {
+		//width: fit-content;
+		font-size: 18px;
+		font-weight: 300;
+		line-height: 24px;
+	}
+}
+
+
+.imgWrapper {
+	cursor: pointer;
+
+	.img {
+		width: 32px;
+		height: 32px;
+		@media only screen and (max-width: $media-lg) {
+			width: 20px;
+			height: 20px;
+		}
+	}
+}

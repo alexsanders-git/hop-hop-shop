@@ -1,0 +1,111 @@
+@import "src/styles/media.scss";
+
+.creditCard {
+	width: 100%;
+	height: 320px;
+	border: 1px solid var(--primary-color);
+	box-shadow: 2px 2px 0 2px var(--primary-color);
+	border-radius: 26px;
+	padding: 32px;
+	background-color: #507178;
+	margin-bottom: 20px;
+	@media only screen and (max-width: $media-lg) {
+		padding: 24px;
+		margin-bottom: 16px;
+		height: 225px;
+	}
+}
+
+.cardName, .cardNumber, .expiryDate, .cvv {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 10px;
+	border-bottom: 2px solid #7A8E98;
+	color: #7A8E98;
+	@media only screen and (max-width: $media-lg) {
+		border-bottom: 1px solid #7A8E98;
+		margin-bottom: 5px;
+	}
+
+	span {
+		font-size: 21px;
+		font-weight: 400;
+		line-height: 26px;
+		margin-bottom: 10px;
+
+		@media only screen and (max-width: $media-lg) {
+			font-size: 16px;
+			line-height: 20px;
+		}
+	}
+}
+
+.cardName {
+	input {
+		font-size: 37px;
+		font-weight: 300;
+		line-height: 45px;
+		@media only screen and (max-width: $media-lg) {
+			font-size: 28px;
+			font-weight: 300;
+			line-height: 34px;
+		}
+	}
+}
+
+.cardNumber {
+
+	input {
+		font-size: 32px;
+		font-weight: 400;
+		line-height: 32px;
+		@media only screen and (max-width: $media-lg) {
+			font-size: 22px;
+			font-weight: 400;
+			line-height: 24px;
+			letter-spacing: 2px;
+		}
+	}
+}
+
+.expiryDate {
+	input {
+		font-size: 26px;
+		font-weight: 400;
+		line-height: 32px;
+		@media only screen and (max-width: $media-lg) {
+			font-size: 20px;
+			font-weight: 400;
+			line-height: 24px;
+		}
+	}
+
+
+}
+
+.cvv {
+	input {
+		font-size: 26px;
+		font-weight: 400;
+		line-height: 32px;
+		@media only screen and (max-width: $media-lg) {
+			font-size: 20px;
+			font-weight: 400;
+			line-height: 24px;
+		}
+	}
+}
+
+
+.creditCardWrapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+
+	.expiryDate, .cvv {
+		width: 100px;
+		@media only screen and (max-width: $media-lg) {
+			width: 70px;
+		}
+	}
+}

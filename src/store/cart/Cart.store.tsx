@@ -9,6 +9,8 @@ interface InterfaceProductExtended extends InterfaceProduct {
 
 interface InterfaceState {
   cart: InterfaceProductExtended[];
+  totalCardPrice: number;
+  discount: number;
 }
 
 interface InterfaceActions {
@@ -22,6 +24,8 @@ export const useCart = create<InterfaceState & InterfaceActions>()(
     persist(
       immer((set) => ({
         cart: [],
+        totalCardPrice: 0,
+        discount: 0,
         addToCart: (product) =>
           set((state) => {
             const existingProduct = state.cart.find((p) => p.id === product.id);

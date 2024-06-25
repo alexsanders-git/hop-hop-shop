@@ -4,14 +4,18 @@ import Button from '@/components/Button/Button';
 import { useCart } from '@/store/cart/Cart.store';
 import { londrinaSolid, robotoCondensed } from '@/styles/fonts/fonts';
 
-export interface InterfaceOrder {}
+import DiscountArrow from '../../../../../../public/payment/discountArrow.svg';
+import { useState } from 'react';
+import Input from '@/components/Input/Input';
 
-export default function Order(props: InterfaceOrder) {
-  const {} = props;
+export default function Order() {
   const cart = useCart((state) => state.cart);
+  const [open, setOpen] = useState<boolean>(false);
+
   const totalAmount = cart
     .reduce((total, product) => total + product.quantity * product.price, 0)
     .toFixed(2);
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.buttonWrapper}>
@@ -48,11 +52,33 @@ export default function Order(props: InterfaceOrder) {
         </div>
         <div className={styles.discount}>
           <span>Discount </span>
-          <span>$15</span>
+          {open && (
+            <input
+              type={'text'}
+              placeholder={'Enter code'}
+              className={`${styles.input}`}
+            />
+          )}
+          {!open && (
+            <span
+              onClick={() => setOpen(true)}
+              className={styles.discountWrite}
+            >
+              Enter Code
+              <DiscountArrow />
+            </span>
+          )}
         </div>
         <div className={styles.discountAccept}>
-          <span>Discount Block</span>
-          <span>$15</span>
+          <span>
+            Enter your magical promo code below and watch as your total goes
+            down faster than a cat chasing a laser pointer.
+          </span>
+          <input
+            type={'text'}
+            placeholder={'asdasdasdasd'}
+            className={`${styles.input} ${styles.inputSuccess}`}
+          />
         </div>
         <div className={styles.total}>
           <span>Total</span>
