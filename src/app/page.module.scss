@@ -64,7 +64,10 @@
 	line-height: 1.1;
 
 	@media only screen and (max-width: $media-sm) {
-		margin-bottom: 28px;
+		width: 100%;
+		max-width: 250px;
+		margin-bottom: 20px;
+		font-size: 20px;
 	}
 
 }
@@ -74,7 +77,8 @@
 	font-size: 20px;
 
 	@media only screen and (max-width: $media-sm) {
-		margin-bottom: 20px;
+		margin-bottom: 24px;
+		font-size: 16px;
 	}
 
 }
@@ -84,7 +88,7 @@
 	display: flex;
 	gap: 36px;
 
-	& > * {
+	&>* {
 		width: 100%;
 		max-width: calc(33.333% - 18px);
 	}

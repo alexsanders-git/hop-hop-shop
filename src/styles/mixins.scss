@@ -18,141 +18,148 @@
 }
 
 @mixin footer-icons-state {
-	transition: all .4s ease;
+	transition: var(--transition);
 
 	&:hover {
-		background-color: #507178;
+		background-color: var(--gray-color);
 
 		svg path {
-			fill: #F2DECD;
+			fill: var(--beige-color);
 		}
 	}
 
 	&:active {
-		background-color: #192C32;
-		border: 1px solid #F2DECD;
+		background-color: var(--primary-color);
+		border: 1px solid var(--beige-color);
 
 		svg path {
-			fill: #F2DECD;
+			fill: var(--beige-color);
 		}
 	}
 
 	&:disabled {
-		background-color: #F2DECD;
-		border: 1px solid #507178;
-		box-shadow: 1px 1px 0 1px #507178;
+		background-color: var(--beige-color);
+		border: 1px solid var(--gray-color);
+		box-shadow: 1px 1px 0 1px var(--gray-color);
 
 		svg path {
-			fill: #507178;
+			fill: var(--gray-color);
 		}
 	}
 
 }
 
 @mixin footer-links-states {
-	transition: all .4s ease;
+	transition: var(--transition);
+
 	&:hover {
-		color: #507178;
+		color: var(--gray-color);
 	}
 
 	&:active {
-		color: #192C32;
+		color: var(--primary-color);
 	}
 
 	&:disabled {
-		color: #B5C2C8;
+		color: var(--lightblue-color);
 	}
 }
 
 @mixin header-links-states {
-	transition: all .4s ease;
+	transition: var(--transition);
+
 	&:hover {
-		color: #DFE7EB;
-		background-color: #507178;
+		color: var(--white-color);
+		background-color: var(--gray-color);
 	}
 
 	&:active {
-		color: #F2DECD;
-		background-color: #192C32;
+		color: var(--beige-color);
+		background-color: var(--primary-color);
 	}
 
 	&:disabled {
-		background-color: #F2DECD;
-		color: #B5C2C8;
+		background-color: var(--beige-color);
+		color: var(--lightblue-color);
 	}
 }
 
 @mixin button-states-secondary {
-	transition: all .4s ease;
-	background-color: #F2DECD;
+	transition: var(--transition);
+	background-color: var(--beige-color);
 
 	&:hover {
-		color: #507178;
-		background-color: #F2DECD;
+		color: var(--gray-color);
+		background-color: var(--beige-color);
 	}
 
 	&:active {
-		color: #DDE8E4;
-		background-color: #507178;
+		color: var(--lightgreen-color);
+		background-color: var(--gray-color);
 	}
 
 	&:disabled {
-		color: #192C32;
+		color: var(--primary-color);
 		background-color: #7A8E98;
 		opacity: 0.3;
 		pointer-events: none;
-
 	}
 }
 
 @mixin button-states-primary {
-	transition: all .4s ease;
-	background-color: #FFB63B;
-	color: #192C32;
+	transition: var(--transition);
+	background-color: var(--yellow-color);
+	color: var(--primary-color);
+	box-shadow: 2px 2px 0 2px var(--primary-color);
 
 	&:hover {
-		color: #507178;
-		background-color: #FFB63B;
+		color: var(--gray-color);
+		border-color: var(--gray-color);
+		background-color: var(--yellow-color);
+		box-shadow: 2px 2px 0 2px var(--gray-color);
 	}
 
 	&:active {
-		color: #DDE8E4;
-		background-color: #507178;
+		color: var(--lightgreen-color);
+		border-color: var(--primary-color);
+		background-color: var(--gray-color);
+		box-shadow: 2px 2px 0 2px var(--primary-color);
 	}
 
 	&:disabled {
-		color: #192C32;
-		background-color: #507178;
+		color: var(--primary-color);
+		background-color: var(--gray-color);
 		opacity: 0.3;
 		pointer-events: none;
 	}
 }
 
 @mixin like-states {
-	transition: all .4s ease;
+	transition: var(--transition);
+
 	svg path {
-		fill: #F2DECD;
-		stroke: #192C32;
+		fill: var(--beige-color);
+		stroke: var(--primary-color);
 	}
 
 	&:hover {
 		svg path {
-			fill: #F2DECD;
-			stroke: #507178;
+			fill: var(--beige-color);
+			stroke: var(--gray-color);
 		}
 	}
 
 	&:active {
 		svg path {
-			fill: #FFB63B;
-			stroke: #192C32;
+			fill: var(--yellow-color);
+			stroke: var(--primary-color);
 		}
 	}
 
 	&:disabled {
 		svg path {
 			fill: #7A8E98;
-			stroke: #B5C2C8;
+			stroke: var(--lightblue-color);
 		}
 
 		opacity: 0.3;
@@ -160,24 +167,24 @@
 }
 
 @mixin header-icons-state {
-	transition: all .4s ease;
+	transition: var(--transition);
 
 	&:hover {
 		svg path {
-			stroke: #507178;
+			stroke: var(--gray-color);
 		}
 	}
 
 	&:active {
 		svg path {
-			stroke: #192C32;
+			stroke: var(--primary-color);
 
 		}
 	}
 
 	&:disabled {
 		svg path {
-			stroke: #B5C2C8;
+			stroke: var(--lightblue-color);
 		}
 
 		opacity: 0.3;
@@ -185,22 +192,23 @@
 }
 
 @mixin icon-cart-state {
-	transition: all .4s ease;
+	transition: var(--transition);
+
 	&:hover {
 		svg {
-			fill: #507178;
+			fill: var(--gray-color);
 		}
 	}
 
 	&:active {
 		svg {
-			fill: #192C32;
+			fill: var(--primary-color);
 		}
 	}
 
 	&:disabled {
 		svg {
-			fill: #B5C2C8;
+			fill: var(--lightblue-color);
 		}
 
 		opacity: 0.3;
