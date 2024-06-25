@@ -38,7 +38,7 @@ export default async function CategoryGrid() {
   });
 
   return (
-    <section>
+    <section id="category">
       <div className={styles.ribbonWrapper}>
         <Image
           layout="fill"

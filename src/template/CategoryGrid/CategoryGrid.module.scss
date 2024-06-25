@@ -87,8 +87,10 @@
 	bottom: 34px;
 	left: 50%;
 	transform: translateX(-50%);
+	width: 100%;
+	max-width: 220px;
 	padding: 8px 22px;
-	font-size: 45px;
+	font-size: 30px;
 	font-weight: 300;
 	color: var(--primary-color);
 	background: var(--beige-color);
@@ -98,17 +100,19 @@
 	text-align: center;
 
 	@media only screen and (max-width: $media-xxl) {
-		font-size: 35px;
+		font-size: 25px;
 		box-shadow: 2px 2px 0 2px var(--primary-color);
 	}
 
 	@media only screen and (max-width: $media-xl) {
-		font-size: 30px;
+		font-size: 20px;
+		max-width: 160px;
 	}
 
 	@media only screen and (max-width: $media-sm) {
 		padding: 4px 12px;
-		font-size: 24px;
+		font-size: 16px;
+		max-width: 132px;
 	}
 }
 
