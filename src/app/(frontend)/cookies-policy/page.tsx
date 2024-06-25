@@ -10,6 +10,9 @@ import styles from './page.module.scss';
 const data = {
   sections: [
     {
+      headline: 'Cookies Policy'
+    },
+    {
       title: 'Introduction',
       paragraphs: [
         'Welcome to “HopHopShop” ("we," "us," "our"). We are committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner. This Cookies Policy explains what cookies are, how we use them, and how you can manage your preferences regarding their use.'
@@ -100,6 +103,7 @@ export default function CookiesPolicy() {
         {data.sections.map((section, index) => (
           <ContentBlock
             key={index}
+            headline={section.headline}
             title={section.title}
             paragraphs={section.paragraphs}
             listItems={section.listItems}
