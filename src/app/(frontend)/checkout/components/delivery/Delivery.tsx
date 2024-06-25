@@ -12,6 +12,14 @@ import united from '../../../../../../public/delivery/united.png';
 import usp from '../../../../../../public/delivery/usp.png';
 import tnt from '../../../../../../public/delivery/tnt.png';
 import Image from 'next/image';
+import ReadyData from '@/app/(frontend)/checkout/components/readyData/ReadyData';
+import * as yup from 'yup';
+import {
+  cityValid,
+  emailValid,
+  nameValid,
+  postalCodeValid
+} from '@/validation/checkout/validation';
 
 export interface InterfaceDelivery {}
 
@@ -32,6 +40,14 @@ export default function Delivery(props: InterfaceDelivery) {
   return (
     <Formik
       innerRef={ref}
+      validationSchema={yup
+        .object({
+          country: cityValid,
+          city: cityValid,
+          address: cityValid,
+          postalCode: postalCodeValid
+        })
+        .required()}
       initialValues={{
         country: '',
         city: '',
@@ -43,82 +59,76 @@ export default function Delivery(props: InterfaceDelivery) {
         setOpened(true);
       }}
     >
-      <Form>
-        <Accordion title={'Delivery address'}>
-          {!opened && (
-            <div className={styles.inputWrapper}>
-              <div className={styles.deliveryImages}>
-                {deliveryImages.map((img, index) => (
-                  <Image
-                    className={styles.deliveryImage}
-                    key={index}
-                    width={104}
-                    height={56}
-                    src={img}
-                    alt="delivery-image"
+      {({ isValid, dirty }) => (
+        <Form>
+          <Accordion title={'Delivery address'}>
+            {!opened && (
+              <div className={styles.inputWrapper}>
+                <div className={styles.deliveryImages}>
+                  {deliveryImages.map((img, index) => (
+                    <Image
+                      className={styles.deliveryImage}
+                      key={index}
+                      width={104}
+                      height={56}
+                      src={img}
+                      alt="delivery-image"
+                    />
+                  ))}
+                </div>
+                <div className={styles.inputContainer}>
+                  <Input
+                    className={styles.input}
+                    title={'Country'}
+                    type={'text'}
+                    name={'country'}
+                    placeholder={'country'}
                   />
-                ))}
-              </div>
-              <div className={styles.inputContainer}>
-                <Input
-                  className={styles.input}
-                  title={'Country'}
-                  type={'text'}
-                  name={'country'}
-                  placeholder={'country'}
-                />
-                <Input
-                  className={styles.input}
-                  title={'City'}
-                  type={'text'}
-                  name={'city'}
-                  placeholder={'city'}
-                />
-              </div>
-              <div className={styles.inputContainer}>
-                <Input
-                  className={styles.input}
-                  title={'Address'}
-                  type={'text'}
-                  name={'address'}
-                  placeholder={'address'}
-                />
-                <Input
-                  className={styles.input}
-                  title={'Postal Code'}
-                  type={'text'}
-                  name={'postalCode'}
-                  placeholder={'postal code'}
+                  <Input
+                    className={styles.input}
+                    title={'City'}
+                    type={'text'}
+                    name={'city'}
+                    placeholder={'city'}
+                  />
+                </div>
+                <div className={styles.inputContainer}>
+                  <Input
+                    className={styles.input}
+                    title={'Address'}
+                    type={'text'}
+                    name={'address'}
+                    placeholder={'address'}
+                  />
+                  <Input
+                    className={styles.input}
+                    title={'Postal Code'}
+                    type={'text'}
+                    name={'postalCode'}
+                    placeholder={'postal code'}
+                  />
+                </div>
+                <Button
+                  className={styles.button}
+                  disabled={!(isValid && dirty)}
+                  style={'secondary'}
+                  text={'Next'}
+                  type="submit"
                 />
               </div>
-              <Button
-                className={styles.button}
-                onClick={() => {}}
-                disabled={false}
-                style={'secondary'}
-                text={'Next'}
-                type="submit"
+            )}
+            {opened && (
+              <ReadyData
+                firstText={ref?.current?.values.country}
+                secondText={ref?.current?.values.city}
+                thirdText={ref?.current?.values.address}
+                fourText={ref?.current?.values.postalCode}
+                setOpened={() => setOpened(!opened)}
               />
-            </div>
-          )}
-          {opened && (
-            <div className={styles.readyData}>
-              <div className={styles.userInfo}>
-                <span>{ref?.current?.values.country}</span>
-                <span>{ref?.current?.values.city}</span>
-                <span>{ref?.current?.values.address}</span>
-                <span>{ref?.current?.values.postalCode}</span>
-              </div>
-              <div
-                onClick={() => setOpened(!opened)}
-                className={styles.imgWrapper}
-              >
-                <PencilIcon className={styles.img} />
-              </div>
-            </div>
-          )}
-        </Accordion>
-      </Form>
+            )}
+          </Accordion>
+        </Form>
+      )}
     </Formik>
   );
 }
