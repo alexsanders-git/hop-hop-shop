@@ -42,6 +42,10 @@ export const getProductsByCategory = async (
   return await fetchData<IProduct[]>(`shop/products/?category=${id}`);
 };
 
+export const getLatestArrivalProducts = async (): Promise<IProduct[]> => {
+  return await fetchData<IProduct[]>('shop/products/latest_arrival/');
+};
+
 export const getPopularProducts = async (): Promise<IProduct[]> => {
   return await fetchData<IProduct[]>('shop/products/popular/');
 };
