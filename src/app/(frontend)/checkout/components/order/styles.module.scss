@@ -183,3 +183,10 @@
 	border: 2px solid var(--error-color);
 	box-shadow: 2px 2px 0 2px var(--error-color);
 }
+
+.rotate {
+	svg {
+
+		transform: rotate(180deg);
+	}
+}

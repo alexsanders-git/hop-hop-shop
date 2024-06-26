@@ -18,7 +18,7 @@ export default function Accordion(props: InterfaceAccordion) {
         className={`${styles.head} ${active && styles.activeHead}`}
       >
         <span className={styles.title}>{title}</span>
-        <ArrowTop className={`${styles.img} ${active && styles.rotate}`} />
+        <ArrowTop className={`${styles.img} ${!active && styles.rotate}`} />
       </div>
       {active && <div className={styles.body}>{children}</div>}
     </div>

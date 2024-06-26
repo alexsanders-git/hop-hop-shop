@@ -52,34 +52,27 @@ export default function Order() {
         </div>
         <div className={styles.discount}>
           <span>Discount </span>
-          {open && (
+          <span
+            onClick={() => setOpen(!open)}
+            className={`${styles.discountWrite} ${!open && styles.rotate}`}
+          >
+            Enter Code
+            <DiscountArrow />
+          </span>
+        </div>
+        {open && (
+          <div className={styles.discountAccept}>
+            <span>
+              Enter your magical promo code below and watch as your total goes
+              down faster than a cat chasing a laser pointer.
+            </span>
             <input
               type={'text'}
               placeholder={'Enter code'}
               className={`${styles.input}`}
             />
-          )}
-          {!open && (
-            <span
-              onClick={() => setOpen(true)}
-              className={styles.discountWrite}
-            >
-              Enter Code
-              <DiscountArrow />
-            </span>
-          )}
-        </div>
-        <div className={styles.discountAccept}>
-          <span>
-            Enter your magical promo code below and watch as your total goes
-            down faster than a cat chasing a laser pointer.
-          </span>
-          <input
-            type={'text'}
-            placeholder={'asdasdasdasd'}
-            className={`${styles.input} ${styles.inputSuccess}`}
-          />
-        </div>
+          </div>
+        )}
         <div className={styles.total}>
           <span>Total</span>
           <span className={londrinaSolid.className}>$15</span>
