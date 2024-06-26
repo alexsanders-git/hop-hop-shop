@@ -2,6 +2,8 @@
 @import "src/styles/mixins.scss";
 
 .likeImage {
+	display: grid;
+	place-content: center;
 	height: 34px;
 	width: 34px;
 	@include like-states;

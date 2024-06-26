@@ -19,7 +19,7 @@ export default function Order() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.buttonWrapper}>
-        <Button className={styles.button} text={'Log in'} />
+        <Button className={styles.buttonOrange} text={'Log in'} />
       </div>
       <div className={styles.container}>
         <h1 className={styles.title}>Your Order</h1>
