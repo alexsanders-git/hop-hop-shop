@@ -39,6 +39,10 @@
 	flex-direction: row;
 	justify-content: space-between;
 
+	.input {
+		margin-bottom: 30px;
+	}
+
 	.input:nth-child(1), .input:nth-child(3) {
 		margin-right: 20px;
 	}
