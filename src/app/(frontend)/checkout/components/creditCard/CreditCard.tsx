@@ -1,7 +1,7 @@
 import styles from './styles.module.scss';
 import { londrinaSolid, robotoCondensed } from '@/styles/fonts/fonts';
 
-export interface InterfaceCreditCard {
+export interface ICreditCard {
   setCardNumber: (value: string) => void;
   setCardName: (value: string) => void;
   setExpiryDate: (value: string) => void;
@@ -13,7 +13,7 @@ export interface InterfaceCreditCard {
   className: string;
 }
 
-function CreditCard(props: InterfaceCreditCard) {
+function CreditCard(props: ICreditCard) {
   const {
     setCardNumber,
     setCardName,

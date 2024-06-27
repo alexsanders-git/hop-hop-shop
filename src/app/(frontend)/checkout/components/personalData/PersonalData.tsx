@@ -15,9 +15,9 @@ import {
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import PhoneInputField from '@/sharedComponenst/phoneInputField/PhoneInputField';
 
-export interface InterfacePersonalData {}
+export interface IPersonalData {}
 
-export default function PersonalData(props: InterfacePersonalData) {
+export default function PersonalData(props: IPersonalData) {
   const {} = props;
   const [opened, setOpened] = useState(false);
   const ref = useRef<FormikProps<FormValues>>(null);

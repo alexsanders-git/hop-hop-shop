@@ -5,9 +5,9 @@ import Checkbox from '@/sharedComponenst/checkbox/Checkbox';
 import Order from '@/app/(frontend)/checkout/components/order/Order';
 import { useState } from 'react';
 
-export interface InterfaceFinishedCheckout {}
+export interface IFinishedCheckout {}
 
-export default function FinishedCheckout(props: InterfaceFinishedCheckout) {
+export default function FinishedCheckout(props: IFinishedCheckout) {
   const [open, setOpen] = useState<boolean>(false);
   const {} = props;
   return (

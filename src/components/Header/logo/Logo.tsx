@@ -4,11 +4,11 @@ import styles from './Logo.module.scss';
 import Link from 'next/link';
 import Image from 'next/image';
 
-interface InterfaceLogo {
+interface ILogo {
   isShow: boolean;
 }
 
-export default function Logo({ isShow }: InterfaceLogo) {
+export default function Logo({ isShow }: ILogo) {
   return (
     <div className={`${styles.wrapper} ${isShow ? styles.hidden : ''}`}>
       <Link href="/">

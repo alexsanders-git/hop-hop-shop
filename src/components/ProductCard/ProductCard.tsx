@@ -18,6 +18,7 @@ export default function ProductCard({
   price,
   images
 }: ProductCardProps) {
+  console.log('images: ', images);
   return (
     <div className={styles.card}>
       <AddToFavouriteButton />

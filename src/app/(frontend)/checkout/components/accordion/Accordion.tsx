@@ -3,12 +3,12 @@ import styles from './styles.module.scss';
 import { ReactNode, useState } from 'react';
 import ArrowTop from '../../../../../../public/arrowTop.svg';
 
-export interface InterfaceAccordion {
+export interface IAccordion {
   title: string;
   children: ReactNode;
 }
 
-export default function Accordion(props: InterfaceAccordion) {
+export default function Accordion(props: IAccordion) {
   const [active, setActive] = useState(false);
   const { title, children } = props;
   return (

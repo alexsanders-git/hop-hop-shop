@@ -16,7 +16,6 @@ type Props = {
 export default async function CategoryPage({ params: { id } }: Props) {
   const category = await getCategoriesById(id);
   const products = await getProductsByCategory(id);
-  console.log(products);
 
   if (!category) {
     notFound();

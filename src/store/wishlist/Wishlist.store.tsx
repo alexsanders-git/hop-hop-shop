@@ -1,17 +1,17 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import { InterfaceProduct } from '@/types/IProduct';
+import { IProduct } from '@/types/IProduct';
 
-interface InterfaceState {
-  likes: InterfaceProduct[];
+interface IState {
+  likes: IProduct[];
 }
 
-interface InterfaceActions {
-  toggleLike: (product: InterfaceProduct) => void;
+interface IActions {
+  toggleLike: (product: IProduct) => void;
 }
 
-export const useLike = create<InterfaceState & InterfaceActions>()(
+export const useLike = create<IState & IActions>()(
   devtools(
     persist(
       immer((set) => ({

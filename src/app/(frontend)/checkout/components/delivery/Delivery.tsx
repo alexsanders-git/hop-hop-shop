@@ -21,9 +21,9 @@ import {
   postalCodeValid
 } from '@/validation/checkout/validation';
 
-export interface InterfaceDelivery {}
+export interface IDelivery {}
 
-export default function Delivery(props: InterfaceDelivery) {
+export default function Delivery(props: IDelivery) {
   const {} = props;
   const [opened, setOpened] = useState(false);
   const ref = useRef<FormikProps<FormValues>>(null);

@@ -14,13 +14,3 @@ export interface IProduct {
   category: ICategory;
   images: ProductImage[];
 }
-export interface InterfaceProduct {
-  id: number;
-  name: string;
-  slug: string;
-  price: number;
-  SKU: number;
-  description: string;
-  category: ICategory;
-  images: ProductImage[];
-}

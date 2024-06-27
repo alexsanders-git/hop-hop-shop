@@ -3,9 +3,9 @@ import styles from './styles.module.scss';
 import { useCart } from '@/store/cart/Cart.store';
 import Button from '@/components/Button/Button';
 
-export interface InterfaceCheckoutHeader {}
+export interface ICheckoutHeader {}
 
-export default function CheckoutHeader(props: InterfaceCheckoutHeader) {
+export default function CheckoutHeader(props: ICheckoutHeader) {
   const {} = props;
   const cart = useCart((state) => state.cart);
   const totalAmount = cart

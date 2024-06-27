@@ -1,25 +1,25 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import { InterfaceProduct } from '@/types/IProduct';
+import { IProduct } from '@/types/IProduct';
 
-interface InterfaceProductExtended extends InterfaceProduct {
+interface IProductExtended extends IProduct {
   quantity: number;
 }
 
-interface InterfaceState {
-  cart: InterfaceProductExtended[];
+interface IState {
+  cart: IProductExtended[];
   totalCardPrice: number;
   discount: number;
 }
 
-interface InterfaceActions {
-  addToCart: (product: InterfaceProduct) => void;
+interface IActions {
+  addToCart: (product: IProduct) => void;
   decreaseQuantityInCart: (id: number) => void;
   resetCart: (id: number) => void;
 }
 
-export const useCart = create<InterfaceState & InterfaceActions>()(
+export const useCart = create<IState & IActions>()(
   devtools(
     persist(
       immer((set) => ({

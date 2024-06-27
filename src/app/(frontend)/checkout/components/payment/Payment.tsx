@@ -14,9 +14,9 @@ import Checkbox from '@/sharedComponenst/checkbox/Checkbox';
 import CreditCard from '@/app/(frontend)/checkout/components/creditCard/CreditCard';
 import ReadyData from '@/app/(frontend)/checkout/components/readyData/ReadyData';
 
-export interface InterfacePayment {}
+export interface IPayment {}
 
-export default function Payment(props: InterfacePayment) {
+export default function Payment(props: IPayment) {
   const [opened, setOpened] = useState(false);
   const [cardNumber, setCardNumber] = useState('');
   const [cardName, setCardName] = useState('');

@@ -1,7 +1,7 @@
 'use client';
 import styles from './page.module.scss';
 import { useParams } from 'next/navigation';
-import { InterfaceProduct } from '@/types/IProduct';
+import { IProduct } from '@/types/IProduct';
 import { useEffect, useRef, useState } from 'react';
 import { fetchDataProductPage } from '@/services/fetchData';
 import { robotoCondensed } from '@/styles/fonts/fonts';
@@ -23,7 +23,7 @@ import Loading from '@/sharedComponenst/loading/Loading';
 
 export default function CategoryPage() {
   const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState<InterfaceProduct | null>(null);
+  const [product, setProduct] = useState<IProduct | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const toggleLike = useLike((state) => state.toggleLike);

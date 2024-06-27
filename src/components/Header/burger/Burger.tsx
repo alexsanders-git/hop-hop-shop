@@ -5,12 +5,12 @@ import BurgerIcon from '../../../../public/headerImage/burger-menu.svg';
 import SearchBarWrapper from '@/components/Header/searchBarWrapper/SearchBarWrapper';
 import NavbarLinks from '@/components/Header/navbarLinks/NavbarLinks';
 
-export interface InterfaceBurger {
+export interface IBurger {
   isShow: boolean;
   setIsShow: (isShow: boolean) => void;
 }
 
-function Burger(props: InterfaceBurger, ref: Ref<HTMLDivElement>) {
+function Burger(props: IBurger, ref: Ref<HTMLDivElement>) {
   const { isShow, setIsShow } = props;
   const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState<boolean>(false);
 

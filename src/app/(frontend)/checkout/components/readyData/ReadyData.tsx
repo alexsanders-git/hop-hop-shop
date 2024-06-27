@@ -1,7 +1,7 @@
 import styles from './styles.module.scss';
 import Image from 'next/image';
 
-export interface InterfaceReadyData {
+export interface IReadyData {
   firstText?: string;
   secondText?: string;
   thirdText?: string;
@@ -10,7 +10,7 @@ export interface InterfaceReadyData {
   setOpened: () => void;
 }
 
-export default function ReadyData(props: InterfaceReadyData) {
+export default function ReadyData(props: IReadyData) {
   const { firstText, fourText, thirdText, secondText, fiveText, setOpened } =
     props;
   return (

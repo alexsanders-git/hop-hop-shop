@@ -1,7 +1,7 @@
 import styles from './styles.module.scss';
 import { useState } from 'react';
 
-export interface InterfaceCheckbox {
+export interface ICheckbox {
   label: string;
   type?: 'rounded' | 'square';
   className?: string;
@@ -9,7 +9,7 @@ export interface InterfaceCheckbox {
   setIsChecked: (isChecked: boolean) => void;
 }
 
-export default function Checkbox(props: InterfaceCheckbox) {
+export default function Checkbox(props: ICheckbox) {
   const {
     isChecked,
     setIsChecked,

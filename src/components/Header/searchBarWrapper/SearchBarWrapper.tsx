@@ -4,15 +4,12 @@ import styles from './SearchBarWrapper.module.scss';
 import SearchIcon from '../../../../public/headerImage/search.svg';
 import SearchBar from '@/components/SearchBar/SearchBar';
 
-export interface InterfaceSearchBarWrapper {
+export interface ISearchBarWrapper {
   isShow: boolean;
   setIsShow: (isShow: boolean) => void;
 }
 
-function SearchBarWrapper(
-  props: InterfaceSearchBarWrapper,
-  ref: Ref<HTMLDivElement>
-) {
+function SearchBarWrapper(props: ISearchBarWrapper, ref: Ref<HTMLDivElement>) {
   const { setIsShow, isShow } = props;
   return (
     <>
