@@ -7,7 +7,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 
 import ProductCardSlider from '../ProductCardSlider/ProductCardSlider';
-import { IProduct } from '@/types/IProduct';
 
 import IconArrow from './left.svg';
 
@@ -58,12 +57,11 @@ export default function ProductsSlider({ products }: IProductListProps) {
         modules={[FreeMode, Navigation, Thumbs]}
         className={styles.swiperContainer}
       >
-        {products.map(({ id, name, description, price, images }) => (
+        {products.map(({ id, name, price, images }) => (
           <SwiperSlide key={id} className={styles.swiperSlide}>
             <ProductCardSlider
               id={id}
               name={name}
-              description={description}
               price={price}
               images={images}
             />

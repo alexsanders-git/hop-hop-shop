@@ -2,29 +2,21 @@ import Image from 'next/image';
 
 import styles from './ProductCard.module.scss';
 import AddToFavouriteButton from '../AddToFavouriteButton/AddToFavouriteButton';
-import { ProductImage } from '@/types/IProduct';
 
-interface ProductCardProps {
+interface IProps {
   id: number;
   name: string;
-  description: string;
   price: number;
-  images: ProductImage[];
+  images: any;
 }
 
-export default function ProductCard({
-  name,
-  description,
-  price,
-  images
-}: ProductCardProps) {
-  console.log('images: ', images);
+export default function ProductCard({ name, price, images }: IProps) {
   return (
     <div className={styles.card}>
       <AddToFavouriteButton />
       <div className={styles.imgwrapper}>
         <Image
-          src={images[0].image}
+          src={images.image}
           width={357}
           height={378}
           alt="image"
@@ -36,7 +28,7 @@ export default function ProductCard({
           <h3 className={styles.name}>{name}</h3>
           <p className={styles.price}>{`$${price}`}</p>
         </div>
-        <p className={styles.description}>{description}</p>
+        {/* <p className={styles.description}>{description}</p> */}
       </div>
     </div>
   );

@@ -1,14 +1,13 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import { IProduct } from '@/types/IProduct';
 
 interface IState {
-  likes: IProduct[];
+  likes: IProduct[] | IProductDetails[];
 }
 
 interface IActions {
-  toggleLike: (product: IProduct) => void;
+  toggleLike: (product: IProduct | IProductDetails) => void;
 }
 
 export const useLike = create<IState & IActions>()(
@@ -22,7 +21,7 @@ export const useLike = create<IState & IActions>()(
               (p) => p.id === product.id
             );
             if (existingProductIndex === -1) {
-              state.likes.push(product);
+              // state.likes.push(product);
             } else {
               state.likes.splice(existingProductIndex, 1);
             }

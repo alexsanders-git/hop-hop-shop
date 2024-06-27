@@ -1,33 +1,24 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-import { ProductImage } from '@/types/IProduct';
-
 import PriceTagIcon from './price-tag.svg';
 
 import styles from './ProductCardSlider.module.scss';
 
-interface ProductCardSwiperProps {
+interface IProps {
   id: number;
   name: string;
-  description: string;
   price: number;
-  images: ProductImage[];
+  images?: IImage;
 }
 
-export default function ProductCardSlider({
-  id,
-  name,
-  description,
-  price,
-  images
-}: ProductCardSwiperProps) {
+export default function ProductCardSlider({ id, name, price, images }: IProps) {
   return (
     <div className={styles.card}>
       <Link href={`/product/${id}`}>
         <div className={styles.imgwrapper}>
           <Image
-            src={images[0]?.image}
+            src={images?.image || '/not-ready.svg'}
             layout="fill"
             alt="image"
             className={styles.img}
@@ -35,7 +26,7 @@ export default function ProductCardSlider({
         </div>
         <div className={styles.details}>
           <h3 className={styles.name}>{name}</h3>
-          <p className={styles.description}>{description}</p>
+          {/* <p className={styles.description}>{description}</p> */}
         </div>
         <div className={styles.pricetag}>
           <PriceTagIcon className={styles.icon} />

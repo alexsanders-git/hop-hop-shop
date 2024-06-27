@@ -33,7 +33,6 @@ export default async function CategoryPage({ params: { id } }: Props) {
                 <ProductCard
                   id={product.id}
                   name={product.name}
-                  description={product.description}
                   price={product.price}
                   images={product.images}
                 />

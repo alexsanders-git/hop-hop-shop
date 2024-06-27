@@ -5,9 +5,6 @@ import SectionContainer from '@/components/SectionContainer/SectionContainer';
 
 import { getCategories } from '@/services/fetchData';
 
-import { ICategory } from '@/types/ICategory';
-import { IPlaceholder } from '@/types/IPlaceholder';
-
 import styles from './CategoryGrid.module.scss';
 
 type CategoryOrPlaceholder = ICategory | IPlaceholder;

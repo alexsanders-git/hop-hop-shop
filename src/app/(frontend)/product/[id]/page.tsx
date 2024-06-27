@@ -1,7 +1,6 @@
 'use client';
 import styles from './page.module.scss';
 import { useParams } from 'next/navigation';
-import { IProduct } from '@/types/IProduct';
 import { useEffect, useRef, useState } from 'react';
 import { fetchDataProductPage } from '@/services/fetchData';
 import { robotoCondensed } from '@/styles/fonts/fonts';
@@ -23,7 +22,7 @@ import Loading from '@/sharedComponenst/loading/Loading';
 
 export default function CategoryPage() {
   const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState<IProduct | null>(null);
+  const [product, setProduct] = useState<IProductDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const toggleLike = useLike((state) => state.toggleLike);
@@ -33,12 +32,14 @@ export default function CategoryPage() {
 
   const wishListHandler = () => {
     if (product) {
-      toggleLike(product);
+      // toggleLike(product);
+      console.log('toggleLike:', product);
     }
   };
   const addToCartHandler = () => {
     if (product) {
-      addToCart(product);
+      // addToCart(product);
+      console.log('addToCart:', product);
     }
   };
   const handlePrev = () => {

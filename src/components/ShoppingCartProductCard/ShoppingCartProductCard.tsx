@@ -2,8 +2,6 @@ import React from 'react';
 
 import Image from 'next/image';
 
-import { IProduct } from '@/types/IProduct';
-
 import BasketIcon from './basket.svg';
 import MinusIcon from './minus.svg';
 import PlusIcon from './plus.svg';
@@ -31,7 +29,7 @@ export default function ShoppingCartProductCard({
     <div className={styles.cardWrp}>
       <div className={styles.imgWrp}>
         <Image
-          src={product?.images[0]?.image}
+          src={product?.images?.image}
           width={130}
           height={130}
           alt={product.name}

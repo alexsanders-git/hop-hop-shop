@@ -20,7 +20,7 @@ function NavbarIconsLinks() {
       <Link href="" className={styles.icons_item}>
         <LikeIcon />
       </Link>
-      <Link href="/shopping-cart" className={`${styles.iconCart}`}>
+      <Link href="/cart" className={`${styles.iconCart}`}>
         {cart.length > 0 && (
           <div className={styles.qty}>
             {cart.reduce((total, item) => total + item.quantity, 0)}

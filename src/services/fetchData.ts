@@ -1,6 +1,3 @@
-import { ICategory } from '@/types/ICategory';
-import { IProduct } from '@/types/IProduct';
-
 export async function fetchData<T>(endpoint: string): Promise<T> {
   const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -52,7 +49,7 @@ export const getPopularProducts = async (): Promise<IProduct[]> => {
 
 export const fetchDataProductPage = async (
   id: string
-): Promise<IProduct | null> => {
+): Promise<IProductDetails | null> => {
   try {
     const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -62,7 +59,7 @@ export const fetchDataProductPage = async (
     }
 
     const json = await res.json();
-    const product: IProduct = json.data;
+    const product: IProductDetails = json.data;
     return product;
   } catch (error) {
     console.error('Failed to fetch product data:', error);
