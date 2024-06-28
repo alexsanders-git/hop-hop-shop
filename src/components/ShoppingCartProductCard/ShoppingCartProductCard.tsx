@@ -39,23 +39,27 @@ export default function ShoppingCartProductCard({
       <div className={styles.detailsWrp}>
         <div className={styles.details_upperPart}>
           <div>
-            <h2
-              className={`${styles.productName} ${robotoCondensed.className}`}
+            <h2 className={styles.productName}>{product.name}</h2>
+            <p
+              className={`${styles.productDetails} ${robotoCondensed.className}`}
             >
-              {product.name}
-            </h2>
-            <p className={styles.productDetails}>Size: {product.name}</p>
-            <p className={styles.productDetails}>Color: {product.name}</p>
+              Size: {product.name}
+            </p>
+            <p
+              className={`${styles.productDetails} ${robotoCondensed.className}`}
+            >
+              Color: {product.name}
+            </p>
           </div>
           <button onClick={() => onRemove()} className={styles.buttonDelete}>
             <BasketIcon />
           </button>
         </div>
         <div className={styles.details_lowerPart}>
-          <p className={`${styles.price} ${robotoCondensed.className}`}>
-            ${product.price}
-          </p>
-          <div className={styles.quantity_controls}>
+          <p className={styles.price}>${product.price}</p>
+          <div
+            className={`${styles.quantity_controls} ${robotoCondensed.className}`}
+          >
             <button
               onClick={() => onDecrease()}
               className={styles.buttonIncrease}
