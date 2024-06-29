@@ -1,34 +1,63 @@
 import Image from 'next/image';
+import Link from 'next/link';
+
+import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './ProductCard.module.scss';
-import AddToFavouriteButton from '../AddToFavouriteButton/AddToFavouriteButton';
+import { isArrayOfImages } from '../../../utils/typeGuards';
 
 interface IProps {
-	id: number;
-	name: string;
-	price: number;
-	images: any;
+	product: IProduct;
+	showCategory?: boolean;
+	showButtons?: {
+		favorite?: boolean;
+		cart?: boolean;
+		checkout?: boolean;
+	};
 }
 
-export default function ProductCard({ name, price, images }: IProps) {
+export default function ProductCard({ product, showCategory }: IProps) {
+	const imagesArray: IImage[] = isArrayOfImages(product.images)
+		? product.images
+		: [product.images];
+
 	return (
 		<div className={styles.card}>
-			<AddToFavouriteButton />
-			<div className={styles.imgwrapper}>
-				<Image
-					src={images.image}
-					width={357}
-					height={378}
-					alt="image"
-					className={styles.img}
-				/>
+			<div className={styles.imageWrapper}>
+				<Link href={`/product/${product.id}`}>
+					<Image
+						src={imagesArray[0].image}
+						width={358}
+						height={380}
+						alt={product.name}
+						className={styles.image}
+					/>
+				</Link>
 			</div>
-			<div className={styles.details}>
-				<div className={styles.textwrp}>
-					<h3 className={styles.name}>{name}</h3>
-					<p className={styles.price}>{`$${price}`}</p>
+
+			<div className={styles.content}>
+				<div className={styles.details}>
+					<h3 className={styles.name}>
+						<Link
+							href={`/product/${product.id}`}
+							className={robotoCondensed.className}
+						>
+							{product.name}
+						</Link>
+					</h3>
+					<p className={styles.price}>{`$${product.price}`}</p>
 				</div>
-				{/* <p className={styles.description}>{description}</p> */}
+
+				{showCategory && (
+					<div className={styles.category}>
+						<Link
+							href={`/category/${product.category.id}`}
+							className={robotoCondensed.className}
+						>
+							{product.category.name}
+						</Link>
+					</div>
+				)}
 			</div>
 		</div>
 	);

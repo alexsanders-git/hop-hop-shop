@@ -29,12 +29,7 @@ export default async function CategoryPage({ params: { id } }: Props) {
 					{products.length > 0 ? (
 						products.map((product) => (
 							<div className={styles.product} key={product.id}>
-								<ProductCard
-									id={product.id}
-									name={product.name}
-									price={product.price}
-									images={product.images}
-								/>
+								<ProductCard product={product} showCategory={true} />
 							</div>
 						))
 					) : (
