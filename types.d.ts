@@ -27,11 +27,7 @@ interface IProduct {
 	price: number;
 	SKU: number;
 	category: ICategory;
-	images: any;
-}
-
-interface IProductDetails extends IProduct {
-	description: string;
-	attributes: IProductAttributes;
-	images: IImage[]; // for product details, images is an array
+	description?: string;
+	attributes?: IProductAttributes;
+	images: IImage | IImage[];
 }

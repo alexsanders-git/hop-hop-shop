@@ -49,7 +49,7 @@ export const getPopularProducts = async (): Promise<IProduct[]> => {
 
 export const fetchDataProductPage = async (
 	id: string,
-): Promise<IProductDetails | null> => {
+): Promise<IProduct | null> => {
 	try {
 		const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -59,7 +59,7 @@ export const fetchDataProductPage = async (
 		}
 
 		const json = await res.json();
-		const product: IProductDetails = json.data;
+		const product: IProduct = json.data;
 		return product;
 	} catch (error) {
 		console.error('Failed to fetch product data:', error);

@@ -3,11 +3,11 @@ import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 interface IState {
-	likes: IProduct[] | IProductDetails[];
+	likes: IProduct[];
 }
 
 interface IActions {
-	toggleLike: (product: IProduct | IProductDetails) => void;
+	toggleLike: (product: IProduct) => void;
 }
 
 export const useLike = create<IState & IActions>()(
