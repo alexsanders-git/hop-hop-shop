@@ -8,7 +8,6 @@
 	@media only screen and (max-width: $media-lg) {
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
 		margin-bottom: 35px;
 	}
 }
@@ -16,12 +15,15 @@
 .buttonWrapper {
 	display: none;
 	@media only screen and (max-width: $media-lg) {
-		display: block;
-		.button {
+		display: flex;
+		width: 100%;
+		height: 100%;
+		justify-content: flex-end;
+		.buttonHead {
+			padding: 10px 42px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			padding: 12px 50px;
 			font-size: 20px;
 		}
 	}
@@ -50,6 +52,7 @@
 	@media only screen and (max-width: $media-lg) {
 		font-size: 36px;
 		line-height: 38px;
+		margin-bottom: 15px;
 	}
 }
 
