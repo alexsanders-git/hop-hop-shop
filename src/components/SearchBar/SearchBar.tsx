@@ -8,6 +8,7 @@ import {
 	fetchSearchData,
 	ProductSearch,
 } from '@/services/search/search.service';
+import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import CloseIcon from './close.svg';
 import SearchIcon from './search.svg';
@@ -65,7 +66,7 @@ function SearchBar(props: SearchBarProps, ref: Ref<HTMLDivElement>) {
 				type="text"
 				value={query}
 				onChange={(e) => setQuery(e.target.value)}
-				className={`${styles.searchInput} ${query ? styles.searchInputWithQuery : ''}`}
+				className={`${styles.searchInput} ${robotoCondensed.className} ${query ? styles.searchInputWithQuery : ''}`}
 				placeholder="Search"
 			/>
 			{data.length > 0 && debouncedSearch.length > 0 && (

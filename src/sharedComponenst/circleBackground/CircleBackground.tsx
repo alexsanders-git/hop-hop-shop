@@ -1,9 +1,11 @@
+'use client';
+
 import { ReactNode } from 'react';
 
 import styles from './styles.module.scss';
 
 export interface ICircleBackground {
-	onclick: () => void;
+	onclick?: () => void;
 	className?: string;
 	children: ReactNode;
 }

@@ -26,6 +26,8 @@ export default function Payment(props: IPayment) {
 	const [cvv, setCvv] = useState('');
 	const deliveryImages = [applePay, googlePay, paypal, bitcoin];
 	const [isChecked, setIsChecked] = useState<'card' | 'online'>('card');
+	const disabledButton =
+		cardNumber !== '' && cardName !== '' && expiryDate !== '' && cvv !== '';
 
 	return (
 		<Accordion title={'Payment'}>
@@ -85,16 +87,9 @@ export default function Payment(props: IPayment) {
 					<Button
 						className={styles.button}
 						onClick={() => {
-							if (
-								cardNumber !== '' &&
-								cardName !== '' &&
-								expiryDate !== '' &&
-								cvv !== ''
-							) {
-								setOpened(true);
-							}
+							setOpened(true);
 						}}
-						disabled={false}
+						disabled={!disabledButton}
 						style={'secondary'}
 						text={'Next'}
 						type="submit"

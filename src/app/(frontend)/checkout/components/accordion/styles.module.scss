@@ -19,8 +19,7 @@
 	background-color: #DDE8E4;
 	transition: background-color 0.4s ease-in-out;
 	cursor: pointer;
-	@media only screen and (max-width: $media-lg) {
-	}
+
 
 	&:hover {
 		background-color: #7A8E98;
@@ -59,6 +58,7 @@
 	border-right: none;
 	border-left: none;
 	box-shadow: 2px 2px 0 2px var(--primary-color);
+	background-color: #B5C2C8;
 }
 
 .rotate {

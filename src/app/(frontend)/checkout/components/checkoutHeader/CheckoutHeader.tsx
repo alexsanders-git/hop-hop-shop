@@ -21,7 +21,7 @@ export default function CheckoutHeader(props: ICheckoutHeader) {
 				</span>
 			</div>
 			<div className={styles.buttonWrapper}>
-				<Button className={styles.button} text={'Log in'} />
+				<Button className={styles.buttonHead} text={'Log in'} />
 			</div>
 		</div>
 	);

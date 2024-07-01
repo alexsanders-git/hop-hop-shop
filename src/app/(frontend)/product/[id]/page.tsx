@@ -23,9 +23,9 @@ import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './page.module.scss';
 
-export default function CategoryPage() {
+export default function ProductPage() {
 	const { id } = useParams<{ id: string }>();
-	const [product, setProduct] = useState<IProductDetails | null>(null);
+	const [product, setProduct] = useState<IProduct | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 	const toggleLike = useLike((state) => state.toggleLike);
