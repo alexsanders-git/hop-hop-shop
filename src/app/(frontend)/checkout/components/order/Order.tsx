@@ -2,12 +2,11 @@
 import { useState } from 'react';
 
 import Button from '@/components/Button/Button';
-import Input from '@/components/Input/Input';
+import PromoCode from '@/components/promoCode/PromoCode';
 import { useCart } from '@/store/cart/Cart.store';
 import { londrinaSolid, robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './styles.module.scss';
-import DiscountArrow from '../../../../../../public/payment/discountArrow.svg';
 
 export default function Order() {
 	const cart = useCart((state) => state.cart);
@@ -51,29 +50,7 @@ export default function Order() {
 					<span>Delivery Fee</span>
 					<span>$15</span>
 				</div>
-				<div className={styles.discount}>
-					<span>Discount </span>
-					<span
-						onClick={() => setOpen(!open)}
-						className={`${styles.discountWrite} ${!open && styles.rotate}`}
-					>
-						Enter Code
-						<DiscountArrow />
-					</span>
-				</div>
-				{open && (
-					<div className={styles.discountAccept}>
-						<span>
-							Enter your magical promo code below and watch as your total goes
-							down faster than a cat chasing a laser pointer.
-						</span>
-						<input
-							type={'text'}
-							placeholder={'Enter code'}
-							className={`${styles.input}`}
-						/>
-					</div>
-				)}
+				<PromoCode open={open} setOpen={setOpen} />
 				<div className={styles.total}>
 					<span>Total</span>
 					<span className={londrinaSolid.className}>$15</span>
