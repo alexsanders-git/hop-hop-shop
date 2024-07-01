@@ -13,11 +13,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import Button from '@/components/Button/Button';
 import IconArrow from '@/components/ProductsSlider/left.svg';
+import { fetchAddItemToCart } from '@/services/cart/cart.service';
 import { fetchDataProductPage } from '@/services/fetchData';
 import CircleBackground from '@/sharedComponenst/circleBackground/CircleBackground';
 import Like from '@/sharedComponenst/like/Like';
 import Loading from '@/sharedComponenst/loading/Loading';
-import { useCart } from '@/store/cart/Cart.store';
 import { useLike } from '@/store/wishlist/Wishlist.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
@@ -29,7 +29,7 @@ export default function ProductPage() {
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 	const toggleLike = useLike((state) => state.toggleLike);
-	const addToCart = useCart((state) => state.addToCart);
+	// const addToCart = useCart((state) => state.addToCart);
 	const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
 	const swiperRef = useRef<SwiperClass | null>(null);
 
@@ -41,8 +41,7 @@ export default function ProductPage() {
 	};
 	const addToCartHandler = () => {
 		if (product) {
-			// addToCart(product);
-			console.log('addToCart:', product);
+			fetchAddItemToCart(product.id);
 		}
 	};
 	const handlePrev = () => {

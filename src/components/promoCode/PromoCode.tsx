@@ -2,10 +2,7 @@
 import { useEffect, useState } from 'react';
 
 import { useDebounce } from '@/hooks/useDebounce';
-import {
-	fetchCoupon,
-	InterfaceCouponResponse,
-} from '@/services/promocode/promocode.service';
+import { fetchCoupon } from '@/services/promocode/promocode.service';
 
 import styles from './styles.module.scss';
 import DiscountArrow from '../../../public/payment/discountArrow.svg';
@@ -19,7 +16,7 @@ export interface InterfacePromoCode {
 export default function PromoCode(props: InterfacePromoCode) {
 	const { setOpen, open, className = '' } = props;
 	const [value, setValue] = useState<string>('');
-	const [data, setData] = useState<InterfaceCouponResponse>();
+	const [data, setData] = useState<any>();
 	const debouncedValue = useDebounce(value, 700);
 
 	useEffect(() => {

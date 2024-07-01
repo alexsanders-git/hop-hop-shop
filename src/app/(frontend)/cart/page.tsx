@@ -1,19 +1,33 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import PromoCode from '@/components/promoCode/PromoCode';
 import ShoppingCart from '@/components/ShoppingCart/ShoppingCart';
+import { fetchCart } from '@/services/cart/cart.service';
 import { useCart } from '@/store/cart/Cart.store';
 
 import styles from './page.module.scss';
 
 export default function ShoppingCartPage() {
-	const cart = useCart((state) => state.cart);
-	const totalAmount = cart
-		.reduce((total, product) => total + product.quantity * product.price, 0)
-		.toFixed(2);
+	const totalPrice = useCart((state) => state.total_price);
+	const setCart = useCart((state) => state.setCart);
 
 	const [open, setOpen] = useState<boolean>(false);
+
+	useEffect(() => {
+		const fetchProduct = async () => {
+			try {
+				const res = await fetchCart();
+				if (res) {
+					setCart(res.data);
+				}
+			} catch (error) {
+				console.log('error: ', error);
+			}
+		};
+
+		fetchProduct();
+	}, []);
 
 	return (
 		<div className={styles.wrapper}>
@@ -26,7 +40,7 @@ export default function ShoppingCartPage() {
 					<div className={styles.totalWrp}>
 						<div className={styles.pricesWrp}>
 							<p>Subtotal </p>
-							<p>${totalAmount}</p>
+							<p>${totalPrice}</p>
 						</div>
 						<PromoCode
 							className={styles.discount}
@@ -35,7 +49,7 @@ export default function ShoppingCartPage() {
 						/>
 						<div className={`${styles.pricesWrp} ${styles.totalPriceWrp}`}>
 							<p>Total</p>
-							<p className={styles.totalPrice}>${totalAmount}</p>
+							<p className={styles.totalPrice}>${totalPrice}</p>
 						</div>
 					</div>
 					<button className={styles.buttonCheckout}>Checkout</button>

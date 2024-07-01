@@ -18,10 +18,8 @@ export const fetchCoupon = async (
 				code: coupon,
 			}),
 		});
-		console.log('Response status:', res.status);
-		console.log('Response headers:', res.headers);
 		const json = await res.json();
-
+		console.log(json);
 		return json.data;
 	} catch (error) {
 		console.error('Failed to fetch product data:', error);

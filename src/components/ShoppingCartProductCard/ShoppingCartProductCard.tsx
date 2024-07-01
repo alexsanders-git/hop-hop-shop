@@ -1,33 +1,39 @@
 import Image from 'next/image';
 import React from 'react';
 
+import { fetchAddItemToCart } from '@/services/cart/cart.service';
+import { InterfaceProductCart } from '@/store/cart/Cart.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import BasketIcon from './basket.svg';
 import MinusIcon from './minus.svg';
 import PlusIcon from './plus.svg';
 import styles from './ShoppingCartProductCart.module.scss';
+import { isArrayOfImages } from '../../../utils/typeGuards';
 
 interface ShoppingCartProductCardProps {
-	product: IProduct;
-	onIncrease: () => void;
-	onDecrease: () => void;
-	onRemove: () => void;
+	product: InterfaceProductCart;
+	// onIncrease: () => void;
+	// onDecrease: () => void;
+	// onRemove: () => void;
 	quantity: number;
 }
 
 export default function ShoppingCartProductCard({
 	product,
-	onIncrease,
-	onDecrease,
-	onRemove,
+	// onIncrease,
+	// onDecrease,
+	// onRemove,
 	quantity,
 }: ShoppingCartProductCardProps) {
+	const imagesArray: IImage[] = isArrayOfImages(product.images)
+		? product.images
+		: [product.images];
 	return (
 		<div className={styles.cardWrp}>
 			<div className={styles.imgWrp}>
 				<Image
-					src={product?.images?.image}
+					src={''}
 					width={130}
 					height={130}
 					alt={product.name}
@@ -49,7 +55,7 @@ export default function ShoppingCartProductCard({
 							Color: {product.name}
 						</p>
 					</div>
-					<button onClick={() => onRemove()} className={styles.buttonDelete}>
+					<button onClick={() => {}} className={styles.buttonDelete}>
 						<BasketIcon />
 					</button>
 				</div>
@@ -58,15 +64,14 @@ export default function ShoppingCartProductCard({
 					<div
 						className={`${styles.quantity_controls} ${robotoCondensed.className}`}
 					>
-						<button
-							onClick={() => onDecrease()}
-							className={styles.buttonIncrease}
-						>
+						<button onClick={() => {}} className={styles.buttonIncrease}>
 							<MinusIcon />
 						</button>
 						<span>{quantity}</span>
 						<button
-							onClick={() => onIncrease()}
+							onClick={() => {
+								fetchAddItemToCart(product.id);
+							}}
 							className={styles.buttonIncrease}
 						>
 							<PlusIcon />

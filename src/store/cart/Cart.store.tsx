@@ -2,50 +2,63 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-interface IProductExtended extends IProduct {
+interface Category {
+	id: number;
+	name: string;
+	slug: string;
+	image: string;
+}
+
+export interface InterfaceProductCart {
+	id: number;
+	name: string;
+	category: Category;
+	slug: string;
+	price: string;
+	images: {
+		image: string;
+	};
+}
+
+interface ProductDetails {
+	product: InterfaceProductCart;
 	quantity: number;
+	price: number;
+	total_price: number;
+}
+
+export interface Data {
+	products: ProductDetails[];
+	total_price: number;
+	total_items: number;
+	coupon_is_used: boolean;
 }
 
 interface IState {
-	cart: IProductExtended[];
-	totalCardPrice: number;
-	discount: number;
+	products: ProductDetails[];
+	total_price: number;
+	total_items: number;
+	coupon_is_used: boolean;
 }
 
 interface IActions {
-	addToCart: (product: IProduct) => void;
-	decreaseQuantityInCart: (id: number) => void;
-	resetCart: (id: number) => void;
+	setCart: (cart: Data) => void;
 }
 
 export const useCart = create<IState & IActions>()(
 	devtools(
 		persist(
 			immer((set) => ({
-				cart: [],
-				totalCardPrice: 0,
-				discount: 0,
-				addToCart: (product) =>
+				products: [],
+				total_price: 0,
+				total_items: 0,
+				coupon_is_used: false,
+				setCart: (cart) =>
 					set((state) => {
-						const existingProduct = state.cart.find((p) => p.id === product.id);
-						if (existingProduct) {
-							// Якщо продукт вже є, збільшуємо його кількість
-							existingProduct.quantity = (existingProduct.quantity || 0) + 1;
-						} else {
-							// Якщо продукту ще немає, додаємо його з quantity = 1
-							state.cart.push({ ...product, quantity: 1 });
-						}
-					}),
-				decreaseQuantityInCart: (id) =>
-					set((state) => {
-						const existingProduct = state.cart.find((p) => p.id === id);
-						if (existingProduct && existingProduct.quantity > 1) {
-							existingProduct.quantity -= 1;
-						}
-					}),
-				resetCart: (id) =>
-					set((state) => {
-						state.cart = state.cart.filter((product) => product.id !== id);
+						state.products = cart.products;
+						state.total_price = cart.total_price;
+						state.total_items = cart.total_items;
+						state.coupon_is_used = cart.coupon_is_used;
 					}),
 			})),
 			{ name: 'cart' },
