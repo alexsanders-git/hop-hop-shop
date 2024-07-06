@@ -61,7 +61,7 @@ export default function ProductsSlider({ products }: IProductListProps) {
 							id={id}
 							name={name}
 							price={price}
-							images={getImages(images)[0].image}
+							images={getImages(images)[0]?.image}
 						/>
 					</SwiperSlide>
 				))}
