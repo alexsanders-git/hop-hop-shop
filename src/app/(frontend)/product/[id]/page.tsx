@@ -178,7 +178,7 @@ export default function ProductPage() {
 					<div className={styles.actions}>
 						<Button
 							className={styles.cartButton}
-							text={'Add To cart'}
+							text={'Add to cart'}
 							onClick={addToCartHandler}
 						/>
 						<CircleBackground

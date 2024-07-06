@@ -1,36 +1,48 @@
 'use client';
-import { FormikProps } from 'formik';
+import { useFormik } from 'formik';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
 import Accordion from '@/app/(frontend)/checkout/components/accordion/Accordion';
 import CreditCard from '@/app/(frontend)/checkout/components/creditCard/CreditCard';
 import ReadyData from '@/app/(frontend)/checkout/components/readyData/ReadyData';
 import Button from '@/components/Button/Button';
-import Checkbox from '@/sharedComponenst/checkbox/Checkbox';
+import { useCheckout } from '@/store/checkout/Checkout.store';
+import { validationSchemaCreditCard } from '@/validation/creditCard/creditCard.validation';
 
 import styles from './styles.module.scss';
 import applePay from '../../../../../../public/payment/apple_pay.png';
 import bitcoin from '../../../../../../public/payment/bitcoin.png';
 import googlePay from '../../../../../../public/payment/google_pay.png';
 import paypal from '../../../../../../public/payment/paypal.png';
-import PencilIcon from '../../../../../../public/pencel.svg';
+
+const deliveryImages = [applePay, googlePay, paypal, bitcoin];
 
 export interface IPayment {}
 
 export default function Payment(props: IPayment) {
 	const [opened, setOpened] = useState(false);
-	const [cardNumber, setCardNumber] = useState('');
-	const [cardName, setCardName] = useState('');
-	const [expiryDate, setExpiryDate] = useState('');
-	const [cvv, setCvv] = useState('');
-	const deliveryImages = [applePay, googlePay, paypal, bitcoin];
 	const [isChecked, setIsChecked] = useState<'card' | 'online'>('card');
-	const disabledButton =
-		cardNumber !== '' && cardName !== '' && expiryDate !== '' && cvv !== '';
+	const { payment } = useCheckout((state) => state.checkout);
+	const setPayment = useCheckout((state) => state.setPayment);
+
+	const onSubmit = (values: any) => {
+		// console.log(values);
+	};
+
+	const formik = useFormik({
+		initialValues: {
+			cardNumber: '',
+			cvv: '',
+			expiryDate: '',
+			cardName: '',
+		},
+		validationSchema: validationSchemaCreditCard,
+		onSubmit,
+	});
 
 	return (
-		<Accordion title={'Payment'}>
+		<Accordion setActive={setPayment} active={payment} title={'Payment'}>
 			{!opened && (
 				<div className={styles.inputWrapper}>
 					<div className={`${styles.choseMethod}`}>
@@ -73,14 +85,7 @@ export default function Payment(props: IPayment) {
 							<div className={styles.checkboxText}>Credit card</div>
 						</div>
 						<CreditCard
-							cardName={cardName}
-							cardNumber={cardNumber}
-							setCardName={setCardName}
-							setCardNumber={setCardNumber}
-							cvv={cvv}
-							setCvv={setCvv}
-							expiryDate={expiryDate}
-							setExpiryDate={setExpiryDate}
+							formik={formik}
 							className={isChecked === 'online' ? styles.inactive : ''}
 						/>
 					</div>
@@ -89,7 +94,7 @@ export default function Payment(props: IPayment) {
 						onClick={() => {
 							setOpened(true);
 						}}
-						disabled={!disabledButton}
+						disabled={!(formik.isValid && formik.dirty)}
 						style={'secondary'}
 						text={'Next'}
 						type="submit"
@@ -98,10 +103,10 @@ export default function Payment(props: IPayment) {
 			)}
 			{opened && (
 				<ReadyData
-					firstText={cardName}
-					secondText={cardNumber}
-					thirdText={expiryDate}
-					fourText={cvv}
+					firstText={formik.values.cardName}
+					secondText={formik.values.cardNumber}
+					thirdText={formik.values.expiryDate}
+					fourText={formik.values.cvv}
 					setOpened={() => setOpened(!opened)}
 				/>
 			)}

@@ -35,3 +35,11 @@ export interface ApiResponseFetchCart {
 	success: boolean;
 	data: InterfaceFetchCartData;
 }
+
+export interface InterfaceCouponResponse {
+	success: boolean;
+	data: {
+		message?: string;
+		error?: string;
+	};
+}

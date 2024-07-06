@@ -2,9 +2,10 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import { $api } from '@/services/fetchData';
+import { fetchDataCart } from '@/services/fetchData';
 import {
 	ApiResponseFetchCart,
+	InterfaceCouponResponse,
 	InterfaceFetchCartData,
 } from '@/store/cart/Cart.interface';
 
@@ -20,14 +21,6 @@ interface IActions {
 	addCoupon: (coupon: string) => Promise<InterfaceCouponResponse | undefined>;
 }
 
-interface InterfaceCouponResponse {
-	success: boolean;
-	data: {
-		message?: string;
-		error?: string;
-	};
-}
-
 export const useCart = create<IState & IActions>()(
 	devtools(
 		persist(
@@ -35,7 +28,7 @@ export const useCart = create<IState & IActions>()(
 				cart: null,
 				fetchCart: async () => {
 					try {
-						const { data } = await $api.get<ApiResponseFetchCart>('cart/');
+						const data: ApiResponseFetchCart = await fetchDataCart('/cart/');
 						set((state) => {
 							state.cart = data.data;
 						});
@@ -45,10 +38,13 @@ export const useCart = create<IState & IActions>()(
 				},
 				addItemToCart: async (id: number) => {
 					try {
-						const res = await $api.post<ApiResponseFetchCart>(
-							`cart/add/${id}/`,
+						const data: ApiResponseFetchCart = await fetchDataCart(
+							`/cart/add/${id}/`,
+							{
+								method: 'POST',
+							},
 						);
-						if (res.data) {
+						if (data) {
 							await useCart.getState().fetchCart();
 						}
 					} catch (error) {
@@ -58,10 +54,13 @@ export const useCart = create<IState & IActions>()(
 
 				subtractItemFromCart: async (id: number) => {
 					try {
-						const res = await $api.post<ApiResponseFetchCart>(
-							`cart/subtract/${id}/`,
+						const data: ApiResponseFetchCart = await fetchDataCart(
+							`/cart/subtract/${id}/`,
+							{
+								method: 'POST',
+							},
 						);
-						if (res.data) {
+						if (data) {
 							await useCart.getState().fetchCart();
 						}
 					} catch (error) {
@@ -71,10 +70,13 @@ export const useCart = create<IState & IActions>()(
 
 				removeItemFromCart: async (id: number) => {
 					try {
-						const res = await $api.delete<ApiResponseFetchCart>(
-							`cart/remove/${id}/`,
+						const data: ApiResponseFetchCart = await fetchDataCart(
+							`/cart/remove/${id}/`,
+							{
+								method: 'DELETE',
+							},
 						);
-						if (res.data) {
+						if (data) {
 							await useCart.getState().fetchCart();
 						}
 					} catch (error) {
@@ -85,19 +87,23 @@ export const useCart = create<IState & IActions>()(
 					coupon: string,
 				): Promise<InterfaceCouponResponse | undefined> => {
 					try {
-						const res = await $api.post<InterfaceCouponResponse>(
-							'cart/coupon/',
+						const data: InterfaceCouponResponse = await fetchDataCart(
+							'/cart/coupon/',
 							{
-								code: coupon,
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json',
+								},
+								body: JSON.stringify({ code: coupon }),
 							},
 						);
-						if (res.data) {
+						if (data) {
 							await useCart.getState().fetchCart();
 						}
-						return res.data;
+						return data;
 					} catch (error: any) {
-						console.error('Failed to remove item from cart:', error);
-						return error.response.data;
+						console.error('Failed to apply coupon:', error);
+						return { success: false, data: { error: error.message } };
 					}
 				},
 			})),

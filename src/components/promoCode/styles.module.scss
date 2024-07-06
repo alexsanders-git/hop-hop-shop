@@ -22,6 +22,7 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	position: relative;
 	@media only screen and (max-width: $media-xxl) {
 		font-size: 16px;
 	}
@@ -98,4 +99,19 @@
 
 		transform: rotate(180deg);
 	}
+}
+
+.CuponeArrow {
+	position: absolute;
+	z-index: 50;
+	right: 20px;
+
+}
+
+.error {
+	stroke: var(--error-color);
+}
+
+.success {
+	stroke: var(--success-color);
 }

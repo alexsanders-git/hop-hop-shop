@@ -1,11 +1,14 @@
-import axios from 'axios';
-
-const baseURL = process.env.NEXT_PUBLIC_API_URL;
-
-export const $api = axios.create({
-	baseURL: `${baseURL}/`,
-	withCredentials: true,
-});
+export const fetchDataCart = async (url: string, options?: RequestInit) => {
+	const baseURL = process.env.NEXT_PUBLIC_API_URL;
+	const response = await fetch(`${baseURL}${url}`, {
+		credentials: 'include',
+		...options,
+	});
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	}
+	return response.json();
+};
 
 export async function fetchData<T>(endpoint: string): Promise<T> {
 	const baseURL = process.env.NEXT_PUBLIC_API_URL;
