@@ -1,3 +1,12 @@
+import axios from 'axios';
+
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
+export const $api = axios.create({
+	baseURL: `${baseURL}/`,
+	withCredentials: true,
+});
+
 export async function fetchData<T>(endpoint: string): Promise<T> {
 	const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -53,7 +62,9 @@ export const fetchDataProductPage = async (
 	try {
 		const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
-		const res = await fetch(`${baseURL}/shop/products/${id}/`);
+		const res = await fetch(`${baseURL}/shop/products/${id}/`, {
+			// mode: 'cors',
+		});
 		if (!res.ok) {
 			throw new Error(`Error fetching product data: ${res.statusText}`);
 		}

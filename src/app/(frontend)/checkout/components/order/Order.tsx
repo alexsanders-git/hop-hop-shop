@@ -9,12 +9,10 @@ import { londrinaSolid, robotoCondensed } from '@/styles/fonts/fonts';
 import styles from './styles.module.scss';
 
 export default function Order() {
-	const cart = useCart((state) => state.cart);
+	const subtotalPrice = useCart((state) => state.cart?.subtotal_price || 0);
+	const products = useCart((state) => state.cart?.products || []);
+	const totalPrice = useCart((state) => state.cart?.total_price || 0);
 	const [open, setOpen] = useState<boolean>(false);
-
-	const totalAmount = cart
-		.reduce((total, product) => total + product.quantity * product.price, 0)
-		.toFixed(2);
 
 	return (
 		<div className={styles.wrapper}>
@@ -24,15 +22,15 @@ export default function Order() {
 			<div className={styles.container}>
 				<h1 className={styles.title}>Your Order</h1>
 				<div className={styles.productMap}>
-					{cart.map((product, key) => (
+					{products.map((item, key) => (
 						<div
 							key={key}
 							className={`${styles.productWrapper} ${robotoCondensed.className}`}
 						>
-							<span className={styles.name}>{product.name}</span>
+							<span className={styles.name}>{item.product.name}</span>
 							<div className={styles.productContainer}>
-								<span className={styles.price}>${product.price}</span>
-								<span className={styles.qty}>Quantity: {product.quantity}</span>
+								<span className={styles.price}>${item.product.price}</span>
+								<span className={styles.qty}>Quantity: {item.quantity}</span>
 							</div>
 						</div>
 					))}
@@ -44,7 +42,7 @@ export default function Order() {
 			>
 				<div className={styles.Subtotal}>
 					<span>Subtotal</span>
-					<span>${totalAmount}</span>
+					<span>${subtotalPrice}</span>
 				</div>
 				<div className={styles.delivery}>
 					<span>Delivery Fee</span>
@@ -53,7 +51,7 @@ export default function Order() {
 				<PromoCode open={open} setOpen={setOpen} />
 				<div className={styles.total}>
 					<span>Total</span>
-					<span className={londrinaSolid.className}>$15</span>
+					<span className={londrinaSolid.className}>${totalPrice}</span>
 				</div>
 			</div>
 		</div>

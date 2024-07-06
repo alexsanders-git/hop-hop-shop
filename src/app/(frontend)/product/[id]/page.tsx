@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import 'swiper/css';
@@ -13,15 +14,16 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import Button from '@/components/Button/Button';
 import IconArrow from '@/components/ProductsSlider/left.svg';
-import { fetchAddItemToCart } from '@/services/cart/cart.service';
 import { fetchDataProductPage } from '@/services/fetchData';
 import CircleBackground from '@/sharedComponenst/circleBackground/CircleBackground';
 import Like from '@/sharedComponenst/like/Like';
 import Loading from '@/sharedComponenst/loading/Loading';
+import { useCart } from '@/store/cart/Cart.store';
 import { useLike } from '@/store/wishlist/Wishlist.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './page.module.scss';
+import { getImages } from '../../../../../utils/typeGuards';
 
 export default function ProductPage() {
 	const { id } = useParams<{ id: string }>();
@@ -29,19 +31,18 @@ export default function ProductPage() {
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 	const toggleLike = useLike((state) => state.toggleLike);
-	// const addToCart = useCart((state) => state.addToCart);
 	const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
 	const swiperRef = useRef<SwiperClass | null>(null);
+	const addToCart = useCart((state) => state.addItemToCart);
 
 	const wishListHandler = () => {
 		if (product) {
-			// toggleLike(product);
-			console.log('toggleLike:', product);
+			toggleLike(product);
 		}
 	};
 	const addToCartHandler = () => {
 		if (product) {
-			fetchAddItemToCart(product.id);
+			addToCart(product.id);
 		}
 	};
 	const handlePrev = () => {
@@ -100,9 +101,9 @@ export default function ProductPage() {
 						<CircleBackground onclick={wishListHandler}>
 							<Like id={product!.id} />
 						</CircleBackground>
-						{product?.images.map((img, key) => (
+						{getImages(product?.images).map((img, key) => (
 							<SwiperSlide key={key} className={styles.slideMobile}>
-								<img src={img.image} alt="" />
+								<Image width={319} height={380} src={img.image} alt="" />
 							</SwiperSlide>
 						))}
 					</Swiper>
@@ -126,9 +127,9 @@ export default function ProductPage() {
 							modules={[FreeMode, Navigation, Thumbs]}
 							className={styles.mySwiper2}
 						>
-							{product?.images.map((img, key) => (
+							{getImages(product?.images).map((img, key) => (
 								<SwiperSlide key={key} className={styles.swiperSlide}>
-									<img src={img.image} alt="" />
+									<Image width={610} height={700} src={img.image} alt="" />
 								</SwiperSlide>
 							))}
 						</Swiper>
@@ -150,9 +151,9 @@ export default function ProductPage() {
 						className={styles.mySwiper}
 						direction={'vertical'}
 					>
-						{product?.images.map((img, key) => (
+						{getImages(product?.images).map((img, key) => (
 							<SwiperSlide key={key} className={styles.swiperSlide2}>
-								<img src={img.image} alt="" />
+								<Image width={220} height={320} src={img.image} alt="" />
 							</SwiperSlide>
 						))}
 					</Swiper>

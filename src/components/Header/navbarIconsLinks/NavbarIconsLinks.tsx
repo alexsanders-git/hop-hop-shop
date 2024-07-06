@@ -13,8 +13,8 @@ import ShoppingCartIcon from '../../../../public/headerImage/shopping-cart.svg';
 
 function NavbarIconsLinks() {
 	const { ref, setIsShow, isShow } = useOutside(false);
-	const cart = useCart((state) => state.products);
-	const totalItems = useCart((state) => state.total_items);
+	const totalItems = useCart((state) => state.cart?.total_items || 0);
+
 	return (
 		<div className={styles.icons_list}>
 			<div className={styles.icons_list__search}>
@@ -24,7 +24,7 @@ function NavbarIconsLinks() {
 				<LikeIcon />
 			</Link>
 			<Link href="/cart" className={`${styles.iconCart}`}>
-				{cart.length > 0 && <div className={styles.qty}>{totalItems}</div>}
+				{totalItems > 0 && <div className={styles.qty}>{totalItems}</div>}
 				<ShoppingCartIcon />
 			</Link>
 			<button className={styles.icons_item}>

@@ -3,31 +3,20 @@ import { useEffect, useState } from 'react';
 
 import PromoCode from '@/components/promoCode/PromoCode';
 import ShoppingCart from '@/components/ShoppingCart/ShoppingCart';
-import { fetchCart } from '@/services/cart/cart.service';
 import { useCart } from '@/store/cart/Cart.store';
 
 import styles from './page.module.scss';
 
 export default function ShoppingCartPage() {
-	const totalPrice = useCart((state) => state.total_price);
-	const setCart = useCart((state) => state.setCart);
+	const totalPrice = useCart((state) => state?.cart?.total_price || 0);
+	const subTotal = useCart((state) => state?.cart?.subtotal_price || 0);
+	const fetchCart = useCart((state) => state?.fetchCart);
 
 	const [open, setOpen] = useState<boolean>(false);
 
 	useEffect(() => {
-		const fetchProduct = async () => {
-			try {
-				const res = await fetchCart();
-				if (res) {
-					setCart(res.data);
-				}
-			} catch (error) {
-				console.log('error: ', error);
-			}
-		};
-
-		fetchProduct();
-	}, []);
+		fetchCart();
+	}, [fetchCart]);
 
 	return (
 		<div className={styles.wrapper}>
@@ -40,7 +29,7 @@ export default function ShoppingCartPage() {
 					<div className={styles.totalWrp}>
 						<div className={styles.pricesWrp}>
 							<p>Subtotal </p>
-							<p>${totalPrice}</p>
+							<p>${subTotal}</p>
 						</div>
 						<PromoCode
 							className={styles.discount}

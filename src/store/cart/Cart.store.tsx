@@ -2,64 +2,104 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-interface Category {
-	id: number;
-	name: string;
-	slug: string;
-	image: string;
-}
-
-export interface InterfaceProductCart {
-	id: number;
-	name: string;
-	category: Category;
-	slug: string;
-	price: string;
-	images: {
-		image: string;
-	};
-}
-
-interface ProductDetails {
-	product: InterfaceProductCart;
-	quantity: number;
-	price: number;
-	total_price: number;
-}
-
-export interface Data {
-	products: ProductDetails[];
-	total_price: number;
-	total_items: number;
-	coupon_is_used: boolean;
-}
+import { $api } from '@/services/fetchData';
+import {
+	ApiResponseFetchCart,
+	InterfaceFetchCartData,
+} from '@/store/cart/Cart.interface';
 
 interface IState {
-	products: ProductDetails[];
-	total_price: number;
-	total_items: number;
-	coupon_is_used: boolean;
+	cart: InterfaceFetchCartData | null;
 }
 
 interface IActions {
-	setCart: (cart: Data) => void;
+	fetchCart: () => Promise<void>;
+	addItemToCart: (id: number) => Promise<void>;
+	subtractItemFromCart: (id: number) => Promise<void>;
+	removeItemFromCart: (id: number) => Promise<void>;
+	addCoupon: (coupon: string) => Promise<InterfaceCouponResponse | undefined>;
+}
+
+interface InterfaceCouponResponse {
+	success: boolean;
+	data: {
+		message?: string;
+		error?: string;
+	};
 }
 
 export const useCart = create<IState & IActions>()(
 	devtools(
 		persist(
 			immer((set) => ({
-				products: [],
-				total_price: 0,
-				total_items: 0,
-				coupon_is_used: false,
-				setCart: (cart) =>
-					set((state) => {
-						state.products = cart.products;
-						state.total_price = cart.total_price;
-						state.total_items = cart.total_items;
-						state.coupon_is_used = cart.coupon_is_used;
-					}),
+				cart: null,
+				fetchCart: async () => {
+					try {
+						const { data } = await $api.get<ApiResponseFetchCart>('cart/');
+						set((state) => {
+							state.cart = data.data;
+						});
+					} catch (error) {
+						console.error('Failed to fetch cart data:', error);
+					}
+				},
+				addItemToCart: async (id: number) => {
+					try {
+						const res = await $api.post<ApiResponseFetchCart>(
+							`cart/add/${id}/`,
+						);
+						if (res.data) {
+							await useCart.getState().fetchCart();
+						}
+					} catch (error) {
+						console.error('Failed to add item to cart:', error);
+					}
+				},
+
+				subtractItemFromCart: async (id: number) => {
+					try {
+						const res = await $api.post<ApiResponseFetchCart>(
+							`cart/subtract/${id}/`,
+						);
+						if (res.data) {
+							await useCart.getState().fetchCart();
+						}
+					} catch (error) {
+						console.error('Failed to subtract item from cart:', error);
+					}
+				},
+
+				removeItemFromCart: async (id: number) => {
+					try {
+						const res = await $api.delete<ApiResponseFetchCart>(
+							`cart/remove/${id}/`,
+						);
+						if (res.data) {
+							await useCart.getState().fetchCart();
+						}
+					} catch (error) {
+						console.error('Failed to remove item from cart:', error);
+					}
+				},
+				addCoupon: async (
+					coupon: string,
+				): Promise<InterfaceCouponResponse | undefined> => {
+					try {
+						const res = await $api.post<InterfaceCouponResponse>(
+							'cart/coupon/',
+							{
+								code: coupon,
+							},
+						);
+						if (res.data) {
+							await useCart.getState().fetchCart();
+						}
+						return res.data;
+					} catch (error: any) {
+						console.error('Failed to remove item from cart:', error);
+						return error.response.data;
+					}
+				},
 			})),
 			{ name: 'cart' },
 		),

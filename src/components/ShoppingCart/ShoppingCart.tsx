@@ -6,8 +6,8 @@ import styles from './ShoppingCart.module.scss';
 import ShoppingCartProductCard from '../ShoppingCartProductCard/ShoppingCartProductCard';
 
 export default function ShoppingCart() {
-	// const { cart, addToCart, decreaseQuantityInCart, resetCart } = useCart();
-	const { products } = useCart();
+	const { addItemToCart, removeItemFromCart, subtractItemFromCart } = useCart();
+	const products = useCart((state) => state?.cart?.products || []);
 
 	return (
 		<div className={styles.shoppingCart}>
@@ -18,9 +18,9 @@ export default function ShoppingCart() {
 					<ShoppingCartProductCard
 						key={index}
 						product={item.product}
-						// onIncrease={() => addToCart(product)}
-						// onDecrease={() => decreaseQuantityInCart(product.id)}
-						// onRemove={() => resetCart(product.id)}
+						onIncrease={() => addItemToCart(item.product.id)}
+						onDecrease={() => subtractItemFromCart(item.product.id)}
+						onRemove={() => removeItemFromCart(item.product.id)}
 						quantity={item.quantity}
 					/>
 				))

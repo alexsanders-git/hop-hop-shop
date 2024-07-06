@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 
 import { useDebounce } from '@/hooks/useDebounce';
-import { fetchCoupon } from '@/services/promocode/promocode.service';
+import { useCart } from '@/store/cart/Cart.store';
 
 import styles from './styles.module.scss';
 import DiscountArrow from '../../../public/payment/discountArrow.svg';
@@ -16,15 +16,19 @@ export interface InterfacePromoCode {
 export default function PromoCode(props: InterfacePromoCode) {
 	const { setOpen, open, className = '' } = props;
 	const [value, setValue] = useState<string>('');
-	const [data, setData] = useState<any>();
+	const [data, setData] = useState<{
+		message?: string;
+		error?: string;
+	}>();
 	const debouncedValue = useDebounce(value, 700);
+	const addCoupon = useCart((state) => state.addCoupon);
 
 	useEffect(() => {
 		const fetchProduct = async () => {
 			try {
-				const couponData = await fetchCoupon(debouncedValue);
+				const couponData = await addCoupon(debouncedValue);
 				if (couponData) {
-					setData(couponData);
+					setData(couponData.data);
 				}
 			} catch (error) {
 				console.log('error: ', error);
@@ -34,7 +38,7 @@ export default function PromoCode(props: InterfacePromoCode) {
 		if (debouncedValue !== '') {
 			fetchProduct();
 		}
-	}, [debouncedValue]);
+	}, [addCoupon, debouncedValue]);
 
 	return (
 		<div className={styles.wrapper}>
