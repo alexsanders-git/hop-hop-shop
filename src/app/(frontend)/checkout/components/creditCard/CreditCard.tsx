@@ -1,31 +1,12 @@
+import { ChangeEvent } from 'react';
+
 import { londrinaSolid, robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './styles.module.scss';
 
-export interface ICreditCard {
-	setCardNumber: (value: string) => void;
-	setCardName: (value: string) => void;
-	setExpiryDate: (value: string) => void;
-	setCvv: (value: string) => void;
-	cardName: string;
-	cardNumber: string;
-	expiryDate: string;
-	cvv: string;
-	className: string;
-}
+function CreditCard(props: { className: string; formik: any }) {
+	const { className = '', formik } = props;
 
-function CreditCard(props: ICreditCard) {
-	const {
-		setCardNumber,
-		setCardName,
-		setCvv,
-		setExpiryDate,
-		cardNumber,
-		cvv,
-		expiryDate,
-		cardName,
-		className = '',
-	} = props;
 	const formatCardNumber = (value: string) => {
 		const cleaned = value.replace(/\D+/g, ''); // Видалити всі нечислові символи
 		const match = cleaned.match(/.{1,4}/g); // Розділити кожні 4 цифри
@@ -36,73 +17,106 @@ function CreditCard(props: ICreditCard) {
 		return value.replace(/\D+/g, ''); // Видалити всі нечислові символи
 	};
 
-	const handleCardNumberChange = (e: { target: { value: string } }) => {
-		const value = formatCardNumber(e.target.value);
-		setCardNumber(value);
-	};
+	const handleCustomChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		let formattedValue = value;
 
-	const handleCardNameChange = (e: { target: { value: string } }) => {
-		setCardName(e.target.value);
-	};
+		if (name === 'cardNumber') {
+			formattedValue = formatCardNumber(value);
+		} else if (name === 'expiryDate') {
+			formattedValue = value.replace(/\D+/g, ''); // Видалити всі нечислові символи
+			if (formattedValue.length === 2) {
+				formattedValue = formattedValue + '/';
+			} else if (formattedValue.length > 2) {
+				formattedValue =
+					formattedValue.slice(0, 2) + '/' + formattedValue.slice(2, 4);
+			}
+		} else if (name === 'cvv') {
+			formattedValue = formatCard(value);
+		}
 
-	const handleExpiryDateChange = (e: { target: { value: string } }) => {
-		const value = formatCard(e.target.value);
-		setExpiryDate(value);
-	};
-
-	const handleCvvChange = (e: { target: { value: string } }) => {
-		const value = formatCard(e.target.value);
-		setCvv(value);
+		formik.setFieldValue(name, formattedValue);
 	};
 
 	return (
-		<div
-			className={`${styles.creditCard} ${robotoCondensed.className} ${className}`}
-		>
-			<div className={styles.cardName}>
-				<span>Card Holder</span>
-				<input
-					name={'cardName'}
-					type="text"
-					value={cardName}
-					onChange={handleCardNameChange}
-					placeholder="Cardholder Name"
-					className={londrinaSolid.className}
-				/>
-			</div>
-			<div className={styles.cardNumber}>
-				<span>Card Number</span>
-				<input
-					type="text"
-					maxLength={19}
-					value={cardNumber}
-					onChange={handleCardNumberChange}
-					placeholder="1234 1234 1234 1234"
-				/>
-			</div>
-			<div className={styles.creditCardWrapper}>
-				<div className={styles.expiryDate}>
-					<span>Exp.Date</span>
+		<form onSubmit={formik.handleSubmit}>
+			<div
+				className={`${styles.creditCard} ${robotoCondensed.className} ${className}`}
+			>
+				<div
+					className={`${styles.cardName} ${formik.touched.cardName && styles.toched} ${formik.touched.cardName && formik.errors.cardName && styles.error}`}
+				>
+					<span>Card Holder</span>
 					<input
+						name="cardName"
 						type="text"
-						maxLength={4}
-						value={expiryDate}
-						onChange={handleExpiryDateChange}
-						placeholder="MM/YY"
+						placeholder="Cardholder Name"
+						className={londrinaSolid.className}
+						onChange={handleCustomChange}
+						onBlur={formik.handleBlur}
+						value={formik.values.cardName}
 					/>
+					{formik.touched.cardName && formik.errors.cardName ? (
+						<div className={styles.errorBlock}>{formik.errors.cardName}</div>
+					) : null}
 				</div>
-				<div className={styles.cvv}>
-					<span>Label</span>
+				<div
+					className={`${styles.cardNumber} ${formik.touched.cardNumber && styles.toched} ${formik.touched.cardNumber && formik.errors.cardNumber && styles.error}`}
+				>
+					<span>Card Number</span>
 					<input
+						name="cardNumber"
 						type="text"
-						maxLength={3}
-						value={cvv}
-						onChange={handleCvvChange}
-						placeholder="123"
+						maxLength={19}
+						placeholder="1234 1234 1234 1234"
+						onChange={handleCustomChange}
+						onBlur={formik.handleBlur}
+						value={formik.values.cardNumber}
 					/>
+					{formik.touched.cardNumber && formik.errors.cardNumber ? (
+						<div className={styles.errorBlock}>{formik.errors.cardNumber}</div>
+					) : null}
+				</div>
+				<div className={`${styles.creditCardWrapper}`}>
+					<div
+						className={`${styles.expiryDate} ${formik.touched.expiryDate && styles.toched} ${formik.touched.expiryDate && formik.errors.expiryDate && styles.error}`}
+					>
+						<span>Exp.Date</span>
+						<input
+							name="expiryDate"
+							type="text"
+							maxLength={5}
+							placeholder="MM/YY"
+							onChange={handleCustomChange}
+							onBlur={formik.handleBlur}
+							value={formik.values.expiryDate}
+						/>
+						{formik.touched.expiryDate && formik.errors.expiryDate ? (
+							<div className={styles.errorBlock}>
+								{formik.errors.expiryDate}
+							</div>
+						) : null}
+					</div>
+					<div
+						className={`${styles.cvv} ${formik.touched.cvv && styles.toched} ${formik.touched.cvv && formik.errors.cvv && styles.error}`}
+					>
+						<span>CVV</span>
+						<input
+							name="cvv"
+							type="text"
+							maxLength={4}
+							placeholder="123"
+							onChange={handleCustomChange}
+							onBlur={formik.handleBlur}
+							value={formik.values.cvv}
+						/>
+						{formik.touched.cvv && formik.errors.cvv ? (
+							<div className={styles.errorBlock}>{formik.errors.cvv}</div>
+						) : null}
+					</div>
 				</div>
 			</div>
-		</div>
+		</form>
 	);
 }
 

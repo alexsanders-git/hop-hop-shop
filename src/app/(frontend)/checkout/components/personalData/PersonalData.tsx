@@ -8,21 +8,24 @@ import ReadyData from '@/app/(frontend)/checkout/components/readyData/ReadyData'
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
 import PhoneInputField from '@/sharedComponenst/phoneInputField/PhoneInputField';
+import { useCheckout } from '@/store/checkout/Checkout.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import {
 	emailValid,
+	latNameValid,
 	nameValid,
 	phoneValid,
 } from '@/validation/checkout/validation';
 
 import styles from './styles.module.scss';
 
-export interface IPersonalData {}
-
-export default function PersonalData(props: IPersonalData) {
-	// const {} = props;
+export default function PersonalData() {
 	const [opened, setOpened] = useState(false);
 	const ref = useRef<FormikProps<FormValues>>(null);
+
+	const { personal } = useCheckout((state) => state.checkout);
+	const setDelivery = useCheckout((state) => state.setDelivery);
+	const setPersonal = useCheckout((state) => state.setPersonal);
 
 	interface FormValues {
 		name: string;
@@ -38,7 +41,7 @@ export default function PersonalData(props: IPersonalData) {
 					validationSchema={yup
 						.object({
 							name: nameValid,
-							lastname: nameValid,
+							lastname: latNameValid,
 							email: emailValid,
 							phone: phoneValid,
 						})
@@ -51,13 +54,17 @@ export default function PersonalData(props: IPersonalData) {
 						phone: '',
 					}}
 					onSubmit={async (values) => {
-						alert(JSON.stringify(values));
 						setOpened(true);
+						setDelivery(true);
 					}}
 				>
 					{({ isValid, dirty }) => (
 						<Form>
-							<Accordion title={'Personal data'}>
+							<Accordion
+								setActive={setPersonal}
+								active={personal}
+								title={'Personal data'}
+							>
 								{!opened && (
 									<div className={styles.inputWrapper}>
 										<div className={styles.inputContainer}>

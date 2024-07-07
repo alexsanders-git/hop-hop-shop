@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Swiper as SwiperClass } from 'swiper';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -12,6 +12,7 @@ import 'swiper/css/thumbs';
 
 import IconArrow from './left.svg';
 import styles from './ProductsSlider.module.scss';
+import { getImages } from '../../../utils/typeGuards';
 import ProductCardSlider from '../ProductCardSlider/ProductCardSlider';
 
 interface IProductListProps {
@@ -60,7 +61,7 @@ export default function ProductsSlider({ products }: IProductListProps) {
 							id={id}
 							name={name}
 							price={price}
-							images={images}
+							images={getImages(images)[0]?.image}
 						/>
 					</SwiperSlide>
 				))}

@@ -21,34 +21,46 @@ export const AppErrors = {
 
 export const nameValid = yup
 	.string()
-	.required(AppErrors.RequiredField)
-	.min(2, AppErrors.minLengthName)
-	.max(50, AppErrors.maxLengthName)
-	.matches(/^[^\s]+$/, AppErrors.Spaces)
-	.matches(/^\p{L}+$/u, AppErrors.onlyLetters);
+	.matches(/^[A-Za-z]+$/, 'First name must contain only Latin letters')
+	.required('First name is required');
+
+export const latNameValid = yup
+	.string()
+	.matches(/^[A-Za-z]+$/, 'Last name must contain only Latin letters')
+	.required('Last name is required');
 
 export const emailValid = yup
 	.string()
-	.required(AppErrors.RequiredField)
-	.max(256, AppErrors.maxLengthEmail)
-	.matches(
-		/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/,
-		AppErrors.InvalidEmail,
-	);
+	.email('Invalid email format')
+	.required('Email is required');
+// .required(AppErrors.RequiredField)
+// .max(256, AppErrors.maxLengthEmail)
+// .matches(
+// 	/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/,
+// 	AppErrors.InvalidEmail,
+// );
 
-export const phoneValid1 = yup
+export const phoneValid = yup
 	.string()
-	.required(AppErrors.RequiredField)
 	.matches(
-		/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){12}(\s*)?$/,
-		AppErrors.InvalidPhone,
-	);
+		/^[\d\s+]+$/,
+		'Phone number can only contain plus, space, and numbers',
+	)
+	.required('Phone number is required');
+
+export const addressValid = yup
+	.string()
+	.matches(/^[A-Za-z\s]+$/, 'Address must contain only Latin letters')
+	.required('Address is required');
 
 export const cityValid = yup
 	.string()
-	.required(AppErrors.RequiredField)
-	.matches(/^\p{L}+$/u, AppErrors.onlyLetters);
+	.matches(/^[A-Za-z\s]+$/, 'City must contain only Latin letters')
+	.required('City is required');
 
-export const postalCodeValid = yup.number();
+export const countryValid = yup
+	.string()
+	.matches(/^[A-Za-z\s]+$/, 'Country must contain only Latin letters')
+	.required('Country is required');
 
-export const phoneValid = yup.string().required('Phone number is required');
+export const postalCodeValid = yup.string().required('Postal Code is required');

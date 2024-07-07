@@ -2,51 +2,110 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-interface IProductExtended extends IProduct {
-	quantity: number;
-}
+import { fetchDataCart } from '@/services/fetchData';
+import {
+	ApiResponseFetchCart,
+	InterfaceCouponResponse,
+	InterfaceFetchCartData,
+} from '@/store/cart/Cart.interface';
 
 interface IState {
-	cart: IProductExtended[];
-	totalCardPrice: number;
-	discount: number;
+	cart: InterfaceFetchCartData | null;
 }
 
 interface IActions {
-	addToCart: (product: IProduct) => void;
-	decreaseQuantityInCart: (id: number) => void;
-	resetCart: (id: number) => void;
+	fetchCart: () => Promise<void>;
+	addItemToCart: (id: number) => Promise<void>;
+	subtractItemFromCart: (id: number) => Promise<void>;
+	removeItemFromCart: (id: number) => Promise<void>;
+	addCoupon: (coupon: string) => Promise<InterfaceCouponResponse | undefined>;
 }
 
 export const useCart = create<IState & IActions>()(
 	devtools(
 		persist(
 			immer((set) => ({
-				cart: [],
-				totalCardPrice: 0,
-				discount: 0,
-				addToCart: (product) =>
-					set((state) => {
-						const existingProduct = state.cart.find((p) => p.id === product.id);
-						if (existingProduct) {
-							// Якщо продукт вже є, збільшуємо його кількість
-							existingProduct.quantity = (existingProduct.quantity || 0) + 1;
-						} else {
-							// Якщо продукту ще немає, додаємо його з quantity = 1
-							state.cart.push({ ...product, quantity: 1 });
+				cart: null,
+				fetchCart: async () => {
+					try {
+						const data: ApiResponseFetchCart = await fetchDataCart('/cart/');
+						set((state) => {
+							state.cart = data.data;
+						});
+					} catch (error) {
+						console.error('Failed to fetch cart data:', error);
+					}
+				},
+				addItemToCart: async (id: number) => {
+					try {
+						const data: ApiResponseFetchCart = await fetchDataCart(
+							`/cart/add/${id}/`,
+							{
+								method: 'POST',
+							},
+						);
+						if (data) {
+							await useCart.getState().fetchCart();
 						}
-					}),
-				decreaseQuantityInCart: (id) =>
-					set((state) => {
-						const existingProduct = state.cart.find((p) => p.id === id);
-						if (existingProduct && existingProduct.quantity > 1) {
-							existingProduct.quantity -= 1;
+					} catch (error) {
+						console.error('Failed to add item to cart:', error);
+					}
+				},
+
+				subtractItemFromCart: async (id: number) => {
+					try {
+						const data: ApiResponseFetchCart = await fetchDataCart(
+							`/cart/subtract/${id}/`,
+							{
+								method: 'POST',
+							},
+						);
+						if (data) {
+							await useCart.getState().fetchCart();
 						}
-					}),
-				resetCart: (id) =>
-					set((state) => {
-						state.cart = state.cart.filter((product) => product.id !== id);
-					}),
+					} catch (error) {
+						console.error('Failed to subtract item from cart:', error);
+					}
+				},
+
+				removeItemFromCart: async (id: number) => {
+					try {
+						const data: ApiResponseFetchCart = await fetchDataCart(
+							`/cart/remove/${id}/`,
+							{
+								method: 'DELETE',
+							},
+						);
+						if (data) {
+							await useCart.getState().fetchCart();
+						}
+					} catch (error) {
+						console.error('Failed to remove item from cart:', error);
+					}
+				},
+				addCoupon: async (
+					coupon: string,
+				): Promise<InterfaceCouponResponse | undefined> => {
+					try {
+						const data: InterfaceCouponResponse = await fetchDataCart(
+							'/cart/coupon/',
+							{
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json',
+								},
+								body: JSON.stringify({ code: coupon }),
+							},
+						);
+						if (data) {
+							await useCart.getState().fetchCart();
+						}
+						return data;
+					} catch (error: any) {
+						console.error('Failed to apply coupon:', error);
+						return { success: false, data: { error: error.message } };
+					}
+				},
 			})),
 			{ name: 'cart' },
 		),

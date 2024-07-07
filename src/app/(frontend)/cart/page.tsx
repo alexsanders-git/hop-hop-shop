@@ -1,8 +1,25 @@
+'use client';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+import Button from '@/components/Button/Button';
+import PromoCode from '@/components/promoCode/PromoCode';
 import ShoppingCart from '@/components/ShoppingCart/ShoppingCart';
+import { useCart } from '@/store/cart/Cart.store';
 
 import styles from './page.module.scss';
 
 export default function ShoppingCartPage() {
+	const totalPrice = useCart((state) => state?.cart?.total_price || 0);
+	const subTotal = useCart((state) => state?.cart?.subtotal_price || 0);
+	const fetchCart = useCart((state) => state?.fetchCart);
+	const router = useRouter();
+	const [open, setOpen] = useState<boolean>(false);
+
+	useEffect(() => {
+		fetchCart();
+	}, [fetchCart]);
+
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.shoppingCartPage}>
@@ -13,19 +30,26 @@ export default function ShoppingCartPage() {
 					<h2>Order Summary</h2>
 					<div className={styles.totalWrp}>
 						<div className={styles.pricesWrp}>
-							<p>Subtotal</p>
-							<p>$Price</p>
+							<p>Subtotal </p>
+							<p>${subTotal}</p>
 						</div>
-						<div className={styles.pricesWrp}>
-							<p>Discount</p>
-							<p>Enter code</p>
-						</div>
+						<PromoCode
+							className={styles.discount}
+							open={open}
+							setOpen={setOpen}
+						/>
 						<div className={`${styles.pricesWrp} ${styles.totalPriceWrp}`}>
 							<p>Total</p>
-							<p className={styles.totalPrice}>$Price</p>
+							<p className={styles.totalPrice}>${totalPrice}</p>
 						</div>
 					</div>
-					<button className={styles.buttonCheckout}>Checkout</button>
+					<Button
+						text={'Checkout'}
+						style={'primary'}
+						disabled={totalPrice === 0}
+						onClick={() => router.push('/checkout')}
+						className={styles.buttonCheckout}
+					/>
 				</div>
 			</div>
 		</div>

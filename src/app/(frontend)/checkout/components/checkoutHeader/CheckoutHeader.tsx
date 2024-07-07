@@ -4,20 +4,18 @@ import { useCart } from '@/store/cart/Cart.store';
 
 import styles from './styles.module.scss';
 
-export interface ICheckoutHeader {}
+export default function CheckoutHeader() {
+	const totalItems = useCart((state) => state.cart?.total_items || 0);
+	const totalPrice = useCart((state) => state.cart?.total_price || 0);
+	const subtotalPrice = useCart((state) => state.cart?.subtotal_price || 0);
 
-export default function CheckoutHeader(props: ICheckoutHeader) {
-	// const {} = props;
-	const cart = useCart((state) => state.cart);
-	const totalAmount = cart
-		.reduce((total, product) => total + product.quantity * product.price, 0)
-		.toFixed(2);
 	return (
 		<div className={styles.container}>
 			<div className={styles.headline}>
 				<h1 className={styles.title}>Checkout</h1>
 				<span className={styles.total}>
-					{cart.length} {cart.length > 1 ? 'items' : 'item'} | ${totalAmount}
+					{totalItems} {totalItems > 1 ? 'items' : 'item'} | $
+					{totalPrice < subtotalPrice ? subtotalPrice : totalPrice}
 				</span>
 			</div>
 			<div className={styles.buttonWrapper}>

@@ -1,5 +1,5 @@
 'use client';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 
 import styles from './styles.module.scss';
 import ArrowTop from '../../../../../../public/arrowTop.svg';
@@ -7,11 +7,12 @@ import ArrowTop from '../../../../../../public/arrowTop.svg';
 export interface IAccordion {
 	title: string;
 	children: ReactNode;
+	setActive: (active: boolean) => void;
+	active: boolean;
 }
 
 export default function Accordion(props: IAccordion) {
-	const [active, setActive] = useState(false);
-	const { title, children } = props;
+	const { title, children, setActive, active } = props;
 	return (
 		<div className={`${styles.container} ${active && styles.active}`}>
 			<div

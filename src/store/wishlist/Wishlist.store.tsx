@@ -21,7 +21,7 @@ export const useLike = create<IState & IActions>()(
 							(p) => p.id === product.id,
 						);
 						if (existingProductIndex === -1) {
-							// state.likes.push(product);
+							state.likes.push(product);
 						} else {
 							state.likes.splice(existingProductIndex, 1);
 						}
