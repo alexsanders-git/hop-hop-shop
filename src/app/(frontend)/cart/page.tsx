@@ -2,7 +2,7 @@ import ShoppingCart from '@/components/ShoppingCart/ShoppingCart';
 
 import styles from './page.module.scss';
 
-export default function ShoppingCartPage() {
+export default function CartPage() {
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.shoppingCartPage}>

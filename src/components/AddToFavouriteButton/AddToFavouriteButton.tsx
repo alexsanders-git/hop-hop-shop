@@ -1,32 +1,25 @@
 'use client';
 
-import { useState } from 'react';
+import { useFavorite } from '@/store/favorite/Favorite.store';
 
 import styles from './AddToFavouriteButton.module.scss';
-import LikeIcon from './like.svg';
-import LikeOnIcon from './likeOn.svg';
+import LikeIcon from '../../../public/like.svg';
 
-export default function AddToFavouriteButton() {
-	const [isFavourite, setIsFavourite] = useState(false);
+interface IProps {
+	product: IProduct;
+	className?: string;
+}
 
-	const toggleIsFavourite = () => {
-		setIsFavourite(!isFavourite);
-	};
+export default function AddToFavouriteButton({ product, className }: IProps) {
+	const { favorites, toggleFavorite } = useFavorite();
+	const isFavorite = favorites.some((fav) => fav.id === product.id);
 
 	return (
 		<button
-			className={
-				!isFavourite
-					? `${styles.button}`
-					: `${styles.button} ${styles.buttonLikeOn}`
-			}
-			onClick={toggleIsFavourite}
+			className={`${styles.button} ${className} ${isFavorite ? styles.active : ''}`}
+			onClick={() => toggleFavorite(product)}
 		>
-			{isFavourite ? (
-				<LikeOnIcon className={styles.iconOn} />
-			) : (
-				<LikeIcon className={styles.icon} />
-			)}
+			<LikeIcon />
 		</button>
 	);
 }
