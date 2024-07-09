@@ -41,9 +41,10 @@
 	url('./splashDown.png') no-repeat bottom center;
 	background-size: contain;
 	@media only screen and (max-width: $media-xxl) {
+		width: 48%;
 	}
 	@media only screen and (max-width: $media-xl) {
-		width: 48%;
+		width: 60%;
 		padding: 40px;
 	}
 	@media only screen and (max-width: $media-lg) {
