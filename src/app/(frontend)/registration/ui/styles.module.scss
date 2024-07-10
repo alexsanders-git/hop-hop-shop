@@ -1,0 +1,246 @@
+@import "src/styles/media";
+
+.wrapper {
+	display: flex;
+	justify-content: space-between;
+	gap: 50px;
+	width: 100%;
+	height: 100%;
+	@media screen and (max-width: $media-xxl) {
+		gap: 30px;
+	}
+	@media screen and (max-width: 1140px) {
+		gap: 0;
+	}
+}
+
+.info {
+	display: flex;
+	flex-direction: column;
+	gap: 40px;
+	padding-top: 60px;
+	padding-left: 60px;
+	width: 40%;
+	@media screen and (max-width: $media-xl) {
+		padding-left: 10px;
+	}
+	@media screen and (max-width: 1140px) {
+		display: none;
+	}
+
+	&_head {
+		display: flex;
+		flex-direction: column;
+
+		span {
+			font-size: 40px;
+			font-weight: 300;
+			line-height: 46px;
+			color: var(--primary-color);
+			@media screen and (max-width: $media-xxl) {
+				font-size: 34px;
+				line-height: 38px;
+			}
+		}
+	}
+
+	&_body {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		width: 100%;
+
+		.desc {
+
+			span {
+				font-size: 22px;
+				font-weight: 700;
+				line-height: 24px;
+				margin-right: 5px;
+				@media screen and (max-width: $media-xxl) {
+					font-size: 20px;
+					line-height: 20px;
+				}
+			}
+
+			p {
+				font-size: 22px;
+				font-weight: 300;
+				line-height: 24px;
+				@media screen and (max-width: $media-xxl) {
+					font-size: 20px;
+					line-height: 20px;
+				}
+			}
+		}
+
+		.subDesc {
+			font-size: 20px;
+			font-weight: 700;
+			line-height: 24px;
+			color: #192C32;
+		}
+	}
+}
+
+.account {
+	padding: 60px;
+	background-image: url("../../../../../public/register/fon.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+
+	width: 758px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	@media screen and (max-width: 1140px) {
+		width: 100%;
+
+	}
+	@media screen and (max-width: $media-md) {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+
+	@media screen and (max-width: 600px) {
+		padding: 20px;
+		background-image: url("../../../../../public/register/fonSmall.png");
+	}
+
+	&_wrapper {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 32px;
+		width: 638px;
+		@media screen and (max-width: 1140px) {
+			width: 100%;
+		}
+		@media screen and (max-width: $media-md) {
+			gap: 10px;
+		}
+
+		h1 {
+			font-size: 64px;
+			font-weight: 400;
+			line-height: 70px;
+			color: var(--primary-color);
+
+			@media screen and (max-width: $media-md) {
+				font-size: 36px;
+				font-weight: 400;
+				line-height: 38px;
+			}
+		}
+
+		.form {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			width: 638px;
+			@media screen and (max-width: $media-md) {
+				width: 100%;
+			}
+			@media screen and (max-width: 600px) {
+				gap: 15px;
+			}
+		}
+
+		.inputWrapper {
+			display: flex;
+			gap: 25px;
+			width: 638px;
+			@media screen and (max-width: $media-md) {
+				width: 90%;
+			}
+			@media screen and (max-width: 600px) {
+				flex-direction: column;
+				gap: 15px;
+				width: 100%;
+			}
+		}
+
+		.buttonsWrapper {
+			display: flex;
+			flex-direction: column;
+			gap: 32px;
+			text-align: center;
+			width: 638px;
+
+			@media screen and (max-width: $media-md) {
+				width: 70%;
+				gap: 15px;
+			}
+			@media screen and (max-width: 600px) {
+				width: 100%;
+
+			}
+
+			button {
+				font-size: 34px;
+				font-weight: 400;
+				line-height: 38px;
+
+				@media screen and (max-width: $media-md) {
+					font-size: 20px;
+					line-height: 22px;
+				}
+			}
+
+			.checkbox {
+				font-size: 24px;
+				font-weight: 300;
+				line-height: 32.04px;
+
+				@media screen and (max-width: $media-md) {
+					font-size: 18px;
+					line-height: 24px;
+				}
+			}
+
+			.link {
+				text-decoration: underline;
+				margin-left: 5px;
+				@media screen and (max-width: $media-md) {
+					font-size: 18px;
+					font-weight: 300;
+					line-height: 24px;
+				}
+			}
+
+
+			.google {
+				display: flex;
+				flex-direction: column;
+				gap: 24px;
+				align-items: center;
+				@media screen and (max-width: $media-md) {
+					gap: 12px;
+				}
+
+				span {
+					font-size: 22px;
+					font-weight: 700;
+					line-height: 24px;
+					@media screen and (max-width: $media-md) {
+						font-size: 16px;
+						line-height: 18px;
+					}
+				}
+
+				.googleImage {
+					width: 48px;
+					height: 48px;
+					cursor: pointer;
+					border: 2px solid #192C32;
+					background: #DFE7EB;
+					border-radius: 15px;
+					box-shadow: 2px 2px 0 2px var(--primary-color);
+				}
+			}
+		}
+	}
+}

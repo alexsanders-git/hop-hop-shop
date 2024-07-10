@@ -31,3 +31,11 @@ interface IProduct {
 	attributes?: IProductAttributes;
 	images: IImage | IImage[];
 }
+
+interface InterfaceUser {
+	id: number;
+	email: string;
+	first_name: string;
+	last_name: string;
+	is_staff?: boolean;
+}
