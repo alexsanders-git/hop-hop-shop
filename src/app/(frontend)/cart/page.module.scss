@@ -1,14 +1,14 @@
 @import "../../../styles/media.scss";
 
 .wrapper {
-	
+
 	@media only screen and (max-width: $media-xxl) {
-	
+
 	}
 	@media only screen and (max-width: $media-xl) {
 	}
 	@media only screen and (max-width: $media-lg) {
-		
+
 	}
 	@media only screen and (max-width: $media-sm) {
 	}
@@ -38,12 +38,13 @@
 	align-items: center;
 	justify-content: center;
 	background: url('./splashUp.png') no-repeat top center,
-	            url('./splashDown.png') no-repeat bottom center;
-	background-size: contain;			
+	url('./splashDown.png') no-repeat bottom center;
+	background-size: contain;
 	@media only screen and (max-width: $media-xxl) {
+		width: 48%;
 	}
 	@media only screen and (max-width: $media-xl) {
-		width: 48%;
+		width: 60%;
 		padding: 40px;
 	}
 	@media only screen and (max-width: $media-lg) {
@@ -54,6 +55,7 @@
 		padding: 20px;
 	}
 }
+
 .orderSummaryWrp {
 	display: flex;
 	gap: 36px;
@@ -70,7 +72,7 @@
 	@media only screen and (max-width: $media-lg) {
 		width: 100%;
 		padding: 0 100px 40px 100px;
-		
+
 	}
 	@media only screen and (max-width: $media-sm) {
 		padding: 0 20px 20px 20px;
@@ -98,6 +100,15 @@
 	font-weight: 300;
 	@media only screen and (max-width: $media-sm) {
 		font-size: 16px;
+	}
+}
+
+.discount {
+	font-size: 20px !important;
+	line-height: 1.2 !important;
+	font-weight: 300 !important;
+	@media only screen and (max-width: $media-sm) {
+		font-size: 16px !important;
 	}
 }
 

@@ -8,7 +8,7 @@ interface IProps {
 	id: number;
 	name: string;
 	price: number;
-	images?: IImage;
+	images?: string;
 }
 
 export default function ProductCardSlider({ id, name, price, images }: IProps) {
@@ -17,7 +17,7 @@ export default function ProductCardSlider({ id, name, price, images }: IProps) {
 			<Link href={`/product/${id}`}>
 				<div className={styles.imgwrapper}>
 					<Image
-						src={images?.image || '/not-ready.svg'}
+						src={images || '/not-ready.svg'}
 						layout="fill"
 						alt="image"
 						className={styles.img}

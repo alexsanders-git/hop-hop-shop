@@ -1,33 +1,32 @@
 import Image from 'next/image';
 import React from 'react';
 
+import { InterfaceProductCart } from '@/store/cart/Cart.interface';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import BasketIcon from './basket.svg';
 import MinusIcon from './minus.svg';
 import PlusIcon from './plus.svg';
 import styles from './ShoppingCartProductCart.module.scss';
+import { getImages } from '../../../utils/typeGuards';
 
 interface ShoppingCartProductCardProps {
-	product: IProduct;
+	product: InterfaceProductCart;
+	quantity: number;
 	onIncrease: () => void;
 	onDecrease: () => void;
 	onRemove: () => void;
-	quantity: number;
 }
 
-export default function ShoppingCartProductCard({
-	product,
-	onIncrease,
-	onDecrease,
-	onRemove,
-	quantity,
-}: ShoppingCartProductCardProps) {
+export default function ShoppingCartProductCard(
+	props: ShoppingCartProductCardProps,
+) {
+	const { product, quantity, onIncrease, onDecrease, onRemove } = props;
 	return (
 		<div className={styles.cardWrp}>
 			<div className={styles.imgWrp}>
 				<Image
-					src={product?.images?.image}
+					src={getImages(product.images)[0].image}
 					width={130}
 					height={130}
 					alt={product.name}
@@ -49,7 +48,12 @@ export default function ShoppingCartProductCard({
 							Color: {product.name}
 						</p>
 					</div>
-					<button onClick={() => onRemove()} className={styles.buttonDelete}>
+					<button
+						onClick={() => {
+							onRemove();
+						}}
+						className={styles.buttonDelete}
+					>
 						<BasketIcon />
 					</button>
 				</div>
@@ -59,14 +63,18 @@ export default function ShoppingCartProductCard({
 						className={`${styles.quantity_controls} ${robotoCondensed.className}`}
 					>
 						<button
-							onClick={() => onDecrease()}
+							onClick={() => {
+								onDecrease();
+							}}
 							className={styles.buttonIncrease}
 						>
 							<MinusIcon />
 						</button>
 						<span>{quantity}</span>
 						<button
-							onClick={() => onIncrease()}
+							onClick={() => {
+								onIncrease();
+							}}
 							className={styles.buttonIncrease}
 						>
 							<PlusIcon />

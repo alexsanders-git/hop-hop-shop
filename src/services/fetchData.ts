@@ -1,3 +1,15 @@
+export const fetchDataCart = async (url: string, options?: RequestInit) => {
+	const baseURL = process.env.NEXT_PUBLIC_API_URL;
+	const response = await fetch(`${baseURL}${url}`, {
+		credentials: 'include',
+		...options,
+	});
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	}
+	return response.json();
+};
+
 export async function fetchData<T>(endpoint: string): Promise<T> {
 	const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -53,7 +65,9 @@ export const fetchDataProductPage = async (
 	try {
 		const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
-		const res = await fetch(`${baseURL}/shop/products/${id}/`);
+		const res = await fetch(`${baseURL}/shop/products/${id}/`, {
+			// mode: 'cors',
+		});
 		if (!res.ok) {
 			throw new Error(`Error fetching product data: ${res.statusText}`);
 		}

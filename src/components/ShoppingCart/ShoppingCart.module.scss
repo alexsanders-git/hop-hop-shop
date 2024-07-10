@@ -4,19 +4,22 @@
 display: flex;
 gap: 36px;
 flex-direction: column;
+min-height: 500px;
 width: 95%;
 
 
 @media only screen and (max-width: $media-lg){
-
+    width: 100%;
+    min-height: 600px;
+    
 }
-
 @media only screen and (max-width: $media-md){
-width: 100%;
+    width: 120%;
+    min-height: 350px;
 }
-
 @media only screen and (max-width: $media-xs){
     gap: 20px;
+    
 }
 }
 
@@ -31,4 +34,8 @@ width: 100%;
     @media only screen and (max-width: $media-md){
         font-size: 44px;
     }
+    @media only screen and (max-width: $media-xs){
+        font-size: 32px;
+    }
+    
 }
