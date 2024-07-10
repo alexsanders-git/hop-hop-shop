@@ -18,7 +18,11 @@ export default function FavoritesPage() {
 					{favorites.length > 0 ? (
 						favorites.map((product) => (
 							<div className={styles.product} key={product.id}>
-								<ProductCard product={product} showCategory={true} />
+								<ProductCard
+									product={product}
+									showCategory={true}
+									showButtons={{ favorite: true, cart: true, checkout: true }}
+								/>
 							</div>
 						))
 					) : (

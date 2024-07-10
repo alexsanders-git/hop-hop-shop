@@ -2,10 +2,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { robotoCondensed } from '@/styles/fonts/fonts';
+import { isArrayOfImages } from '@/utils/typeGuards';
 
 import styles from './ProductCard.module.scss';
-import { isArrayOfImages } from '../../../utils/typeGuards';
+import AddToCartButton from '../AddToCartButton/AddToCartButton';
 import AddToFavouriteButton from '../AddToFavouriteButton/AddToFavouriteButton';
+import GoToCheckoutButton from '../GoToCheckoutButton/GoToCheckoutButton';
 
 interface IProps {
 	product: IProduct;
@@ -30,6 +32,8 @@ export default function ProductCard({
 		<div className={styles.card}>
 			<div className={styles.buttons}>
 				{showButtons.favorite && <AddToFavouriteButton product={product} />}
+				{showButtons.cart && <AddToCartButton product={product} />}
+				{showButtons.checkout && <GoToCheckoutButton product={product} />}
 			</div>
 
 			<div className={styles.imageWrapper}>

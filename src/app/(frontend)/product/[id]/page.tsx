@@ -21,9 +21,9 @@ import Loading from '@/sharedComponenst/loading/Loading';
 import { useCart } from '@/store/cart/Cart.store';
 import { useLike } from '@/store/wishlist/Wishlist.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
+import { getImages } from '@/utils/typeGuards';
 
 import styles from './page.module.scss';
-import { getImages } from '../../../../../utils/typeGuards';
 
 export default function ProductPage() {
 	const { id } = useParams<{ id: string }>();

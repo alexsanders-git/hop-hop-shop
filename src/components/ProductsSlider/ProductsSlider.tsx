@@ -10,9 +10,10 @@ import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 
+import { getImages } from '@/utils/typeGuards';
+
 import IconArrow from './left.svg';
 import styles from './ProductsSlider.module.scss';
-import { getImages } from '../../../utils/typeGuards';
 import ProductCardSlider from '../ProductCardSlider/ProductCardSlider';
 
 interface IProductListProps {

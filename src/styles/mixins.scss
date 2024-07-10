@@ -214,3 +214,27 @@
 		opacity: 0.3;
 	}
 }
+
+@mixin icon-go-to-checkout-state {
+	transition: var(--transition);
+
+	&:hover {
+		svg path {
+			fill: var(--gray-color);
+		}
+	}
+
+	&:active {
+		svg path {
+			fill: var(--primary-color);
+		}
+	}
+
+	&:disabled {
+		svg path {
+			fill: var(--lightblue-color);
+		}
+
+		opacity: 0.3;
+	}
+}

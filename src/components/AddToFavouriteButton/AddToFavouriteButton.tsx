@@ -1,9 +1,9 @@
 'use client';
 
+import LikeIcon from '@/assets/svg/like.svg';
 import { useFavorite } from '@/store/favorite/Favorite.store';
 
 import styles from './AddToFavouriteButton.module.scss';
-import LikeIcon from '../../../public/like.svg';
 
 interface IProps {
 	product: IProduct;

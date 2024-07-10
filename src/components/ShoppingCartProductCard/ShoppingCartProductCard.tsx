@@ -3,12 +3,12 @@ import React from 'react';
 
 import { InterfaceProductCart } from '@/store/cart/Cart.interface';
 import { robotoCondensed } from '@/styles/fonts/fonts';
+import { getImages } from '@/utils/typeGuards';
 
 import BasketIcon from './basket.svg';
 import MinusIcon from './minus.svg';
 import PlusIcon from './plus.svg';
 import styles from './ShoppingCartProductCart.module.scss';
-import { getImages } from '../../../utils/typeGuards';
 
 interface ShoppingCartProductCardProps {
 	product: InterfaceProductCart;
