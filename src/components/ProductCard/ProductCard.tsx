@@ -6,7 +6,7 @@ import { isArrayOfImages } from '@/utils/typeGuards';
 
 import styles from './ProductCard.module.scss';
 import AddToCartButton from '../AddToCartButton/AddToCartButton';
-import AddToFavouriteButton from '../AddToFavouriteButton/AddToFavouriteButton';
+import AddToFavoriteButton from '../AddToFavoriteButton/AddToFavoriteButton';
 import GoToCheckoutButton from '../GoToCheckoutButton/GoToCheckoutButton';
 
 interface IProps {
@@ -31,7 +31,7 @@ export default function ProductCard({
 	return (
 		<div className={styles.card}>
 			<div className={styles.buttons}>
-				{showButtons.favorite && <AddToFavouriteButton product={product} />}
+				{showButtons.favorite && <AddToFavoriteButton product={product} />}
 				{showButtons.cart && <AddToCartButton product={product} />}
 				{showButtons.checkout && <GoToCheckoutButton product={product} />}
 			</div>

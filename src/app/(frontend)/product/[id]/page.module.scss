@@ -4,17 +4,21 @@
 .wrapper {
 	padding: 80px 60px;
 	height: 850px;
+
 	@media only screen and (max-width: $media-xxl) {
 		padding: 60px 40px;
 		height: 700px;
 	}
+
 	@media only screen and (max-width: $media-xl) {
 		padding: 40px 20px;
 	}
+
 	@media only screen and (max-width: $media-lg) {
 		padding: 80px 60px;
 		height: 100%;
 	}
+
 	@media only screen and (max-width: $media-sm) {
 		padding: 20px;
 	}
@@ -25,6 +29,7 @@
 	justify-content: space-between;
 	height: 100%;
 	width: 100%;
+
 	@media only screen and (max-width: $media-lg) {
 		flex-direction: column;
 	}
@@ -32,9 +37,11 @@
 	&__secondSwiper {
 		position: relative;
 		display: none;
+
 		@media only screen and (max-width: $media-lg) {
 			display: block;
 		}
+
 		width: 100%;
 		height: 100%;
 		margin-bottom: 25px;
@@ -71,12 +78,32 @@
 				justify-content: center;
 				gap: 10px;
 			}
+
+			.actions__iconFavoriteMobile {
+				position: absolute;
+				z-index: 100;
+				top: 14px;
+				right: 18px;
+				width: 48px;
+				height: 48px;
+
+				@media only screen and (max-width: $media-md) {
+					width: 40px;
+					height: 40px;
+				}
+
+				svg {
+					width: 28px;
+					height: 28px;
+				}
+			}
 		}
 
 		.slideMobile {
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
+
 			@media only screen and (max-width: $media-sm) {
 				width: 100%;
 				height: 380px;
@@ -99,6 +126,7 @@
 		flex-direction: row-reverse;
 		justify-content: space-between;
 		width: 100%;
+
 		@media only screen and (max-width: $media-lg) {
 			display: none;
 		}
@@ -123,10 +151,12 @@
 				box-shadow: 2px 2px 0 2px var(--primary-color);
 				border-radius: 24px;
 				cursor: pointer;
+
 				@media only screen and (max-width: $media-xxl) {
 					width: 180px;
 					height: 200px;
 				}
+
 				@media only screen and (max-width: $media-xl) {
 					width: 130px;
 				}
@@ -138,12 +168,15 @@
 			border-radius: 24px;
 			width: 600px;
 			margin: 0 20px;
+
 			@media only screen and (max-width: 1450px) {
 				width: 550px;
 			}
+
 			@media only screen and (max-width: $media-xxl) {
 				width: 500px;
 			}
+
 			@media only screen and (max-width: $media-xl) {
 				width: 450px;
 			}
@@ -154,6 +187,7 @@
 			border-radius: 32px;
 			border: 4px solid var(--primary-color);
 			width: 294px;
+
 			@media only screen and (max-width: $media-xl) {
 				width: 180px;
 			}
@@ -179,14 +213,15 @@
 				width: 100%;
 				display: flex;
 				flex-direction: column;
-				@media only screen and (max-width: $media-lg) {
-				}
+
+				@media only screen and (max-width: $media-lg) {}
 			}
 
 			&__wrapper {
 				width: 100%;
 				display: block;
 				margin-bottom: 32px;
+
 				@media only screen and (max-width: $media-lg) {
 					display: flex;
 					margin-bottom: 0;
@@ -199,9 +234,11 @@
 				font-weight: 300;
 				line-height: 46px;
 				margin-bottom: 10px;
+
 				@media only screen and (max-width: $media-xxl) {
 					font-size: 34px;
 				}
+
 				@media only screen and (max-width: $media-lg) {
 					font-size: 28px;
 					line-height: 32px;
@@ -214,10 +251,12 @@
 				font-weight: 700;
 				line-height: 28px;
 				margin-bottom: 15px;
+
 				@media only screen and (max-width: $media-xxl) {
 					font-size: 20px;
 					line-height: 22px;
 				}
+
 				@media only screen and (max-width: $media-lg) {
 					font-size: 16px;
 					line-height: 18px;
@@ -231,10 +270,12 @@
 				font-weight: 400;
 				line-height: 38px;
 				margin-bottom: 25px;
+
 				@media only screen and (max-width: $media-xxl) {
 					font-size: 30px;
 					line-height: 32px;
 				}
+
 				@media only screen and (max-width: $media-lg) {
 					font-size: 28px;
 					line-height: 16px;
@@ -247,10 +288,12 @@
 				font-size: 20px;
 				font-weight: 400;
 				line-height: 24px;
+
 				@media only screen and (max-width: $media-xxl) {
 					font-size: 16px;
 					line-height: 22px;
 				}
+
 				@media only screen and (max-width: $media-lg) {
 					font-size: 16px;
 					line-height: 16px;
@@ -263,13 +306,34 @@
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
+
 			@media only screen and (max-width: $media-lg) {
 				justify-content: center;
-				&__iconWrapper {
-					display: none;
-				}
 			}
 
+			&__iconFavorite {
+				width: 68px;
+				height: 68px;
+
+				@media only screen and (max-width: $media-xxl) {
+					width: 48px;
+					height: 48px;
+				}
+
+				@media only screen and (max-width: $media-lg) {
+					display: none;
+				}
+
+				svg {
+					height: 34px;
+					width: 34px;
+
+					@media only screen and (max-width: $media-xxl) {
+						width: 28px;
+						height: 28px;
+					}
+				}
+			}
 
 			.cartButton {
 				padding: 12px 18px;
@@ -282,6 +346,7 @@
 				box-shadow: 2px 2px 0 2px var(--primary-color);
 				color: var(--primary-color);
 				@include button-states-primary;
+
 				@media only screen and (max-width: $media-xxl) {
 					padding: 4px 12px;
 					font-size: 18px;
@@ -346,4 +411,3 @@
 .icon {
 	transform: rotate(180deg);
 }
-

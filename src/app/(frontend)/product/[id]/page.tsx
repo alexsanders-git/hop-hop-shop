@@ -12,6 +12,7 @@ import { Swiper as SwiperClass } from 'swiper';
 import { FreeMode, Navigation, Pagination, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import AddToFavoriteButton from '@/components/AddToFavoriteButton/AddToFavoriteButton';
 import Button from '@/components/Button/Button';
 import IconArrow from '@/components/ProductsSlider/left.svg';
 import { fetchDataProductPage } from '@/services/fetchData';
@@ -98,9 +99,13 @@ export default function ProductPage() {
 						modules={[Pagination]}
 						className={styles.mobileSwiper}
 					>
-						<CircleBackground onclick={wishListHandler}>
-							<Like id={product!.id} />
-						</CircleBackground>
+						{product && (
+							<AddToFavoriteButton
+								className={styles.actions__iconFavoriteMobile}
+								product={product}
+							/>
+						)}
+
 						{getImages(product?.images).map((img, key) => (
 							<SwiperSlide key={key} className={styles.slideMobile}>
 								<Image width={319} height={380} src={img.image} alt="" />
@@ -181,12 +186,13 @@ export default function ProductPage() {
 							text={'Add to cart'}
 							onClick={addToCartHandler}
 						/>
-						<CircleBackground
-							className={styles.actions__iconWrapper}
-							onclick={wishListHandler}
-						>
-							<Like id={product!.id} />
-						</CircleBackground>
+
+						{product && (
+							<AddToFavoriteButton
+								className={styles.actions__iconFavorite}
+								product={product}
+							/>
+						)}
 					</div>
 				</div>
 			</div>
