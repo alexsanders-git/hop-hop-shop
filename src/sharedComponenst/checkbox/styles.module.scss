@@ -13,7 +13,8 @@
 }
 
 .checkbox {
-	width: 21px;
+	display: block;
+	width: 25px;
 	height: 21px;
 	border-radius: 50%;
 	border: 1px solid var(--primary-color);
@@ -21,9 +22,11 @@
 	background-color: #DFE7EB;
 	box-shadow: 1px 1px 0 1px var(--primary-color);
 	@media only screen and (max-width: $media-lg) {
-		width: 16px;
+		width: 20px;
 		height: 16px;
-		padding: 3px;
+	}
+	@media only screen and (max-width: $media-sm) {
+		width: 30px;
 	}
 }
 

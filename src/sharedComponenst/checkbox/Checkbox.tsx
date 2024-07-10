@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode } from 'react';
 
 import styles from './styles.module.scss';
 
@@ -8,6 +8,7 @@ export interface ICheckbox {
 	className?: string;
 	isChecked: boolean;
 	setIsChecked: (isChecked: boolean) => void;
+	children: ReactNode;
 }
 
 export default function Checkbox(props: ICheckbox) {
@@ -17,6 +18,7 @@ export default function Checkbox(props: ICheckbox) {
 		label,
 		type = 'rounded',
 		className = '',
+		children,
 	} = props;
 	return (
 		<div
@@ -30,7 +32,10 @@ export default function Checkbox(props: ICheckbox) {
 			>
 				{isChecked && <div className={styles.background}></div>}
 			</div>
-			<div className={styles.text}>{label}</div>
+			<div className={styles.text}>
+				{label}
+				{children}
+			</div>
 		</div>
 	);
 }
