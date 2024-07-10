@@ -5,6 +5,7 @@ import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './ProductCard.module.scss';
 import { isArrayOfImages } from '../../../utils/typeGuards';
+import AddToFavouriteButton from '../AddToFavouriteButton/AddToFavouriteButton';
 
 interface IProps {
 	product: IProduct;
@@ -16,13 +17,21 @@ interface IProps {
 	};
 }
 
-export default function ProductCard({ product, showCategory }: IProps) {
+export default function ProductCard({
+	product,
+	showCategory = false,
+	showButtons = { favorite: true, cart: false, checkout: false },
+}: IProps) {
 	const imagesArray: IImage[] = isArrayOfImages(product.images)
 		? product.images
 		: [product.images];
 
 	return (
 		<div className={styles.card}>
+			<div className={styles.buttons}>
+				{showButtons.favorite && <AddToFavouriteButton product={product} />}
+			</div>
+
 			<div className={styles.imageWrapper}>
 				<Link href={`/product/${product.id}`}>
 					<Image

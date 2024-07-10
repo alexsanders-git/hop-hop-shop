@@ -20,15 +20,22 @@
   border: 2.67px solid var(--black-color);
   border-radius: 16px;
   box-shadow: 2px 2px 0 2px var(--black-color);
-  width: 132px;
+  min-width: 132px;
   height: 132px;
 
   @media only screen and (max-width: $media-sm) {
     border: 2px solid var(--black-color);
     border-radius: 12px;
-    width: 99px;
+    min-width: 99px;
     height: 99px;
   }
+}
+
+.product_image {
+  height: 100%;
+  border-radius: 12px;
+	object-fit: cover;
+  
 }
 
 .detailsWrp {
