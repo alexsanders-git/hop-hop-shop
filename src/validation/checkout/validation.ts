@@ -21,12 +21,12 @@ export const AppErrors = {
 
 export const nameValid = yup
 	.string()
-	.matches(/^[A-Za-z]+$/, 'First name must contain only Latin letters')
-	.required('First name is required');
+	.matches(/^[A-Za-z'’]+$/, 'Name must contain only Latin letters')
+	.required('Name is required');
 
 export const latNameValid = yup
 	.string()
-	.matches(/^[A-Za-z]+$/, 'Last name must contain only Latin letters')
+	.matches(/^[A-Za-z'’]+$/, 'Last name must contain only Latin letters')
 	.required('Last name is required');
 
 export const emailValid = yup
@@ -64,3 +64,15 @@ export const countryValid = yup
 	.required('Country is required');
 
 export const postalCodeValid = yup.string().required('Postal Code is required');
+
+export const passwordValid = yup
+	.string()
+	.required('Password is required')
+	.min(8, 'Password is too short - should be 8 chars minimum.')
+	.matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+	.matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+	.matches(/[0-9]/, 'Password must contain at least one number')
+	.matches(
+		/[!@#$%^&*(),.?":{}|<>]/,
+		'Password must contain at least one special character',
+	);

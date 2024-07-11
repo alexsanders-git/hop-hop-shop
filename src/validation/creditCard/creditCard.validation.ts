@@ -5,7 +5,13 @@ export const validationSchemaCreditCard = yup.object().shape({
 		.string()
 		.required('Card Number is required')
 		.matches(/^[0-9\s]{19}$/, 'Card Number is not valid'),
-	cardName: yup.string().required('Card Name is required'),
+	cardName: yup
+		.string()
+		.matches(
+			/^(?!['’ ]+$)[A-Za-z'’]+(?: [A-Za-z'’]+)*$/,
+			'Card Name is not valid',
+		)
+		.required('Card holder name is required'),
 	expiryDate: yup
 		.string()
 		.required('Expiry Date is required')
