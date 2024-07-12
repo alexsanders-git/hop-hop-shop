@@ -34,7 +34,7 @@ export default function Checkbox(props: ICheckbox) {
 			</div>
 			<div className={styles.text}>
 				{label}
-				{children}
+				<span onClick={(e) => e.stopPropagation()}>{children}</span>
 			</div>
 		</div>
 	);

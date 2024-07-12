@@ -14,7 +14,7 @@
 
 .checkbox {
 	display: block;
-	width: 25px;
+	width: 30px;
 	height: 21px;
 	border-radius: 50%;
 	border: 1px solid var(--primary-color);
@@ -24,10 +24,20 @@
 	@media only screen and (max-width: $media-lg) {
 		width: 20px;
 		height: 16px;
+		padding: 2px;
+
 	}
+	@media only screen and (max-width: $media-md) {
+		width: 25px;
+	}
+
 	@media only screen and (max-width: $media-sm) {
 		width: 30px;
 	}
+	@media only screen and (max-width: $media-xs) {
+		width: 35px;
+	}
+
 }
 
 .text {
