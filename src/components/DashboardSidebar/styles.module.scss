@@ -1,0 +1,43 @@
+@import "src/styles/media";
+
+.sidebar {
+	display: flex;
+	flex-direction: column;
+	width: 240px;
+	border-right: 2px solid var(--primary-color);
+	border-left: 2px solid var(--primary-color);
+	border-bottom: 2px solid var(--primary-color);
+
+	@media screen and (max-width: $media-xl) {
+		display: none;
+	}
+
+	ul {
+		padding: 0;
+
+	}
+
+	li {
+		width: 100%;
+		list-style: none;
+		padding: 19px 0 19px 28px;
+		border-bottom: 2px solid var(--primary-color);
+		cursor: pointer;
+
+		&:hover {
+			background-color: var(--primary-color);
+
+			a {
+				color: var(--beige-color);
+			}
+		}
+	}
+
+	a {
+		font-size: 28px;
+		font-weight: 300;
+		line-height: 36px;
+		color: var(--primary-color);
+	}
+}
+
