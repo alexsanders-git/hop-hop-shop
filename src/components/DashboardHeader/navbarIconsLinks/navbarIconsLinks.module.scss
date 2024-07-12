@@ -1,0 +1,83 @@
+@import "../../../styles/media";
+@import "../../../styles/mixins";
+
+.icons_list {
+	display: flex;
+	gap: 32px;
+	align-items: center;
+	justify-content: center;
+
+	@media only screen and (max-width: $media-xl) {
+		gap: 18px;
+	}
+	@media only screen and (max-width: $media-xs) {
+		gap: 8px;
+	}
+}
+
+
+.icons_item, .icons_item2 {
+	width: 22px;
+	height: 22px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+
+	@media only screen and (max-width: $media-xl) {
+		&:nth-child(1) {
+			display: none;
+		}
+	}
+}
+
+.icons_item2 {
+	transition: var(--transition);
+
+	&:hover {
+		svg path {
+			fill: var(--gray-color);
+		}
+	}
+
+	&:active {
+		svg path {
+			fill: var(--primary-color);
+
+		}
+	}
+
+	&:disabled {
+		svg path {
+			fill: var(--lightblue-color);
+		}
+
+		opacity: 0.3;
+	}
+
+}
+
+.icons_item {
+	@include header-icons-state;
+}
+
+
+.admin {
+	color: var(--yellow-color);
+	text-shadow: -2px -2px 0 var(--primary-color),
+	2px -2px 0 var(--primary-color),
+	-2px 2px 0 var(--primary-color),
+	2px 2px 0 var(--primary-color);
+
+	font-size: 28px;
+	font-weight: 900;
+	line-height: 32px;
+	letter-spacing: 2px;
+
+	@media only screen and (max-width: $media-lg) {
+		font-size: 24px;
+		font-weight: 900;
+		line-height: 26px;
+	}
+
+}
