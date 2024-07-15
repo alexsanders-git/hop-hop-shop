@@ -8,13 +8,24 @@ interface IState {
 		delivery: boolean;
 		payment: boolean;
 	};
+	personalData: IPersonalData | null;
+	deliveryAddress: IDeliveryAddress | null;
+	creditCard: ICreditCard | null;
 }
 
 interface IActions {
 	setPersonal: (personal: boolean) => void;
 	setDelivery: (delivery: boolean) => void;
 	setPayment: (payment: boolean) => void;
+
+	setPersonalData: (personalData: IPersonalData) => void;
+	setDeliveryAddress: (deliveryAddress: IDeliveryAddress) => void;
+	setCreditCard: (creditCard: ICreditCard) => void;
 }
+
+const partialize = (state: IState) => ({
+	checkout: state.checkout,
+});
 
 export const useCheckout = create<IState & IActions>()(
 	devtools(
@@ -25,6 +36,9 @@ export const useCheckout = create<IState & IActions>()(
 					delivery: false,
 					payment: false,
 				},
+				personalData: null,
+				deliveryAddress: null,
+				creditCard: null,
 				setPersonal: (personal) =>
 					set((state) => {
 						state.checkout.personal = personal;
@@ -37,8 +51,21 @@ export const useCheckout = create<IState & IActions>()(
 					set((state) => {
 						state.checkout.payment = payment;
 					}),
+				setPersonalData: (personalData) =>
+					set((state) => {
+						state.personalData = personalData;
+					}),
+				setDeliveryAddress: (payload) =>
+					set((state) => {
+						state.deliveryAddress = payload;
+					}),
+				setCreditCard: (payload) =>
+					set((state) => {
+						state.creditCard = payload;
+					}),
 			})),
-			{ name: 'checkout' },
+			{ name: 'checkout', partialize },
 		),
+		{ name: 'checkout' },
 	),
 );

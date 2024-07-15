@@ -1,5 +1,5 @@
 'use client';
-import { useFormik } from 'formik';
+import { useFormik, useFormikContext } from 'formik';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -18,16 +18,16 @@ import paypal from '../../../../../../public/payment/paypal.png';
 
 const deliveryImages = [applePay, googlePay, paypal, bitcoin];
 
-export interface IPayment {}
-
-export default function Payment(props: IPayment) {
+export default function Payment() {
 	const [opened, setOpened] = useState(false);
 	const [isChecked, setIsChecked] = useState<'card' | 'online'>('card');
 	const { payment } = useCheckout((state) => state.checkout);
 	const setPayment = useCheckout((state) => state.setPayment);
+	const setCreditCard = useCheckout((state) => state.setCreditCard);
 
-	const onSubmit = (values: any) => {
-		// console.log(values);
+	const onSubmit = (values: ICreditCard) => {
+		setCreditCard(values);
+		setOpened(true);
 	};
 
 	const formik = useFormik({
@@ -91,9 +91,7 @@ export default function Payment(props: IPayment) {
 					</div>
 					<Button
 						className={styles.button}
-						onClick={() => {
-							setOpened(true);
-						}}
+						onClick={formik.submitForm}
 						disabled={!(formik.isValid && formik.dirty)}
 						style={'secondary'}
 						text={'Next'}

@@ -39,3 +39,24 @@ interface InterfaceUser {
 	last_name: string;
 	is_staff?: boolean;
 }
+
+interface IPersonalData {
+	name: string;
+	lastname: string;
+	email: string;
+	phone: string;
+}
+
+interface IDeliveryAddress {
+	country: string;
+	city: string;
+	postalCode: string;
+	address: string;
+}
+
+interface ICreditCard {
+	cardNumber: string;
+	cvv: string;
+	expiryDate: string;
+	cardName: string;
+}
