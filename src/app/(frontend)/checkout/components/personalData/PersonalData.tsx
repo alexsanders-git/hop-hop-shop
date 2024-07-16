@@ -21,18 +21,12 @@ import styles from './styles.module.scss';
 
 export default function PersonalData() {
 	const [opened, setOpened] = useState(false);
-	const ref = useRef<FormikProps<FormValues>>(null);
+	const ref = useRef<FormikProps<IPersonalData>>(null);
 
 	const { personal } = useCheckout((state) => state.checkout);
 	const setDelivery = useCheckout((state) => state.setDelivery);
 	const setPersonal = useCheckout((state) => state.setPersonal);
-
-	interface FormValues {
-		name: string;
-		lastname: string;
-		email: string;
-		phone: string;
-	}
+	const setPersonalData = useCheckout((state) => state.setPersonalData);
 
 	return (
 		<div className={styles.container}>
@@ -56,6 +50,7 @@ export default function PersonalData() {
 					onSubmit={async (values) => {
 						setOpened(true);
 						setDelivery(true);
+						setPersonalData(values);
 					}}
 				>
 					{({ isValid, dirty }) => (

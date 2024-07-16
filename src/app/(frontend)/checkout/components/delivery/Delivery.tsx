@@ -25,19 +25,13 @@ import usp from '../../../../../../public/delivery/usp.png';
 
 export default function Delivery() {
 	const [opened, setOpened] = useState(false);
-	const ref = useRef<FormikProps<FormValues>>(null);
+	const ref = useRef<FormikProps<IDeliveryAddress>>(null);
 	const { delivery } = useCheckout((state) => state.checkout);
 	const setDelivery = useCheckout((state) => state.setDelivery);
 	const setPayment = useCheckout((state) => state.setPayment);
+	const setDeliveryAddress = useCheckout((state) => state.setDeliveryAddress);
 
 	const deliveryImages = [dhl, fedEx, united, usp, tnt];
-
-	interface FormValues {
-		country: string;
-		city: string;
-		postalCode: string;
-		address: string;
-	}
 
 	return (
 		<Formik
@@ -59,6 +53,7 @@ export default function Delivery() {
 			onSubmit={async (values) => {
 				setPayment(true);
 				setOpened(true);
+				setDeliveryAddress(values);
 			}}
 		>
 			{({ isValid, dirty }) => (
