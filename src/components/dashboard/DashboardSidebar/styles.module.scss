@@ -1,4 +1,4 @@
-@import "src/styles/media";
+@import "../../../styles/media";
 
 .sidebar {
 	display: flex;
@@ -18,26 +18,24 @@
 	}
 
 	li {
-		width: 100%;
 		list-style: none;
-		padding: 19px 0 19px 28px;
-		border-bottom: 2px solid var(--primary-color);
-		cursor: pointer;
 
-		&:hover {
-			background-color: var(--primary-color);
+		a {
+			display: block;
+			border-bottom: 2px solid var(--primary-color);
+			cursor: pointer;
+			padding: 19px 0 19px 28px;
+			font-size: 28px;
+			font-weight: 300;
+			line-height: 36px;
+			color: var(--primary-color);
 
-			a {
+			&:hover {
+				background-color: var(--primary-color);
 				color: var(--beige-color);
 			}
 		}
 	}
 
-	a {
-		font-size: 28px;
-		font-weight: 300;
-		line-height: 36px;
-		color: var(--primary-color);
-	}
 }
 
