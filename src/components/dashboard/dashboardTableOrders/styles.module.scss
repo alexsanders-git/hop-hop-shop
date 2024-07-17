@@ -98,7 +98,7 @@
 	}
 
 	.col1 {
-		flex-basis: 10%;
+		flex-basis: 11%;
 		padding-left: 25px;
 		@media screen and (max-width: $media-lg) {
 			padding-left: 12px;
@@ -167,5 +167,18 @@
 			}
 		}
 
+	}
+}
+
+.first {
+	@media screen and (max-width: $media-sm) {
+		display: none !important;
+	}
+}
+
+.second {
+	display: none !important;
+	@media screen and (max-width: $media-sm) {
+		display: flex !important;
 	}
 }

@@ -154,3 +154,17 @@
 
 	}
 }
+
+
+.first {
+	@media screen and (max-width: $media-sm) {
+		display: none !important;
+	}
+}
+
+.second {
+	display: none !important;
+	@media screen and (max-width: $media-sm) {
+		display: flex !important;
+	}
+}

@@ -24,14 +24,18 @@ export default function DashboardTableUsers(props: IProps) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentPage]);
 
+	const header = [{ name: 'User ID' }, { name: 'Name' }, { name: 'Email' }];
+
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.container}>
 				<ul className={styles.responsiveTable}>
-					<li className={styles.tableHeader}>
-						<div className={`${styles.col} ${styles.col1}`}>User ID</div>
-						<div className={`${styles.col} ${styles.col2}`}>Name</div>
-						<div className={`${styles.col} ${styles.col3}`}>Email</div>
+					<li className={`${styles.tableHeader}`}>
+						{header.map((item, i) => (
+							<div key={i} className={`${styles.col} ${styles[`col${i + 1}`]}`}>
+								{item.name}
+							</div>
+						))}
 					</li>
 					{currentTableData.map((item: any, index: number) => (
 						<li

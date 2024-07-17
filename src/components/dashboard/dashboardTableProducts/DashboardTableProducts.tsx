@@ -24,26 +24,31 @@ export default function DashboardTableProducts(props: IProps) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentPage]);
 
-	const width = window.innerWidth;
+	const header = [
+		{ name: 'Product', mobileName: 'Pro...' },
+		{ name: 'Category', mobileName: 'Cat...' },
+		{ name: 'Quantity', mobileName: 'Qty...' },
+		{ name: 'Price', mobileName: 'Pri...' },
+		{ name: '', mobileName: '' },
+	];
 
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.container}>
 				<ul className={styles.responsiveTable}>
-					<li className={styles.tableHeader}>
-						<div className={`${styles.col} ${styles.col1}`}>
-							{width > 500 ? 'Product' : 'Product'}
-						</div>
-						<div className={`${styles.col} ${styles.col2}`}>
-							{width > 500 ? 'Category' : 'Cate...'}
-						</div>
-						<div className={`${styles.col} ${styles.col3}`}>
-							{width > 500 ? 'Quantity' : 'Quan...'}
-						</div>
-						<div className={`${styles.col} ${styles.col4}`}>
-							{width > 500 ? 'Price' : 'Price'}
-						</div>
-						<div className={`${styles.col} ${styles.col5}`}></div>
+					<li className={`${styles.tableHeader} ${styles.first} `}>
+						{header.map((item, i) => (
+							<div key={i} className={`${styles.col} ${styles[`col${i + 1}`]}`}>
+								{item.name}
+							</div>
+						))}
+					</li>
+					<li className={`${styles.tableHeader} ${styles.second} `}>
+						{header.map((item, i) => (
+							<div key={i} className={`${styles.col} ${styles[`col${i + 1}`]}`}>
+								{item.mobileName}
+							</div>
+						))}
 					</li>
 					{currentTableData.map((item: any, index: number) => (
 						<li

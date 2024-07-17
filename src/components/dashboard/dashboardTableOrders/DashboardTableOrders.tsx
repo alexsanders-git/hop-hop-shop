@@ -24,35 +24,34 @@ export default function DashboardTableOrders(props: IProps) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentPage]);
 
-	const width = window.innerWidth;
+	const header = [
+		{ name: 'Order ID', mobileName: 'Ord...' },
+		{ name: 'Product', mobileName: 'Prd...' },
+		{ name: 'Category', mobileName: 'Cat...' },
+		{ name: 'Date', mobileName: 'Dat...' },
+		{ name: 'Status', mobileName: 'Sta...' },
+		{ name: 'Quantity', mobileName: 'Qty...' },
+		{ name: 'Price', mobileName: 'Pri...' },
+		{ name: '', mobileName: '' },
+	];
 
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.container}>
 				<ul className={styles.responsiveTable}>
-					<li className={styles.tableHeader}>
-						<div className={`${styles.col} ${styles.col1}`}>
-							{width > 500 ? 'Order ID' : 'Ord...'}
-						</div>
-						<div className={`${styles.col} ${styles.col2}`}>
-							{width > 500 ? 'Product' : 'Pro...'}
-						</div>
-						<div className={`${styles.col} ${styles.col3}`}>
-							{width > 500 ? 'Category' : 'Cat...'}
-						</div>
-						<div className={`${styles.col} ${styles.col4}`}>
-							{width > 500 ? 'Date' : 'Dat...'}
-						</div>
-						<div className={`${styles.col} ${styles.col5}`}>
-							{width > 500 ? 'Status' : 'Sta...'}
-						</div>
-						<div className={`${styles.col} ${styles.col6}`}>
-							{width > 500 ? 'Quantity' : 'Qty...'}
-						</div>
-						<div className={`${styles.col} ${styles.col7}`}>
-							{width > 500 ? 'Price' : 'Pri...'}
-						</div>
-						<div className={`${styles.col} ${styles.col8}`}></div>
+					<li className={`${styles.tableHeader} ${styles.first} `}>
+						{header.map((item, i) => (
+							<div key={i} className={`${styles.col} ${styles[`col${i + 1}`]}`}>
+								{item.name}
+							</div>
+						))}
+					</li>
+					<li className={`${styles.tableHeader} ${styles.second} `}>
+						{header.map((item, i) => (
+							<div key={i} className={`${styles.col} ${styles[`col${i + 1}`]}`}>
+								{item.mobileName}
+							</div>
+						))}
 					</li>
 					{currentTableData.map((item: any, index: number) => (
 						<li
