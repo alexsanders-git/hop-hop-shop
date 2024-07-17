@@ -25,6 +25,8 @@
 	display: flex;
 	gap: 25px;
 	width: 638px;
+
+
 	@media screen and (max-width: $media-md) {
 		width: 90%;
 	}
@@ -117,5 +119,56 @@
 			border-radius: 15px;
 			box-shadow: 2px 2px 0 2px var(--primary-color);
 		}
+	}
+}
+
+
+.phoneInputWrapper {
+	width: 100%;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+
+	input {
+		width: 100%;
+
+		&::placeholder {
+			opacity: 0.5;
+
+		}
+	}
+
+	@media screen and (max-width: $media-lg) {
+		margin-bottom: 16px;
+	}
+}
+
+.phoneInputText {
+	font-size: 22px;
+	font-weight: 400;
+	line-height: 27px;
+	margin-bottom: 15px;
+	@media only screen and (max-width: $media-lg) {
+		font-size: 16px;
+		line-height: 20px;
+		margin-bottom: 7px;
+	}
+}
+
+
+.error {
+	width: 100%;
+	display: block;
+	position: absolute;
+	top: calc(100% - 30px);
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 16px;
+	line-height: 1;
+	color: var(--error-color);
+	z-index: 50;
+
+	@media screen and (max-width: $media-lg) {
+		top: calc(100% + 10px);
 	}
 }
