@@ -33,7 +33,7 @@ export default function LoginForm() {
 				})
 				.required()}
 			onSubmit={async (values) => {
-				const res = await fetchWithCookies('/auth/token/', {
+				const res = await fetchWithCookies('/auth/login/', {
 					method: 'POST',
 					body: JSON.stringify({
 						email: values.email,

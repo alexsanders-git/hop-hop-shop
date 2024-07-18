@@ -61,13 +61,9 @@ export default function RegistrationForm() {
 						last_name: values.last_name,
 						email: values.email,
 						password: values.password,
-						// видалити нафіг confirm_password і включити phone
-
-						// phone: values.phone,
-						confirm_password: values.password,
+						phone_number: values.phone,
 					}),
 				});
-				console.log(res);
 				if (res.success === true) {
 					localStorage.setItem(LocalStorageEnums.access_token, res.data.access);
 					setUser(res.data.user);
