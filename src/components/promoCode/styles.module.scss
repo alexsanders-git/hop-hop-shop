@@ -22,7 +22,7 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	position: relative;
+	//position: relative;
 	@media only screen and (max-width: $media-xxl) {
 		font-size: 16px;
 	}
@@ -96,7 +96,6 @@
 
 .rotate {
 	svg {
-
 		transform: rotate(180deg);
 	}
 }
@@ -105,7 +104,7 @@
 	position: absolute;
 	z-index: 50;
 	right: 20px;
-
+	top: 15px;
 }
 
 .error {
@@ -114,4 +113,17 @@
 
 .success {
 	stroke: var(--success-color);
+}
+
+
+.errorMessage {
+	color: var(--error-color);
+	font-size: 16px;
+	position: absolute;
+	bottom: -25px;
+	right: 0;
+}
+
+.inputWrapper {
+	position: relative;
 }

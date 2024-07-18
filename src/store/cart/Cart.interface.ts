@@ -38,8 +38,5 @@ export interface ApiResponseFetchCart {
 
 export interface InterfaceCouponResponse {
 	success: boolean;
-	data: {
-		message?: string;
-		error?: string;
-	};
+	error?: string;
 }
