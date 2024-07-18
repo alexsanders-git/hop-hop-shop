@@ -38,7 +38,8 @@
 	padding-left: 32px;
 }
 
-.suggestionsContainer {
+
+.suggestionsWrapper {
 	position: absolute;
 	top: 60%;
 	left: 0;
@@ -50,15 +51,27 @@
 	background-color: var(--main-background-color);
 	border-top: none;
 	z-index: 500;
-	max-height: 150px;
-	padding-top: 20px;
+	padding-top: 25px;
+}
+
+.suggestionsWrapperScrollBar {
+	overflow: hidden;
+	position: relative;
+	border-bottom-left-radius: 20px;
+	border-bottom-right-radius: 20px;
+}
+
+.suggestionsContainer {
 	overflow-y: auto;
+	box-sizing: content-box;
+	max-height: 150px;
 }
 
 .suggestionItem {
 	padding: 8px;
 	cursor: pointer;
 	transition: all .4s ease;
+
 
 	&:hover {
 		color: #507178;

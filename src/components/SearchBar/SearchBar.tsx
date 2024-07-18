@@ -70,16 +70,20 @@ function SearchBar(props: SearchBarProps, ref: Ref<HTMLDivElement>) {
 				placeholder="Search"
 			/>
 			{data.length > 0 && debouncedSearch.length > 0 && (
-				<div className={styles.suggestionsContainer}>
-					{data.map((suggestion, index) => (
-						<div
-							key={index}
-							className={styles.suggestionItem}
-							onClick={() => handleSuggestionClick(suggestion.id)}
-						>
-							{suggestion.name}
+				<div className={styles.suggestionsWrapper}>
+					<div className={styles.suggestionsWrapperScrollBar}>
+						<div className={styles.suggestionsContainer}>
+							{data.map((suggestion, index) => (
+								<div
+									key={index}
+									className={styles.suggestionItem}
+									onClick={() => handleSuggestionClick(suggestion.id)}
+								>
+									{suggestion.name}
+								</div>
+							))}
 						</div>
-					))}
+					</div>
 				</div>
 			)}
 		</div>
