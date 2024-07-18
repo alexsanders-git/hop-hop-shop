@@ -68,7 +68,7 @@ export default function ProductIdDesktopSwiper(props: IProps) {
 				onSwiper={setThumbsSwiper}
 				loop={true}
 				spaceBetween={20}
-				slidesPerView={2.15}
+				slidesPerView={2}
 				freeMode={true}
 				watchSlidesProgress={true}
 				modules={[FreeMode, Navigation, Thumbs]}
