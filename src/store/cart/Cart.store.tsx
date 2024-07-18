@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import { fetchWithAuth } from '@/services/auth/auth.service';
+import { fetchWithCookies } from '@/services/cookies/cookies.service';
 import { fetchDataCart } from '@/services/fetchData';
 import {
 	ApiResponseFetchCart,
@@ -87,7 +87,7 @@ export const useCart = create<IState & IActions>()(
 				},
 
 				addCoupon: async (coupon: string): Promise<any | undefined> => {
-					const res: InterfaceCouponResponse = await fetchWithAuth(
+					const res: InterfaceCouponResponse = await fetchWithCookies(
 						'/cart/coupon/',
 						{
 							method: 'POST',
