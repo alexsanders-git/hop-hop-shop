@@ -1,0 +1,22 @@
+@import "src/styles/media.scss";
+
+.container {
+	width: 100%;
+}
+
+.title {
+    font-weight: 40px;
+    font-weight: 300;
+}
+
+.inputContainer {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
