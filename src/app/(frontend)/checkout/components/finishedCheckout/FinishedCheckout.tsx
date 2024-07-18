@@ -4,8 +4,7 @@ import { useState } from 'react';
 
 import Order from '@/app/(frontend)/checkout/components/order/Order';
 import Button from '@/components/Button/Button';
-import { fetchWithAuth } from '@/services/auth/auth.service';
-import { fetchData } from '@/services/fetchData';
+import { fetchWithCookies } from '@/services/cookies/cookies.service';
 import Checkbox from '@/sharedComponenst/checkbox/Checkbox';
 import { useCart } from '@/store/cart/Cart.store';
 import { useCheckout } from '@/store/checkout/Checkout.store';
@@ -41,7 +40,7 @@ export default function FinishedCheckout() {
 				className={styles.button}
 				text={'Place order'}
 				onClick={async () => {
-					const res = await fetchWithAuth('/checkout/checkout/', {
+					const res = await fetchWithCookies('/checkout/checkout/', {
 						method: 'POST',
 						body: JSON.stringify({
 							first_name: personalData!.phone,

@@ -1,4 +1,4 @@
-export const fetchWithAuth = async (url: string, options?: RequestInit) => {
+export const fetchWithCookies = async (url: string, options?: RequestInit) => {
 	const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 	try {

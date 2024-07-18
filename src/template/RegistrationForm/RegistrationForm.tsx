@@ -1,6 +1,7 @@
 'use client';
-import { Form, Formik } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import * as yup from 'yup';
 
@@ -8,12 +9,18 @@ import Button from '@/components/Button/Button';
 import ButtonLink from '@/components/ButtonLink/ButtonLink';
 import Input from '@/components/Input/Input';
 import InputPassword from '@/components/InputPassword/InputPassword';
+import { fetchWithCookies } from '@/services/cookies/cookies.service';
 import Checkbox from '@/sharedComponenst/checkbox/Checkbox';
+import PhoneInputField from '@/sharedComponenst/phoneInputField/PhoneInputField';
+import { useUser } from '@/store/user/User.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
+import { LocalStorageEnums } from '@/utils/enums/localStorageEnums';
 import {
 	emailValid,
+	latNameValid,
 	nameValid,
 	passwordValid,
+	phoneValid,
 } from '@/validation/checkout/validation';
 
 import styles from './styles.module.scss';
@@ -21,17 +28,23 @@ import Google from '../../../public/login/google.svg';
 
 export default function RegistrationForm() {
 	const [open, setOpen] = useState<boolean>(false);
+	const setUser = useUser((state) => state.setUser);
+	const navigate = useRouter();
 	return (
 		<Formik
 			initialValues={{
 				name: '',
+				last_name: '',
 				email: '',
+				phone: '',
 				password: '',
 				confPassword: '',
 			}}
 			validationSchema={yup
 				.object({
 					name: nameValid,
+					last_name: latNameValid,
+					phone: phoneValid,
 					email: emailValid,
 					password: passwordValid,
 					confPassword: yup
@@ -40,23 +53,68 @@ export default function RegistrationForm() {
 						.oneOf([yup.ref('password')], 'Passwords must match'),
 				})
 				.required()}
-			onSubmit={async (values) => {}}
+			onSubmit={async (values) => {
+				const res = await fetchWithCookies('/auth/registration/', {
+					method: 'POST',
+					body: JSON.stringify({
+						first_name: values.name,
+						last_name: values.last_name,
+						email: values.email,
+						password: values.password,
+						phone_number: values.phone,
+					}),
+				});
+				if (res.success === true) {
+					localStorage.setItem(LocalStorageEnums.access_token, res.data.access);
+					setUser(res.data.user);
+					navigate.push('/');
+				}
+				if (res.error) {
+					alert(res.error);
+				}
+			}}
 		>
 			{({ isValid, dirty }) => (
 				<Form className={styles.form}>
 					<div className={styles.inputWrapper}>
 						<Input
-							title={'Name'}
+							title={'First Name'}
 							type={'text'}
 							name={'name'}
 							placeholder={'Enter Name'}
 						/>
+						<Input
+							title={'Last Name'}
+							type={'text'}
+							name={'last_name'}
+							placeholder={'Enter Last Name'}
+						/>
+					</div>
+					<div className={styles.inputWrapper}>
 						<Input
 							title={'Email'}
 							type={'email'}
 							name={'email'}
 							placeholder={'Enter Email'}
 						/>
+						<div className={styles.phoneInputWrapper}>
+							<label
+								className={`${styles.phoneInputText} ${robotoCondensed.className}`}
+								htmlFor="phone"
+							>
+								Phone Number
+							</label>
+							<Field
+								name="phone"
+								placeholder={'+38 066 666 66 66'}
+								component={PhoneInputField}
+							/>
+							<ErrorMessage
+								className={styles.error}
+								name="phone"
+								component="div"
+							/>
+						</div>
 					</div>
 					<div className={styles.inputWrapper}>
 						<InputPassword
