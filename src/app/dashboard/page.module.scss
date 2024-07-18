@@ -20,9 +20,9 @@
 	flex: 1 1 auto;
 	overflow: hidden;
 	background: var(--lightblue-color);
-	@media screen and (max-width: $media-lg) {
-		border-right: 2px solid var(--primary-color);
+	border-right: 2px solid var(--primary-color);
+	border-bottom: 2px solid var(--primary-color);
+	@media screen and (max-width: $media-xl) {
 		border-left: 2px solid var(--primary-color);
-		border-bottom: 2px solid var(--primary-color);
 	}
 }
