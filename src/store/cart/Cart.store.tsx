@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
+import { fetchWithCookies } from '@/services/cookies/cookies.service';
 import { fetchDataCart } from '@/services/fetchData';
 import {
 	ApiResponseFetchCart,
@@ -18,7 +19,7 @@ interface IActions {
 	addItemToCart: (id: number) => Promise<void>;
 	subtractItemFromCart: (id: number) => Promise<void>;
 	removeItemFromCart: (id: number) => Promise<void>;
-	addCoupon: (coupon: string) => Promise<InterfaceCouponResponse | undefined>;
+	addCoupon: (coupon: string) => Promise<InterfaceCouponResponse>;
 }
 
 export const useCart = create<IState & IActions>()(
@@ -36,6 +37,7 @@ export const useCart = create<IState & IActions>()(
 						console.error('Failed to fetch cart data:', error);
 					}
 				},
+
 				addItemToCart: async (id: number) => {
 					try {
 						const data: ApiResponseFetchCart = await fetchDataCart(
@@ -83,28 +85,22 @@ export const useCart = create<IState & IActions>()(
 						console.error('Failed to remove item from cart:', error);
 					}
 				},
-				addCoupon: async (
-					coupon: string,
-				): Promise<InterfaceCouponResponse | undefined> => {
-					try {
-						const data: InterfaceCouponResponse = await fetchDataCart(
-							'/cart/coupon/',
-							{
-								method: 'POST',
-								headers: {
-									'Content-Type': 'application/json',
-								},
-								body: JSON.stringify({ code: coupon }),
+
+				addCoupon: async (coupon: string): Promise<any | undefined> => {
+					const res: InterfaceCouponResponse = await fetchWithCookies(
+						'/cart/coupon/',
+						{
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
 							},
-						);
-						if (data) {
-							await useCart.getState().fetchCart();
-						}
-						return data;
-					} catch (error: any) {
-						console.error('Failed to apply coupon:', error);
-						return { success: false, data: { error: error.message } };
+							body: JSON.stringify({ code: coupon }),
+						},
+					);
+					if (res?.success) {
+						await useCart.getState().fetchCart();
 					}
+					return res;
 				},
 			})),
 			{ name: 'cart' },

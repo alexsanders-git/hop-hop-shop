@@ -37,7 +37,7 @@ interface InterfaceUser {
 	email: string;
 	first_name: string;
 	last_name: string;
-	is_staff?: boolean;
+	user_role: UserRole.Admin | UserRole.User;
 }
 
 interface IPersonalData {
@@ -59,4 +59,9 @@ interface ICreditCard {
 	cvv: string;
 	expiryDate: string;
 	cardName: string;
+}
+
+enum UserRole {
+	User = 'User',
+	Admin = 'Admin',
 }

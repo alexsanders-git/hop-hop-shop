@@ -29,6 +29,10 @@
 	padding-right: 32px;
 	background-color: var(--secondary-background-color);
 
+	@media only screen and (max-width: $media-xl) {
+		padding-left: 32px;
+	}
+
 	@media only screen and (max-width: $media-lg) {
 		padding: 14px;
 		justify-content: space-between;

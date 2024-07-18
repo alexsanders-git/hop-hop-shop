@@ -20,22 +20,27 @@
 	li {
 		list-style: none;
 
-		a {
-			display: block;
-			border-bottom: 2px solid var(--primary-color);
-			cursor: pointer;
-			padding: 19px 0 19px 28px;
-			font-size: 28px;
-			font-weight: 300;
-			line-height: 36px;
-			color: var(--primary-color);
-
-			&:hover {
-				background-color: var(--primary-color);
-				color: var(--beige-color);
-			}
-		}
 	}
 
 }
 
+.link {
+	display: block;
+	border-bottom: 2px solid var(--primary-color);
+	cursor: pointer;
+	padding: 19px 0 19px 28px;
+	font-size: 28px;
+	font-weight: 300;
+	line-height: 36px;
+	color: var(--primary-color);
+
+	&:hover {
+		background-color: var(--gray-color);
+		color: var(--white-color);
+	}
+}
+
+.active {
+	background-color: var(--primary-color);
+	color: var(--beige-color);
+}
