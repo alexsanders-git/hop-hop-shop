@@ -115,6 +115,10 @@
 			stroke: #DFE7EB;
 		}
 	}
+
+	svg path {
+		transition: var(--transition);
+	}
 }
 
 .button_left {
