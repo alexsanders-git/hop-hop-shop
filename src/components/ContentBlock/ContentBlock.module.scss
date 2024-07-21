@@ -7,6 +7,7 @@
 	line-height: 70px;
 	color: var(--primary-color);
 	margin-bottom: 12px;
+
 	@media only screen and (max-width: $media-md) {
 		font-size: 42px;
 	}
@@ -67,6 +68,11 @@
 		margin-bottom: 16px;
 	}
 
+	b,
+	strong {
+		font-weight: 700;
+	}
+
 	a {
 		text-decoration: underline;
 
@@ -97,6 +103,11 @@
 		&:not(:last-child) {
 			margin-bottom: 8px;
 		}
+	}
+
+	b,
+	strong {
+		font-weight: 700;
 	}
 
 	a {

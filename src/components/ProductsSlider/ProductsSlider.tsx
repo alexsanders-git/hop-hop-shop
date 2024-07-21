@@ -21,6 +21,7 @@ interface IProductListProps {
 }
 
 export default function ProductsSlider({ products }: IProductListProps) {
+	console.log('products: ', products);
 	const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
 	const swiperRef = useRef<SwiperClass | null>(null);
 
@@ -56,13 +57,14 @@ export default function ProductsSlider({ products }: IProductListProps) {
 				modules={[FreeMode, Navigation, Thumbs]}
 				className={styles.swiperContainer}
 			>
-				{products.map(({ id, name, price, images }) => (
+				{products.map(({ id, name, price, images, category }) => (
 					<SwiperSlide key={id} className={styles.swiperSlide}>
 						<ProductCardSlider
 							id={id}
 							name={name}
 							price={price}
 							images={getImages(images)[0]?.image}
+							category={category.name}
 						/>
 					</SwiperSlide>
 				))}

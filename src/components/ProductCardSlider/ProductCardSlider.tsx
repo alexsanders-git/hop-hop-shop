@@ -9,9 +9,16 @@ interface IProps {
 	name: string;
 	price: number;
 	images?: string;
+	category: string;
 }
 
-export default function ProductCardSlider({ id, name, price, images }: IProps) {
+export default function ProductCardSlider({
+	id,
+	name,
+	price,
+	images,
+	category,
+}: IProps) {
 	return (
 		<div className={styles.card}>
 			<Link href={`/product/${id}`}>
@@ -25,7 +32,7 @@ export default function ProductCardSlider({ id, name, price, images }: IProps) {
 				</div>
 				<div className={styles.details}>
 					<h3 className={styles.name}>{name}</h3>
-					{/* <p className={styles.description}>{description}</p> */}
+					<p className={styles.category}>{category}</p>
 				</div>
 				<div className={styles.pricetag}>
 					<PriceTagIcon className={styles.icon} />

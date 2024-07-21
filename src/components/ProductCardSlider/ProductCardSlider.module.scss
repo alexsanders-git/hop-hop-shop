@@ -3,8 +3,8 @@
 
 .card {
 	position: relative;
-	border: 4px solid  var(--primary-color);
-	box-shadow: 4px 6px 0 4px  var(--primary-color);
+	border: 4px solid var(--primary-color);
+	box-shadow: 4px 6px 0 4px var(--primary-color);
 	border-radius: 24px;
 	width: 220px;
 	height: 320px;
@@ -13,9 +13,8 @@
 .imgwrapper {
 	overflow: hidden;
 	border-radius: inherit;
-	
-	@media only screen and (max-width: $media-xs) {
-	}
+
+	@media only screen and (max-width: $media-xs) {}
 }
 
 .img {
@@ -32,9 +31,8 @@
 	flex-direction: column;
 	align-items: flex-start;
 	color: var(--white-color);
-	-webkit-text-stroke: 0.5px #000000;
-	text-shadow: 1px 1px 2px #000000; 
-	
+	-webkit-text-stroke: 0.5px var(--primary-color);
+	text-shadow: 1px 1px 2px var(--primary-color);
 }
 
 .name {
@@ -42,25 +40,13 @@
 	font-size: 16px;
 	line-height: 112%;
 	letter-spacing: -0.02em;
-	text-shadow: 1px 1px 2px #000000;
-	
-	
-
-	// @media only screen and (max-width: $media-xs) {
-	// 	font-size: 28px;
-	// }
 }
 
-.description {
+.category {
 	font-weight: 400;
 	font-size: 14px;
 	line-height: 114%;
 	letter-spacing: -0.02em;
-	text-shadow: 1px 1px 2px #000000;
-
-	// @media only screen and (max-width: $media-xs) {
-	// 	font-size: 16px;
-	// }
 }
 
 .pricetag {
