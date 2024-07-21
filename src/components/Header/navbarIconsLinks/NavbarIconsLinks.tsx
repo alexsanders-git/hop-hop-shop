@@ -30,14 +30,14 @@ function NavbarIconsLinks() {
 				<LikeIcon />
 			</Link>
 
-			<Link href="/cart" className={`${styles.iconCart}`}>
+			<Link href="/cart" className={styles.iconCart}>
 				{totalItems > 0 && <div className={styles.qty}>{totalItems}</div>}
 				<ShoppingCartIcon />
 			</Link>
 
-			<button className={styles.icons_item}>
+			<Link href="/dashboard/account" className={styles.icons_item}>
 				<AccountIcon />
-			</button>
+			</Link>
 		</div>
 	);
 }

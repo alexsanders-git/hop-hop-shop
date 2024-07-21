@@ -12,9 +12,11 @@
 			display: none;
 		}
 	}
+
 	@media only screen and (max-width: $media-xl) {
 		gap: 18px;
 	}
+
 	@media only screen and (max-width: $media-xs) {
 		gap: 8px;
 	}
@@ -43,7 +45,8 @@
 	}
 }
 
-.icons_item, .iconCart {
+.icons_item,
+.iconCart {
 	position: relative;
 	width: 32px;
 	height: 32px;
@@ -55,6 +58,7 @@
 		width: 24px;
 		height: 24px;
 	}
+
 	@media only screen and (max-width: $media-xs) {
 		width: 24px;
 		height: 24px;
@@ -62,7 +66,7 @@
 }
 
 .icons_item {
-	@include header-icons-state ;
+	@include header-icons-state;
 }
 
 .iconCart {
@@ -85,6 +89,7 @@
 	justify-content: center;
 	top: -5px;
 	left: 18px;
+
 	@media only screen and (max-width: $media-xl) {
 		width: 15px;
 		height: 15px;
