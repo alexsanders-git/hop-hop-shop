@@ -1,6 +1,7 @@
 @import "../../styles/media";
 
 .bodyInner {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -16,7 +17,6 @@
 }
 
 .wrapper {
-	flex: 1 1 auto;
 	overflow: hidden;
 	background: var(--lightblue-color);
 	border-left: 2px solid var(--primary-color);
@@ -88,7 +88,7 @@
 	display: flex;
 	gap: 36px;
 
-	& > * {
+	&>* {
 		width: 100%;
 		max-width: calc(33.333% - 18px);
 	}
