@@ -1,8 +1,10 @@
 'use client';
+
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import Button from '@/components/Button/Button';
+import ButtonLink from '@/components/ButtonLink/ButtonLink';
 import PromoCode from '@/components/promoCode/PromoCode';
 import ShoppingCart from '@/components/ShoppingCart/ShoppingCart';
 import { useCart } from '@/store/cart/Cart.store';
@@ -50,6 +52,13 @@ export default function ShoppingCartPage() {
 						onClick={() => router.push('/checkout')}
 						className={styles.buttonCheckout}
 					/>
+
+					{/* <ButtonLink
+						href='/checkout'
+						style='primary'
+						text={'Checkout'}
+						className={styles.buttonCheckout}
+					/> */}
 				</div>
 			</div>
 		</div>

@@ -9,6 +9,7 @@ import {
 	InterfaceCouponResponse,
 	InterfaceFetchCartData,
 } from '@/store/cart/Cart.interface';
+import { syncCartWithCookies } from '@/utils/syncCartWithCookies';
 
 interface IState {
 	cart: InterfaceFetchCartData | null;
@@ -32,6 +33,8 @@ export const useCart = create<IState & IActions>()(
 						const data: ApiResponseFetchCart = await fetchDataCart('/cart/');
 						set((state) => {
 							state.cart = data.data;
+
+							syncCartWithCookies(state.cart);
 						});
 					} catch (error) {
 						console.error('Failed to fetch cart data:', error);
@@ -48,6 +51,8 @@ export const useCart = create<IState & IActions>()(
 						);
 						if (data) {
 							await useCart.getState().fetchCart();
+
+							syncCartWithCookies(useCart.getState().cart);
 						}
 					} catch (error) {
 						console.error('Failed to add item to cart:', error);
@@ -64,6 +69,8 @@ export const useCart = create<IState & IActions>()(
 						);
 						if (data) {
 							await useCart.getState().fetchCart();
+
+							syncCartWithCookies(useCart.getState().cart);
 						}
 					} catch (error) {
 						console.error('Failed to subtract item from cart:', error);
@@ -80,6 +87,8 @@ export const useCart = create<IState & IActions>()(
 						);
 						if (data) {
 							await useCart.getState().fetchCart();
+
+							syncCartWithCookies(useCart.getState().cart);
 						}
 					} catch (error) {
 						console.error('Failed to remove item from cart:', error);
@@ -99,6 +108,8 @@ export const useCart = create<IState & IActions>()(
 					);
 					if (res?.success) {
 						await useCart.getState().fetchCart();
+
+						syncCartWithCookies(useCart.getState().cart);
 					}
 					return res;
 				},
