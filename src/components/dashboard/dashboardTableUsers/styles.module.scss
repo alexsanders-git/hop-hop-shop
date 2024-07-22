@@ -19,13 +19,28 @@
 	@media screen and (max-width: $media-lg) {
 		border-radius: 16px;
 	}
+	@media screen and (max-width: $media-md) {
+		width: 100%;
+		max-width: 778px;
+		overflow-x: auto;
 
+		&::-webkit-scrollbar {
+			height: 10px;
+		}
+	}
 }
 
 
 .responsiveTable {
 	padding: 0;
 	margin: 0;
+	//height: 612px;
+	//@media screen and (max-width: $media-lg) {
+	//	height: 484px;
+	//}
+	@media screen and (max-width: $media-md) {
+		width: 800px;
+	}
 
 	li {
 		display: flex;
@@ -123,4 +138,8 @@
 
 		}
 	}
+}
+
+.last {
+	//border-bottom: 2px solid var(--primary-color);
 }

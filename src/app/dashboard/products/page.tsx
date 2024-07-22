@@ -1,132 +1,16 @@
+import { notFound } from 'next/navigation';
+
 import DashboardHeadLine from '@/components/dashboard/dashboardHeadLine/DashboardHeadLine';
 import DashboardTableProducts from '@/components/dashboard/dashboardTableProducts/DashboardTableProducts';
+import { getProducts } from '@/services/fetchData';
 
 import styles from './styles.module.scss';
 
-const data = [
-	{
-		product: 'ScienceScienceScienceScience Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'ScienceScienceScienceScience Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-	{
-		product: 'Science Fiction Book',
-		category: 'Books',
-		quantity: '12pcs',
-		price: '$120',
-	},
-];
-
-export default function DashboardProducts() {
+export default async function DashboardProducts() {
+	const products = await getProducts();
+	if (!products) {
+		notFound();
+	}
 	return (
 		<div className={styles.wrapper}>
 			<DashboardHeadLine
@@ -134,7 +18,7 @@ export default function DashboardProducts() {
 				text={'Products'}
 				textButton={'New Product'}
 			/>
-			<DashboardTableProducts data={data} />
+			<DashboardTableProducts data={products} />
 		</div>
 	);
 }

@@ -25,7 +25,7 @@ export default function DashboardLayout({
 			<body className={londrinaSolid.className}>
 				<div className={styles.bodyInner}>
 					<DashboardHeader />
-					<Container>
+					<Container className={styles.container}>
 						<main className={styles.main}>
 							<DashboardSidebar />
 							<div className={styles.wrapper}>{children}</div>

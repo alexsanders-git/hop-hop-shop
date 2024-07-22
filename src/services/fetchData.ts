@@ -44,7 +44,9 @@ export const getCategoriesById = async (id: string): Promise<ICategory> => {
 export const getProducts = async (): Promise<IProduct[]> => {
 	return await fetchData<IProduct[]>('shop/products/');
 };
-
+export const getOrders = async (): Promise<IOrders[]> => {
+	return await fetchData<IOrders[]>('checkout/orders/');
+};
 export const getProductsByCategory = async (
 	id: string,
 ): Promise<IProduct[]> => {

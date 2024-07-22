@@ -11,7 +11,7 @@ import Container from '../Container/Container';
 export default function DashboardHeader() {
 	return (
 		<header className={styles.header}>
-			<Container>
+			<Container className={styles.container}>
 				<div className={styles.wrapper}>
 					<Burger />
 

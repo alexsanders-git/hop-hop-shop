@@ -9,7 +9,7 @@ import { robotoCondensed } from '@/styles/fonts/fonts';
 import styles from './styles.module.scss';
 
 interface IProps {
-	data: any;
+	data: ICategory[];
 }
 
 export default function DashboardTableCategories(props: IProps) {
@@ -25,44 +25,31 @@ export default function DashboardTableCategories(props: IProps) {
 	}, [currentPage]);
 
 	const header = [
+		{ name: 'ID', mobileName: 'Cate...' },
 		{ name: 'Category', mobileName: 'Cate...' },
 		{ name: 'Description', mobileName: 'Desc...' },
-		{ name: 'Status', mobileName: 'Sta...' },
-		{ name: '', mobileName: '' },
+		{ name: 'Actions', mobileName: '' },
 	];
 
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.container}>
 				<ul className={styles.responsiveTable}>
-					<li className={`${styles.tableHeader} ${styles.first} `}>
+					<li className={`${styles.tableHeader}`}>
 						{header.map((item, i) => (
 							<div key={i} className={`${styles.col} ${styles[`col${i + 1}`]}`}>
 								{item.name}
 							</div>
 						))}
 					</li>
-					<li className={`${styles.tableHeader} ${styles.second} `}>
-						{header.map((item, i) => (
-							<div key={i} className={`${styles.col} ${styles[`col${i + 1}`]}`}>
-								{item.mobileName}
-							</div>
-						))}
-					</li>
-					{currentTableData.map((item: any, index: number) => (
+					{currentTableData.map((item, index: number) => (
 						<li
 							key={index}
 							className={`${styles.tableRow} ${robotoCondensed.className}`}
 						>
-							<div className={`${styles.col} ${styles.col1}`}>
-								{item.category}
-							</div>
-							<div className={`${styles.col} ${styles.col2}`}>
-								{item.description}
-							</div>
-							<div className={`${styles.col} ${styles.col3}`}>
-								{item.status}
-							</div>
+							<div className={`${styles.col} ${styles.col1}`}>#{item.id}</div>
+							<div className={`${styles.col} ${styles.col2}`}>{item.name}</div>
+							<div className={`${styles.col} ${styles.col3}`}>{item.name}</div>
 							<div className={`${styles.col} ${styles.col4}`}>
 								<div className={styles.iconWrapper}>
 									<Remove />

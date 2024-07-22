@@ -22,8 +22,7 @@ export default function DashboardTableUsers(props: IProps) {
 		const lastPageIndex = firstPageIndex + PageSize;
 		return data.slice(firstPageIndex, lastPageIndex);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [currentPage]);
-
+	}, [currentPage, data]);
 	const header = [{ name: 'User ID' }, { name: 'Name' }, { name: 'Email' }];
 
 	return (
@@ -40,7 +39,7 @@ export default function DashboardTableUsers(props: IProps) {
 					{currentTableData.map((item: any, index: number) => (
 						<li
 							key={index}
-							className={`${styles.tableRow} ${robotoCondensed.className}`}
+							className={`${styles.tableRow} ${robotoCondensed.className} ${index === currentTableData.length - 1 ? styles.last : ''}`}
 						>
 							<div className={`${styles.col} ${styles.col1}`}>
 								{item.userId}

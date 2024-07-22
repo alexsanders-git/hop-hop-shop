@@ -7,6 +7,7 @@ interface ICategory {
 	name: string;
 	slug: string;
 	image: string;
+	description: string;
 }
 
 interface IImage {
@@ -59,6 +60,14 @@ interface ICreditCard {
 	cvv: string;
 	expiryDate: string;
 	cardName: string;
+}
+
+interface IOrders {
+	id: number;
+	status: string;
+	created_at: string;
+	total_quantity: string;
+	total_price: string;
 }
 
 enum UserRole {

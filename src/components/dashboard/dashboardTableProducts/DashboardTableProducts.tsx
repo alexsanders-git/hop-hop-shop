@@ -9,7 +9,7 @@ import { robotoCondensed } from '@/styles/fonts/fonts';
 import styles from './styles.module.scss';
 
 interface IProps {
-	data: any;
+	data: IProduct[];
 }
 
 export default function DashboardTableProducts(props: IProps) {
@@ -25,32 +25,25 @@ export default function DashboardTableProducts(props: IProps) {
 	}, [currentPage]);
 
 	const header = [
+		{ name: 'ID', mobileName: 'Pro...' },
 		{ name: 'Product', mobileName: 'Pro...' },
 		{ name: 'Category', mobileName: 'Cat...' },
-		{ name: 'Quantity', mobileName: 'Qty...' },
 		{ name: 'Price', mobileName: 'Pri...' },
-		{ name: '', mobileName: '' },
+		{ name: 'Actions', mobileName: '' },
 	];
 
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.container}>
 				<ul className={styles.responsiveTable}>
-					<li className={`${styles.tableHeader} ${styles.first} `}>
+					<li className={`${styles.tableHeader} `}>
 						{header.map((item, i) => (
 							<div key={i} className={`${styles.col} ${styles[`col${i + 1}`]}`}>
 								{item.name}
 							</div>
 						))}
 					</li>
-					<li className={`${styles.tableHeader} ${styles.second} `}>
-						{header.map((item, i) => (
-							<div key={i} className={`${styles.col} ${styles[`col${i + 1}`]}`}>
-								{item.mobileName}
-							</div>
-						))}
-					</li>
-					{currentTableData.map((item: any, index: number) => (
+					{currentTableData.map((item, index: number) => (
 						<li
 							key={index}
 							className={`${styles.tableRow} ${robotoCondensed.className}`}
@@ -59,25 +52,25 @@ export default function DashboardTableProducts(props: IProps) {
 								className={`${styles.col} ${styles.col1}`}
 								data-label="Product"
 							>
-								{item.product}
+								#{item.id}
 							</div>
 							<div
 								className={`${styles.col} ${styles.col2}`}
 								data-label="Category"
 							>
-								{item.category}
+								{item.name}
 							</div>
 							<div
 								className={`${styles.col} ${styles.col3}`}
 								data-label="Quantity"
 							>
-								{item.quantity}
+								{item.category.name}
 							</div>
 							<div
 								className={`${styles.col} ${styles.col4}`}
 								data-label="Price"
 							>
-								{item.price}
+								{item.price}$
 							</div>
 							<div className={`${styles.col} ${styles.col5}`}>
 								<div className={styles.iconWrapper}>

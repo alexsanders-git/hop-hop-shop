@@ -9,7 +9,7 @@ import { robotoCondensed } from '@/styles/fonts/fonts';
 import styles from './styles.module.scss';
 
 interface IProps {
-	data: any;
+	data: IOrders[];
 }
 
 export default function DashboardTableOrders(props: IProps) {
@@ -25,55 +25,44 @@ export default function DashboardTableOrders(props: IProps) {
 	}, [currentPage]);
 
 	const header = [
-		{ name: 'Order ID', mobileName: 'Ord...' },
-		{ name: 'Product', mobileName: 'Prd...' },
-		{ name: 'Category', mobileName: 'Cat...' },
-		{ name: 'Date', mobileName: 'Dat...' },
-		{ name: 'Status', mobileName: 'Sta...' },
-		{ name: 'Quantity', mobileName: 'Qty...' },
-		{ name: 'Price', mobileName: 'Pri...' },
-		{ name: '', mobileName: '' },
+		{ name: 'Order ID' },
+		{ name: 'Status' },
+		{ name: 'Quantity' },
+		{ name: 'Price' },
+		{ name: 'Date' },
+		{ name: 'Actions' },
 	];
 
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.container}>
 				<ul className={styles.responsiveTable}>
-					<li className={`${styles.tableHeader} ${styles.first} `}>
+					<li className={`${styles.tableHeader}`}>
 						{header.map((item, i) => (
 							<div key={i} className={`${styles.col} ${styles[`col${i + 1}`]}`}>
 								{item.name}
 							</div>
 						))}
 					</li>
-					<li className={`${styles.tableHeader} ${styles.second} `}>
-						{header.map((item, i) => (
-							<div key={i} className={`${styles.col} ${styles[`col${i + 1}`]}`}>
-								{item.mobileName}
-							</div>
-						))}
-					</li>
-					{currentTableData.map((item: any, index: number) => (
+					{currentTableData.map((item, index: number) => (
 						<li
 							key={index}
 							className={`${styles.tableRow} ${robotoCondensed.className}`}
 						>
-							<div className={`${styles.col} ${styles.col1}`}>{item.id}</div>
+							<div className={`${styles.col} ${styles.col1}`}>#{item.id}</div>
 							<div className={`${styles.col} ${styles.col2}`}>
-								{item.product}
-							</div>
-							<div className={`${styles.col} ${styles.col3}`}>
-								{item.category}
-							</div>
-							<div className={`${styles.col} ${styles.col4}`}>{item.date}</div>
-							<div className={`${styles.col} ${styles.col5}`}>
 								{item.status}
 							</div>
-							<div className={`${styles.col} ${styles.col6}`}>
-								{item.quantity}
+							<div className={`${styles.col} ${styles.col3}`}>
+								{item.total_quantity}
 							</div>
-							<div className={`${styles.col} ${styles.col7}`}>{item.price}</div>
-							<div className={`${styles.col} ${styles.col8}`}>
+							<div className={`${styles.col} ${styles.col4}`}>
+								{item.total_price}
+							</div>
+							<div className={`${styles.col} ${styles.col5}`}>
+								{item.created_at}
+							</div>
+							<div className={`${styles.col} ${styles.col6}`}>
 								<div className={styles.iconWrapper}>
 									<Remove />
 								</div>

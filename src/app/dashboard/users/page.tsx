@@ -1,5 +1,4 @@
 import DashboardHeadLine from '@/components/dashboard/dashboardHeadLine/DashboardHeadLine';
-import DashboardTableCategories from '@/components/dashboard/dashboardTableCategories/DashboardTableCategories';
 import DashboardTableUsers from '@/components/dashboard/dashboardTableUsers/DashboardTableUsers';
 
 import styles from './styles.module.scss';

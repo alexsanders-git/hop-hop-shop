@@ -1,5 +1,6 @@
 import DashboardHeadLine from '@/components/dashboard/dashboardHeadLine/DashboardHeadLine';
 import DashboardTableOrders from '@/components/dashboard/dashboardTableOrders/DashboardTableOrders';
+import { getOrders } from '@/services/fetchData';
 
 import styles from './styles.module.scss';
 
@@ -267,11 +268,12 @@ const data = [
 	},
 ];
 
-export default function DashboardProducts() {
+export default async function DashboardProducts() {
+	const orders = await getOrders();
 	return (
 		<div className={styles.wrapper}>
 			<DashboardHeadLine compact={true} text={'Orders'} />
-			<DashboardTableOrders data={data} />
+			<DashboardTableOrders data={orders} />
 		</div>
 	);
 }

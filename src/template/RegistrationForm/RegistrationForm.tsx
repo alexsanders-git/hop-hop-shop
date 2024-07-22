@@ -29,6 +29,7 @@ import Google from '../../../public/login/google.svg';
 export default function RegistrationForm() {
 	const [open, setOpen] = useState<boolean>(false);
 	const setUser = useUser((state) => state.setUser);
+	const [error, setError] = useState<string | null>(null);
 	const navigate = useRouter();
 	return (
 		<Formik
@@ -70,7 +71,7 @@ export default function RegistrationForm() {
 					navigate.push('/');
 				}
 				if (res.error) {
-					alert(res.error);
+					setError(res.error);
 				}
 			}}
 		>
@@ -155,6 +156,7 @@ export default function RegistrationForm() {
 							text={'I already have an account'}
 							className={styles.buttonLink}
 						/>
+						{error && <div className={styles.errorText}>{error}</div>}
 						<div className={styles.google}>
 							<span className={robotoCondensed.className}>Or sing in with</span>
 							<Google className={styles.googleImage} />

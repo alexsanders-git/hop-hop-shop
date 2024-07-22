@@ -2,6 +2,7 @@
 import { Form, Formik } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import * as yup from 'yup';
 
 import Button from '@/components/Button/Button';
@@ -19,6 +20,7 @@ import Google from '../../../public/login/google.svg';
 
 export default function LoginForm() {
 	const setUser = useUser((state) => state.setUser);
+	const [error, setError] = useState<string | null>(null);
 	const navigate = useRouter();
 	return (
 		<Formik
@@ -46,7 +48,7 @@ export default function LoginForm() {
 					navigate.push('/');
 				}
 				if (res.error) {
-					alert(res.error);
+					setError(res.error);
 				}
 			}}
 		>
@@ -79,6 +81,7 @@ export default function LoginForm() {
 							style={'secondary'}
 							text={'Create an account'}
 						/>
+						{error && <div className={styles.error}>{error}</div>}
 						<div className={styles.google}>
 							<span className={robotoCondensed.className}>Or sing in with</span>
 							<Google className={styles.googleImage} />
