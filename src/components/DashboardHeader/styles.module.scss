@@ -1,0 +1,132 @@
+@import "src/styles/media.scss";
+@import "src/styles/mixins";
+
+.header {
+	position: fixed;
+	width: 100%;
+	top: 0;
+	z-index: 2000;
+
+	.logo {
+		width: 238px;
+		@media only screen and (max-width: $media-xl) {
+			border-right: none;
+		}
+	}
+
+}
+
+.wrapper {
+	position: relative;
+	width: 100%;
+	height: 70px;
+	border-left: 2px solid var(--primary-color);
+	border-right: 2px solid var(--primary-color);
+	border-bottom: 2px solid var(--primary-color);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-right: 32px;
+	background-color: var(--secondary-background-color);
+
+	@media only screen and (max-width: $media-xl) {
+		padding-left: 32px;
+	}
+
+	@media only screen and (max-width: $media-lg) {
+		padding: 14px;
+		justify-content: space-between;
+	}
+}
+
+.icons_item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+}
+
+.navigation {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	&__links {
+		width: 100%;
+		height: 100%;
+	}
+
+	@media only screen and (max-width: $media-xl) {
+		width: calc((100% - 235px) / 2);
+		justify-content: flex-end;
+	}
+
+	@media only screen and (max-width: $media-sm) {
+		width: calc((100% - 100px) / 2);
+	}
+}
+
+
+.icons_list {
+	display: flex;
+	gap: 32px;
+	align-items: center;
+	justify-content: center;
+
+	@media only screen and (max-width: $media-xl) {
+		gap: 18px;
+	}
+	@media only screen and (max-width: $media-xs) {
+		gap: 8px;
+	}
+}
+
+
+.icons_item {
+	width: 28px;
+	height: 28px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+
+	@media only screen and (max-width: $media-xl) {
+		&:nth-child(1) {
+			display: none;
+		}
+	}
+	@media only screen and (max-width: $media-xl) {
+		width: 24px;
+		height: 24px;
+	}
+	@media only screen and (max-width: $media-xs) {
+		width: 24px;
+		height: 24px;
+	}
+}
+
+.icons_item {
+	@include header-icons-state ;
+}
+
+
+.admin {
+	color: var(--yellow-color);
+	text-shadow: -2px -2px 0 var(--primary-color),
+	2px -2px 0 var(--primary-color),
+	-2px 2px 0 var(--primary-color),
+	2px 2px 0 var(--primary-color);
+
+	font-size: 28px;
+	font-weight: 900;
+	line-height: 32px;
+	letter-spacing: 2px;
+
+	@media only screen and (max-width: $media-lg) {
+		font-size: 24px;
+		font-weight: 900;
+		line-height: 26px;
+	}
+
+}

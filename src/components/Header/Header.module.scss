@@ -23,6 +23,10 @@
 		padding: 14px;
 		justify-content: space-between;
 	}
+
+	@media only screen and (max-width: $media-sm) {
+		border-top: 2px solid var(--primary-color);
+	}
 }
 
 .icons_item {

@@ -59,14 +59,14 @@ export const getPopularProducts = async (): Promise<IProduct[]> => {
 	return await fetchData<IProduct[]>('shop/products/popular/');
 };
 
-export const fetchDataProductPage = async (
-	id: string,
-): Promise<IProduct | null> => {
+export const fetchDataProductPage = async (id: string): Promise<IProduct> => {
 	try {
 		const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 		const res = await fetch(`${baseURL}/shop/products/${id}/`, {
-			// mode: 'cors',
+			next: {
+				revalidate: 200,
+			},
 		});
 		if (!res.ok) {
 			throw new Error(`Error fetching product data: ${res.statusText}`);
@@ -76,7 +76,7 @@ export const fetchDataProductPage = async (
 		const product: IProduct = json.data;
 		return product;
 	} catch (error) {
-		console.error('Failed to fetch product data:', error);
-		return null;
+		console.error('Error fetching data:', error);
+		throw error;
 	}
 };

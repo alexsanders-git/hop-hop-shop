@@ -6,12 +6,15 @@ import Link from 'next/link';
 import styles from './Logo.module.scss';
 
 interface ILogo {
-	isShow: boolean;
+	isShow?: boolean;
+	className?: string;
 }
 
-export default function Logo({ isShow }: ILogo) {
+export default function Logo({ isShow, className = '' }: ILogo) {
 	return (
-		<div className={`${styles.wrapper} ${isShow ? styles.hidden : ''}`}>
+		<div
+			className={`${styles.wrapper} ${isShow ? styles.hidden : ''} ${className}`}
+		>
 			<Link href="/">
 				<Image
 					src="/logo.svg"

@@ -65,3 +65,21 @@ ol {
 	clip: rect(0, 0, 0, 0);
 	border: 0;
 }
+
+
+::-webkit-scrollbar {
+	width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #adadad;
+	border-radius: 12px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-button {
+	display: none;
+}

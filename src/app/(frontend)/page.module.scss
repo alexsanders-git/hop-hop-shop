@@ -1,6 +1,7 @@
-@import "src/styles/media.scss";
+@import "../../styles/media";
 
 .bodyInner {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -16,7 +17,6 @@
 }
 
 .wrapper {
-	flex: 1 1 auto;
 	overflow: hidden;
 	background: var(--lightblue-color);
 	border-left: 2px solid var(--primary-color);

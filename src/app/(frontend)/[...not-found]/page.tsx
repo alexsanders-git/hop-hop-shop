@@ -5,7 +5,7 @@ import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './page.module.scss';
 
-export default function NotFound() {
+export default function Page() {
 	return (
 		<>
 			<div className={styles.notFoundWrapper}>
