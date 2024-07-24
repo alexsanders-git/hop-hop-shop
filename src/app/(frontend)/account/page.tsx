@@ -7,6 +7,7 @@ export default function page() {
 	return (
 		<div className={styles.pageWrp}>
 			<div>
+				<h1 className={styles.title}>Account</h1>
 				<AdminAccountForm />
 			</div>
 			<div className={styles.imgWrp}>

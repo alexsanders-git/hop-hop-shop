@@ -79,11 +79,9 @@ export default function AdminAccountForm() {
 				onSubmit={handleSubmit}
 			>
 				{() => (
-					<Form>
+					<Form className={styles.formContainer}>
 						<div className={styles.formGroup}>
-							<h2 className={`${styles.title} ${robotoCondensed.className}`}>
-								Personal data
-							</h2>
+							<h2 className={styles.title}>Personal data</h2>
 							<div className={styles.inputContainer}>
 								<Input
 									className={styles.input}
@@ -129,9 +127,7 @@ export default function AdminAccountForm() {
 							</div>
 						</div>
 						<div className={styles.formGroup}>
-							<h2 className={`${styles.title} ${robotoCondensed.className}`}>
-								Delivery address
-							</h2>
+							<h2 className={styles.title}>Delivery address</h2>
 							<div className={styles.inputContainer}>
 								<Input
 									className={styles.input}
@@ -166,9 +162,7 @@ export default function AdminAccountForm() {
 							</div>
 						</div>
 						<div className={styles.formGroup}>
-							<h2 className={`${styles.title} ${robotoCondensed.className}`}>
-								Password
-							</h2>
+							<h2 className={styles.title}>Password</h2>
 							<InputPassword
 								className={styles.input}
 								title={'Current password'}
