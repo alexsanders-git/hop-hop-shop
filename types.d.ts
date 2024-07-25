@@ -32,7 +32,7 @@ interface IProduct {
 	images: IImage | IImage[];
 }
 
-interface InterfaceUser {
+interface IUser {
 	id: number;
 	email: string;
 	first_name: string;
