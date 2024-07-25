@@ -10,7 +10,7 @@ export const fetchDataCart = async (url: string, options?: RequestInit) => {
 	return response.json();
 };
 
-export async function fetchData<T>(endpoint: string): Promise<T> {
+export async function fetchData<T>(endpoint: string): Promise<IResponse<T>> {
 	const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 	try {
@@ -26,7 +26,7 @@ export async function fetchData<T>(endpoint: string): Promise<T> {
 
 		if (!json || !json.data) throw new Error('No data found.');
 
-		return json.data as T;
+		return json.data as IResponse<T>;
 	} catch (error) {
 		console.error('Error fetching data:', error);
 		throw error;
@@ -41,13 +41,13 @@ export const getCategoriesById = async (id: string): Promise<ICategory> => {
 	return await fetchData<ICategory>(`shop/categories/${id}`);
 };
 
-export const getProducts = async (): Promise<IProduct[]> => {
+export const getProducts = async (): Promise<IResponse<IProduct>> => {
 	return await fetchData<IProduct[]>('shop/products/');
 };
 
 export const getProductsByCategory = async (
 	id: string,
-): Promise<IProduct[]> => {
+): Promise<IResponse<IProduct>> => {
 	return await fetchData<IProduct[]>(`shop/products/?category=${id}`);
 };
 
