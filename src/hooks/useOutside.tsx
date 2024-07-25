@@ -7,7 +7,6 @@ export default function useOutside(initialIsVisible: boolean) {
 	const ref = useRef<any>(null);
 	const handleClickOutside = (event: any) => {
 		if (ref.current && !ref.current.contains(event.target)) {
-			console.log(ref);
 			setIsShow(false);
 		}
 	};

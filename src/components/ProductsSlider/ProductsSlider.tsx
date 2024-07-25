@@ -21,7 +21,6 @@ interface IProductListProps {
 }
 
 export default function ProductsSlider({ products }: IProductListProps) {
-	console.log('products: ', products);
 	const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
 	const swiperRef = useRef<SwiperClass | null>(null);
 
