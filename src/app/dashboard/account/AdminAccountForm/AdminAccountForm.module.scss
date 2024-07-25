@@ -1,0 +1,87 @@
+@import 'src/styles/media.scss';
+
+.formContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 48px;
+
+	@media only screen and (max-width: 1140px) {
+		flex-grow: 1;
+	}
+}
+
+.formGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.title {
+	font-weight: 40px;
+	font-weight: 300;
+	line-height: 1.15;
+}
+
+.inputContainer {
+	display: flex;
+	gap: 16px;
+	align-items: center;
+
+	&.withPhoneInput {
+		align-items: baseline;
+	}
+}
+
+.input {
+	font-size: 21px;
+	line-height: 1.25;
+}
+
+.phoneInputContainer {
+	width: 48%;
+}
+
+.phoneInputText {
+	font-size: 21px;
+	line-height: 1.25;
+
+	@media only screen and (max-width: $media-md) {
+		font-size: 16px;
+	}
+}
+
+.actions {
+	display: flex;
+	gap: 16px;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.deleteButton {
+	max-width: 250px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 300;
+	font-size: 24px;
+	line-height: 1.67;
+	text-decoration: underline;
+	color: var(--gray-color);
+
+	@media only screen and (max-width: $media-lg) {
+		max-width: 200px;
+	}
+}
+
+.saveButton {
+	padding: 12px 36px;
+	font-size: 36px;
+	line-height: 1.06;
+	color: var(--black-color);
+
+	@media only screen and (max-width: $media-lg) {
+		font-size: 26px;
+		padding: 12px 20px;
+	}
+}

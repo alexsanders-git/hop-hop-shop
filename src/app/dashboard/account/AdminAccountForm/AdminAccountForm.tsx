@@ -98,7 +98,9 @@ export default function AdminAccountForm() {
 									placeholder={'Doe'}
 								/>
 							</div>
-							<div className={styles.inputContainer}>
+							<div
+								className={`${styles.inputContainer} ${styles.withPhoneInput}`}
+							>
 								<Input
 									className={styles.input}
 									title={'Email'}
