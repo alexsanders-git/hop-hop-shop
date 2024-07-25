@@ -42,13 +42,13 @@ export const getCategoriesById = async (id: string): Promise<ICategory> => {
 };
 
 export const getProducts = async (): Promise<IResponse<IProduct>> => {
-	return await fetchData<IProduct[]>('shop/products/');
+	return await fetchData<IProduct>('shop/products/');
 };
 
 export const getProductsByCategory = async (
 	id: string,
 ): Promise<IResponse<IProduct>> => {
-	return await fetchData<IProduct[]>(`shop/products/?category=${id}`);
+	return await fetchData<IProduct>(`shop/products/?category=${id}`);
 };
 
 export const getLatestArrivalProducts = async (): Promise<IProduct[]> => {
