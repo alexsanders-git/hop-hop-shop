@@ -40,7 +40,7 @@ function DashboardSearchBar(props: IProps) {
 					setData(productData);
 				}
 			} catch (error) {
-				console.log('error: ', error);
+				console.error('error: ', error);
 			}
 		};
 

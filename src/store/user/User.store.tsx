@@ -5,11 +5,11 @@ import { immer } from 'zustand/middleware/immer';
 import { LocalStorageEnums } from '@/utils/enums/localStorageEnums';
 
 interface IState {
-	user: InterfaceUser | null;
+	user: IUser | null;
 }
 
 interface IActions {
-	setUser: (user: InterfaceUser) => void;
+	setUser: (user: IUser) => void;
 	logout: () => void;
 }
 

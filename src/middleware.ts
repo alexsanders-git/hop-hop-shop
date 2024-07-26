@@ -1,8 +1,16 @@
-import type { NextRequest } from 'next/server';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-// Middleware function to check if the cart is empty
-export function middleware(req: NextRequest) {
+export function middleware(request: NextRequest) {
+	const cartCookie = request.cookies.get('cart');
+
+	if (
+		!cartCookie ||
+		!cartCookie.value ||
+		JSON.parse(cartCookie.value)?.products?.length === 0
+	) {
+		return NextResponse.redirect(new URL('/cart', request.url));
+	}
+
 	return NextResponse.next();
 }
 

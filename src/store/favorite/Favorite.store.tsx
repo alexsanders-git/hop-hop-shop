@@ -1,5 +1,7 @@
 import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { devtools, persist, createJSONStorage } from 'zustand/middleware';
+
+import CookieStorage from '@/utils/cookieStorage';
 
 interface IState {
 	favorites: IProduct[];
@@ -34,7 +36,10 @@ export const useFavorite = create<IState>()(
 					);
 				},
 			}),
-			{ name: 'favorites' },
+			{
+				name: 'favorites',
+				storage: createJSONStorage(() => CookieStorage()),
+			},
 		),
 		{ name: 'Favorites' },
 	),
