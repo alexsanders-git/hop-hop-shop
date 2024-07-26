@@ -6,11 +6,11 @@ import { immer } from 'zustand/middleware/immer';
 import { CookiesEnums } from '@/utils/enums/cookiesEnums';
 
 interface IState {
-	user: InterfaceUser | null;
+	user: IUser | null;
 }
 
 interface IActions {
-	setUser: (user: InterfaceUser) => void;
+	setUser: (user: IUser) => void;
 	logout: () => void;
 }
 

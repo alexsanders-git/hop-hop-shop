@@ -35,7 +35,7 @@ function SearchBar(props: SearchBarProps, ref: Ref<HTMLDivElement>) {
 					setData(productData.items);
 				}
 			} catch (error) {
-				console.log('error: ', error);
+				console.error('error: ', error);
 			}
 		};
 

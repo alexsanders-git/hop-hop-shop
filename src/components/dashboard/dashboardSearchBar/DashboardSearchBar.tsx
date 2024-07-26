@@ -38,7 +38,7 @@ function DashboardSearchBar(props: IProps) {
 					setData(res);
 				}
 			} catch (error) {
-				console.log('error: ', error);
+				console.error('error: ', error);
 			}
 		};
 

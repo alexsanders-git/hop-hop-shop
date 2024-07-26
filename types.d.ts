@@ -1,5 +1,16 @@
+interface IResponse<T> {
+	items_count: number;
+	pages_link: IPagination;
+	items: T[];
+}
+
 interface IPlaceholder {
 	empty: boolean;
+}
+
+interface IPagination {
+	next: string | null;
+	previous: string | null;
 }
 
 interface ICategory {
@@ -33,7 +44,7 @@ interface IProduct {
 	images: IImage | IImage[];
 }
 
-interface InterfaceUser {
+interface IUser {
 	id: number;
 	email: string;
 	first_name: string;
