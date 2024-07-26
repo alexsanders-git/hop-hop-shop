@@ -1,33 +1,31 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { forwardRef, Ref, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useDebounce } from '@/hooks/useDebounce';
-import {
-	fetchSearchData,
-	ProductSearch,
-} from '@/services/search/search.service';
+import { getDashboardSearch } from '@/services/dashboard/search/dashboard.search.service';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
-import CloseIcon from './close.svg';
 import styles from './DashboardSearchBar.module.scss';
-import SearchIcon from './search.svg';
+import CloseIcon from '../../../assets/svg/close.svg';
+import SearchIcon from '../../../assets/svg/search.svg';
 
 interface IProps {
 	className?: string;
+	type: string;
 }
 
 function DashboardSearchBar(props: IProps) {
-	const { className = '' } = props;
-	const [data, setData] = useState<ProductSearch[]>([]);
+	const { className = '', type } = props;
+	const [data, setData] = useState<IDashboardSearch[]>([]);
 	const [query, setQuery] = useState('');
 	const debouncedSearch = useDebounce(query.toLowerCase(), 500);
 	const router = useRouter();
 	const [open, setOpen] = useState<boolean>(false);
 
 	const handleSuggestionClick = (id: number) => {
-		router.push(`/product/${id}`);
+		router.push(`/dashboard/${type}/${id}`);
 		setQuery('');
 		setOpen(true);
 	};
@@ -35,9 +33,9 @@ function DashboardSearchBar(props: IProps) {
 	useEffect(() => {
 		const fetchProduct = async () => {
 			try {
-				const productData = await fetchSearchData(debouncedSearch);
-				if (productData) {
-					setData(productData);
+				const res = await getDashboardSearch(type, debouncedSearch);
+				if (res) {
+					setData(res);
 				}
 			} catch (error) {
 				console.log('error: ', error);
@@ -74,17 +72,22 @@ function DashboardSearchBar(props: IProps) {
 				className={`${styles.searchInput} ${robotoCondensed.className} ${query ? styles.searchInputWithQuery : ''}`}
 				placeholder="Search"
 			/>
+
 			{data.length > 0 && debouncedSearch.length > 0 && !open && (
-				<div className={styles.suggestionsContainer}>
-					{data.map((suggestion, index) => (
-						<div
-							key={index}
-							className={styles.suggestionItem}
-							onClick={() => handleSuggestionClick(suggestion.id)}
-						>
-							{suggestion.name}
+				<div className={styles.suggestionsWrapper}>
+					<div className={styles.suggestionsWrapperScrollBar}>
+						<div className={styles.suggestionsContainer}>
+							{data.map((suggestion, index) => (
+								<div
+									key={index}
+									className={styles.suggestionItem}
+									onClick={() => handleSuggestionClick(suggestion.id)}
+								>
+									{suggestion.name}
+								</div>
+							))}
 						</div>
-					))}
+					</div>
 				</div>
 			)}
 		</div>

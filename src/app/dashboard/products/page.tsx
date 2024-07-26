@@ -2,12 +2,13 @@ import { notFound } from 'next/navigation';
 
 import DashboardHeadLine from '@/components/dashboard/dashboardHeadLine/DashboardHeadLine';
 import DashboardTableProducts from '@/components/dashboard/dashboardTableProducts/DashboardTableProducts';
-import { getProducts } from '@/services/fetchData';
+import { getProductsDashboardServer } from '@/services/dashboard/products/dashboard.products.service';
+import { getDashboardProductsCreate } from '@/utils/paths/dashboard/dashboard.paths';
 
 import styles from './styles.module.scss';
 
 export default async function DashboardProducts() {
-	const products = await getProducts();
+	const products = await getProductsDashboardServer();
 	if (!products) {
 		notFound();
 	}
@@ -17,8 +18,10 @@ export default async function DashboardProducts() {
 				compact={false}
 				text={'Products'}
 				textButton={'New Product'}
+				buttonLink={getDashboardProductsCreate()}
+				searchType={'products'}
 			/>
-			<DashboardTableProducts data={products} />
+			<DashboardTableProducts products={products} />
 		</div>
 	);
 }

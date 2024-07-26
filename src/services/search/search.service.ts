@@ -24,12 +24,12 @@ export interface ProductSearch {
 
 interface ApiResponse {
 	success: boolean;
-	data: ProductSearch[];
+	data: IDashboardProducts;
 }
 
 export const fetchSearchData = async (
 	search: string,
-): Promise<ProductSearch[] | null> => {
+): Promise<IDashboardProducts | null> => {
 	try {
 		const baseURL = process.env.NEXT_PUBLIC_API_URL;
 		const res = await fetch(`${baseURL}/shop/products/?name=${search}`, {

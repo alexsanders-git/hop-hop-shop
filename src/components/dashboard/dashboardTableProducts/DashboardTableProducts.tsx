@@ -1,35 +1,32 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
-import Edit from '@/assets/svg/edit.svg';
-import Remove from '@/assets/svg/remove.svg';
+import EditButton from '@/components/dashboard/editButton/editButton';
 import Pagination from '@/components/dashboard/pagination/Pagination';
+import RemoveButton from '@/components/dashboard/removeButton/RemoveButton';
+import {
+	getDashboardProducts,
+	removeProductById,
+} from '@/services/dashboard/products/dashboard.products.service';
 import { robotoCondensed } from '@/styles/fonts/fonts';
+import { getDashboardProductsId } from '@/utils/paths/dashboard/dashboard.paths';
 
 import styles from './styles.module.scss';
 
 interface IProps {
-	data: IProduct[];
+	products: IDashboardProducts;
 }
 
 export default function DashboardTableProducts(props: IProps) {
-	const { data } = props;
-	let PageSize = 10;
-	const [currentPage, setCurrentPage] = useState(1);
-
-	const currentTableData = useMemo(() => {
-		const firstPageIndex = (currentPage - 1) * PageSize;
-		const lastPageIndex = firstPageIndex + PageSize;
-		return data.slice(firstPageIndex, lastPageIndex);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [currentPage]);
+	const { products } = props;
+	const [newData, setNewData] = useState<IDashboardProducts>(products);
 
 	const header = [
-		{ name: 'ID', mobileName: 'Pro...' },
-		{ name: 'Product', mobileName: 'Pro...' },
-		{ name: 'Category', mobileName: 'Cat...' },
-		{ name: 'Price', mobileName: 'Pri...' },
-		{ name: 'Actions', mobileName: '' },
+		{ name: 'ID' },
+		{ name: 'Product' },
+		{ name: 'Category' },
+		{ name: 'Price' },
+		{ name: 'Actions' },
 	];
 
 	return (
@@ -43,53 +40,42 @@ export default function DashboardTableProducts(props: IProps) {
 							</div>
 						))}
 					</li>
-					{currentTableData.map((item, index: number) => (
+					{newData.items.map((item, index: number) => (
 						<li
 							key={index}
 							className={`${styles.tableRow} ${robotoCondensed.className}`}
 						>
-							<div
-								className={`${styles.col} ${styles.col1}`}
-								data-label="Product"
-							>
-								#{item.id}
-							</div>
-							<div
-								className={`${styles.col} ${styles.col2}`}
-								data-label="Category"
-							>
-								{item.name}
-							</div>
-							<div
-								className={`${styles.col} ${styles.col3}`}
-								data-label="Quantity"
-							>
+							<div className={`${styles.col} ${styles.col1}`}>#{item.id}</div>
+							<div className={`${styles.col} ${styles.col2}`}>{item.name}</div>
+							<div className={`${styles.col} ${styles.col3}`}>
 								{item.category.name}
 							</div>
-							<div
-								className={`${styles.col} ${styles.col4}`}
-								data-label="Price"
-							>
+							<div className={`${styles.col} ${styles.col4}`}>
 								{item.price}$
 							</div>
 							<div className={`${styles.col} ${styles.col5}`}>
-								<div className={styles.iconWrapper}>
-									<Remove />
-								</div>
-								<div className={styles.iconWrapper}>
-									<Edit />
-								</div>
+								<RemoveButton
+									callback={async () => {
+										const res = await removeProductById(item.id);
+									}}
+								/>
+								<EditButton callback={() => getDashboardProductsId(item.id)} />
 							</div>
 						</li>
 					))}
 				</ul>
 			</div>
-			<Pagination
-				currentPage={currentPage}
-				totalCount={data.length}
-				pageSize={PageSize}
-				onPageChange={(page) => setCurrentPage(page)}
-			/>
+			{newData?.items?.length > 0 ? (
+				<Pagination
+					currentPage={newData?.pagination?.current_page}
+					totalCount={newData?.items_count}
+					pageSize={10}
+					onPageChange={async (page) => {
+						const res = await getDashboardProducts(page);
+						setNewData(res);
+					}}
+				/>
+			) : null}
 		</div>
 	);
 }

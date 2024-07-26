@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
 import Ring from '@/assets/svg/ring.svg';
-import NavbarLinks from '@/components/DashboardHeader/navbarLinks/NavbarLinks';
+import NavbarLinks from '@/components/dashboard/dashboardHeader/navbarLinks/NavbarLinks';
 
 import styles from './Burger.module.scss';
-import BurgerIcon from '../../../../public/headerImage/burger-menu.svg';
-import CloseIcon from '../../../../public/headerImage/close.svg';
+import BurgerIcon from '../../../../../public/headerImage/burger-menu.svg';
+import CloseIcon from '../../../../../public/headerImage/close.svg';
 
 function Burger() {
 	const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState<boolean>(false);

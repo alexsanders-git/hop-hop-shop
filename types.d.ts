@@ -74,3 +74,40 @@ enum UserRole {
 	User = 'User',
 	Admin = 'Admin',
 }
+interface IDashboardPagination {
+	next_page: string | null;
+	previous_page: string | null;
+	current_page: number;
+}
+
+interface IDashboardProducts {
+	items: IProduct[];
+	pagination: IDashboardPagination;
+	items_count: number;
+}
+interface IDashboardOrders {
+	items: IOrders[];
+	items_count: number;
+	pagination: IDashboardPagination;
+}
+interface IDashboardUsers {
+	items: InterfaceUser[];
+	items_count: number;
+	pagination: IDashboardPagination;
+}
+interface IDashboardCategories {
+	items: ICategory[];
+	items_count: number;
+	pagination: IDashboardPagination;
+}
+interface IResponseError {
+	success: boolean;
+	type?: string;
+	code?: string;
+	error: string;
+}
+
+interface IDashboardSearch {
+	id: number;
+	name: string;
+}

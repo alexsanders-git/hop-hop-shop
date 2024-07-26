@@ -6,12 +6,13 @@ import styles from './styles.module.scss';
 
 export interface IProps {
 	className?: string;
+	link: string;
 }
 
 export default function DashboardPlusButton(props: IProps) {
-	const { className = '' } = props;
+	const { className = '', link } = props;
 	return (
-		<Link className={`${styles.container} ${className}`} href={''}>
+		<Link className={`${styles.container} ${className}`} href={link}>
 			<Plus />
 		</Link>
 	);

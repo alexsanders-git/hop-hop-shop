@@ -1,28 +1,25 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
-import Edit from '@/assets/svg/edit.svg';
-import Remove from '@/assets/svg/remove.svg';
+import EditButton from '@/components/dashboard/editButton/editButton';
 import Pagination from '@/components/dashboard/pagination/Pagination';
+import RemoveButton from '@/components/dashboard/removeButton/RemoveButton';
+import {
+	getDashboardOrders,
+	removeOrderById,
+} from '@/services/dashboard/orders/dashboard.orders.service';
 import { robotoCondensed } from '@/styles/fonts/fonts';
+import { getDashboardOrdersId } from '@/utils/paths/dashboard/dashboard.paths';
 
 import styles from './styles.module.scss';
 
 interface IProps {
-	data: IOrders[];
+	orders: IDashboardOrders;
 }
-
 export default function DashboardTableOrders(props: IProps) {
-	const { data } = props;
-	let PageSize = 10;
-	const [currentPage, setCurrentPage] = useState(1);
+	const { orders } = props;
 
-	const currentTableData = useMemo(() => {
-		const firstPageIndex = (currentPage - 1) * PageSize;
-		const lastPageIndex = firstPageIndex + PageSize;
-		return data.slice(firstPageIndex, lastPageIndex);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [currentPage]);
+	const [newData, setNewData] = useState<IDashboardOrders>(orders);
 
 	const header = [
 		{ name: 'Order ID' },
@@ -44,7 +41,7 @@ export default function DashboardTableOrders(props: IProps) {
 							</div>
 						))}
 					</li>
-					{currentTableData.map((item, index: number) => (
+					{newData?.items?.map((item, index: number) => (
 						<li
 							key={index}
 							className={`${styles.tableRow} ${robotoCondensed.className}`}
@@ -63,23 +60,28 @@ export default function DashboardTableOrders(props: IProps) {
 								{item.created_at}
 							</div>
 							<div className={`${styles.col} ${styles.col6}`}>
-								<div className={styles.iconWrapper}>
-									<Remove />
-								</div>
-								<div className={styles.iconWrapper}>
-									<Edit />
-								</div>
+								<RemoveButton
+									callback={async () => {
+										const res = await removeOrderById(item.id);
+									}}
+								/>
+								<EditButton callback={() => getDashboardOrdersId(item.id)} />
 							</div>
 						</li>
 					))}
 				</ul>
 			</div>
-			<Pagination
-				currentPage={currentPage}
-				totalCount={data.length}
-				pageSize={PageSize}
-				onPageChange={(page) => setCurrentPage(page)}
-			/>
+			{newData?.items?.length > 0 ? (
+				<Pagination
+					currentPage={newData?.pagination?.current_page}
+					totalCount={newData?.items_count}
+					pageSize={10}
+					onPageChange={async (page) => {
+						const res = await getDashboardOrders(page);
+						setNewData(res);
+					}}
+				/>
+			) : null}
 		</div>
 	);
 }
