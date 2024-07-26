@@ -4,16 +4,19 @@
 	padding: 62px 60px;
 	display: flex;
 	flex-direction: column;
+
+	@media only screen and (max-width: $media-md){
+		padding: 30px 20px;
+	}
 }
 
 .formWrp {
 	display: flex;
 	gap: 30px;
+	justify-content: space-between;
 
 	@media only screen and (max-width: 1140px) {
 		flex-direction: column-reverse;
-		align-items: flex-end;
-		flex-grow: 1;
 	}
 }
 
@@ -42,5 +45,6 @@
 		margin-top: 0;
 		max-width: 200px;
 		max-height: 200px;
+		align-self: flex-end;
 	}
 }

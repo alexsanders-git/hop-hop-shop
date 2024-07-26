@@ -4,7 +4,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 48px;
-
+	width: 100%;
 	@media only screen and (max-width: 1140px) {
 		flex-grow: 1;
 	}
@@ -14,21 +14,28 @@
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
+	width: 100%;
 }
 
 .title {
 	font-weight: 40px;
 	font-weight: 300;
 	line-height: 1.15;
+	width: 100%;
 }
 
 .inputContainer {
 	display: flex;
 	gap: 16px;
 	align-items: center;
+	width: 100%;
 
 	&.withPhoneInput {
 		align-items: baseline;
+	}
+
+	@media only screen and (max-width: $media-sm) {
+		flex-direction: column;
 	}
 }
 
@@ -39,6 +46,10 @@
 
 .phoneInputContainer {
 	width: 48%;
+
+	@media only screen and (max-width: 1140px){
+		width: 100%;
+	}
 }
 
 .phoneInputText {
@@ -54,7 +65,8 @@
 	display: flex;
 	gap: 16px;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: space-evenly;
+	width: 100%;
 }
 
 .deleteButton {
@@ -72,6 +84,11 @@
 	@media only screen and (max-width: $media-lg) {
 		max-width: 200px;
 	}
+
+	@media only screen and (max-width: $media-md){
+		max-width: 150px;
+		font-size: 18px;
+	}
 }
 
 .saveButton {
@@ -83,5 +100,9 @@
 	@media only screen and (max-width: $media-lg) {
 		font-size: 26px;
 		padding: 12px 20px;
+	}
+
+	@media only screen and (max-width: $media-md){
+		font-size: 20px;
 	}
 }
