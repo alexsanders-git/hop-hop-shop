@@ -45,10 +45,14 @@
 }
 
 .phoneInputContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
 	width: 48%;
 
 	@media only screen and (max-width: 1140px){
 		width: 100%;
+		gap: 7px;
 	}
 }
 
@@ -56,7 +60,7 @@
 	font-size: 21px;
 	line-height: 1.25;
 
-	@media only screen and (max-width: $media-md) {
+	@media only screen and (max-width: 1140px) {
 		font-size: 16px;
 	}
 }
