@@ -14,12 +14,12 @@ import { getDashboardProductsId } from '@/utils/paths/dashboard/dashboard.paths'
 import styles from './styles.module.scss';
 
 interface IProps {
-	products: IDashboardProducts;
+	products: IResponse<IProduct>;
 }
 
 export default function DashboardTableProducts(props: IProps) {
 	const { products } = props;
-	const [newData, setNewData] = useState<IDashboardProducts>(products);
+	const [newData, setNewData] = useState<IResponse<IProduct>>(products);
 
 	const header = [
 		{ name: 'ID' },

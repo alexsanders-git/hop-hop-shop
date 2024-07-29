@@ -4,12 +4,12 @@ import { useRouter } from 'next/navigation';
 import { forwardRef, Ref, useEffect, useState } from 'react';
 
 import { useDebounce } from '@/hooks/useDebounce';
-import { fetchSearchData } from '@/services/search/search.service';
+import { getSearchProducts } from '@/services/fetchData';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
-import CloseIcon from './close.svg';
-import SearchIcon from './search.svg';
 import styles from './SearchBar.module.scss';
+import CloseIcon from '../../assets/svg/close.svg';
+import SearchIcon from '../../assets/svg/search.svg';
 
 interface SearchBarProps {
 	handleSearchButton: (isShow: boolean) => void;
@@ -30,7 +30,7 @@ function SearchBar(props: SearchBarProps, ref: Ref<HTMLDivElement>) {
 	useEffect(() => {
 		const fetchProduct = async () => {
 			try {
-				const productData = await fetchSearchData(debouncedSearch);
+				const productData = await getSearchProducts(debouncedSearch);
 				if (productData) {
 					setData(productData.items);
 				}

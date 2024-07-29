@@ -14,12 +14,13 @@ import { getDashboardOrdersId } from '@/utils/paths/dashboard/dashboard.paths';
 import styles from './styles.module.scss';
 
 interface IProps {
-	orders: IDashboardOrders;
+	orders: IResponse<IOrders>;
 }
+
 export default function DashboardTableOrders(props: IProps) {
 	const { orders } = props;
 
-	const [newData, setNewData] = useState<IDashboardOrders>(orders);
+	const [newData, setNewData] = useState<IResponse<IOrders>>(orders);
 
 	const header = [
 		{ name: 'Order ID' },

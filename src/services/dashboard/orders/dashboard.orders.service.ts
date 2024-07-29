@@ -1,7 +1,8 @@
 import { fetchWithAuth } from '@/services/auth/fetchApiAuth.service';
+import { fetchWithAuthServer } from '@/services/auth/fetchApiAuthServer.service';
 
 export const getOrdersDashboardServer = async () => {
-	const res = await fetchWithAuth('checkout/orders/', {
+	const res = await fetchWithAuthServer('checkout/orders/', {
 		method: 'GET',
 	});
 	return res.data as IResponse<IOrders>;

@@ -9,8 +9,6 @@ import styles from './NewArrivals.module.scss';
 export default async function NewArrivals() {
 	const products = await getLatestArrivalProducts();
 
-	console.log(products);
-
 	return (
 		<section className={styles.section}>
 			<div className={styles.ribbonWrapper}>
@@ -27,9 +25,7 @@ export default async function NewArrivals() {
 			<SectionContainer>
 				<h2 className={styles.title}>New Arrivals</h2>
 
-				{products.items.length > 0 && (
-					<ProductsSlider products={products.items} />
-				)}
+				<ProductsSlider products={products} />
 			</SectionContainer>
 		</section>
 	);

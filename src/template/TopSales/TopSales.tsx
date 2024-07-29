@@ -25,9 +25,7 @@ export default async function TopSales() {
 			<SectionContainer>
 				<h2 className={styles.title}>Top Sales</h2>
 
-				{products.items.length > 0 && (
-					<ProductsSlider products={products.items} />
-				)}
+				<ProductsSlider products={products} />
 			</SectionContainer>
 		</section>
 	);

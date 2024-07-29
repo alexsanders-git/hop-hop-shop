@@ -11,12 +11,12 @@ import { getDashboardUsersId } from '@/utils/paths/dashboard/dashboard.paths';
 import styles from './styles.module.scss';
 
 interface IProps {
-	users: IDashboardUsers;
+	users: IResponse<IUser>;
 }
 
 export default function DashboardTableUsers(props: IProps) {
 	const { users } = props;
-	const [newData, setNewData] = useState<IDashboardUsers>(users);
+	const [newData, setNewData] = useState<IResponse<IUser>>(users);
 
 	const header = [
 		{ name: 'User ID' },

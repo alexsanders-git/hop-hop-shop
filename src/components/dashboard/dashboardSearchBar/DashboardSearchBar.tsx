@@ -45,7 +45,7 @@ function DashboardSearchBar(props: IProps) {
 		if (debouncedSearch !== '') {
 			fetchProduct();
 		}
-	}, [debouncedSearch]);
+	}, [debouncedSearch, type]);
 
 	return (
 		<div className={`${styles.searchContainer} ${className}`}>
