@@ -16,5 +16,5 @@ export const getDashboardProducts = async (page: number) => {
 	const res = await fetchWithAuth(`shop/products?page=${page}`, {
 		method: 'GET',
 	});
-	return res.data as IDashboardProducts;
+	return res.data as IResponse<IProduct>;
 };

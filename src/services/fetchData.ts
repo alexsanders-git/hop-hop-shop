@@ -34,8 +34,9 @@ export const fetchDataCart = async (url: string, options?: RequestInit) => {
 	return response.json();
 };
 
-export const getCategories = async (): Promise<IResponse<ICategory[]>> => {
-	return await fetchData<ICategory[]>('shop/categories/');
+export const getCategories = async (): Promise<ICategory[]> => {
+	const res = await fetchData<ICategory>('shop/categories/');
+	return res.items as ICategory[];
 };
 
 export const getCategoriesById = async (
@@ -54,10 +55,8 @@ export const getProductsByCategory = async (
 	return await fetchData<IProduct>(`shop/products/?category=${id}`);
 };
 
-export const getLatestArrivalProducts = async (): Promise<
-	IResponse<IProduct>
-> => {
-	return await fetchData<IProduct>('shop/products/latest_arrival/');
+export const getLatestArrivalProducts = async (): Promise<IProduct[]> => {
+	return await fetchData<IProduct[]>('shop/products/latest_arrival/');
 };
 
 export const getPopularProducts = async (): Promise<IResponse<IProduct>> => {

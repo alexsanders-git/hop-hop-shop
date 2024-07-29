@@ -1,11 +1,10 @@
 import { fetchWithAuth } from '@/services/auth/fetchApiAuth.service';
-import { fetchWithAuthServer } from '@/services/auth/fetchApiAuthServer.service';
 
 export const getOrdersDashboardServer = async () => {
-	const res = await fetchWithAuthServer('checkout/orders/', {
+	const res = await fetchWithAuth('checkout/orders/', {
 		method: 'GET',
 	});
-	return res.data as IDashboardOrders;
+	return res.data as IResponse<IOrders>;
 };
 
 export const removeOrderById = async (id: number) => {
@@ -19,5 +18,5 @@ export const getDashboardOrders = async (page: number) => {
 	const res = await fetchWithAuth(`/checkout/orders?page=${page}`, {
 		method: 'GET',
 	});
-	return res.data as IDashboardOrders;
+	return res.data as IResponse<IOrders>;
 };

@@ -1,9 +1,13 @@
-// саша??
-// TS2614: Module "js-cookie" has no exported member CookieAttributes. Did you mean to use import CookieAttributes from "js-cookie" instead?
-// @ts-ignore
-import type { CookieAttributes } from 'js-cookie';
 import Cookies from 'js-cookie';
 import type { StateStorage } from 'zustand/middleware';
+
+interface CookieAttributes {
+	expires?: number | Date;
+	path?: string;
+	domain?: string;
+	secure?: boolean;
+	sameSite?: 'strict' | 'lax' | 'none';
+}
 
 const CookieStorage: (options?: CookieAttributes) => StateStorage = (
 	options = {

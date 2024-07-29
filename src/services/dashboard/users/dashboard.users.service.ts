@@ -1,8 +1,7 @@
 import { fetchWithAuth } from '@/services/auth/fetchApiAuth.service';
-import { fetchWithAuthServer } from '@/services/auth/fetchApiAuthServer.service';
 
 export const getUsersDashboardServer = async () => {
-	const res = await fetchWithAuthServer('auth/customers/', {
+	const res = await fetchWithAuth('auth/customers/', {
 		method: 'GET',
 	});
 	console.log(res);
