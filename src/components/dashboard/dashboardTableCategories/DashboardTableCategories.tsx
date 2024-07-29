@@ -11,7 +11,7 @@ import { getDashboardCategoriesId } from '@/utils/paths/dashboard/dashboard.path
 import styles from './styles.module.scss';
 
 interface IProps {
-	categories: IDashboardCategories;
+	categories: IResponse<ICategory>;
 }
 
 export default function DashboardTableCategories(props: IProps) {

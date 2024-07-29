@@ -25,7 +25,7 @@ export default async function TopSales() {
 			<SectionContainer>
 				<h2 className={styles.title}>Top Sales</h2>
 
-				<ProductsSlider products={products} />
+				<ProductsSlider products={products?.items} />
 			</SectionContainer>
 		</section>
 	);

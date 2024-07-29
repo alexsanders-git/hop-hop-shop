@@ -15,6 +15,7 @@ export default async function CategoryGrid() {
 	});
 
 	// Отримуємо категорії
+	// @ts-ignore
 	const categories: CategoryOrPlaceholder[] = await getCategories();
 
 	// Перевіряємо, чи кількість елементів кратна 8, якщо ні - додаємо заглушки

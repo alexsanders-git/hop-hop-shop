@@ -1,16 +1,11 @@
 interface IResponse<T> {
-	items_count: number;
-	pages_link: IPagination;
 	items: T[];
+	items_count: number;
+	pagination: IDashboardPagination;
 }
 
 interface IPlaceholder {
 	empty: boolean;
-}
-
-interface IPagination {
-	next: string | null;
-	previous: string | null;
 }
 
 interface ICategory {

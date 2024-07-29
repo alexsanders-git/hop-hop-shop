@@ -25,7 +25,7 @@ export default async function NewArrivals() {
 			<SectionContainer>
 				<h2 className={styles.title}>New Arrivals</h2>
 
-				<ProductsSlider products={products} />
+				<ProductsSlider products={products?.items} />
 			</SectionContainer>
 		</section>
 	);

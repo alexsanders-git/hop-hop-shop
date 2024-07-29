@@ -9,16 +9,15 @@ import InputPassword from '@/components/InputPassword/InputPassword';
 import PhoneInputField from '@/sharedComponenst/phoneInputField/PhoneInputField';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import {
-	nameValid,
-	latNameValid,
-	emailValid,
-	phoneValid,
 	addressValid,
 	cityValid,
 	countryValid,
-	postalCodeValid,
+	emailValid,
+	latNameValid,
+	nameValid,
 	passwordValid,
-	confirmPasswordValid,
+	phoneValid,
+	postalCodeValid,
 } from '@/validation/checkout/validation';
 
 import styles from './AdminAccountForm.module.scss';
@@ -59,7 +58,10 @@ export default function AdminAccountForm() {
 						postalCode: postalCodeValid,
 						currentPassword: passwordValid,
 						newPassword: passwordValid,
-						confirmPassword: confirmPasswordValid,
+						confirmPassword: yup
+							.string()
+							.required('Confirm Password is required')
+							.oneOf([yup.ref('newPassword')], 'Passwords must match'),
 					})
 					.required()}
 				innerRef={ref}

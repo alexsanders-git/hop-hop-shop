@@ -24,7 +24,8 @@ export default async function CategoryPage({ params: { id } }: Props) {
 	return (
 		<section className={styles.section}>
 			<SectionContainer>
-				<h2 className={styles.title}>Category {category?.name}</h2>
+				{/*хз що там було ілья змінив респонс*/}
+				{/*<h2 className={styles.title}>Category {category?.name}</h2>*/}
 
 				<div className={styles.products}>
 					{products.length > 0 ? (
