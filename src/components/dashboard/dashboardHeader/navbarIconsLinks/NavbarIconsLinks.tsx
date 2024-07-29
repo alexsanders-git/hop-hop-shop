@@ -1,8 +1,8 @@
 'use client';
 
 import styles from './navbarIconsLinks.module.scss';
-import Logout from '../../../assets/svg/logaut.svg';
-import Ring from '../../../assets/svg/ring.svg';
+import Logout from '../../../../assets/svg/logaut.svg';
+import Ring from '../../../../assets/svg/ring.svg';
 
 function NavbarIconsLinks() {
 	return (

@@ -83,3 +83,11 @@
 		line-height: 22px;
 	}
 }
+
+.error {
+	width: 100%;
+	display: block;
+	font-size: 16px;
+	line-height: 1;
+	color: var(--error-color);
+}

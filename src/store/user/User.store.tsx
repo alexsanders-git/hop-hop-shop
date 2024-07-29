@@ -1,8 +1,9 @@
+import Cookies from 'js-cookie';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import { LocalStorageEnums } from '@/utils/enums/localStorageEnums';
+import { CookiesEnums } from '@/utils/enums/cookiesEnums';
 
 interface IState {
 	user: IUser | null;
@@ -25,7 +26,7 @@ export const useUser = create<IState & IActions>()(
 				logout: () =>
 					set((state) => {
 						state.user = null;
-						localStorage.removeItem(LocalStorageEnums.access_token);
+						Cookies.remove(CookiesEnums.access_token);
 					}),
 			})),
 			{ name: 'user' },

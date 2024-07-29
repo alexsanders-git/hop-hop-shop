@@ -1,5 +1,5 @@
-@import "src/styles/media.scss";
-@import "src/styles/mixins";
+@import "../../../styles/media";
+@import "../../../styles/mixins";
 
 .header {
 	position: fixed;
@@ -14,6 +14,10 @@
 		}
 	}
 
+}
+
+.container {
+	max-width: 1800px;
 }
 
 .wrapper {

@@ -1,86 +1,78 @@
 'use client';
 import { useMemo, useState } from 'react';
 
-import Edit from '@/assets/svg/edit.svg';
-import Remove from '@/assets/svg/remove.svg';
+import EditButton from '@/components/dashboard/editButton/editButton';
 import Pagination from '@/components/dashboard/pagination/Pagination';
+import RemoveButton from '@/components/dashboard/removeButton/RemoveButton';
+import { removeCategoryById } from '@/services/dashboard/categories/dashboard.categories.service';
 import { robotoCondensed } from '@/styles/fonts/fonts';
+import { getDashboardCategoriesId } from '@/utils/paths/dashboard/dashboard.paths';
 
 import styles from './styles.module.scss';
 
 interface IProps {
-	data: any;
+	categories: IResponse<ICategory>;
 }
 
 export default function DashboardTableCategories(props: IProps) {
-	const { data } = props;
-	let PageSize = 10;
+	const { categories } = props;
+	const PageSize = 7;
 	const [currentPage, setCurrentPage] = useState(1);
 
 	const currentTableData = useMemo(() => {
 		const firstPageIndex = (currentPage - 1) * PageSize;
 		const lastPageIndex = firstPageIndex + PageSize;
-		return data.slice(firstPageIndex, lastPageIndex);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [currentPage]);
+		return categories.items.slice(firstPageIndex, lastPageIndex);
+	}, [categories.items, currentPage]);
 
 	const header = [
-		{ name: 'Category', mobileName: 'Cate...' },
-		{ name: 'Description', mobileName: 'Desc...' },
-		{ name: 'Status', mobileName: 'Sta...' },
-		{ name: '', mobileName: '' },
+		{ name: 'ID' },
+		{ name: 'Category' },
+		{ name: 'Description' },
+		{ name: 'Actions' },
 	];
 
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.container}>
 				<ul className={styles.responsiveTable}>
-					<li className={`${styles.tableHeader} ${styles.first} `}>
+					<li className={`${styles.tableHeader}`}>
 						{header.map((item, i) => (
 							<div key={i} className={`${styles.col} ${styles[`col${i + 1}`]}`}>
 								{item.name}
 							</div>
 						))}
 					</li>
-					<li className={`${styles.tableHeader} ${styles.second} `}>
-						{header.map((item, i) => (
-							<div key={i} className={`${styles.col} ${styles[`col${i + 1}`]}`}>
-								{item.mobileName}
-							</div>
-						))}
-					</li>
-					{currentTableData.map((item: any, index: number) => (
+					{currentTableData?.map((item, index: number) => (
 						<li
 							key={index}
 							className={`${styles.tableRow} ${robotoCondensed.className}`}
 						>
-							<div className={`${styles.col} ${styles.col1}`}>
-								{item.category}
-							</div>
-							<div className={`${styles.col} ${styles.col2}`}>
-								{item.description}
-							</div>
-							<div className={`${styles.col} ${styles.col3}`}>
-								{item.status}
-							</div>
+							<div className={`${styles.col} ${styles.col1}`}>#{item.id}</div>
+							<div className={`${styles.col} ${styles.col2}`}>{item.name}</div>
+							<div className={`${styles.col} ${styles.col3}`}>{item.name}</div>
 							<div className={`${styles.col} ${styles.col4}`}>
-								<div className={styles.iconWrapper}>
-									<Remove />
-								</div>
-								<div className={styles.iconWrapper}>
-									<Edit />
-								</div>
+								<RemoveButton
+									callback={async () => {
+										const res = await removeCategoryById(item.id);
+									}}
+								/>
+								<EditButton
+									callback={() => getDashboardCategoriesId(item.id)}
+								/>
 							</div>
 						</li>
 					))}
 				</ul>
 			</div>
-			<Pagination
-				currentPage={currentPage}
-				totalCount={data.length}
-				pageSize={PageSize}
-				onPageChange={(page) => setCurrentPage(page)}
-			/>
+			{currentTableData.length > 0 ? (
+				<Pagination
+					currentPage={currentPage}
+					totalCount={categories.items_count}
+					pageSize={PageSize}
+					onPageChange={(page) => setCurrentPage(page)}
+				/>
+			) : null}
 		</div>
 	);
 }

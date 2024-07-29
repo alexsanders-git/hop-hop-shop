@@ -4,12 +4,12 @@
 	position: relative;
 	display: flex;
 	align-items: center;
-	z-index: 1000;
+	z-index: 10;
 }
 
 .searchInput {
 	position: relative;
-	z-index: 1500;
+	z-index: 12;
 	padding: 16px 36px;
 	font-weight: 700;
 	font-size: 22px;
@@ -19,16 +19,17 @@
 	border: 2px solid var(--black-color);
 	box-shadow: 2px 2px 0 2px var(--black-color);
 	background-color: var(--white-color);
+
+
 	@media screen and (max-width: 1300px) {
 		padding: 15px 0;
 		font-size: 18px;
 		line-height: 20px;
-		padding-left: 15px;
+		padding-left: 30px;
 	}
 }
 
-
-.suggestionsContainer {
+.suggestionsWrapper {
 	position: absolute;
 	top: 60%;
 	left: 0;
@@ -39,10 +40,22 @@
 	box-shadow: 2px 2px 0 2px var(--black-color);
 	background-color: var(--white-color);
 	border-top: none;
-	z-index: 500;
-	max-height: 150px;
-	padding-top: 20px;
+	z-index: 10;
+	padding-top: 25px;
+}
+
+.suggestionsWrapperScrollBar {
+	overflow: hidden;
+	position: relative;
+	border-bottom-left-radius: 20px;
+	border-bottom-right-radius: 20px;
+}
+
+.suggestionsContainer {
 	overflow-y: auto;
+	box-sizing: content-box;
+	max-height: 150px;
+	background-color: var(--white-color);
 }
 
 .suggestionItem {
@@ -64,7 +77,12 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	z-index: 1500;
+	z-index: 15;
+	top: 36%;
+	@media screen and (max-width: $media-md) {
+		top: 33%;
+
+	}
 }
 
 .closeButton {
@@ -75,5 +93,10 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	z-index: 1500;
+	z-index: 15;
+	top: 36%;
+	@media screen and (max-width: $media-md) {
+		top: 33%;
+
+	}
 }

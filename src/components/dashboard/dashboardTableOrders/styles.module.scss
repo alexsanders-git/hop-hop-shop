@@ -19,13 +19,23 @@
 	@media screen and (max-width: $media-lg) {
 		border-radius: 16px;
 	}
-
+	@media screen and (max-width: $media-md) {
+		width: 100%;
+		max-width: 778px;
+		overflow-x: auto;
+		&::-webkit-scrollbar {
+			height: 10px;
+		}
+	}
 }
 
 
 .responsiveTable {
 	padding: 0;
 	margin: 0;
+	@media screen and (max-width: $media-md) {
+		width: 800px;
+	}
 
 	li {
 		display: flex;
@@ -98,15 +108,16 @@
 	}
 
 	.col1 {
-		flex-basis: 11%;
+		flex-basis: 15%;
 		padding-left: 25px;
+		text-align: start;
 		@media screen and (max-width: $media-lg) {
 			padding-left: 12px;
 
 		}
 	}
 
-	.col2, .col3, .col4, .col5, .col6, .col7, {
+	.col2, .col3, .col4, .col5 {
 		text-align: center;
 	}
 
@@ -127,15 +138,7 @@
 	}
 
 	.col6 {
-		flex-basis: 11%;
-	}
-
-	.col7 {
-		flex-basis: 11%;
-	}
-
-	.col8 {
-		flex-basis: 10%;
+		flex-basis: 15%;
 		padding-right: 25px;
 		display: flex;
 		justify-content: flex-end;
@@ -170,15 +173,3 @@
 	}
 }
 
-.first {
-	@media screen and (max-width: $media-sm) {
-		display: none !important;
-	}
-}
-
-.second {
-	display: none !important;
-	@media screen and (max-width: $media-sm) {
-		display: flex !important;
-	}
-}

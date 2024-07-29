@@ -1,3 +1,4 @@
+'use client';
 import {
 	DOTS,
 	usePagination,
@@ -24,6 +25,7 @@ export default function Pagination(props: InterfacePagination) {
 		pageSize,
 		className = '',
 	} = props;
+
 	const paginationRange = usePagination({
 		currentPage,
 		totalCount,
@@ -31,7 +33,7 @@ export default function Pagination(props: InterfacePagination) {
 		pageSize,
 	});
 
-	if (currentPage === 0 || paginationRange!.length < 2) {
+	if (currentPage === 0 || (paginationRange && paginationRange?.length < 2)) {
 		return null;
 	}
 
@@ -44,6 +46,7 @@ export default function Pagination(props: InterfacePagination) {
 	};
 
 	let lastPage = paginationRange![paginationRange!.length - 1];
+
 	return (
 		<ul className={`${styles.paginationContainer}  ${className}`}>
 			<li

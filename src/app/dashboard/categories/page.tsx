@@ -1,199 +1,27 @@
+import { notFound } from 'next/navigation';
+
 import DashboardHeadLine from '@/components/dashboard/dashboardHeadLine/DashboardHeadLine';
 import DashboardTableCategories from '@/components/dashboard/dashboardTableCategories/DashboardTableCategories';
+import { getDashboardCategoriesServer } from '@/services/dashboard/categories/dashboard.categories.service';
+import { getDashboardCategoriesCreate } from '@/utils/paths/dashboard/dashboard.paths';
 
 import styles from './styles.module.scss';
 
-const data = [
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-	{
-		category: 'Books',
-		description: 'Books, comics, magazines, other publications',
-		status: 'Shown',
-	},
-];
-export default function DashboardProducts() {
+export default async function DashboardCategories() {
+	const categories = await getDashboardCategoriesServer();
+	if (!categories) {
+		return notFound();
+	}
 	return (
 		<div className={styles.wrapper}>
 			<DashboardHeadLine
 				compact={false}
 				text={'Categories'}
 				textButton={'New category'}
+				buttonLink={getDashboardCategoriesCreate()}
+				searchType={'categories'}
 			/>
-			<DashboardTableCategories data={data} />
+			<DashboardTableCategories categories={categories} />
 		</div>
 	);
 }

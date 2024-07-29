@@ -19,13 +19,26 @@
 	@media screen and (max-width: $media-lg) {
 		border-radius: 16px;
 	}
-
+	@media screen and (max-width: $media-md) {
+		width: 100%;
+		max-width: 778px;
+		overflow-x: auto;
+		&::-webkit-scrollbar {
+			height: 10px;
+		}
+	}
 }
-
 
 .responsiveTable {
 	padding: 0;
 	margin: 0;
+	//height: 680px;
+	//@media screen and (max-width: $media-lg) {
+	//	height: 505px;
+	//}
+	@media screen and (max-width: $media-md) {
+		width: 800px;
+	}
 
 	li {
 		display: flex;
@@ -91,6 +104,9 @@
 	.tableRow {
 		border-top: 2px solid var(--primary-color);
 		padding: 16px 0;
+		&:last-child{
+			border-bottom: 2px solid var(--primary-color);
+		}
 
 		@media screen and (max-width: $media-lg) {
 			padding: 12px 0;
@@ -98,7 +114,7 @@
 	}
 
 	.col1 {
-		flex-basis: 30%;
+		flex-basis: 8%;
 		padding-left: 25px;
 		@media screen and (max-width: $media-lg) {
 			padding-left: 12px;
@@ -111,7 +127,9 @@
 	}
 
 	.col2 {
-		flex-basis: 17.5%;
+		flex-basis: 30%;
+		text-align: start;
+
 	}
 
 	.col3 {
@@ -158,15 +176,5 @@
 	}
 }
 
-.first {
-	@media screen and (max-width: $media-sm) {
-		display: none !important;
-	}
-}
 
-.second {
-	display: none !important;
-	@media screen and (max-width: $media-sm) {
-		display: flex !important;
-	}
-}
+

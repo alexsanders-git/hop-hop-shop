@@ -29,7 +29,8 @@ export default async function CategoryGrid() {
 	// Розбиваємо елементи на 4 колонки
 	const columns: CategoryOrPlaceholder[][] = [[], [], [], []];
 
-	categories.forEach((category, index) => {
+	console.log(categories);
+	categories?.forEach((category, index) => {
 		columns[index % 4].push(category);
 	});
 
@@ -51,9 +52,9 @@ export default async function CategoryGrid() {
 			</SectionContainer>
 
 			<div className={styles.cards}>
-				{columns.map((column, columnIndex) => (
+				{columns?.map((column, columnIndex) => (
 					<div className={styles.column} key={columnIndex}>
-						{column.map((item, itemIndex) => {
+						{column?.map((item, itemIndex) => {
 							if ('empty' in item && item.empty) {
 								// Рендеримо заглушку
 								return (

@@ -1,6 +1,13 @@
-import type { CookieAttributes } from 'js-cookie';
 import Cookies from 'js-cookie';
 import type { StateStorage } from 'zustand/middleware';
+
+interface CookieAttributes {
+	expires?: number | Date;
+	path?: string;
+	domain?: string;
+	secure?: boolean;
+	sameSite?: 'strict' | 'lax' | 'none';
+}
 
 const CookieStorage: (options?: CookieAttributes) => StateStorage = (
 	options = {

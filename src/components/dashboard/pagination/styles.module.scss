@@ -5,6 +5,7 @@
 	justify-content: flex-end;
 	list-style-type: none;
 	gap: 10px;
+	flex-wrap: wrap;
 	@media screen and (max-width: $media-lg) {
 		justify-content: center;
 	}
