@@ -12,3 +12,24 @@ export const removeCategoryById = async (id: number) => {
 	});
 	return res as boolean;
 };
+export const createCategory = async (data: {
+	name: string;
+	description: string;
+}) => {
+	const res = await fetchWithAuth('shop/categories/', {
+		method: 'POST',
+		body: JSON.stringify(data),
+	});
+	return res;
+};
+export const createCategoryImage = async (id: number, data: FormData) => {
+	const res = await fetchWithAuth(
+		`shop/categories/${id}/upload-image/`,
+		{
+			method: 'POST',
+			body: data,
+		},
+		true,
+	);
+	return res;
+};

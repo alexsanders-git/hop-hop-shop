@@ -4,22 +4,24 @@ import { CookiesEnums } from '@/utils/enums/cookiesEnums';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL + '/';
 
-const prepareHeaders = () => {
+const prepareHeaders = (isFile: boolean) => {
 	const headers = new Headers();
 
 	const token = Cookies.get(CookiesEnums.access_token);
 	if (token) {
 		headers.set('Authorization', `Bearer ${token}`);
 	}
-	headers.set('Content-Type', 'application/json');
+	if (!isFile) {
+		headers.set('Content-Type', 'application/json');
+	}
 	return headers;
 };
 
-const refreshAuthToken = async () => {
+const refreshAuthToken = async (isFile: boolean) => {
 	try {
 		const refreshResponse = await fetch(`${baseUrl}auth/token/refresh/`, {
 			method: 'POST',
-			headers: prepareHeaders(),
+			headers: prepareHeaders(isFile),
 			credentials: 'include',
 		});
 
@@ -41,20 +43,24 @@ const refreshAuthToken = async () => {
 };
 
 // при роботі з авторизацією
-export const fetchWithAuth = async (url: string, options = {}) => {
+export const fetchWithAuth = async (
+	url: string,
+	options = {},
+	isFile = false,
+) => {
 	try {
 		let response = await fetch(`${baseUrl}${url}`, {
 			...options,
-			headers: prepareHeaders(),
+			headers: prepareHeaders(isFile),
 			credentials: 'include',
 		});
 
 		if (response.status === 401) {
-			const tokenRefreshed = await refreshAuthToken();
+			const tokenRefreshed = await refreshAuthToken(isFile);
 			if (tokenRefreshed) {
 				response = await fetch(`${baseUrl}${url}`, {
 					...options,
-					headers: prepareHeaders(),
+					headers: prepareHeaders(isFile),
 					credentials: 'include',
 				});
 			}
