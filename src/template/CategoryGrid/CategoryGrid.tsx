@@ -29,7 +29,6 @@ export default async function CategoryGrid() {
 	// Розбиваємо елементи на 4 колонки
 	const columns: CategoryOrPlaceholder[][] = [[], [], [], []];
 
-	console.log(categories);
 	categories?.forEach((category, index) => {
 		columns[index % 4].push(category);
 	});
