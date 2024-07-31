@@ -1,7 +1,7 @@
 interface IResponse<T> {
 	items: T[];
 	items_count: number;
-	pagination: IDashboardPagination;
+	pagination: IPagination;
 }
 
 interface IPlaceholder {
@@ -81,7 +81,7 @@ enum UserRole {
 	Admin = 'Admin',
 }
 
-interface IDashboardPagination {
+interface IPagination {
 	next_page: string | null;
 	previous_page: string | null;
 	current_page: number;
