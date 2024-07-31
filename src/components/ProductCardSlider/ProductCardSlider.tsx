@@ -32,7 +32,6 @@ export default function ProductCardSlider({
 				</div>
 				<div className={styles.details}>
 					<h3 className={styles.name}>{name}</h3>
-					<p className={styles.category}>{category}</p>
 				</div>
 				<div className={styles.pricetag}>
 					<PriceTagIcon className={styles.icon} />
