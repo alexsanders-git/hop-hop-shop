@@ -11,7 +11,7 @@ interface IPlaceholder {
 interface ICategory {
 	id: number;
 	name: string;
-	slug: string;
+	slug?: string;
 	image: string;
 	description: string;
 }
