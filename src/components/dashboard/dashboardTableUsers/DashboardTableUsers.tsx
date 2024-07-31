@@ -1,30 +1,29 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
-import Edit from '@/assets/svg/edit.svg';
-import Remove from '@/assets/svg/remove.svg';
+import EditButton from '@/components/dashboard/editButton/editButton';
 import Pagination from '@/components/dashboard/pagination/Pagination';
+import RemoveButton from '@/components/dashboard/removeButton/RemoveButton';
+import { getDashboardUsers } from '@/services/dashboard/users/dashboard.users.service';
 import { robotoCondensed } from '@/styles/fonts/fonts';
+import { getDashboardUsersId } from '@/utils/paths/dashboard/dashboard.paths';
 
 import styles from './styles.module.scss';
 
 interface IProps {
-	data: any;
+	users: IResponse<IUser>;
 }
 
 export default function DashboardTableUsers(props: IProps) {
-	const { data } = props;
-	let PageSize = 10;
-	const [currentPage, setCurrentPage] = useState(1);
+	const { users } = props;
+	const [newData, setNewData] = useState<IResponse<IUser>>(users);
 
-	const currentTableData = useMemo(() => {
-		const firstPageIndex = (currentPage - 1) * PageSize;
-		const lastPageIndex = firstPageIndex + PageSize;
-		return data.slice(firstPageIndex, lastPageIndex);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [currentPage]);
-
-	const header = [{ name: 'User ID' }, { name: 'Name' }, { name: 'Email' }];
+	const header = [
+		{ name: 'User ID' },
+		{ name: 'Name' },
+		{ name: 'Email' },
+		{ name: 'Actions' },
+	];
 
 	return (
 		<div className={styles.wrapper}>
@@ -37,26 +36,35 @@ export default function DashboardTableUsers(props: IProps) {
 							</div>
 						))}
 					</li>
-					{currentTableData.map((item: any, index: number) => (
+					{newData?.items?.map((item, index: number) => (
 						<li
 							key={index}
 							className={`${styles.tableRow} ${robotoCondensed.className}`}
 						>
-							<div className={`${styles.col} ${styles.col1}`}>
-								{item.userId}
+							<div className={`${styles.col} ${styles.col1}`}>#{item.id}</div>
+							<div className={`${styles.col} ${styles.col2}`}>
+								{item.first_name} {item.last_name}
 							</div>
-							<div className={`${styles.col} ${styles.col2}`}>{item.name}</div>
 							<div className={`${styles.col} ${styles.col3}`}>{item.email}</div>
+							<div className={`${styles.col} ${styles.col4}`}>
+								<RemoveButton callback={() => {}} />
+								<EditButton callback={() => getDashboardUsersId(item.id)} />
+							</div>
 						</li>
 					))}
 				</ul>
 			</div>
-			<Pagination
-				currentPage={currentPage}
-				totalCount={data.length}
-				pageSize={PageSize}
-				onPageChange={(page) => setCurrentPage(page)}
-			/>
+			{newData?.items?.length > 0 ? (
+				<Pagination
+					currentPage={newData?.pagination?.current_page}
+					totalCount={newData?.items_count}
+					pageSize={10}
+					onPageChange={async (page) => {
+						const res = await getDashboardUsers(page);
+						setNewData(res);
+					}}
+				/>
+			) : null}
 		</div>
 	);
 }

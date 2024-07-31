@@ -4,15 +4,12 @@ import { useRouter } from 'next/navigation';
 import { forwardRef, Ref, useEffect, useState } from 'react';
 
 import { useDebounce } from '@/hooks/useDebounce';
-import {
-	fetchSearchData,
-	ProductSearch,
-} from '@/services/search/search.service';
+import { getSearchProducts } from '@/services/fetchData';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
-import CloseIcon from './close.svg';
-import SearchIcon from './search.svg';
 import styles from './SearchBar.module.scss';
+import CloseIcon from '../../assets/svg/close.svg';
+import SearchIcon from '../../assets/svg/search.svg';
 
 interface SearchBarProps {
 	handleSearchButton: (isShow: boolean) => void;
@@ -20,7 +17,7 @@ interface SearchBarProps {
 
 function SearchBar(props: SearchBarProps, ref: Ref<HTMLDivElement>) {
 	const { handleSearchButton } = props;
-	const [data, setData] = useState<ProductSearch[]>([]);
+	const [data, setData] = useState<IProduct[]>([]);
 	const [query, setQuery] = useState('');
 	const debouncedSearch = useDebounce(query.toLowerCase(), 500);
 	const router = useRouter();
@@ -33,12 +30,12 @@ function SearchBar(props: SearchBarProps, ref: Ref<HTMLDivElement>) {
 	useEffect(() => {
 		const fetchProduct = async () => {
 			try {
-				const productData = await fetchSearchData(debouncedSearch);
+				const productData = await getSearchProducts(debouncedSearch);
 				if (productData) {
-					setData(productData);
+					setData(productData.items);
 				}
 			} catch (error) {
-				console.log('error: ', error);
+				console.error('error: ', error);
 			}
 		};
 

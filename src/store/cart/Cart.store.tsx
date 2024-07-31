@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 import { fetchWithCookies } from '@/services/cookies/cookies.service';
@@ -9,7 +9,7 @@ import {
 	InterfaceCouponResponse,
 	InterfaceFetchCartData,
 } from '@/store/cart/Cart.interface';
-import { syncCartWithCookies } from '@/utils/syncCartWithCookies';
+import CookieStorage from '@/utils/cookieStorage';
 
 interface IState {
 	cart: InterfaceFetchCartData | null;
@@ -33,8 +33,6 @@ export const useCart = create<IState & IActions>()(
 						const data: ApiResponseFetchCart = await fetchDataCart('/cart/');
 						set((state) => {
 							state.cart = data.data;
-
-							syncCartWithCookies(state.cart);
 						});
 					} catch (error) {
 						console.error('Failed to fetch cart data:', error);
@@ -51,8 +49,6 @@ export const useCart = create<IState & IActions>()(
 						);
 						if (data) {
 							await useCart.getState().fetchCart();
-
-							syncCartWithCookies(useCart.getState().cart);
 						}
 					} catch (error) {
 						console.error('Failed to add item to cart:', error);
@@ -69,8 +65,6 @@ export const useCart = create<IState & IActions>()(
 						);
 						if (data) {
 							await useCart.getState().fetchCart();
-
-							syncCartWithCookies(useCart.getState().cart);
 						}
 					} catch (error) {
 						console.error('Failed to subtract item from cart:', error);
@@ -87,8 +81,6 @@ export const useCart = create<IState & IActions>()(
 						);
 						if (data) {
 							await useCart.getState().fetchCart();
-
-							syncCartWithCookies(useCart.getState().cart);
 						}
 					} catch (error) {
 						console.error('Failed to remove item from cart:', error);
@@ -108,13 +100,15 @@ export const useCart = create<IState & IActions>()(
 					);
 					if (res?.success) {
 						await useCart.getState().fetchCart();
-
-						syncCartWithCookies(useCart.getState().cart);
 					}
 					return res;
 				},
 			})),
-			{ name: 'cart' },
+			{
+				name: 'cart',
+				storage: createJSONStorage(() => CookieStorage()),
+			},
 		),
+		{ name: 'Cart' },
 	),
 );

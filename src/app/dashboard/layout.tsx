@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 
 import Container from '@/components/Container/Container';
-import DashboardFooter from '@/components/dashboard/DashboardFooter/DashboardFooter';
-import DashboardSidebar from '@/components/dashboard/DashboardSidebar/DashboardSidebar';
-import DashboardHeader from '@/components/DashboardHeader/DashboardHeader';
+import DashboardFooter from '@/components/dashboard/dashboardFooter/DashboardFooter';
+import DashboardHeader from '@/components/dashboard/dashboardHeader/DashboardHeader';
+import DashboardSidebar from '@/components/dashboard/dashboardSidebar/DashboardSidebar';
 import { londrinaSolid } from '@/styles/fonts/fonts';
 
 import '@/styles/reset.scss';
@@ -25,7 +25,7 @@ export default function DashboardLayout({
 			<body className={londrinaSolid.className}>
 				<div className={styles.bodyInner}>
 					<DashboardHeader />
-					<Container>
+					<Container className={styles.container}>
 						<main className={styles.main}>
 							<DashboardSidebar />
 							<div className={styles.wrapper}>{children}</div>

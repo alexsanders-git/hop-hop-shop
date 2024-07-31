@@ -1,7 +1,7 @@
 'use client';
 import ButtonLink from '@/components/ButtonLink/ButtonLink';
 import DashboardPlusButton from '@/components/dashboard/dashboardPlusButton/DashboardPlusButton';
-import DashboardSearchBar from '@/components/dashboard/DashboardSearchBar/DashboardSearchBar';
+import DashboardSearchBar from '@/components/dashboard/dashboardSearchBar/DashboardSearchBar';
 
 import styles from './styles.module.scss';
 
@@ -9,10 +9,12 @@ interface IProps {
 	compact: boolean;
 	text: string;
 	textButton?: string;
+	buttonLink?: string;
+	searchType: 'products' | 'users' | 'orders' | 'categories';
 }
 
 export default function DashboardHeadLine(props: IProps) {
-	const { compact, text, textButton = '' } = props;
+	const { compact, text, textButton = '', buttonLink = '', searchType } = props;
 	return (
 		<div
 			className={`${styles.container} ${compact && styles.compactContainer}`}
@@ -24,16 +26,17 @@ export default function DashboardHeadLine(props: IProps) {
 						<div className={styles.actions}>
 							<ButtonLink
 								className={styles.button}
-								href={''}
+								href={buttonLink}
 								text={textButton}
 							/>
-							<DashboardSearchBar />
+							<DashboardSearchBar type={searchType} />
 						</div>
-						<DashboardPlusButton className={styles.plus} />
+						<DashboardPlusButton link={buttonLink} className={styles.plus} />
 					</>
 				)}
 			</div>
 			<DashboardSearchBar
+				type={searchType}
 				className={`${styles.mobileSearch} ${compact && styles.compactSearch}`}
 			/>
 		</div>

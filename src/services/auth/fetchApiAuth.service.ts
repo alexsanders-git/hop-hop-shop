@@ -1,60 +1,89 @@
-import { LocalStorageEnums } from '@/utils/enums/localStorageEnums';
+import Cookies from 'js-cookie';
+
+import { CookiesEnums, UserEnum } from '@/utils/enums/cookiesEnums';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL + '/';
-const prepareHeaders = () => {
+
+const prepareHeaders = (isFile: boolean) => {
 	const headers = new Headers();
-	const token = localStorage.getItem(LocalStorageEnums.access_token);
+
+	const token = Cookies.get(CookiesEnums.access_token);
 	if (token) {
 		headers.set('Authorization', `Bearer ${token}`);
 	}
-	headers.set('Content-Type', 'application/json');
+	if (!isFile) {
+		headers.set('Content-Type', 'application/json');
+	}
 	return headers;
 };
 
-const refreshAuthToken = async () => {
+const refreshAuthToken = async (isFile: boolean) => {
 	try {
-		const refreshResponse = await fetch(`${baseUrl}/auth/refresh-token`, {
+		const refreshResponse = await fetch(`${baseUrl}auth/token/refresh/`, {
 			method: 'POST',
-			headers: prepareHeaders(),
+			headers: prepareHeaders(isFile),
 			credentials: 'include',
 		});
 
 		if (refreshResponse.ok) {
 			const refreshData = await refreshResponse.json();
-			localStorage.setItem(LocalStorageEnums.access_token, refreshData.access);
+			Cookies.set(CookiesEnums.access_token, refreshData.data.access);
 			return true;
 		} else {
-			// logoutAll();
+			const logoutRes = await fetch(`${baseUrl}auth/logout/`, {
+				method: 'POST',
+				headers: prepareHeaders(isFile),
+				credentials: 'include',
+			});
+			Cookies.remove(CookiesEnums.access_token);
+			Cookies.remove(UserEnum.user);
 			return false;
 		}
 	} catch (error) {
 		console.error('Error refreshing auth token:', error);
-		// logoutAll();
+		const logoutRes = await fetch(`${baseUrl}auth/logout/`, {
+			method: 'POST',
+			headers: prepareHeaders(isFile),
+			credentials: 'include',
+		});
+		Cookies.remove(CookiesEnums.access_token);
+		Cookies.remove(UserEnum.user);
 		return false;
 	}
 };
+
 // при роботі з авторизацією
-export const fetchWithAuth = async (url: string, options = {}) => {
+export const fetchWithAuth = async (
+	url: string,
+	options = {},
+	isFile = false,
+) => {
 	try {
 		let response = await fetch(`${baseUrl}${url}`, {
 			...options,
-			headers: prepareHeaders(),
+			headers: prepareHeaders(isFile),
 			credentials: 'include',
 		});
 
 		if (response.status === 401) {
-			const tokenRefreshed = await refreshAuthToken();
+			const tokenRefreshed = await refreshAuthToken(isFile);
 			if (tokenRefreshed) {
 				response = await fetch(`${baseUrl}${url}`, {
 					...options,
-					headers: prepareHeaders(),
+					headers: prepareHeaders(isFile),
 					credentials: 'include',
 				});
 			}
 		}
 
-		return response.json();
-	} catch (error) {
+		const json = await response.json();
+
+		console.log(json);
+
+		if (!json || !json.data) throw new Error('No data found.');
+
+		return json;
+	} catch (error: unknown) {
 		console.error('Error fetching data:', error);
 		return error;
 	}

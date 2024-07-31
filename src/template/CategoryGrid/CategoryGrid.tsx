@@ -18,7 +18,7 @@ export default async function CategoryGrid() {
 	const categories: CategoryOrPlaceholder[] = await getCategories();
 
 	// Перевіряємо, чи кількість елементів кратна 8, якщо ні - додаємо заглушки
-	const remainder = categories.length % 8;
+	const remainder = categories?.length % 8;
 	if (remainder !== 0) {
 		const placeholdersNeeded = 8 - remainder;
 		for (let i = 0; i < placeholdersNeeded; i++) {
@@ -29,7 +29,7 @@ export default async function CategoryGrid() {
 	// Розбиваємо елементи на 4 колонки
 	const columns: CategoryOrPlaceholder[][] = [[], [], [], []];
 
-	categories.forEach((category, index) => {
+	categories?.forEach((category, index) => {
 		columns[index % 4].push(category);
 	});
 
@@ -51,9 +51,9 @@ export default async function CategoryGrid() {
 			</SectionContainer>
 
 			<div className={styles.cards}>
-				{columns.map((column, columnIndex) => (
+				{columns?.map((column, columnIndex) => (
 					<div className={styles.column} key={columnIndex}>
-						{column.map((item, itemIndex) => {
+						{column?.map((item, itemIndex) => {
 							if ('empty' in item && item.empty) {
 								// Рендеримо заглушку
 								return (

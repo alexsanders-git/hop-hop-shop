@@ -1,16 +1,15 @@
 import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import { LocalStorageEnums } from '@/utils/enums/localStorageEnums';
+import CookieStorage from '@/utils/cookieStorage';
 
 interface IState {
-	user: InterfaceUser | null;
+	user: IUser | null;
 }
 
 interface IActions {
-	setUser: (user: InterfaceUser) => void;
-	logout: () => void;
+	setUser: (user: IUser) => void;
 }
 
 export const useUser = create<IState & IActions>()(
@@ -22,13 +21,12 @@ export const useUser = create<IState & IActions>()(
 					set((state) => {
 						state.user = payload;
 					}),
-				logout: () =>
-					set((state) => {
-						state.user = null;
-						localStorage.removeItem(LocalStorageEnums.access_token);
-					}),
 			})),
-			{ name: 'user' },
+			{
+				name: 'user',
+				storage: createJSONStorage(() => CookieStorage()),
+			},
 		),
+		{ name: 'User' },
 	),
 );

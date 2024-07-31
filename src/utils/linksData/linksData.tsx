@@ -3,5 +3,5 @@ export const sidebarLinks = [
 	{ name: 'Products', path: '/dashboard/products' },
 	{ name: 'Categories', path: '/dashboard/categories' },
 	{ name: 'Orders', path: '/dashboard/orders' },
-	{ name: 'Users', path: '/dashboard/users' },
+	{ name: 'Users List', path: '/dashboard/users' },
 ];

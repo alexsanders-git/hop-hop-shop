@@ -1,0 +1,16 @@
+@import "src/styles/media";
+.iconWrapper {
+	cursor: pointer;
+
+	svg {
+		width: 24px;
+		height: 24px;
+	}
+
+	@media screen and (max-width: $media-lg) {
+		svg {
+			height: 15px;
+			width: 15px;
+		}
+	}
+}

@@ -1,3 +1,9 @@
+interface IResponse<T> {
+	items: T[];
+	items_count: number;
+	pagination: IDashboardPagination;
+}
+
 interface IPlaceholder {
 	empty: boolean;
 }
@@ -7,6 +13,7 @@ interface ICategory {
 	name: string;
 	slug: string;
 	image: string;
+	description: string;
 }
 
 interface IImage {
@@ -32,7 +39,7 @@ interface IProduct {
 	images: IImage | IImage[];
 }
 
-interface InterfaceUser {
+interface IUser {
 	id: number;
 	email: string;
 	first_name: string;
@@ -61,7 +68,33 @@ interface ICreditCard {
 	cardName: string;
 }
 
+interface IOrders {
+	id: number;
+	status: string;
+	created_at: string;
+	total_quantity: string;
+	total_price: string;
+}
+
 enum UserRole {
 	User = 'User',
 	Admin = 'Admin',
+}
+
+interface IDashboardPagination {
+	next_page: string | null;
+	previous_page: string | null;
+	current_page: number;
+}
+
+interface IResponseError {
+	success: boolean;
+	type?: string;
+	code?: string;
+	error: string;
+}
+
+interface IDashboardSearch {
+	id: number;
+	name: string;
 }

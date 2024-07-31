@@ -1,24 +1,27 @@
 'use client';
 import { Form, Formik } from 'formik';
+import Cookies from 'js-cookie';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import * as yup from 'yup';
 
 import Button from '@/components/Button/Button';
 import ButtonLink from '@/components/ButtonLink/ButtonLink';
 import Input from '@/components/Input/Input';
 import InputPassword from '@/components/InputPassword/InputPassword';
-import { fetchWithCookies } from '@/services/cookies/cookies.service';
+import { fetchWithAuth } from '@/services/auth/fetchApiAuth.service';
 import { useUser } from '@/store/user/User.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
-import { LocalStorageEnums } from '@/utils/enums/localStorageEnums';
-import { emailValid, passwordValid } from '@/validation/checkout/validation';
+import { CookiesEnums } from '@/utils/enums/cookiesEnums';
+import { emailValid } from '@/validation/checkout/validation';
 
 import styles from './styles.module.scss';
 import Google from '../../../public/login/google.svg';
 
 export default function LoginForm() {
 	const setUser = useUser((state) => state.setUser);
+	const [error, setError] = useState<string | null>(null);
 	const navigate = useRouter();
 	return (
 		<Formik
@@ -29,24 +32,23 @@ export default function LoginForm() {
 			validationSchema={yup
 				.object({
 					email: emailValid,
-					password: passwordValid,
+					// password: passwordValid,
 				})
 				.required()}
 			onSubmit={async (values) => {
-				const res = await fetchWithCookies('/auth/login/', {
+				const res = await fetchWithAuth('auth/login/', {
 					method: 'POST',
 					body: JSON.stringify({
 						email: values.email,
 						password: values.password,
 					}),
 				});
-				if (res.success === true) {
-					localStorage.setItem(LocalStorageEnums.access_token, res.data.access);
+				if (res.data) {
+					Cookies.set(CookiesEnums.access_token, res.data.access);
 					setUser(res.data.user);
 					navigate.push('/');
-				}
-				if (res.error) {
-					alert(res.error);
+				} else if (res.error) {
+					setError(res.error);
 				}
 			}}
 		>
@@ -68,7 +70,7 @@ export default function LoginForm() {
 							I forgot my password
 						</Link>
 						<Button
-							disabled={!(isValid && dirty)}
+							// disabled={!(isValid && dirty)}
 							type={'submit'}
 							style={'primary'}
 							text={'Log in!'}
@@ -79,6 +81,7 @@ export default function LoginForm() {
 							style={'secondary'}
 							text={'Create an account'}
 						/>
+						{error && <div className={styles.error}>{error}</div>}
 						<div className={styles.google}>
 							<span className={robotoCondensed.className}>Or sing in with</span>
 							<Google className={styles.googleImage} />
