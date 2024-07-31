@@ -21,7 +21,7 @@ export function middleware(request: NextRequest) {
 			!userCookie.value ||
 			JSON.parse(userCookie?.value)?.state?.user?.user_role !== 'Admin'
 		) {
-			return NextResponse.redirect(new URL('/', origin));
+			return NextResponse.redirect(new URL('/login', origin));
 		}
 	}
 
