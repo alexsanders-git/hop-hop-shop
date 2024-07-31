@@ -1,3 +1,8 @@
+import { notFound } from 'next/navigation';
+
+import { getCategoryById } from '@/services/dashboard/categories/dashboard.categories.service';
+import EditCategory from '@/template/editCategory/EditCategory';
+
 type Props = {
 	params: {
 		id: string;
@@ -5,5 +10,10 @@ type Props = {
 };
 
 export default async function DashboardCategoriesId({ params: { id } }: Props) {
-	return <div>create categories {id}</div>;
+	const category = await getCategoryById(id);
+
+	if (!category) {
+		return notFound();
+	}
+	return <EditCategory category={category} />;
 }

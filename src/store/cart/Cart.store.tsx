@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 import { fetchWithCookies } from '@/services/cookies/cookies.service';
@@ -9,6 +9,7 @@ import {
 	InterfaceCouponResponse,
 	InterfaceFetchCartData,
 } from '@/store/cart/Cart.interface';
+import CookieStorage from '@/utils/cookieStorage';
 
 interface IState {
 	cart: InterfaceFetchCartData | null;
@@ -103,7 +104,11 @@ export const useCart = create<IState & IActions>()(
 					return res;
 				},
 			})),
-			{ name: 'cart' },
+			{
+				name: 'cart',
+				storage: createJSONStorage(() => CookieStorage()),
+			},
 		),
+		{ name: 'Cart' },
 	),
 );

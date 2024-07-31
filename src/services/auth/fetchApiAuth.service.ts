@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 
-import { CookiesEnums } from '@/utils/enums/cookiesEnums';
+import { CookiesEnums, UserEnum } from '@/utils/enums/cookiesEnums';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL + '/';
 
@@ -30,14 +30,24 @@ const refreshAuthToken = async (isFile: boolean) => {
 			Cookies.set(CookiesEnums.access_token, refreshData.data.access);
 			return true;
 		} else {
-			// logoutAll();
+			const logoutRes = await fetch(`${baseUrl}auth/logout/`, {
+				method: 'POST',
+				headers: prepareHeaders(isFile),
+				credentials: 'include',
+			});
 			Cookies.remove(CookiesEnums.access_token);
+			Cookies.remove(UserEnum.user);
 			return false;
 		}
 	} catch (error) {
 		console.error('Error refreshing auth token:', error);
+		const logoutRes = await fetch(`${baseUrl}auth/logout/`, {
+			method: 'POST',
+			headers: prepareHeaders(isFile),
+			credentials: 'include',
+		});
 		Cookies.remove(CookiesEnums.access_token);
-		// logoutAll();
+		Cookies.remove(UserEnum.user);
 		return false;
 	}
 };

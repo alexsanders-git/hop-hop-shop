@@ -1,27 +1,34 @@
 'use client';
+
 import { Form, Formik } from 'formik';
 import Image from 'next/image';
 import { ChangeEvent, useState } from 'react';
 import * as yup from 'yup';
 
+import image from '@/assets/png/Newdescription.png';
 import CreateDashboardHeader from '@/components/dashboard/createDashboardHeader/CreateDashboardHeader';
 import ModalConfirmation from '@/components/dashboard/modalConfirmation/ModalСonfirmation';
 import Input from '@/components/Input/Input';
 import Textarea from '@/components/textarea/Textarea';
 import {
-	createCategory,
 	createCategoryImage,
+	updateCategory,
 } from '@/services/dashboard/categories/dashboard.categories.service';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
-import image from '../../../../assets/png/Newdescription.png';
 
-export default function DashboardCategoriesCreate() {
+export interface IProps {
+	category: ICategory;
+}
+
+export default function EditCategory(props: IProps) {
+	const { category } = props;
+
 	const [modal, setModal] = useState<boolean>(false);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
-	const [preview, setPreview] = useState<string | null>(null);
+	const [preview, setPreview] = useState<string | null>(category.image);
 
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files && event.target.files.length > 0) {
@@ -41,8 +48,8 @@ export default function DashboardCategoriesCreate() {
 	return (
 		<Formik
 			initialValues={{
-				name: '',
-				description: '',
+				name: category.name,
+				description: category.description,
 			}}
 			validationSchema={yup
 				.object({
@@ -51,7 +58,8 @@ export default function DashboardCategoriesCreate() {
 				})
 				.required()}
 			onSubmit={async (values, { resetForm }) => {
-				const res = await createCategory(values);
+				console.log(values);
+				const res = await updateCategory(values);
 				const formData = new FormData();
 
 				if (selectedFile) {
@@ -89,7 +97,7 @@ export default function DashboardCategoriesCreate() {
 							setModal(true);
 						}}
 						disabledDelete={false}
-						disabledApply={!(isValid && dirty && selectedFile)}
+						// disabledApply={!(isValid && dirty && selectedFile)}
 						typeApply={'submit'}
 						typeDelete={'button'}
 					/>

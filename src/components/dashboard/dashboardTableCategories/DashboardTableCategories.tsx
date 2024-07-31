@@ -1,10 +1,13 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import EditButton from '@/components/dashboard/editButton/editButton';
 import Pagination from '@/components/dashboard/pagination/Pagination';
 import RemoveButton from '@/components/dashboard/removeButton/RemoveButton';
-import { removeCategoryById } from '@/services/dashboard/categories/dashboard.categories.service';
+import {
+	getDashboardCategories,
+	removeCategoryById,
+} from '@/services/dashboard/categories/dashboard.categories.service';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import { getDashboardCategoriesId } from '@/utils/paths/dashboard/dashboard.paths';
 
@@ -14,16 +17,10 @@ interface IProps {
 	categories: IResponse<ICategory>;
 }
 
+const PageSize = 10;
 export default function DashboardTableCategories(props: IProps) {
 	const { categories } = props;
-	const PageSize = 7;
-	const [currentPage, setCurrentPage] = useState(1);
-
-	const currentTableData = useMemo(() => {
-		const firstPageIndex = (currentPage - 1) * PageSize;
-		const lastPageIndex = firstPageIndex + PageSize;
-		return categories.items.slice(firstPageIndex, lastPageIndex);
-	}, [categories.items, currentPage]);
+	const [newData, setNewData] = useState<IResponse<ICategory>>(categories);
 
 	const header = [
 		{ name: 'ID' },
@@ -43,7 +40,7 @@ export default function DashboardTableCategories(props: IProps) {
 							</div>
 						))}
 					</li>
-					{currentTableData?.map((item, index: number) => (
+					{newData?.items?.map((item, index: number) => (
 						<li
 							key={index}
 							className={`${styles.tableRow} ${robotoCondensed.className}`}
@@ -55,6 +52,9 @@ export default function DashboardTableCategories(props: IProps) {
 								<RemoveButton
 									callback={async () => {
 										const res = await removeCategoryById(item.id);
+										if (res) {
+											setNewData(res);
+										}
 									}}
 								/>
 								<EditButton
@@ -65,12 +65,15 @@ export default function DashboardTableCategories(props: IProps) {
 					))}
 				</ul>
 			</div>
-			{currentTableData.length > 0 ? (
+			{newData?.items?.length > 0 ? (
 				<Pagination
-					currentPage={currentPage}
-					totalCount={categories.items_count}
+					currentPage={newData?.pagination?.current_page}
+					totalCount={newData?.items_count}
 					pageSize={PageSize}
-					onPageChange={(page) => setCurrentPage(page)}
+					onPageChange={async (page) => {
+						const res = await getDashboardCategories(page);
+						setNewData(res);
+					}}
 				/>
 			) : null}
 		</div>

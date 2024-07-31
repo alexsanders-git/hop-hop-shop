@@ -18,7 +18,7 @@ export default async function CategoryGrid() {
 	const categories: CategoryOrPlaceholder[] = await getCategories();
 
 	// Перевіряємо, чи кількість елементів кратна 8, якщо ні - додаємо заглушки
-	const remainder = categories.length % 8;
+	const remainder = categories?.length % 8;
 	if (remainder !== 0) {
 		const placeholdersNeeded = 8 - remainder;
 		for (let i = 0; i < placeholdersNeeded; i++) {

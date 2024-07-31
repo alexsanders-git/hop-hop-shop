@@ -1,9 +1,8 @@
-import Cookies from 'js-cookie';
 import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import { CookiesEnums } from '@/utils/enums/cookiesEnums';
+import CookieStorage from '@/utils/cookieStorage';
 
 interface IState {
 	user: IUser | null;
@@ -11,7 +10,6 @@ interface IState {
 
 interface IActions {
 	setUser: (user: IUser) => void;
-	logout: () => void;
 }
 
 export const useUser = create<IState & IActions>()(
@@ -23,13 +21,12 @@ export const useUser = create<IState & IActions>()(
 					set((state) => {
 						state.user = payload;
 					}),
-				logout: () =>
-					set((state) => {
-						state.user = null;
-						Cookies.remove(CookiesEnums.access_token);
-					}),
 			})),
-			{ name: 'user' },
+			{
+				name: 'user',
+				storage: createJSONStorage(() => CookieStorage()),
+			},
 		),
+		{ name: 'User' },
 	),
 );
