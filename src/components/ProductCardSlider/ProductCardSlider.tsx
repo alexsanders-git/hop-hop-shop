@@ -22,14 +22,26 @@ export default function ProductCardSlider({
 	return (
 		<div className={styles.card}>
 			<Link href={`/product/${id}`}>
-				<div className={styles.imgwrapper}>
-					<Image
-						src={images || '/not-ready.svg'}
-						layout="fill"
-						alt="image"
-						className={styles.img}
-					/>
-				</div>
+				{images ? (
+					<div className={styles.imgwrapper}>
+						<Image
+							src={images || '/default-image.png'}
+							layout="fill"
+							alt={name}
+							className={styles.img}
+						/>
+					</div>
+				) : (
+					<div className={styles.defaultImageWrapper}>
+						<Image
+							src="/default-image.png"
+							width={335}
+							height={560}
+							alt={name}
+							className={styles.img}
+						/>
+					</div>
+				)}
 				<div className={styles.details}>
 					<h3 className={styles.name}>{name}</h3>
 				</div>
