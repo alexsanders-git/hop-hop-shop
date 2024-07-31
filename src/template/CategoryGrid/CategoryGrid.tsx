@@ -86,7 +86,9 @@ export default async function CategoryGrid() {
 									>
 										<div className={styles.imageWrapper}>
 											<Image
-												src={category.image}
+												src={
+													category.image ? category.image : '/default-image.png'
+												}
 												width={335}
 												height={560}
 												alt={category.name}
