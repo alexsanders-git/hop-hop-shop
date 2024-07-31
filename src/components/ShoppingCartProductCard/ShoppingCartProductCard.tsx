@@ -26,7 +26,7 @@ export default function ShoppingCartProductCard(
 		<div className={styles.cardWrp}>
 			<div className={styles.imgWrp}>
 				<Image
-					src={getImages(product.images)[0]?.image}
+					src={getImages(product.images)[0]?.image || '/default-image.png'}
 					width={130}
 					height={130}
 					alt={product.name}

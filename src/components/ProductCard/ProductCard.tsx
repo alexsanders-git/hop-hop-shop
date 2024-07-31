@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { robotoCondensed } from '@/styles/fonts/fonts';
-import { isArrayOfImages } from '@/utils/typeGuards';
+import { getImages, isArrayOfImages } from '@/utils/typeGuards';
 
 import styles from './ProductCard.module.scss';
 import AddToCartButton from '../AddToCartButton/AddToCartButton';
@@ -24,9 +24,7 @@ export default function ProductCard({
 	showCategory = false,
 	showButtons = { favorite: true, cart: false, checkout: false },
 }: IProps) {
-	const imagesArray: IImage[] = isArrayOfImages(product.images)
-		? product.images
-		: [product.images];
+	const images = getImages(product.images);
 
 	return (
 		<div className={styles.card}>
@@ -39,7 +37,7 @@ export default function ProductCard({
 			<div className={styles.imageWrapper}>
 				<Link href={`/product/${product.id}`}>
 					<Image
-						src={imagesArray[0].image}
+						src={images[0]?.image || '/default-image.png'}
 						width={358}
 						height={380}
 						alt={product.name}
