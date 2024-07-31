@@ -44,6 +44,7 @@
 		gap: 20px;
 		align-items: center;
 		justify-content: center;
+		order: 2;
 	}
 }
 
@@ -70,12 +71,12 @@
 
 	@media only screen and (max-width: $media-xl) {
 		width: 300px;
-		display: block;
-		text-align: center;
 	}
 
 	@media only screen and (max-width: $media-lg) {
 		width: 225px;
+		display: block;
+		text-align: center;
 	}
 }
 
