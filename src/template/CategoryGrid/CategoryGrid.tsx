@@ -15,7 +15,9 @@ export default async function CategoryGrid() {
 	});
 
 	// Отримуємо категорії
-	const categories: CategoryOrPlaceholder[] = await getCategories();
+	const categoriesResponce = await getCategories();
+
+	const categories: CategoryOrPlaceholder[] = categoriesResponce.items;
 
 	// Перевіряємо, чи кількість елементів кратна 8, якщо ні - додаємо заглушки
 	const remainder = categories?.length % 8;
@@ -86,7 +88,7 @@ export default async function CategoryGrid() {
 									>
 										<div className={styles.imageWrapper}>
 											<Image
-												src={category.image}
+												src={category.image || '/default-image.png'}
 												width={335}
 												height={560}
 												alt={category.name}

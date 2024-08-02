@@ -17,36 +17,30 @@
 	@media only screen and (max-width: $media-xs) {}
 }
 
+.defaultImageWrapper {
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .img {
 	border-radius: 18px;
-	background-color: var(--gray-color);
 }
 
 .details {
 	position: absolute;
-	left: 16px;
-	bottom: 16px;
-	display: flex;
-	align-items: flex-start;
-	flex-direction: column;
-	align-items: flex-start;
+	width: 100%;
+	left: 0;
+	bottom: 0;
+	padding: 12px 14px;
 	color: var(--white-color);
-	-webkit-text-stroke: 0.5px var(--primary-color);
-	text-shadow: 1px 1px 2px var(--primary-color);
+	background: rgba(25, 44, 50, .5);
 }
 
 .name {
-	font-weight: 700;
-	font-size: 16px;
-	line-height: 112%;
-	letter-spacing: -0.02em;
-}
-
-.category {
-	font-weight: 400;
-	font-size: 14px;
-	line-height: 114%;
-	letter-spacing: -0.02em;
+	font-size: 18px;
+	line-height: 1.15;
 }
 
 .pricetag {

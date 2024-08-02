@@ -4,7 +4,7 @@ import { fetchData } from '@/services/fetchData';
 export const getProductsDashboardServer = async (): Promise<
 	IResponse<IProduct>
 > => {
-	return await fetchData<IProduct>('shop/products/');
+	return await fetchData<IResponse<IProduct>>('shop/products/');
 };
 
 export const removeProductById = async (id: number) => {

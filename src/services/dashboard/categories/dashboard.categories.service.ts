@@ -4,7 +4,7 @@ import { fetchData } from '@/services/fetchData';
 export const getDashboardCategoriesServer = async (): Promise<
 	IResponse<ICategory>
 > => {
-	return await fetchData<ICategory>('shop/categories/');
+	return await fetchData<IResponse<ICategory>>('shop/categories/');
 };
 
 export const removeCategoryById = async (id: number) => {
