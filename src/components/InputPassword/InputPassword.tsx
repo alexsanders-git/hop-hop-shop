@@ -1,12 +1,11 @@
 'use client';
 import { useField } from 'formik';
+import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './Input.module.scss';
-import EyeOff from '../../../public/login/eyeOff.svg';
-import EyeOn from '../../../public/login/eyeOn.svg';
 
 interface InterfaceInputPassword {
 	name: string;
@@ -36,7 +35,7 @@ export default function InputPassword(props: InterfaceInputPassword) {
 			/>
 			{openPass && (
 				<div onClick={() => setOpenPass(!openPass)} className={styles.eye}>
-					<EyeOn />
+					<Eye />
 				</div>
 			)}
 			{!openPass && (

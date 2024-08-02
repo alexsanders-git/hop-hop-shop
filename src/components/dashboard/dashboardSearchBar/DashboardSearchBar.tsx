@@ -1,5 +1,6 @@
 'use client';
 
+import { Search, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -8,8 +9,6 @@ import { getDashboardSearch } from '@/services/dashboard/search/dashboard.search
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './DashboardSearchBar.module.scss';
-import CloseIcon from '../../../assets/svg/close.svg';
-import SearchIcon from '../../../assets/svg/search.svg';
 
 interface IProps {
 	className?: string;
@@ -52,7 +51,7 @@ function DashboardSearchBar(props: IProps) {
 			{query && (
 				<>
 					<button className={styles.searchButton}>
-						<SearchIcon />
+						<Search />
 					</button>
 					<button
 						className={styles.closeButton}
@@ -61,7 +60,7 @@ function DashboardSearchBar(props: IProps) {
 							setQuery('');
 						}}
 					>
-						<CloseIcon />
+						<X />
 					</button>
 				</>
 			)}

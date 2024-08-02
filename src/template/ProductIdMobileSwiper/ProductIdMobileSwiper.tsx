@@ -1,12 +1,9 @@
 'use client';
 import Image from 'next/image';
-import { useRef, useState } from 'react';
-import { Swiper as SwiperClass } from 'swiper';
-import { FreeMode, Navigation, Pagination, Thumbs } from 'swiper/modules';
+import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import AddToFavoriteButton from '@/components/AddToFavoriteButton/AddToFavoriteButton';
-import IconArrow from '@/components/ProductsSlider/left.svg';
 import { getImages } from '@/utils/typeGuards';
 
 import styles from './styles.module.scss';

@@ -6,18 +6,15 @@
 }
 
 .icons_item {
-	width: 32px;
-	height: 32px;
+	width: 24px;
+	height: 24px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	@include icon-cart-state;
+	@include icons-state;
 	@media only screen and (max-width: $media-xl) {
-		width: 24px;
-		height: 24px;
+		width: 18px;
+		height: 18px;
 	}
-	@media only screen and (max-width: $media-xs) {
-		width: 24px;
-		height: 24px;
-	}
+
 }

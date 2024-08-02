@@ -1,7 +1,6 @@
 'use client';
+import { PencilLine } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-
-import Edit from '@/assets/svg/edit.svg';
 
 import styles from './styles.module.scss';
 
@@ -14,7 +13,7 @@ export default function EditButton(props: IProps) {
 	const router = useRouter();
 	return (
 		<div className={styles.iconWrapper}>
-			<Edit onClick={() => router.push(callback())} />
+			<PencilLine onClick={() => router.push(callback())} />
 		</div>
 	);
 }

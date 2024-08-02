@@ -1,8 +1,10 @@
 'use client';
 
 import { Form, Formik } from 'formik';
+import { CircleX } from 'lucide-react';
 import Image from 'next/image';
-import { ChangeEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ChangeEvent, useRef, useState } from 'react';
 import * as yup from 'yup';
 
 import image from '@/assets/png/Newdescription.png';
@@ -12,6 +14,7 @@ import Input from '@/components/Input/Input';
 import Textarea from '@/components/textarea/Textarea';
 import {
 	createCategoryImage,
+	removeCategoryById,
 	updateCategory,
 } from '@/services/dashboard/categories/dashboard.categories.service';
 import { robotoCondensed } from '@/styles/fonts/fonts';
@@ -25,10 +28,12 @@ export interface IProps {
 
 export default function EditCategory(props: IProps) {
 	const { category } = props;
-
+	const fileInputRef = useRef<null | HTMLInputElement>(null);
 	const [modal, setModal] = useState<boolean>(false);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [preview, setPreview] = useState<string | null>(category.image);
+	const [isHovered, setIsHovered] = useState<boolean>(false);
+	const router = useRouter();
 
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files && event.target.files.length > 0) {
@@ -58,32 +63,39 @@ export default function EditCategory(props: IProps) {
 				})
 				.required()}
 			onSubmit={async (values, { resetForm }) => {
-				console.log(values);
-				const res = await updateCategory(values);
-				const formData = new FormData();
-
 				if (selectedFile) {
+					const formData = new FormData();
 					formData.append('image', selectedFile);
-				}
-				if (res.success && formData) {
-					const resUpload = await createCategoryImage(res.data.id, formData);
-					if (resUpload.success) {
-						resetForm();
-						setSelectedFile(null);
-						setPreview(null);
+					const res = await updateCategory(values);
+					if (res.success && formData) {
+						const resUpload = await createCategoryImage(res.data.id, formData);
+						if (resUpload.success) {
+							router.push('/dashboard/categories');
+						}
+					} else {
+						const newData = {
+							name: values.name,
+							description: values.description,
+							image: preview,
+						};
+						const res = await updateCategory(newData);
+						if (res) {
+							router.push('/dashboard/categories');
+						}
 					}
 				}
 			}}
 		>
-			{({ isValid, dirty, resetForm }) => (
+			{({ isValid }) => (
 				<Form className={styles.wrapper}>
 					{modal && (
 						<ModalConfirmation
-							reset={() => {
-								setModal(false);
-								setSelectedFile(null);
-								resetForm();
-								setPreview(null);
+							reset={async () => {
+								const res = await removeCategoryById(category.id);
+								if (res) {
+									setModal(false);
+									router.push('/dashboard/categories');
+								}
 							}}
 							closeModal={() => setModal(false)}
 							text={'Are you sure?'}
@@ -91,13 +103,11 @@ export default function EditCategory(props: IProps) {
 					)}
 
 					<CreateDashboardHeader
-						title={'New category'}
+						title={'Edit category'}
 						callbackApply={() => {}}
-						callbackDelete={() => {
-							setModal(true);
-						}}
+						callbackDelete={() => setModal(true)}
 						disabledDelete={false}
-						// disabledApply={!(isValid && dirty && selectedFile)}
+						disabledApply={!isValid}
 						typeApply={'submit'}
 						typeDelete={'button'}
 					/>
@@ -121,7 +131,30 @@ export default function EditCategory(props: IProps) {
 							<span className={`${styles.text} ${robotoCondensed.className}`}>
 								Category Image
 							</span>
-							<div className={styles.imageContainer}>
+							<div
+								onMouseEnter={() => {
+									if (preview) {
+										setIsHovered(true);
+									}
+								}}
+								onMouseLeave={() => {
+									if (preview) {
+										setIsHovered(false);
+									}
+								}}
+								className={styles.imageContainer}
+							>
+								{isHovered && preview && (
+									<div
+										onClick={() => {
+											setPreview(null);
+											fileInputRef?.current?.click();
+										}}
+										className={styles.removeImage}
+									>
+										<CircleX />
+									</div>
+								)}
 								{preview && (
 									<Image
 										className={styles.preview}
@@ -132,6 +165,7 @@ export default function EditCategory(props: IProps) {
 									/>
 								)}
 								<input
+									ref={fileInputRef}
 									onChange={handleFileChange}
 									accept="image/png, image/jpeg"
 									className={styles.file}

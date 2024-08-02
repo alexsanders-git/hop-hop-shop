@@ -1,5 +1,5 @@
 'use client';
-import Remove from '@/assets/svg/remove.svg';
+import { Trash2 } from 'lucide-react';
 
 import styles from './styles.module.scss';
 
@@ -11,7 +11,7 @@ export default function RemoveButton(props: IProps) {
 	const { callback } = props;
 	return (
 		<div className={styles.iconWrapper}>
-			<Remove onClick={() => callback()} />
+			<Trash2 onClick={() => callback()} />
 		</div>
 	);
 }

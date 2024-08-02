@@ -1,17 +1,17 @@
 'use client';
 
+import { BellRing, LogOut } from 'lucide-react';
+
 import styles from './navbarIconsLinks.module.scss';
-import Logout from '../../../../assets/svg/logaut.svg';
-import Ring from '../../../../assets/svg/ring.svg';
 
 function NavbarIconsLinks() {
 	return (
 		<div className={styles.icons_list}>
 			<div className={styles.icons_item}>
-				<Ring />
+				<BellRing />
 			</div>
-			<div className={styles.icons_item2}>
-				<Logout />
+			<div className={styles.icons_item}>
+				<LogOut />
 			</div>
 			<span className={styles.admin}>ADMIN</span>
 		</div>

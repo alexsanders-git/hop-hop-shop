@@ -1,7 +1,8 @@
+import { Heart } from 'lucide-react';
+
 import { useLike } from '@/store/wishlist/Wishlist.store';
 
 import styles from './styles.module.scss';
-import LikeIcon from '../../../public/like.svg';
 
 export interface ILike {
 	className?: string;
@@ -15,7 +16,7 @@ export default function Like({ id, className = '' }: ILike) {
 		<span
 			className={`${styles.likeImage} ${className} ${existingProduct && styles.active}`}
 		>
-			<LikeIcon />
+			<Heart />
 		</span>
 	);
 }

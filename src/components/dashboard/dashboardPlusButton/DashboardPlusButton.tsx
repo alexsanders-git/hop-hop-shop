@@ -1,6 +1,5 @@
+import { Plus } from 'lucide-react';
 import Link from 'next/link';
-
-import Plus from '@/assets/svg/plus.svg';
 
 import styles from './styles.module.scss';
 
@@ -13,7 +12,7 @@ export default function DashboardPlusButton(props: IProps) {
 	const { className = '', link } = props;
 	return (
 		<Link className={`${styles.container} ${className}`} href={link}>
-			<Plus />
+			<Plus strokeWidth={5} />
 		</Link>
 	);
 }

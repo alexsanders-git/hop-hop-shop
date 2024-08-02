@@ -2,7 +2,6 @@
 @import "src/styles/mixins.scss";
 
 .button {
-	@include icon-go-to-checkout-state;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -19,12 +18,13 @@
 	}
 
 	svg {
-		width: 26px;
-		height: 26px;
+		width: 22px;
+		height: 22px;
+		@include icons-state;
 
 		@media only screen and (max-width: $media-sm) {
-			width: 20px;
-			height: 20px;
+			width: 18px;
+			height: 18px;
 		}
 	}
 }

@@ -1,3 +1,4 @@
+import { Minus, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
 
@@ -5,9 +6,6 @@ import { InterfaceProductCart } from '@/store/cart/Cart.interface';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import { getImages } from '@/utils/typeGuards';
 
-import BasketIcon from './basket.svg';
-import MinusIcon from './minus.svg';
-import PlusIcon from './plus.svg';
 import styles from './ShoppingCartProductCart.module.scss';
 
 interface ShoppingCartProductCardProps {
@@ -52,9 +50,8 @@ export default function ShoppingCartProductCard(
 						onClick={() => {
 							onRemove();
 						}}
-						className={styles.buttonDelete}
 					>
-						<BasketIcon />
+						<Trash2 className={styles.buttonDelete} />
 					</button>
 				</div>
 				<div className={styles.details_lowerPart}>
@@ -68,16 +65,15 @@ export default function ShoppingCartProductCard(
 							}}
 							className={styles.buttonIncrease}
 						>
-							<MinusIcon />
+							<Minus />
 						</button>
 						<span>{quantity}</span>
 						<button
 							onClick={() => {
 								onIncrease();
 							}}
-							className={styles.buttonIncrease}
 						>
-							<PlusIcon />
+							<Plus className={styles.buttonIncrease} />
 						</button>
 					</div>
 				</div>

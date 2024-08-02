@@ -108,11 +108,11 @@
 }
 
 .error {
-	stroke: var(--error-color);
+	display: none;
 }
 
 .success {
-	stroke: var(--success-color);
+	color: var(--success-color);
 }
 
 
