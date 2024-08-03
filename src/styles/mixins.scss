@@ -17,51 +17,12 @@
 	}
 }
 
-@mixin footer-icons-state {
-	transition: var(--transition);
-
-	&:hover {
-		background-color: var(--gray-color);
-
-		svg path {
-			fill: var(--beige-color);
-		}
-	}
-
-	&:active {
-		background-color: var(--primary-color);
-		border: 1px solid var(--beige-color);
-
-		svg path {
-			fill: var(--beige-color);
-		}
-	}
-
-	&:disabled {
-		background-color: var(--beige-color);
-		border: 1px solid var(--gray-color);
-		box-shadow: 1px 1px 0 1px var(--gray-color);
-
-		svg path {
-			fill: var(--gray-color);
-		}
-	}
-
-}
 
 @mixin footer-links-states {
 	transition: var(--transition);
 
 	&:hover {
 		color: var(--gray-color);
-	}
-
-	&:active {
-		color: var(--primary-color);
-	}
-
-	&:disabled {
-		color: var(--lightblue-color);
 	}
 }
 
@@ -71,11 +32,6 @@
 	&:hover {
 		color: var(--white-color);
 		background-color: var(--gray-color);
-	}
-
-	&:active {
-		color: var(--beige-color);
-		background-color: var(--primary-color);
 	}
 
 	&:disabled {
@@ -134,107 +90,12 @@
 	}
 }
 
-@mixin like-states {
-	transition: var(--transition);
 
-	svg path {
-		fill: var(--beige-color);
-		stroke: var(--primary-color);
-	}
+@mixin icons-state {
+	transition: var(--transition);
+	color: var(--primary-color);;
 
 	&:hover {
-		svg path {
-			fill: var(--beige-color);
-			stroke: var(--gray-color);
-		}
-	}
-
-	&:active {
-		svg path {
-			fill: var(--yellow-color);
-			stroke: var(--primary-color);
-		}
-	}
-
-	&:disabled {
-		svg path {
-			fill: #7A8E98;
-			stroke: var(--lightblue-color);
-		}
-
-		opacity: 0.3;
-	}
-}
-
-@mixin header-icons-state {
-	transition: var(--transition);
-
-	&:hover {
-		svg path {
-			stroke: var(--gray-color);
-		}
-	}
-
-	&:active {
-		svg path {
-			stroke: var(--primary-color);
-
-		}
-	}
-
-	&:disabled {
-		svg path {
-			stroke: var(--lightblue-color);
-		}
-
-		opacity: 0.3;
-	}
-}
-
-@mixin icon-cart-state {
-	transition: var(--transition);
-
-	&:hover {
-		svg {
-			fill: var(--gray-color);
-		}
-	}
-
-	&:active {
-		svg {
-			fill: var(--primary-color);
-		}
-	}
-
-	&:disabled {
-		svg {
-			fill: var(--lightblue-color);
-		}
-
-		opacity: 0.3;
-	}
-}
-
-@mixin icon-go-to-checkout-state {
-	transition: var(--transition);
-
-	&:hover {
-		svg path {
-			fill: var(--gray-color);
-		}
-	}
-
-	&:active {
-		svg path {
-			fill: var(--primary-color);
-		}
-	}
-
-	&:disabled {
-		svg path {
-			fill: var(--lightblue-color);
-		}
-
-		opacity: 0.3;
+		color: var(--gray-color);
 	}
 }

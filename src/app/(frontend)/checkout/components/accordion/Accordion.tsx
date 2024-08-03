@@ -1,8 +1,8 @@
 'use client';
+import { ChevronUp } from 'lucide-react';
 import { ReactNode } from 'react';
 
 import styles from './styles.module.scss';
-import ArrowTop from '../../../../../../public/arrowTop.svg';
 
 export interface IAccordion {
 	title: string;
@@ -20,7 +20,7 @@ export default function Accordion(props: IAccordion) {
 				className={`${styles.head} ${active && styles.activeHead}`}
 			>
 				<span className={styles.title}>{title}</span>
-				<ArrowTop className={`${styles.img} ${!active && styles.rotate}`} />
+				<ChevronUp className={`${styles.img} ${!active && styles.rotate}`} />
 			</div>
 			{active && <div className={styles.body}>{children}</div>}
 		</div>

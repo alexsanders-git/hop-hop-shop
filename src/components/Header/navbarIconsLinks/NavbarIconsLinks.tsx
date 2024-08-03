@@ -1,5 +1,6 @@
 'use client';
 
+import { Heart, ShoppingCart, UserRound } from 'lucide-react';
 import Link from 'next/link';
 
 import SearchBarWrapper from '@/components/Header/searchBarWrapper/SearchBarWrapper';
@@ -8,9 +9,6 @@ import { useCart } from '@/store/cart/Cart.store';
 import { useFavorite } from '@/store/favorite/Favorite.store';
 
 import styles from './navbarIconsLinks.module.scss';
-import AccountIcon from '../../../../public/headerImage/account.svg';
-import LikeIcon from '../../../../public/headerImage/like.svg';
-import ShoppingCartIcon from '../../../../public/headerImage/shopping-cart.svg';
 
 function NavbarIconsLinks() {
 	const { ref, setIsShow, isShow } = useOutside(false);
@@ -27,16 +25,16 @@ function NavbarIconsLinks() {
 				{favorites.length > 0 && (
 					<div className={styles.qty}>{favorites.length}</div>
 				)}
-				<LikeIcon />
+				<Heart />
 			</Link>
 
-			<Link href="/cart" className={styles.iconCart}>
+			<Link href="/cart" className={styles.icons_item}>
 				{totalItems > 0 && <div className={styles.qty}>{totalItems}</div>}
-				<ShoppingCartIcon />
+				<ShoppingCart />
 			</Link>
 
 			<Link href="/dashboard/account" className={styles.icons_item}>
-				<AccountIcon />
+				<UserRound />
 			</Link>
 		</div>
 	);

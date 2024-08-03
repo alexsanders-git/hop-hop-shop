@@ -1,8 +1,8 @@
 'use client';
 
+import { BaggageClaim } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-import GoToCheckoutIcon from '@/assets/svg/go-to-checkout.svg';
 import { useCart } from '@/store/cart/Cart.store';
 
 import styles from './GoToCheckoutButton.module.scss';
@@ -32,7 +32,7 @@ export default function GoToCheckoutButton({ product, className }: IProps) {
 			className={`${styles.button} ${className}`}
 			onClick={() => GoToCheckoutHandler()}
 		>
-			<GoToCheckoutIcon />
+			<BaggageClaim />
 		</button>
 	);
 }

@@ -1,10 +1,10 @@
 'use client';
+import { Search } from 'lucide-react';
 import { forwardRef, Ref } from 'react';
 
 import SearchBar from '@/components/SearchBar/SearchBar';
 
 import styles from './SearchBarWrapper.module.scss';
-import SearchIcon from '../../../../public/headerImage/search.svg';
 
 export interface ISearchBarWrapper {
 	isShow: boolean;
@@ -16,8 +16,8 @@ function SearchBarWrapper(props: ISearchBarWrapper, ref: Ref<HTMLDivElement>) {
 	return (
 		<>
 			{!isShow && (
-				<button className={styles.icons_item} onClick={() => setIsShow(true)}>
-					<SearchIcon />
+				<button onClick={() => setIsShow(true)}>
+					<Search className={styles.icons_item} />
 				</button>
 			)}
 			{isShow && <SearchBar handleSearchButton={setIsShow} ref={ref} />}

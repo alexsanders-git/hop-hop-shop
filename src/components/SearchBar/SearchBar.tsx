@@ -1,5 +1,6 @@
 'use client';
 
+import { Search, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { forwardRef, Ref, useEffect, useState } from 'react';
 
@@ -8,8 +9,6 @@ import { getSearchProducts } from '@/services/fetchData';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './SearchBar.module.scss';
-import CloseIcon from '../../assets/svg/close.svg';
-import SearchIcon from '../../assets/svg/search.svg';
 
 interface SearchBarProps {
 	handleSearchButton: (isShow: boolean) => void;
@@ -49,13 +48,13 @@ function SearchBar(props: SearchBarProps, ref: Ref<HTMLDivElement>) {
 			{query && (
 				<>
 					<button className={styles.searchButton}>
-						<SearchIcon />
+						<Search />
 					</button>
 					<button
 						className={styles.closeButton}
 						onClick={() => handleSearchButton(false)}
 					>
-						<CloseIcon />
+						<X />
 					</button>
 				</>
 			)}

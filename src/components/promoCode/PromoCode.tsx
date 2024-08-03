@@ -1,11 +1,11 @@
 'use client';
+import { Check } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { useDebounce } from '@/hooks/useDebounce';
 import { useCart } from '@/store/cart/Cart.store';
 
 import styles from './styles.module.scss';
-import CuponeArrow from '../../../public/cupone.svg';
 import DiscountArrow from '../../../public/payment/discountArrow.svg';
 
 export interface InterfacePromoCode {
@@ -68,7 +68,7 @@ export default function PromoCode(props: InterfacePromoCode) {
 								placeholder={'Enter code'}
 								className={`${styles.input} ${data?.error && styles.inputError} ${data?.message && styles.inputSuccess}`}
 							/>
-							<CuponeArrow
+							<Check
 								className={`
 						${styles.CuponeArrow}
 						${data?.error && styles.error}

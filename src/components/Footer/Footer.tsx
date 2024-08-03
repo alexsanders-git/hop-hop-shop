@@ -1,12 +1,9 @@
+import { Facebook, Github, Instagram, Twitter } from 'lucide-react';
 import Link from 'next/link';
 
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './Footer.module.scss';
-import FacebookIcon from '../../../public/footerImage/facebook.svg';
-import InstagramIcon from '../../../public/footerImage/instagram.svg';
-import PinterestIcon from '../../../public/footerImage/pinterest.svg';
-import TwitterIcon from '../../../public/footerImage/twitter.svg';
 import CookiesPopUp from '../CookiesPopUp/CookiesPopUp';
 import Logo from '../Logo/Logo';
 
@@ -25,16 +22,16 @@ export default function Footer() {
 						</p>
 						<div className={styles.social_icons}>
 							<Link href="#" className={styles.iconsWrp}>
-								<TwitterIcon className={styles.icon} />
+								<Twitter />
 							</Link>
 							<Link href="#" className={styles.iconsWrp}>
-								<FacebookIcon />
+								<Facebook />
 							</Link>
 							<Link href="#" className={styles.iconsWrp}>
-								<InstagramIcon />
+								<Instagram style={{ fill: 'none' }} />
 							</Link>
 							<Link href="#" className={styles.iconsWrp}>
-								<PinterestIcon />
+								<Github />
 							</Link>
 						</div>
 					</div>

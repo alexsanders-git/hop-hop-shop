@@ -30,6 +30,12 @@
 	justify-content: center;
 	width: 24px;
 	height: 24px;
+	@include icons-state;
+
+	@media only screen and (max-width: $media-xl) {
+		width: 18px;
+		height: 18px;
+	}
 }
 
 .burgerMenu {
@@ -59,44 +65,3 @@
 	opacity: 1;
 }
 
-.closeIcon, .burgerIcon {
-	transition: all .4s ease;
-
-	&:hover {
-		stroke: #507178;
-	}
-
-	&:active {
-		stroke: #192C32;
-	}
-
-	&:disabled {
-		stroke: #B5C2C8;
-
-		opacity: 0.3;
-	}
-}
-
-.burgerIcon {
-	transition: all .4s ease;
-
-	&:hover {
-		path {
-			stroke: #507178;
-		}
-	}
-
-	&:active {
-		path {
-			stroke: #192C32;
-		}
-	}
-
-	&:disabled {
-		path {
-			stroke: #B5C2C8;
-		}
-
-		opacity: 0.3;
-	}
-}

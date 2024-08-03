@@ -16,49 +16,22 @@
 }
 
 
-.icons_item, .icons_item2 {
+.icons_item {
 	width: 22px;
 	height: 22px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
-
+	@include icons-state;
 	@media only screen and (max-width: $media-xl) {
+		width: 18px;
+		height: 18px;
 		&:nth-child(1) {
 			display: none;
 		}
 	}
-}
 
-.icons_item2 {
-	transition: var(--transition);
-
-	&:hover {
-		svg path {
-			fill: var(--gray-color);
-		}
-	}
-
-	&:active {
-		svg path {
-			fill: var(--primary-color);
-
-		}
-	}
-
-	&:disabled {
-		svg path {
-			fill: var(--lightblue-color);
-		}
-
-		opacity: 0.3;
-	}
-
-}
-
-.icons_item {
-	@include header-icons-state;
 }
 
 

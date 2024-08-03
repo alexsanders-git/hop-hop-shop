@@ -87,20 +87,17 @@
 }
 
 .arrow {
-	width: 14px;
+	width: 20px;
 	height: 24px;
 	transition: all 0.3s ease-in-out;
 	@media screen and (max-width: $media-lg) {
-		width: 10px;
+		width: 14px;
 		height: 18px;
 	}
 
 	&:hover {
 		opacity: 0.9;
 	}
-}
-
-.arrowLeft {
 }
 
 .arrowRight {

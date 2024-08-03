@@ -1,11 +1,12 @@
 'use client';
+import { ChevronsRight } from 'lucide-react';
+
 import {
 	DOTS,
 	usePagination,
 } from '@/components/dashboard/pagination/usePagination';
 
 import styles from './styles.module.scss';
-import Arrow from '../../../assets/svg/paginationArrow.svg';
 
 export interface InterfacePagination {
 	onPageChange: (page: number) => void;
@@ -53,7 +54,7 @@ export default function Pagination(props: InterfacePagination) {
 				className={`${styles.paginationItem}  ${currentPage === 1 && styles.disabled}`}
 				onClick={onPrevious}
 			>
-				<Arrow className={`${styles.arrow}  ${styles.arrowLeft}`} />
+				<ChevronsRight className={`${styles.arrow}  ${styles.arrowRight}`} />
 			</li>
 			{paginationRange!.map((pageNumber, index) => {
 				if (pageNumber === DOTS) {
@@ -81,7 +82,7 @@ export default function Pagination(props: InterfacePagination) {
 				className={`${styles.paginationItem}  ${currentPage === lastPage && styles.disabled}`}
 				onClick={onNext}
 			>
-				<Arrow className={`${styles.arrow}  ${styles.arrowRight}`} />
+				<ChevronsRight className={`${styles.arrow}  `} />
 			</li>
 		</ul>
 	);

@@ -1,4 +1,4 @@
-@import "src/styles/media";
+@import "src/styles/mixins";
 
 
 .swiperWrapper {
@@ -97,28 +97,20 @@
 	box-shadow: 2px 2px 0 2px var(--primary-color);
 	transition: all .2s ease;
 
+	svg {
+		transition: var(--transition);
+		color: var(--primary-color);;
+	}
+
 	&:hover {
 		border: 2px solid #507178;
 		box-shadow: 2px 2px 0 2px #507178;
 
-		svg path {
-			stroke: #507178;
+		svg {
+			color: var(--gray-color);
 		}
 	}
 
-	&:active {
-		background-color: #507178;
-		border: 2px solid var(--primary-color);
-		box-shadow: 2px 2px 0 2px var(--primary-color);
-
-		svg path {
-			stroke: #DFE7EB;
-		}
-	}
-
-	svg path {
-		transition: var(--transition);
-	}
 }
 
 .button_left {
@@ -129,6 +121,6 @@
 	right: 20px;
 }
 
-.icon {
+.iconRotate {
 	transform: rotate(180deg);
 }

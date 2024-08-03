@@ -2,7 +2,6 @@
 @import "src/styles/mixins.scss";
 
 .button {
-	@include like-states;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -21,7 +20,9 @@
 	svg {
 		width: 26px;
 		height: 26px;
+		transition: var(--transition);
 
+		@include icons-state;
 		@media only screen and (max-width: $media-sm) {
 			width: 20px;
 			height: 20px;
@@ -30,8 +31,8 @@
 }
 
 .active {
-	svg path {
-		fill: var(--yellow-color);
-		stroke: var(--primary-color);
+	svg {
+		fill: var(--yellow-color) !important;
+		color: var(--primary-color) !important;
 	}
 }

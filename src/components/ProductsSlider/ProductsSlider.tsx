@@ -1,5 +1,5 @@
 'use client';
-
+import { ChevronLeft } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { Swiper as SwiperClass } from 'swiper';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
@@ -12,7 +12,6 @@ import 'swiper/css/thumbs';
 
 import { getImages } from '@/utils/typeGuards';
 
-import IconArrow from './left.svg';
 import styles from './ProductsSlider.module.scss';
 import ProductCardSlider from '../ProductCardSlider/ProductCardSlider';
 
@@ -42,7 +41,7 @@ export default function ProductsSlider({ products }: IProductListProps) {
 				onClick={handlePrev}
 				className={` ${styles.button} ${styles.button_left}`}
 			>
-				<IconArrow />
+				<ChevronLeft />
 			</button>
 			<Swiper
 				onSwiper={(swiper) => {
@@ -72,7 +71,7 @@ export default function ProductsSlider({ products }: IProductListProps) {
 				onClick={handleNext}
 				className={`${styles.button} ${styles.button_right}`}
 			>
-				<IconArrow className={styles.icon} />
+				<ChevronLeft className={styles.icon} />
 			</button>
 		</div>
 	);

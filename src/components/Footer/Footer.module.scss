@@ -57,9 +57,22 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	transition: var(--transition);
+
+	svg {
+		width: 15px;
+		height: 15px;
+		color: var(--primary-color);;
+	}
 
 	&:hover {
-		@include footer-icons-state;
+		background-color: var(--gray-color);
+
+		svg {
+			color: var(--beige-color);
+			fill: var(--beige-color);
+		}
+
 	}
 }
 

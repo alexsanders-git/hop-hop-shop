@@ -43,13 +43,6 @@
 	}
 }
 
-.icons_item {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 24px;
-	height: 24px;
-}
 
 .navigation {
 	display: flex;
@@ -69,49 +62,6 @@
 	@media only screen and (max-width: $media-sm) {
 		width: calc((100% - 100px) / 2);
 	}
-}
-
-
-.icons_list {
-	display: flex;
-	gap: 32px;
-	align-items: center;
-	justify-content: center;
-
-	@media only screen and (max-width: $media-xl) {
-		gap: 18px;
-	}
-	@media only screen and (max-width: $media-xs) {
-		gap: 8px;
-	}
-}
-
-
-.icons_item {
-	width: 28px;
-	height: 28px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
-
-	@media only screen and (max-width: $media-xl) {
-		&:nth-child(1) {
-			display: none;
-		}
-	}
-	@media only screen and (max-width: $media-xl) {
-		width: 24px;
-		height: 24px;
-	}
-	@media only screen and (max-width: $media-xs) {
-		width: 24px;
-		height: 24px;
-	}
-}
-
-.icons_item {
-	@include header-icons-state ;
 }
 
 

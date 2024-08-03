@@ -1,6 +1,7 @@
 'use client';
 
-import LikeIcon from '@/assets/svg/like.svg';
+import { Heart } from 'lucide-react';
+
 import { useFavorite } from '@/store/favorite/Favorite.store';
 
 import styles from './AddToFavoriteButton.module.scss';
@@ -19,7 +20,7 @@ export default function AddToFavoriteButton({ product, className }: IProps) {
 			className={`${styles.button} ${className} ${isFavorite ? styles.active : ''}`}
 			onClick={() => toggleFavorite(product)}
 		>
-			<LikeIcon />
+			<Heart />
 		</button>
 	);
 }

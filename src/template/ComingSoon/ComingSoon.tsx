@@ -13,7 +13,6 @@ import Timer from '@/components/Timer/Timer';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './ComingSoon.module.scss';
-import IconArrow from '../../../public/arrow.svg';
 
 interface ISubscribeForm {
 	email: string;
@@ -110,7 +109,8 @@ export default function ComingSoon() {
 					) : (
 						<>
 							<button className={styles.buttonBack} onClick={handleClick}>
-								<IconArrow />
+								{/*<IconArrow />*/}
+								була іконка))
 							</button>
 
 							<div className={styles.notReadyImageWrapper}>
