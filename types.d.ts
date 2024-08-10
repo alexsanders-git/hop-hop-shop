@@ -45,6 +45,13 @@ interface IUser {
 	first_name: string;
 	last_name: string;
 	user_role: UserRole.Admin | UserRole.User;
+	phone_number: string;
+	country?: string;
+	city?: string;
+	address?: string;
+	postalCode?: string;
+	avatar?: string;
+	currentPassword?: string;
 }
 
 interface IPersonalData {

@@ -29,32 +29,47 @@
 	overflow: hidden;
 
 	@media only screen and (max-width: $media-lg) {
+		max-width: 300px;
+		max-height: 300px;
+		align-self: flex-end;
+	}
+
+	@media only screen and (max-width: $media-md) {
+		align-self: center;
+		margin-bottom: 20px;
+	}
+
+	@media only screen and (max-width: $media-sm) {
 		max-width: 200px;
 		max-height: 200px;
-		align-self: flex-end;
 	}
 }
 
 .changeAvatarBtn {
 	position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    height: 20%;
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-    border: none;
-    cursor: pointer;
-    text-align: center;
-    font-size: 14px;
-    transition: background 0.3s ease;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100%;
+	height: 20%;
+	background: rgba(0, 0, 0, 0.6);
+	color: white;
+	border: none;
+	cursor: pointer;
+	text-align: center;
+	font-size: 28px;
+	font-weight: 300;
+	transition: background 0.3s ease;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 
 	&:hover {
 		background: rgba(0, 0, 0, 0.8);
+	}
+
+	@media only screen and (max-width: $media-xl) {
+		font-size: 18px;
 	}
 
 	@media only screen and (max-width: $media-lg) {
@@ -150,6 +165,11 @@
 	line-height: 1.67;
 	text-decoration: underline;
 	color: var(--gray-color);
+	transition: var(--transition);
+
+	&:hover {
+		color: var(--black-color);
+	}
 
 	@media only screen and (max-width: $media-lg) {
 		max-width: 200px;

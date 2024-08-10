@@ -1,11 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 import SearchBarWrapper from '@/components/Header/searchBarWrapper/SearchBarWrapper';
 import useOutside from '@/hooks/useOutside';
 import { useCart } from '@/store/cart/Cart.store';
 import { useFavorite } from '@/store/favorite/Favorite.store';
+import { useFormStore } from '@/store/useForm/useForm.store';
 
 import styles from './navbarIconsLinks.module.scss';
 import AccountIcon from '../../../../public/headerImage/account.svg';
@@ -16,6 +18,39 @@ function NavbarIconsLinks() {
 	const { ref, setIsShow, isShow } = useOutside(false);
 	const { favorites } = useFavorite();
 	const totalItems = useCart((state) => state.cart?.total_items || 0);
+	const setActiveForm = useFormStore((state) => state.setActiveForm);
+	const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+
+	const toggleDropdown = () => {
+		setIsDropdownVisible(!isDropdownVisible);
+	};
+
+	const handleOutsideClick = (event: MouseEvent) => {
+		if (ref.current && !ref.current.contains(event.target)) {
+			setIsDropdownVisible(false);
+		}
+	};
+
+	const handleKeyDown = (event: KeyboardEvent) => {
+		if (event.key === 'Escape') {
+			setIsDropdownVisible(false);
+		}
+	};
+
+	useEffect(() => {
+		if (isDropdownVisible) {
+			document.addEventListener('mousedown', handleOutsideClick);
+			document.addEventListener('keydown', handleKeyDown);
+		} else {
+			document.removeEventListener('mousedown', handleOutsideClick);
+			document.removeEventListener('keydown', handleKeyDown);
+		}
+
+		return () => {
+			document.removeEventListener('mousedown', handleOutsideClick);
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [isDropdownVisible]);
 
 	return (
 		<div className={styles.icons_list}>
@@ -35,9 +70,41 @@ function NavbarIconsLinks() {
 				<ShoppingCartIcon />
 			</Link>
 
-			<Link href="/dashboard/account" className={styles.icons_item}>
+			<div ref={ref} className={styles.icons_item} onClick={toggleDropdown}>
 				<AccountIcon />
-			</Link>
+				{isDropdownVisible && (
+					<div className={styles.dropdown}>
+						<Link
+							href="/account"
+							onClick={() => {
+								setActiveForm('account');
+								setIsDropdownVisible(false);
+							}}
+							className={styles.accountModalItems}
+						>
+							My account
+						</Link>
+						<Link
+							href="/account"
+							onClick={() => {
+								setActiveForm('orders');
+								setIsDropdownVisible(false);
+							}}
+							className={styles.accountModalItems}
+						>
+							Orders
+						</Link>
+						<button
+							onClick={() => {
+								setIsDropdownVisible(false);
+							}}
+							className={`${styles.accountModalItems} ${styles.logOutBtn}`}
+						>
+							Log out
+						</button>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }

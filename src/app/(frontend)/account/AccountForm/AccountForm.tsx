@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
 import InputPassword from '@/components/InputPassword/InputPassword';
+import { fetchWithCookies } from '@/services/cookies/cookies.service';
 import PhoneInputField from '@/sharedComponenst/phoneInputField/PhoneInputField';
 import { useUser } from '@/store/user/User.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
@@ -25,41 +26,39 @@ import {
 import styles from './AccountForm.module.scss';
 
 export default function AccountForm() {
-	const ref = useRef<FormikProps<FormValues>>(null);
-	const [initialValues, setInitialValues] = useState<FormValues | null>(null);
+	const ref = useRef<FormikProps<IUser>>(null);
+	const [initialValues, setInitialValues] = useState<IUser | null>(null);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [preview, setPreview] = useState<string | null>(null);
 	const user = useUser((state) => state.user);
 	console.log(user);
 
-	interface FormValues {
-		name: string;
-		lastname: string;
-		email: string;
-		phone: string;
-		country: string;
-		city: string;
-		address: string;
-		postalCode: string;
-		currentPassword: string;
-		newPassword: string;
-		confirmPassword: string;
-	}
+	// interface FormValues {
+	// 	name: string;
+	// 	lastname: string;
+	// 	email: string;
+	// 	phone: string;
+	// 	country: string;
+	// 	city: string;
+	// 	address: string;
+	// 	postalCode: string;
+	// 	currentPassword: string;
+	// 	newPassword: string;
+	// 	confirmPassword: string;
+	// }
 
 	useEffect(() => {
 		if (user) {
 			setInitialValues({
-				name: user.first_name || '',
-				lastname: user.last_name || '',
+				first_name: user.first_name || '',
+				last_name: user.last_name || '',
 				email: user.email || '',
-				phone: user.phone_number || '',
+				phone_number: user.phone_number || '',
 				country: user.country || '',
 				city: user.city || '',
 				address: user.address || '',
 				postalCode: user.postalCode || '',
 				currentPassword: user.currentPassword || '',
-				newPassword: '',
-				confirmPassword: '',
 			});
 			if (user.avatar) {
 				setPreview(user.avatar);
@@ -67,39 +66,25 @@ export default function AccountForm() {
 		}
 	}, [user]);
 
-	const handleSubmit = (values: FormValues) => {
-		const formData = new FormData();
-
-		formData.append('name', values.name);
-		formData.append('lastname', values.lastname);
-		formData.append('email', values.email);
-		formData.append('phone', values.phone);
-		formData.append('country', values.country);
-		formData.append('city', values.city);
-		formData.append('address', values.address);
-		formData.append('postalCode', values.postalCode);
-		formData.append('currentPassword', values.currentPassword);
-		formData.append('newPassword', values.newPassword);
-
-		if (selectedFile) {
-			formData.append('avatar', selectedFile);
-		}
-
-		console.log(formData);
-	};
-
 	const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files && event.target.files.length > 0) {
-			const file = event.target.files[0];
-			setSelectedFile(file);
+			setSelectedFile(event.target.files[0]);
 
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				setPreview(reader.result as string);
-			};
-			reader.readAsDataURL(file);
+			const file = event.target.files[0];
+			if (file) {
+				const reader = new FileReader();
+				reader.onloadend = () => {
+					setPreview(reader.result as string);
+				};
+				reader.readAsDataURL(file);
+			}
 		}
 	};
+
+	useEffect(() => {
+		console.log(preview);
+		console.log(selectedFile);
+	}, [preview, selectedFile]);
 
 	if (!initialValues) {
 		return <div>Loading...</div>;
@@ -113,7 +98,7 @@ export default function AccountForm() {
 					height={391}
 					src={
 						preview ||
-						(user.user_role === 'Admin'
+						(user?.user_role === 'Admin'
 							? '/illustration_admin.svg'
 							: '/illustration_userPlug.svg')
 					}
@@ -133,10 +118,10 @@ export default function AccountForm() {
 			<Formik
 				validationSchema={yup
 					.object({
-						name: nameValid,
-						lastname: latNameValid,
+						first_name: nameValid,
+						last_name: latNameValid,
 						email: emailValid,
-						phone: phoneValid,
+						phone_number: phoneValid,
 						country: countryValid,
 						city: cityValid,
 						address: addressValid,
@@ -151,7 +136,38 @@ export default function AccountForm() {
 					.required()}
 				innerRef={ref}
 				initialValues={initialValues}
-				onSubmit={handleSubmit}
+				onSubmit={async (values: IUser, { resetForm }) => {
+					const formData = new FormData();
+					formData.append(
+						'profile',
+						new Blob(
+							[
+								JSON.stringify({
+									first_name: values.first_name,
+									last_name: values.last_name,
+									email: values.email,
+									password: values.newPassword,
+									phone_number: values.phone_number,
+									country: values.country,
+									city: values.city,
+									address: values.address,
+									postalCode: values.postalCode,
+								}),
+							],
+							{ type: 'application/json' },
+						),
+					);
+					if (selectedFile) {
+						formData.append('avatar', selectedFile);
+					}
+
+					const res = await fetchWithCookies('/auth/profile/', {
+						method: 'PATCH',
+						body: formData,
+					});
+
+					resetForm();
+				}}
 			>
 				{() => (
 					<Form className={styles.formContainer}>
@@ -162,14 +178,14 @@ export default function AccountForm() {
 									className={styles.input}
 									title={'First name'}
 									type={'text'}
-									name={'name'}
+									name={'first_name'}
 									placeholder={'John'}
 								/>
 								<Input
 									className={styles.input}
 									title={'Last name'}
 									type={'text'}
-									name={'lastname'}
+									name={'last_name'}
 									placeholder={'Doe'}
 								/>
 							</div>
@@ -191,7 +207,7 @@ export default function AccountForm() {
 										Phone Number
 									</label>
 									<Field
-										name="phone"
+										name="phone_number"
 										placeholder={'+38 066 666 66 66'}
 										component={PhoneInputField}
 									/>

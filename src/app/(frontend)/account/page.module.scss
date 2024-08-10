@@ -10,14 +10,44 @@
 	}
 }
 
+.titleWrp {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
 .title {
 	font-size: 64px;
 	line-height: 1.09;
 	margin-bottom: 24px;
 }
 
+.upperButtonsWrp {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	@media only screen and (max-width: $media-md) {
+		justify-content: space-between;
+	}
+}
+
+.logOutBtn {
+	display: none;
+
+	@media only screen and (max-width: $media-md) {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		svg {
+			width: 30px;
+			height: 30px;
+		}
+	}
+}
+
 .buttonWrp {
-	margin: 0 auto;
 	display: flex;
 	gap: 25px;
 	align-items: center;
@@ -30,25 +60,32 @@
 	position: relative;
 	overflow: hidden;
 
-	@media only screen and (max-width: $media-md){
+	@media only screen and (max-width: $media-md) {
 		gap: 15px;
 	}
 }
 
 .button {
-	padding: 8px 24px;	
+	padding: 8px 24px;
 	border-radius: 60px;
 	font-weight: 300;
 	font-size: 40px;
 	line-height: 1.15;
-	transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+	transition:
+		transform 0.3s ease-in-out,
+		background-color 0.3s ease-in-out,
+		color 0.3s ease-in-out;
 
 	@media only screen and (max-width: $media-md) {
 		font-size: 28px;
-		padding: 4px 12px ;
+		padding: 4px 12px;
+	}
+
+	@media only screen and (max-width: $media-sm) {
+		font-size: 16px;
+		padding: 4px 6px;
 	}
 }
-
 
 .active {
 	border: 2px solid var(--black-color);
@@ -62,10 +99,10 @@
 	content: '';
 	display: block;
 	position: absolute;
-	width: 2px; /* Width of the line */
-	height: 50%; /* Height of the line */
+	width: 2px;
+	height: 50%;
 	background-color: var(--black-color);
 	left: 53%;
 	transform: translateX(-53%);
-	z-index: 0; /* Ensure the line is beneath the buttons */
-  }
+	z-index: 0;
+}
