@@ -1,12 +1,14 @@
 'use client';
 import { ErrorMessage, Field, Form, Formik, FormikProps } from 'formik';
-import { useRef } from 'react';
+import Image from 'next/image';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
 
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
 import InputPassword from '@/components/InputPassword/InputPassword';
 import PhoneInputField from '@/sharedComponenst/phoneInputField/PhoneInputField';
+import { useUser } from '@/store/user/User.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import {
 	addressValid,
@@ -20,10 +22,15 @@ import {
 	postalCodeValid,
 } from '@/validation/checkout/validation';
 
-import styles from './AdminAccountForm.module.scss';
+import styles from './AccountForm.module.scss';
 
-export default function AdminAccountForm() {
+export default function AccountForm() {
 	const ref = useRef<FormikProps<FormValues>>(null);
+	const [initialValues, setInitialValues] = useState<FormValues | null>(null);
+	const [selectedFile, setSelectedFile] = useState<File | null>(null);
+	const [preview, setPreview] = useState<string | null>(null);
+	const user = useUser((state) => state.user);
+	console.log(user);
 
 	interface FormValues {
 		name: string;
@@ -39,12 +46,90 @@ export default function AdminAccountForm() {
 		confirmPassword: string;
 	}
 
+	useEffect(() => {
+		if (user) {
+			setInitialValues({
+				name: user.first_name || '',
+				lastname: user.last_name || '',
+				email: user.email || '',
+				phone: user.phone_number || '',
+				country: user.country || '',
+				city: user.city || '',
+				address: user.address || '',
+				postalCode: user.postalCode || '',
+				currentPassword: user.currentPassword || '',
+				newPassword: '',
+				confirmPassword: '',
+			});
+			if (user.avatar) {
+				setPreview(user.avatar);
+			}
+		}
+	}, [user]);
+
 	const handleSubmit = (values: FormValues) => {
-		console.log(values);
+		const formData = new FormData();
+
+		formData.append('name', values.name);
+		formData.append('lastname', values.lastname);
+		formData.append('email', values.email);
+		formData.append('phone', values.phone);
+		formData.append('country', values.country);
+		formData.append('city', values.city);
+		formData.append('address', values.address);
+		formData.append('postalCode', values.postalCode);
+		formData.append('currentPassword', values.currentPassword);
+		formData.append('newPassword', values.newPassword);
+
+		if (selectedFile) {
+			formData.append('avatar', selectedFile);
+		}
+
+		console.log(formData);
 	};
+
+	const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
+		if (event.target.files && event.target.files.length > 0) {
+			const file = event.target.files[0];
+			setSelectedFile(file);
+
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				setPreview(reader.result as string);
+			};
+			reader.readAsDataURL(file);
+		}
+	};
+
+	if (!initialValues) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<div className={styles.container}>
+			<div className={styles.imgWrp}>
+				<Image
+					width={391}
+					height={391}
+					src={
+						preview ||
+						(user.user_role === 'Admin'
+							? '/illustration_admin.svg'
+							: '/illustration_userPlug.svg')
+					}
+					alt="User Avatar"
+				></Image>
+				<input
+					type="file"
+					id="avatarInput"
+					accept="image/*"
+					style={{ display: 'none' }}
+					onChange={handleAvatarChange}
+				/>
+				<label htmlFor="avatarInput" className={styles.changeAvatarBtn}>
+					Browse your image
+				</label>
+			</div>
 			<Formik
 				validationSchema={yup
 					.object({
@@ -65,19 +150,7 @@ export default function AdminAccountForm() {
 					})
 					.required()}
 				innerRef={ref}
-				initialValues={{
-					name: '',
-					lastname: '',
-					email: '',
-					phone: '',
-					country: '',
-					city: '',
-					address: '',
-					postalCode: '',
-					currentPassword: '',
-					newPassword: '',
-					confirmPassword: '',
-				}}
+				initialValues={initialValues}
 				onSubmit={handleSubmit}
 			>
 				{() => (
