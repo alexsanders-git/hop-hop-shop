@@ -6,16 +6,15 @@ export const getDashboardCategoriesServer = async (): Promise<
 > => {
 	return await fetchData<IResponse<ICategory>>('shop/categories/');
 };
-
+export const getCategories = async (): Promise<IResponse<ICategory>> => {
+	const res = await fetchWithAuth('shop/categories/');
+	return res.data as IResponse<ICategory>;
+};
 export const removeCategoryById = async (id: number) => {
 	const res = await fetchWithAuth(`shop/categories/${id}`, {
 		method: 'DELETE',
 	});
-	console.log(res);
-	const data = await getDashboardCategoriesServer();
-	if (data) {
-		return data as IResponse<ICategory>;
-	}
+	return res;
 };
 export const getDashboardCategories = async (page: number) => {
 	const res = await fetchWithAuth(`shop/categories?page=${page}`, {
@@ -42,11 +41,14 @@ export const createCategory = async (data: {
 	return res;
 };
 
-export const updateCategory = async (data: {
-	name: string;
-	description: string;
-}) => {
-	const res = await fetchWithAuth('shop/categories/', {
+export const updateCategory = async (
+	id: number,
+	data: {
+		name: string;
+		description: string;
+	},
+) => {
+	const res = await fetchWithAuth(`shop/categories/${id}/`, {
 		method: 'PATCH',
 		body: JSON.stringify(data),
 	});

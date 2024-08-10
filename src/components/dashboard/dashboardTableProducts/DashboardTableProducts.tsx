@@ -17,6 +17,7 @@ interface IProps {
 	products: IResponse<IProduct>;
 }
 
+const PageSize = 10;
 export default function DashboardTableProducts(props: IProps) {
 	const { products } = props;
 	const [newData, setNewData] = useState<IResponse<IProduct>>(products);
@@ -56,7 +57,10 @@ export default function DashboardTableProducts(props: IProps) {
 							<div className={`${styles.col} ${styles.col5}`}>
 								<RemoveButton
 									callback={async () => {
-										const res = await removeProductById(item.id);
+										await removeProductById(item.id).finally(async () => {
+											const products = await getDashboardProducts(1);
+											setNewData(products);
+										});
 									}}
 								/>
 								<EditButton callback={() => getDashboardProductsId(item.id)} />
@@ -65,11 +69,12 @@ export default function DashboardTableProducts(props: IProps) {
 					))}
 				</ul>
 			</div>
-			{newData?.items?.length > 0 ? (
+
+			{newData?.items_count > PageSize ? (
 				<Pagination
 					currentPage={newData?.pagination?.current_page}
 					totalCount={newData?.items_count}
-					pageSize={10}
+					pageSize={PageSize}
 					onPageChange={async (page) => {
 						const res = await getDashboardProducts(page);
 						setNewData(res);
