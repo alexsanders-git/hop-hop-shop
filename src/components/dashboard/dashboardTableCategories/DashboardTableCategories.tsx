@@ -5,6 +5,7 @@ import EditButton from '@/components/dashboard/editButton/editButton';
 import Pagination from '@/components/dashboard/pagination/Pagination';
 import RemoveButton from '@/components/dashboard/removeButton/RemoveButton';
 import {
+	getCategories,
 	getDashboardCategories,
 	removeCategoryById,
 } from '@/services/dashboard/categories/dashboard.categories.service';
@@ -28,7 +29,6 @@ export default function DashboardTableCategories(props: IProps) {
 		{ name: 'Description' },
 		{ name: 'Actions' },
 	];
-
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.container}>
@@ -51,10 +51,10 @@ export default function DashboardTableCategories(props: IProps) {
 							<div className={`${styles.col} ${styles.col4}`}>
 								<RemoveButton
 									callback={async () => {
-										const res = await removeCategoryById(item.id);
-										if (res) {
-											setNewData(res);
-										}
+										await removeCategoryById(item.id).finally(async () => {
+											const categories = await getCategories();
+											setNewData(categories);
+										});
 									}}
 								/>
 								<EditButton
@@ -65,7 +65,7 @@ export default function DashboardTableCategories(props: IProps) {
 					))}
 				</ul>
 			</div>
-			{newData?.items?.length > 0 ? (
+			{newData?.items_count > PageSize ? (
 				<Pagination
 					currentPage={newData?.pagination?.current_page}
 					totalCount={newData?.items_count}

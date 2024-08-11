@@ -1,0 +1,16 @@
+@import "src/styles/mixins";
+
+.container {
+	padding: 15px 50px;
+	display: grid;
+	place-items: center;
+	border: 2px solid var(--primary-color);
+	box-shadow: 2px 2px 0 2px var(--primary-color);
+	background-color: var(--error-color);
+	color: white;
+	border-radius: 20px;
+	position: absolute;
+	text-wrap: wrap;
+	right: 20px;
+	top: 20px;
+}

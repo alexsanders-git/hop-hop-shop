@@ -34,7 +34,7 @@ interface IProduct {
 	price: number;
 	SKU: number;
 	category: ICategory;
-	description?: string;
+	description: string;
 	attributes?: IProductAttributes;
 	images: IImage | IImage[];
 }

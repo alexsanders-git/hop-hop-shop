@@ -1,27 +1,34 @@
 'use client';
 import { Form, Formik } from 'formik';
-import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 import * as yup from 'yup';
 
 import CreateDashboardHeader from '@/components/dashboard/createDashboardHeader/CreateDashboardHeader';
+import DashboardUploadImage from '@/components/dashboard/dashboardUploadImage/DashboardUploadImage';
 import ModalConfirmation from '@/components/dashboard/modalConfirmation/ModalСonfirmation';
 import Input from '@/components/Input/Input';
+import Loader from '@/components/Loader/Loader';
+import MessageError from '@/components/messageError/MessageError';
+import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
 import Textarea from '@/components/textarea/Textarea';
 import {
 	createCategory,
 	createCategoryImage,
 } from '@/services/dashboard/categories/dashboard.categories.service';
-import { robotoCondensed } from '@/styles/fonts/fonts';
+import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
-import image from '../../../../assets/png/Newdescription.png';
 
 export default function DashboardCategoriesCreate() {
 	const [modal, setModal] = useState<boolean>(false);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [preview, setPreview] = useState<string | null>(null);
+	const router = useRouter();
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [success, setSuccess] = useState(false);
+	const [error, setError] = useState('');
 
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files && event.target.files.length > 0) {
@@ -51,6 +58,7 @@ export default function DashboardCategoriesCreate() {
 				})
 				.required()}
 			onSubmit={async (values, { resetForm }) => {
+				setIsLoading(true);
 				const res = await createCategory(values);
 				const formData = new FormData();
 
@@ -63,12 +71,25 @@ export default function DashboardCategoriesCreate() {
 						resetForm();
 						setSelectedFile(null);
 						setPreview(null);
+						setIsLoading(false);
+						setSuccess(true);
+						await revalidateFunc('/dashboard/categories');
+						setTimeout(() => {
+							router.push('/dashboard/categories');
+						}, 2000);
+					} else {
+						setIsLoading(false);
+						setError(resUpload.error);
 					}
 				}
 			}}
 		>
 			{({ isValid, dirty, resetForm }) => (
 				<Form className={styles.wrapper}>
+					{isLoading && <Loader />}
+
+					{success && <MessageSuccess text={'Your Category Added!'} />}
+					{error !== '' && <MessageError text={error} />}
 					{modal && (
 						<ModalConfirmation
 							reset={() => {
@@ -103,44 +124,18 @@ export default function DashboardCategoriesCreate() {
 								placeholder={'Enter Category Name'}
 							/>
 							<Textarea
-								title={'Category'}
+								title={'Category Description'}
 								name={'description'}
 								rows={10}
-								placeholder={'Enter Category Name'}
+								placeholder={'Enter Category Description'}
 							/>
 						</div>
-						<div className={styles.uploadImage}>
-							<span className={`${styles.text} ${robotoCondensed.className}`}>
-								Category Image
-							</span>
-							<div className={styles.imageContainer}>
-								{preview && (
-									<Image
-										className={styles.preview}
-										width={500}
-										height={500}
-										src={preview}
-										alt="preview-image"
-									/>
-								)}
-								<input
-									onChange={handleFileChange}
-									accept="image/png, image/jpeg"
-									className={styles.file}
-									type="file"
-								/>
-								<div
-									className={`${styles.imageContainer_desc} ${preview && styles.hide}`}
-								>
-									<Image src={image} alt={'image'} />
-									<div
-										className={`${styles.subText} ${robotoCondensed.className}`}
-									>
-										Drop your imager here, or browse jpeg, png are allowed
-									</div>
-								</div>
-							</div>
-						</div>
+						<DashboardUploadImage
+							handleFileChange={handleFileChange}
+							preview={preview}
+							setPreview={setPreview}
+							text={'Category Image'}
+						/>
 					</div>
 				</Form>
 			)}

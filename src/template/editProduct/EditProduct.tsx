@@ -1,9 +1,10 @@
 'use client';
+
 import { Form, Formik } from 'formik';
 import { CircleX } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import * as yup from 'yup';
 
 import image from '@/assets/png/Newdescription.png';
@@ -17,10 +18,10 @@ import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
 import Select from '@/components/select/Select';
 import Textarea from '@/components/textarea/Textarea';
-import { getCategories } from '@/services/dashboard/categories/dashboard.categories.service';
 import {
-	createProduct,
 	createProductImage,
+	removeProductById,
+	updateProduct,
 } from '@/services/dashboard/products/dashboard.products.service';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
@@ -28,24 +29,31 @@ import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
 
-export default function DashboardProductsCreate() {
-	const [categories, setCategories] = useState<null | IResponse<ICategory>>(
-		null,
-	);
+export interface IProps {
+	product: IProduct;
+	categories: IResponse<ICategory>;
+}
+
+export default function EditProduct(props: IProps) {
+	const { product, categories } = props;
+
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [success, setSuccess] = useState(false);
-	const [error, setError] = useState('');
+	const [success, setSuccess] = useState<string>('');
+	const [error, setError] = useState<string>('');
 	const [modal, setModal] = useState<boolean>(false);
 	const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 	const [previews, setPreviews] = useState<{ image: string; name: string }[]>(
 		[],
 	);
+	const [images, setImages] = useState(product.images as IImage[]);
 	const fileInputRef = useRef<null | HTMLInputElement>(null);
 	const router = useRouter();
 	const [isHovered, setIsHovered] = useState<boolean>(false);
+
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files) {
 			const filesArray = Array.from(event.target.files);
+			setImages([]);
 			setSelectedFiles(filesArray);
 
 			const previewsArray = filesArray.map((file) => {
@@ -70,23 +78,13 @@ export default function DashboardProductsCreate() {
 		setSelectedFiles(newSelectedFiles);
 	};
 
-	useEffect(() => {
-		const fetchData = async () => {
-			const res = await getCategories();
-			if (res) {
-				setCategories(res);
-			}
-		};
-		fetchData();
-	}, []);
-
 	return (
 		<Formik
 			initialValues={{
-				name: '',
-				description: '',
-				category: '',
-				price: '',
+				name: product.name,
+				description: product.description ? product.description : '',
+				category: product.category.id,
+				price: product.price,
 			}}
 			validationSchema={yup
 				.object({
@@ -98,22 +96,43 @@ export default function DashboardProductsCreate() {
 				.required()}
 			onSubmit={async (values, { resetForm }) => {
 				setIsLoading(true);
-				const res = await createProduct({
-					...values,
-					SKU: Math.floor(Math.random() * 1000),
-				});
-				const formData = new FormData();
 
-				if (selectedFiles) {
-					selectedFiles.forEach((file) => {
-						formData.append('uploaded_images', file);
+				if (selectedFiles.length) {
+					const res = await updateProduct(product.id, {
+						SKU: Math.floor(Math.random() * 1000),
+						...values,
 					});
-				}
-				if (res.success && formData) {
-					const resUpload = await createProductImage(res.data.id, formData);
-					if (resUpload.success) {
+					const formData = new FormData();
+
+					if (selectedFiles) {
+						selectedFiles.forEach((file) => {
+							formData.append('uploaded_images', file);
+						});
+					}
+					if (res.success && formData) {
+						const resUpload = await createProductImage(res.data.id, formData);
+						if (resUpload.success) {
+							setIsLoading(false);
+							setSuccess('Product was updated');
+							resetForm();
+							setSelectedFiles([]);
+							setPreviews([]);
+							await revalidateFunc('/dashboard/products');
+							setTimeout(() => {
+								router.push('/dashboard/products');
+							}, 2000);
+						} else {
+							setError(resUpload.error);
+						}
+					}
+				} else {
+					const res = await updateProduct(product.id, {
+						SKU: Math.floor(Math.random() * 1000),
+						...values,
+					});
+					if (res) {
 						setIsLoading(false);
-						setSuccess(true);
+						setSuccess('Product was updated');
 						resetForm();
 						setSelectedFiles([]);
 						setPreviews([]);
@@ -121,8 +140,6 @@ export default function DashboardProductsCreate() {
 						setTimeout(() => {
 							router.push('/dashboard/products');
 						}, 2000);
-					} else {
-						setError(resUpload.error);
 					}
 				}
 			}}
@@ -131,28 +148,37 @@ export default function DashboardProductsCreate() {
 				<Form className={styles.wrapper}>
 					{isLoading && <Loader className={styles.loader} />}
 
-					{success && <MessageSuccess text={'Your Product Added!'} />}
+					{success !== '' && <MessageSuccess text={success} />}
 					{error !== '' && <MessageError text={error} />}
 					{modal && (
 						<ModalConfirmation
-							reset={() => {
-								setModal(false);
-								resetForm();
-								setSelectedFiles([]);
-								setPreviews([]);
+							reset={async () => {
+								setIsLoading(true);
+								await removeProductById(product.id).finally(async () => {
+									await revalidateFunc('/dashboard/products');
+									setIsLoading(false);
+									setSuccess('Product was deleted');
+									setModal(false);
+									resetForm();
+									setSelectedFiles([]);
+									setPreviews([]);
+									setTimeout(() => {
+										router.push('/dashboard/products');
+									}, 2000);
+								});
 							}}
 							closeModal={() => setModal(false)}
 							text={'Are you sure?'}
 						/>
 					)}
 					<CreateDashboardHeader
-						title={'New Product '}
+						title={`Edit Product ${product.id}`}
 						callbackApply={() => {}}
 						callbackDelete={() => {
 							setModal(true);
 						}}
 						disabledDelete={false}
-						disabledApply={!(isValid && dirty && selectedFiles.length > 0)}
+						disabledApply={!isValid}
 						typeApply={'submit'}
 						typeDelete={'button'}
 					/>
@@ -167,13 +193,19 @@ export default function DashboardProductsCreate() {
 							/>
 							{/* eslint-disable */}
 							<Select
+								defaultValue={{
+									name: product.category.name,
+									id: product.category.id,
+								}}
 								name={'category'}
 								options={
 									categories
-										? categories.items.map((item) => ({
-												name: item.name,
-												id: item.id,
-											}))
+										? categories.items
+												.map((item) => ({
+													name: item.name,
+													id: item.id,
+												}))
+												.filter((item) => item.id !== product.category.id)
 										: null
 								}
 								text={'Product Category'}
@@ -195,12 +227,41 @@ export default function DashboardProductsCreate() {
 								<Button
 									text={'Show pre-publish view'}
 									style={'secondary'}
-									disabled={!(isValid && dirty && selectedFiles.length > 0)}
+									disabled={
+										!(
+											isValid &&
+											dirty &&
+											(selectedFiles.length >= 0 || images.length >= 0)
+										)
+									}
 									onClick={() => alert('Привет Андрей!)')}
 								/>
 							</div>
 						</div>
 						<div className={styles.imageWrapper}>
+							<div className={styles.uploadImage}>
+								<span className={`${styles.text} ${robotoCondensed.className}`}>
+									Product Gallery
+								</span>
+								<div className={styles.imageContainer}>
+									<input
+										ref={fileInputRef}
+										onChange={handleFileChange}
+										accept="image/png, image/jpeg"
+										className={styles.file}
+										type="file"
+										multiple={true}
+									/>
+									<div className={`${styles.imageContainer_desc}`}>
+										<Image src={image} alt={'image'} />
+										<div
+											className={`${styles.subText} ${robotoCondensed.className}`}
+										>
+											Drop your imager here, or browse jpeg, png are allowed
+										</div>
+									</div>
+								</div>
+							</div>
 							{previews.length > 0 && (
 								<div
 									onMouseEnter={() => {
@@ -234,6 +295,19 @@ export default function DashboardProductsCreate() {
 									/>
 								</div>
 							)}
+
+							{images.length > 0 &&
+								images.map((img, index) => (
+									<div key={index + img.image} className={styles.firstPreview}>
+										<Image
+											className={styles.firstImage}
+											width={480}
+											height={470}
+											src={img.image}
+											alt={`image ${index}`}
+										/>
+									</div>
+								))}
 							{previews.length > 1 &&
 								previews
 									.slice(1)
@@ -245,32 +319,15 @@ export default function DashboardProductsCreate() {
 											handleRemoveImage={handleRemoveImage}
 										/>
 									))}
-							<div className={styles.uploadImage}>
-								<span className={`${styles.text} ${robotoCondensed.className}`}>
-									Product Gallery
-								</span>
-								<div className={styles.imageContainer}>
-									<input
-										ref={fileInputRef}
-										onChange={handleFileChange}
-										accept="image/png, image/jpeg"
-										className={styles.file}
-										type="file"
-										multiple={true}
-									/>
-									<div className={`${styles.imageContainer_desc}`}>
-										<Image src={image} alt={'image'} />
-										<div
-											className={`${styles.subText} ${robotoCondensed.className}`}
-										>
-											Drop your imager here, or browse jpeg, png are allowed
-										</div>
-									</div>
-								</div>
-							</div>
 							<div className={styles.buttonWrapper}>
 								<Button
-									disabled={!(isValid && dirty && selectedFiles.length > 0)}
+									disabled={
+										!(
+											isValid &&
+											dirty &&
+											(selectedFiles.length >= 0 || images.length >= 0)
+										)
+									}
 									text={'Show pre-publish view'}
 									style={'secondary'}
 									onClick={() => alert('Привет Андрей!)')}

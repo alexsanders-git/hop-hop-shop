@@ -1,23 +1,23 @@
 'use client';
 
 import { Form, Formik } from 'formik';
-import { CircleX } from 'lucide-react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import * as yup from 'yup';
 
-import image from '@/assets/png/Newdescription.png';
 import CreateDashboardHeader from '@/components/dashboard/createDashboardHeader/CreateDashboardHeader';
+import DashboardUploadImage from '@/components/dashboard/dashboardUploadImage/DashboardUploadImage';
 import ModalConfirmation from '@/components/dashboard/modalConfirmation/ModalСonfirmation';
 import Input from '@/components/Input/Input';
+import Loader from '@/components/Loader/Loader';
+import MessageError from '@/components/messageError/MessageError';
+import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
 import Textarea from '@/components/textarea/Textarea';
 import {
 	createCategoryImage,
 	removeCategoryById,
 	updateCategory,
 } from '@/services/dashboard/categories/dashboard.categories.service';
-import { robotoCondensed } from '@/styles/fonts/fonts';
 import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
@@ -28,12 +28,13 @@ export interface IProps {
 
 export default function EditCategory(props: IProps) {
 	const { category } = props;
-	const fileInputRef = useRef<null | HTMLInputElement>(null);
 	const [modal, setModal] = useState<boolean>(false);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [preview, setPreview] = useState<string | null>(category.image);
-	const [isHovered, setIsHovered] = useState<boolean>(false);
 	const router = useRouter();
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [success, setSuccess] = useState('');
+	const [error, setError] = useState('');
 
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files && event.target.files.length > 0) {
@@ -63,38 +64,60 @@ export default function EditCategory(props: IProps) {
 				})
 				.required()}
 			onSubmit={async (values, { resetForm }) => {
+				setIsLoading(true);
 				if (selectedFile) {
 					const formData = new FormData();
 					formData.append('image', selectedFile);
-					const res = await updateCategory(values);
+					const res = await updateCategory(category.id, values);
 					if (res.success && formData) {
 						const resUpload = await createCategoryImage(res.data.id, formData);
 						if (resUpload.success) {
-							router.push('/dashboard/categories');
+							setIsLoading(false);
+							setSuccess('Category updated successfully');
+							setTimeout(() => {
+								router.push('/dashboard/categories');
+							}, 2000);
+						} else {
+							setIsLoading(false);
+							setError(resUpload.error);
 						}
+					}
+				} else {
+					const res = await updateCategory(category.id, values);
+					if (res) {
+						setIsLoading(false);
+						setSuccess('Category updated successfully');
+						setTimeout(() => {
+							router.push('/dashboard/categories');
+						}, 2000);
 					} else {
-						const newData = {
-							name: values.name,
-							description: values.description,
-							image: preview,
-						};
-						const res = await updateCategory(newData);
-						if (res) {
-							router.push('/dashboard/categories');
-						}
+						setIsLoading(false);
+						setError(res.error);
 					}
 				}
 			}}
 		>
 			{({ isValid }) => (
 				<Form className={styles.wrapper}>
+					{isLoading && <Loader className={styles.loader} />}
+
+					{success !== '' && <MessageSuccess text={success} />}
+					{error !== '' && <MessageError text={error} />}
 					{modal && (
 						<ModalConfirmation
 							reset={async () => {
+								setIsLoading(true);
 								const res = await removeCategoryById(category.id);
 								if (res) {
 									setModal(false);
-									router.push('/dashboard/categories');
+									setIsLoading(false);
+									setSuccess('Category deleted successfully');
+									setTimeout(() => {
+										router.push('/dashboard/categories');
+									}, 2000);
+								} else {
+									setIsLoading(false);
+									setError('Something went wrong');
 								}
 							}}
 							closeModal={() => setModal(false)}
@@ -103,7 +126,7 @@ export default function EditCategory(props: IProps) {
 					)}
 
 					<CreateDashboardHeader
-						title={'Edit category'}
+						title={`Edit Category ${category.id}`}
 						callbackApply={() => {}}
 						callbackDelete={() => setModal(true)}
 						disabledDelete={false}
@@ -121,68 +144,18 @@ export default function EditCategory(props: IProps) {
 								placeholder={'Enter Category Name'}
 							/>
 							<Textarea
-								title={'Category'}
+								title={'Category Description'}
 								name={'description'}
 								rows={10}
-								placeholder={'Enter Category Name'}
+								placeholder={'Enter Category Description'}
 							/>
 						</div>
-						<div className={styles.uploadImage}>
-							<span className={`${styles.text} ${robotoCondensed.className}`}>
-								Category Image
-							</span>
-							<div
-								onMouseEnter={() => {
-									if (preview) {
-										setIsHovered(true);
-									}
-								}}
-								onMouseLeave={() => {
-									if (preview) {
-										setIsHovered(false);
-									}
-								}}
-								className={styles.imageContainer}
-							>
-								{isHovered && preview && (
-									<div
-										onClick={() => {
-											setPreview(null);
-											fileInputRef?.current?.click();
-										}}
-										className={styles.removeImage}
-									>
-										<CircleX />
-									</div>
-								)}
-								{preview && (
-									<Image
-										className={styles.preview}
-										width={500}
-										height={500}
-										src={preview}
-										alt="preview-image"
-									/>
-								)}
-								<input
-									ref={fileInputRef}
-									onChange={handleFileChange}
-									accept="image/png, image/jpeg"
-									className={styles.file}
-									type="file"
-								/>
-								<div
-									className={`${styles.imageContainer_desc} ${preview && styles.hide}`}
-								>
-									<Image src={image} alt={'image'} />
-									<div
-										className={`${styles.subText} ${robotoCondensed.className}`}
-									>
-										Drop your imager here, or browse jpeg, png are allowed
-									</div>
-								</div>
-							</div>
-						</div>
+						<DashboardUploadImage
+							handleFileChange={handleFileChange}
+							preview={preview}
+							setPreview={setPreview}
+							text={'Category Image'}
+						/>
 					</div>
 				</Form>
 			)}

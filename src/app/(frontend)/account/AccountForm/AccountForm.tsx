@@ -29,7 +29,8 @@ export default function AccountForm() {
 	const [initialValues, setInitialValues] = useState<FormValues | null>(null);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [preview, setPreview] = useState<string | null>(null);
-	const user = useUser((state) => state.user);
+	// оксана забереш потім as any;
+	const user = useUser((state) => state.user) as any;
 	console.log(user);
 
 	interface FormValues {
@@ -49,19 +50,19 @@ export default function AccountForm() {
 	useEffect(() => {
 		if (user) {
 			setInitialValues({
-				name: user.first_name || '',
-				lastname: user.last_name || '',
-				email: user.email || '',
-				phone: user.phone_number || '',
-				country: user.country || '',
-				city: user.city || '',
-				address: user.address || '',
-				postalCode: user.postalCode || '',
-				currentPassword: user.currentPassword || '',
+				name: user?.first_name || '',
+				lastname: user?.last_name || '',
+				email: user?.email || '',
+				phone: user?.phone_number || '',
+				country: user?.country || '',
+				city: user?.city || '',
+				address: user?.address || '',
+				postalCode: user?.postalCode || '',
+				currentPassword: user?.currentPassword || '',
 				newPassword: '',
 				confirmPassword: '',
 			});
-			if (user.avatar) {
+			if (user?.avatar) {
 				setPreview(user.avatar);
 			}
 		}
@@ -113,7 +114,7 @@ export default function AccountForm() {
 					height={391}
 					src={
 						preview ||
-						(user.user_role === 'Admin'
+						(user?.user_role === 'Admin'
 							? '/illustration_admin.svg'
 							: '/illustration_userPlug.svg')
 					}
