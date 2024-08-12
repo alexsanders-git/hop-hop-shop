@@ -5,10 +5,12 @@ import AccountForm from './AccountForm/AccountForm';
 import OrdersForm from './OrdersForm/OrdersForm';
 import styles from './page.module.scss';
 
+type FormType = 'account' | 'orders';
+
 export default function Page() {
 	const [activeForm, setActiveForm] = useState('account');
 
-	const handleButtonClick = (form) => {
+	const handleButtonClick = (form: FormType) => {
 		setActiveForm(form);
 	};
 
