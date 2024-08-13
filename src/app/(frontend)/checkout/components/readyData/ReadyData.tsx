@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { Pencil } from 'lucide-react';
 
 import styles from './styles.module.scss';
 
@@ -24,13 +24,7 @@ export default function ReadyData(props: IReadyData) {
 				{fiveText && <span>{fiveText}</span>}
 			</div>
 			<div onClick={() => setOpened()} className={styles.imgWrapper}>
-				<Image
-					className={styles.img}
-					width={32}
-					height={32}
-					src={'/pencel.svg'}
-					alt={'pencel.svg'}
-				/>
+				<Pencil className={styles.img} />
 			</div>
 		</div>
 	);

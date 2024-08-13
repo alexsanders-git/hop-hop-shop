@@ -12,10 +12,11 @@ export interface InterfacePromoCode {
 	open: boolean;
 	setOpen: (open: boolean) => void;
 	className?: string;
+	disabled?: boolean;
 }
 
 export default function PromoCode(props: InterfacePromoCode) {
-	const { setOpen, open, className = '' } = props;
+	const { disabled = false, setOpen, open, className = '' } = props;
 	const [value, setValue] = useState<string>('');
 
 	const [data, setData] = useState<{
@@ -47,13 +48,13 @@ export default function PromoCode(props: InterfacePromoCode) {
 				<span>Discount </span>
 				<span
 					onClick={() => setOpen(!open)}
-					className={`${styles.discountWrite} ${!open && styles.rotate}`}
+					className={`${styles.discountWrite} ${!disabled && !open && styles.rotate}`}
 				>
-					Enter Code
+					Enter code
 					<DiscountArrow />
 				</span>
 			</div>
-			{open && (
+			{!disabled && open && (
 				<>
 					<div className={`${styles.discountAccept} ${className}`}>
 						<span>

@@ -22,7 +22,14 @@ function CreditCard(props: { className: string; formik: any }) {
 		let formattedValue = value;
 
 		if (name === 'cardNumber') {
-			formattedValue = formatCardNumber(value);
+			// Обмежуємо введення до 19 символів (включаючи пробіли)
+			const cleanedValue = value.replace(/\D+/g, ''); // Видалити всі нечислові символи
+			if (cleanedValue.length <= 16) {
+				// 16 цифр + 3 пробіли = 19 символів
+				formattedValue = formatCardNumber(value);
+			} else {
+				formattedValue = formatCardNumber(cleanedValue.slice(0, 16));
+			}
 		} else if (name === 'expiryDate') {
 			formattedValue = value.replace(/\D+/g, ''); // Видалити всі нечислові символи
 			if (formattedValue.length === 2) {
@@ -37,7 +44,6 @@ function CreditCard(props: { className: string; formik: any }) {
 
 		formik.setFieldValue(name, formattedValue);
 	};
-
 	return (
 		<form onSubmit={formik.handleSubmit}>
 			<div

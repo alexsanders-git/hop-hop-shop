@@ -119,9 +119,7 @@
 .errorMessage {
 	color: var(--error-color);
 	font-size: 16px;
-	position: absolute;
-	bottom: -25px;
-	right: 0;
+	margin-top: 10px;
 }
 
 .inputWrapper {

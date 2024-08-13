@@ -50,7 +50,10 @@ export const phoneValid = yup
 
 export const addressValid = yup
 	.string()
-	.matches(/^[A-Za-z\s]+$/, 'Address must contain only Latin letters')
+	.matches(
+		/^(?=.*[A-Za-z])[A-Za-z0-9\s]+$/,
+		'Address must contain only Latin letters',
+	)
 	.required('Address is required');
 
 export const cityValid = yup

@@ -37,7 +37,7 @@ export default function FinishedCheckout() {
 			</Checkbox>
 			<Button
 				disabled={!open || !creditCard || !deliveryAddress || !personalData}
-				className={styles.button}
+				className={styles.placeOrder}
 				text={'Place order'}
 				onClick={async () => {
 					const res = await fetchWithCookies('/checkout/checkout/', {

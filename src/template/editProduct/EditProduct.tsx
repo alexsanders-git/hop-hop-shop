@@ -1,7 +1,6 @@
 'use client';
 
 import { Form, Formik } from 'formik';
-import { CircleX } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useRef, useState } from 'react';
@@ -10,6 +9,7 @@ import * as yup from 'yup';
 import image from '@/assets/png/Newdescription.png';
 import Button from '@/components/Button/Button';
 import CreateDashboardHeader from '@/components/dashboard/createDashboardHeader/CreateDashboardHeader';
+import DashboardUploadedImage from '@/components/dashboard/dashboardUploadedImage/DashboardUploadedImage';
 import ModalConfirmation from '@/components/dashboard/modalConfirmation/ModalСonfirmation';
 import UploadedFileBlock from '@/components/dashboard/uploadedFileBlock/UploadedFileBlock';
 import Input from '@/components/Input/Input';
@@ -48,7 +48,6 @@ export default function EditProduct(props: IProps) {
 	const [images, setImages] = useState(product.images as IImage[]);
 	const fileInputRef = useRef<null | HTMLInputElement>(null);
 	const router = useRouter();
-	const [isHovered, setIsHovered] = useState<boolean>(false);
 
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files) {
@@ -71,13 +70,16 @@ export default function EditProduct(props: IProps) {
 			});
 		}
 	};
-	const handleRemoveImage = (index: number) => {
+	const handleRemovePreview = (index: number) => {
 		const newPreviews = previews.filter((_, i) => i !== index);
 		setPreviews(newPreviews);
 		const newSelectedFiles = selectedFiles.filter((_, i) => i !== index);
 		setSelectedFiles(newSelectedFiles);
 	};
-
+	const handleRemoveImages = (index: number) => {
+		const newImages = images.filter((_, i) => i !== index);
+		setImages(newImages);
+	};
 	return (
 		<Formik
 			initialValues={{
@@ -262,51 +264,15 @@ export default function EditProduct(props: IProps) {
 									</div>
 								</div>
 							</div>
-							{previews.length > 0 && (
-								<div
-									onMouseEnter={() => {
-										if (previews[0].image) {
-											setIsHovered(true);
-										}
-									}}
-									onMouseLeave={() => {
-										if (previews[0].image) {
-											setIsHovered(false);
-										}
-									}}
-									className={styles.firstPreview}
-								>
-									{isHovered && previews[0].image && (
-										<div
-											onClick={() => {
-												handleRemoveImage(0);
-											}}
-											className={styles.removeImage}
-										>
-											<CircleX />
-										</div>
-									)}
-									<Image
-										className={styles.firstImage}
-										width={480}
-										height={470}
-										src={previews[0].image}
-										alt={previews[0].name}
-									/>
-								</div>
-							)}
 
 							{images.length > 0 &&
 								images.map((img, index) => (
-									<div key={index + img.image} className={styles.firstPreview}>
-										<Image
-											className={styles.firstImage}
-											width={480}
-											height={470}
-											src={img.image}
-											alt={`image ${index}`}
-										/>
-									</div>
+									<DashboardUploadedImage
+										key={index}
+										index={index}
+										handleRemoveImages={handleRemoveImages}
+										image={img.image}
+									/>
 								))}
 							{previews.length > 1 &&
 								previews
@@ -316,7 +282,7 @@ export default function EditProduct(props: IProps) {
 											key={index}
 											image={preview}
 											index={index + 1}
-											handleRemoveImage={handleRemoveImage}
+											handleRemoveImage={handleRemovePreview}
 										/>
 									))}
 							<div className={styles.buttonWrapper}>
