@@ -1,7 +1,7 @@
 @import "src/styles/mixins";
 
 .button {
-	display: inline-block;
+	display: flex;
 	padding: 12px 24px;
 	color: var(--primary-color);
 	font-size: 20px;
@@ -14,6 +14,7 @@
 	box-shadow: 2px 2px 0 2px var(--primary-color);
 	border-radius: 32px;
 	outline: none;
+	justify-content: center;
 }
 
 .secondary {

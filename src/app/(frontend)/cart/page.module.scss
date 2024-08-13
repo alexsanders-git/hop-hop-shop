@@ -37,8 +37,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: url('./splashUp.png') no-repeat top center,
-	url('./splashDown.png') no-repeat bottom center;
+	background: url('../../../assets/png/splashUp.png') no-repeat top center,
+	url('../../../assets/png/splashDown.png') no-repeat bottom center;
 	background-size: contain;
 	@media only screen and (max-width: $media-xxl) {
 		width: 48%;
@@ -143,34 +143,16 @@
 }
 
 .buttonCheckout {
-	border: 2.5px solid var(--black-color);
-	box-shadow: 3px 3px 0 3px var(--black-color);
 	border-radius: 43px;
 	padding: 16px 32px;
-	width: 100%;
-	max-width: 426px;
-	height: auto;
-	background-color: var(--yellow-color);
 	font-size: 48px;
 	line-height: 1.11;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin: 0 auto;
 
-	@media only screen and (max-width: $media-xl) {
-		max-width: 400px;
-	}
 
 	@media only screen and (max-width: $media-sm) {
-		max-width: 300px;
 		font-size: 20px;
 		line-height: 1.1;
 		padding: 12px 24px;
-		height: 46px;
 	}
 
-	@media only screen and (max-width: $media-xs) {
-		max-width: 250px;
-	}
 }

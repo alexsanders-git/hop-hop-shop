@@ -18,7 +18,7 @@
 	}
 
 	@media only screen and (max-width: $media-xs) {
-		gap: 8px;
+		gap: 14px;
 	}
 }
 
@@ -52,14 +52,14 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	top: -5px;
-	left: 18px;
+	top: -9px;
+	left: 16px;
 
 	@media only screen and (max-width: $media-xl) {
 		width: 15px;
 		height: 15px;
 		font-size: 9px;
-		top: -2px;
+		top: -6px;
 		left: 13px;
 		box-shadow: 1px 1px 0 1px var(--primary-color);
 	}

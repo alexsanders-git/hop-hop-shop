@@ -10,6 +10,8 @@ import Button from '@/components/Button/Button';
 import ButtonLink from '@/components/ButtonLink/ButtonLink';
 import Input from '@/components/Input/Input';
 import InputPassword from '@/components/InputPassword/InputPassword';
+import Loader from '@/components/Loader/Loader';
+import MessageError from '@/components/messageError/MessageError';
 import { fetchWithCookies } from '@/services/cookies/cookies.service';
 import Checkbox from '@/sharedComponenst/checkbox/Checkbox';
 import PhoneInputField from '@/sharedComponenst/phoneInputField/PhoneInputField';
@@ -30,8 +32,10 @@ import Google from '../../../public/login/google.svg';
 export default function RegistrationForm() {
 	const [open, setOpen] = useState<boolean>(false);
 	const setUser = useUser((state) => state.setUser);
-	const [error, setError] = useState<string | null>(null);
 	const navigate = useRouter();
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [error, setError] = useState<string>('');
+
 	return (
 		<Formik
 			initialValues={{
@@ -56,6 +60,7 @@ export default function RegistrationForm() {
 				})
 				.required()}
 			onSubmit={async (values) => {
+				setIsLoading(true);
 				const res = await fetchWithCookies('/auth/registration/', {
 					method: 'POST',
 					body: JSON.stringify({
@@ -67,17 +72,21 @@ export default function RegistrationForm() {
 					}),
 				});
 				if (res.success === true) {
+					setIsLoading(false);
 					Cookies.set(CookiesEnums.access_token, res.data.access);
 					setUser(res.data.user);
 					navigate.push('/');
 				}
 				if (res.error) {
+					setIsLoading(false);
 					setError(res.error);
 				}
 			}}
 		>
 			{({ isValid, dirty }) => (
 				<Form className={styles.form}>
+					{isLoading && <Loader className={styles.loader} />}
+					{error !== '' && <MessageError text={error} />}
 					<div className={styles.inputWrapper}>
 						<Input
 							title={'First Name'}
@@ -157,7 +166,7 @@ export default function RegistrationForm() {
 							text={'I already have an account'}
 							className={styles.buttonLink}
 						/>
-						{error && <div className={styles.errorText}>{error}</div>}
+						{error !== '' && <div className={styles.errorText}>{error}</div>}
 						<div className={styles.google}>
 							<span className={robotoCondensed.className}>Or sing in with</span>
 							<Google className={styles.googleImage} />

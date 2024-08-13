@@ -3,9 +3,9 @@
 .cardWrp {
 	display: flex;
 	gap: 20px;
-	border: 2.67px solid var(--black-color);
+	border: 2.67px solid var(--primary-color);
 	border-radius: 27px;
-	box-shadow: 2px 2px 0 2px var(--black-color);
+	box-shadow: 2px 2px 0 2px var(--primary-color);
 	padding: 16px;
 	background-color: var(--beige-color);
 
@@ -18,14 +18,14 @@
 }
 
 .imgWrp {
-	border: 2.67px solid var(--black-color);
+	border: 2.67px solid var(--primary-color);
 	border-radius: 16px;
-	box-shadow: 2px 2px 0 2px var(--black-color);
+	box-shadow: 2px 2px 0 2px var(--primary-color);
 	min-width: 132px;
 	height: 132px;
 
 	@media only screen and (max-width: $media-sm) {
-		border: 2px solid var(--black-color);
+		border: 2px solid var(--primary-color);
 		border-radius: 12px;
 		min-width: 99px;
 		height: 99px;
@@ -96,9 +96,9 @@
 }
 
 .quantity_controls {
-	border: 1px solid var(--black-color);
+	border: 1px solid var(--primary-color);
 	border-radius: 83px;
-	box-shadow: 3px 3px 0 3px var(--black-color);
+	box-shadow: 3px 3px 0 3px var(--primary-color);
 	background-color: var(--secondary-background-color);
 	padding: 5px 16px;
 	font-size: 21px;
@@ -115,7 +115,7 @@
 	}
 
 	@media only screen and (max-width: $media-sm) {
-		box-shadow: 2px 2px 0 2px var(--black-color);
+		box-shadow: 2px 2px 0 2px var(--primary-color);
 		border-radius: 62px;
 		padding: 4px 12px;
 		font-size: 16px;

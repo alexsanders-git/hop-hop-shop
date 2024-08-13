@@ -1,7 +1,5 @@
 'use client';
 
-import styles from './Button.module.scss';
-
 interface IButtonProps {
 	text: string;
 	onClick?: () => void;
@@ -10,6 +8,8 @@ interface IButtonProps {
 	type?: 'button' | 'submit' | 'reset';
 	style?: 'primary' | 'secondary';
 }
+
+import styles from './Button.module.scss';
 
 export default function Button({
 	text,
