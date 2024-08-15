@@ -1,5 +1,6 @@
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 
 import { InterfaceProductCart } from '@/store/cart/Cart.interface';
@@ -34,7 +35,12 @@ export default function ShoppingCartProductCard(
 			<div className={styles.detailsWrp}>
 				<div className={styles.details_upperPart}>
 					<div>
-						<h2 className={styles.productName}>{product.name}</h2>
+						<Link
+							href={`/product/${product.id}`}
+							className={styles.productName}
+						>
+							{product.name}
+						</Link>
 						<p
 							className={`${styles.productDetails} ${robotoCondensed.className}`}
 						>

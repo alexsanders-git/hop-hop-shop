@@ -6,7 +6,7 @@ import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './page.module.scss';
 
-export default function page() {
+export default function ThanksPage() {
 	return (
 		<div className={styles.pageWrp}>
 			<div className={styles.titleWrp}>
