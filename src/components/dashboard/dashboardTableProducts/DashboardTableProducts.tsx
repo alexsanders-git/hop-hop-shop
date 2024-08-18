@@ -2,6 +2,7 @@
 import { useState } from 'react';
 
 import EditButton from '@/components/dashboard/editButton/editButton';
+import ModalConfirmation from '@/components/dashboard/modalConfirmation/ModalСonfirmation';
 import Pagination from '@/components/dashboard/pagination/Pagination';
 import RemoveButton from '@/components/dashboard/removeButton/RemoveButton';
 import {
@@ -15,6 +16,11 @@ import styles from './styles.module.scss';
 
 interface IProps {
 	products: IResponse<IProduct>;
+}
+
+interface IDashboardItem {
+	item: IProduct;
+	setNewData: (data: IResponse<IProduct>) => void;
 }
 
 const PageSize = 10;
@@ -42,30 +48,7 @@ export default function DashboardTableProducts(props: IProps) {
 						))}
 					</li>
 					{newData.items.map((item, index: number) => (
-						<li
-							key={index}
-							className={`${styles.tableRow} ${robotoCondensed.className}`}
-						>
-							<div className={`${styles.col} ${styles.col1}`}>#{item.id}</div>
-							<div className={`${styles.col} ${styles.col2}`}>{item.name}</div>
-							<div className={`${styles.col} ${styles.col3}`}>
-								{item.category.name}
-							</div>
-							<div className={`${styles.col} ${styles.col4}`}>
-								{item.price}$
-							</div>
-							<div className={`${styles.col} ${styles.col5}`}>
-								<RemoveButton
-									callback={async () => {
-										await removeProductById(item.id).finally(async () => {
-											const products = await getDashboardProducts(1);
-											setNewData(products);
-										});
-									}}
-								/>
-								<EditButton callback={() => getDashboardProductsId(item.id)} />
-							</div>
-						</li>
+						<DashboardItem item={item} setNewData={setNewData} key={index} />
 					))}
 				</ul>
 			</div>
@@ -82,5 +65,39 @@ export default function DashboardTableProducts(props: IProps) {
 				/>
 			) : null}
 		</div>
+	);
+}
+
+function DashboardItem(props: IDashboardItem) {
+	const { setNewData, item } = props;
+	const [isShow, setIsShow] = useState<boolean>(false);
+	return (
+		<>
+			{isShow && (
+				<ModalConfirmation
+					reset={async () => {
+						await removeProductById(item.id).finally(async () => {
+							const products = await getDashboardProducts(1);
+							setNewData(products);
+							setIsShow(false);
+						});
+					}}
+					closeModal={() => setIsShow(false)}
+					text={'Are you sure?'}
+				/>
+			)}
+			<li className={`${styles.tableRow} ${robotoCondensed.className}`}>
+				<div className={`${styles.col} ${styles.col1}`}>#{item.id}</div>
+				<div className={`${styles.col} ${styles.col2}`}>{item.name}</div>
+				<div className={`${styles.col} ${styles.col3}`}>
+					{item.category.name}
+				</div>
+				<div className={`${styles.col} ${styles.col4}`}>{item.price}$</div>
+				<div className={`${styles.col} ${styles.col5}`}>
+					<RemoveButton callback={() => setIsShow(true)} />
+					<EditButton callback={() => getDashboardProductsId(item.id)} />
+				</div>
+			</li>
+		</>
 	);
 }

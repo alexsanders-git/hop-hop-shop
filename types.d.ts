@@ -39,12 +39,14 @@ interface IProduct {
 	images: IImage | IImage[];
 }
 
-interface IUser {
+interface IUser extends IDeliveryAddress {
 	id: number;
 	email: string;
 	first_name: string;
 	last_name: string;
 	user_role: UserRole.Admin | UserRole.User;
+	phone_number: string;
+	avatar: string | null;
 }
 
 interface IPersonalData {

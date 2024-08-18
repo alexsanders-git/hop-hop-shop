@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 import AccountForm from './AccountForm/AccountForm';
 import OrdersForm from './OrdersForm/OrdersForm';
@@ -8,11 +9,15 @@ import styles from './page.module.scss';
 type FormType = 'account' | 'orders';
 
 export default function Page() {
-	const [activeForm, setActiveForm] = useState('account');
-
+	const query = useSearchParams().get('query');
+	const [activeForm, setActiveForm] = useState(query || 'account');
 	const handleButtonClick = (form: FormType) => {
 		setActiveForm(form);
 	};
+
+	useEffect(() => {
+		setActiveForm(query || 'account');
+	}, [query]);
 
 	return (
 		<div className={styles.pageWrp}>
