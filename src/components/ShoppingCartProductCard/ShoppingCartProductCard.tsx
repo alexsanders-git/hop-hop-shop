@@ -21,6 +21,8 @@ export default function ShoppingCartProductCard(
 	props: ShoppingCartProductCardProps,
 ) {
 	const { product, quantity, onIncrease, onDecrease, onRemove } = props;
+	console.log(product.category);
+
 	return (
 		<div className={styles.cardWrp}>
 			<div className={styles.imgWrp}>
@@ -34,23 +36,19 @@ export default function ShoppingCartProductCard(
 			</div>
 			<div className={styles.detailsWrp}>
 				<div className={styles.details_upperPart}>
-					<div>
+					<div className={styles.linkWrapper}>
 						<Link
 							href={`/product/${product.id}`}
 							className={styles.productName}
 						>
 							{product.name}
 						</Link>
-						<p
-							className={`${styles.productDetails} ${robotoCondensed.className}`}
+						<Link
+							href={`/category/${product.category.id}`}
+							className={styles.productName}
 						>
-							Size: {product.name}
-						</p>
-						<p
-							className={`${styles.productDetails} ${robotoCondensed.className}`}
-						>
-							Color: {product.name}
-						</p>
+							{product.category.name}
+						</Link>
 					</div>
 					<button
 						onClick={() => {
