@@ -65,10 +65,10 @@ function UserLink() {
 			{user && isShow && (
 				<div className={styles.linksWrapper}>
 					<div className={styles.test}></div>
-					<Link href="/account" onClick={() => setIsShow(false)}>
+					<Link href="/account/account" onClick={() => setIsShow(false)}>
 						My Account
 					</Link>
-					<Link href="/account?query=orders" onClick={() => setIsShow(false)}>
+					<Link href="/account/orders" onClick={() => setIsShow(false)}>
 						Orders
 					</Link>
 					<button
