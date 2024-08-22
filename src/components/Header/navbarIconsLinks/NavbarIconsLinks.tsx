@@ -2,15 +2,18 @@
 
 import { Heart, ShoppingCart, UserRound } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import SearchBarWrapper from '@/components/Header/searchBarWrapper/SearchBarWrapper';
 import useOutside from '@/hooks/useOutside';
+import { Logout } from '@/services/cookies/cookies.service';
 import { useCart } from '@/store/cart/Cart.store';
 import { useFavorite } from '@/store/favorite/Favorite.store';
+import { useUser } from '@/store/user/User.store';
 
 import styles from './navbarIconsLinks.module.scss';
 
-function NavbarIconsLinks() {
+export default function NavbarIconsLinks() {
 	const { ref, setIsShow, isShow } = useOutside(false);
 	const { favorites } = useFavorite();
 	const totalItems = useCart((state) => state.cart?.total_items || 0);
@@ -33,11 +36,50 @@ function NavbarIconsLinks() {
 				<ShoppingCart />
 			</Link>
 
-			<Link href="/dashboard/account" className={styles.icons_item}>
-				<UserRound />
-			</Link>
+			<UserLink />
 		</div>
 	);
 }
 
-export default NavbarIconsLinks;
+function UserLink() {
+	const user = useUser((state) => state.user);
+	const setUser = useUser((state) => state.setUser);
+	const { setIsShow, isShow, ref } = useOutside(false);
+	const router = useRouter();
+
+	const logout = async () => {
+		console.log('logout function called');
+		const res = await Logout();
+		if (res) {
+			setIsShow(false);
+			setUser(null);
+			router.push('/');
+		}
+	};
+
+	return (
+		<div ref={ref}>
+			<Link href={user ? '' : '/login'} className={styles.icons_item}>
+				<UserRound onClick={() => setIsShow(!isShow)} />
+			</Link>
+			{user && isShow && (
+				<div className={styles.linksWrapper}>
+					<div className={styles.test}></div>
+					<Link href="/account/account" onClick={() => setIsShow(false)}>
+						My Account
+					</Link>
+					<Link href="/account/orders" onClick={() => setIsShow(false)}>
+						Orders
+					</Link>
+					<button
+						className={styles.btn}
+						onClick={() => logout()}
+						type={'button'}
+					>
+						Logout
+					</button>
+				</div>
+			)}
+		</div>
+	);
+}

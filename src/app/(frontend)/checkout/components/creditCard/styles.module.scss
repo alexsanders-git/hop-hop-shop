@@ -25,6 +25,10 @@
 	position: relative;
 
 	input {
+		&:-webkit-autofill {
+			-webkit-box-shadow: 0 0 0 30px #507178 inset !important;
+			-webkit-text-fill-color: #DFE7EB !important;
+		}
 
 		&:focus {
 			color: #DFE7EB;

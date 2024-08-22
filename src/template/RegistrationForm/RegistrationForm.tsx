@@ -134,9 +134,9 @@ export default function RegistrationForm() {
 							placeholder={'Enter Password'}
 						/>{' '}
 						<InputPassword
-							title={'Confirm password '}
+							title={'Confirm Password '}
 							name={'confPassword'}
-							placeholder={'Enter password'}
+							placeholder={'Enter Password'}
 						/>
 					</div>
 

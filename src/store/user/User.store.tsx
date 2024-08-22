@@ -9,7 +9,7 @@ interface IState {
 }
 
 interface IActions {
-	setUser: (user: IUser) => void;
+	setUser: (user: IUser | null) => void;
 }
 
 export const useUser = create<IState & IActions>()(

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 
 import EditButton from '@/components/dashboard/editButton/editButton';
+import ModalConfirmation from '@/components/dashboard/modalConfirmation/ModalСonfirmation';
 import Pagination from '@/components/dashboard/pagination/Pagination';
 import RemoveButton from '@/components/dashboard/removeButton/RemoveButton';
 import {
@@ -16,6 +17,11 @@ import styles from './styles.module.scss';
 
 interface IProps {
 	categories: IResponse<ICategory>;
+}
+
+interface IDashboardItem {
+	setNewData: (data: IResponse<ICategory>) => void;
+	item: ICategory;
 }
 
 const PageSize = 10;
@@ -41,27 +47,7 @@ export default function DashboardTableCategories(props: IProps) {
 						))}
 					</li>
 					{newData?.items?.map((item, index: number) => (
-						<li
-							key={index}
-							className={`${styles.tableRow} ${robotoCondensed.className}`}
-						>
-							<div className={`${styles.col} ${styles.col1}`}>#{item.id}</div>
-							<div className={`${styles.col} ${styles.col2}`}>{item.name}</div>
-							<div className={`${styles.col} ${styles.col3}`}>{item.name}</div>
-							<div className={`${styles.col} ${styles.col4}`}>
-								<RemoveButton
-									callback={async () => {
-										await removeCategoryById(item.id).finally(async () => {
-											const categories = await getCategories();
-											setNewData(categories);
-										});
-									}}
-								/>
-								<EditButton
-									callback={() => getDashboardCategoriesId(item.id)}
-								/>
-							</div>
-						</li>
+						<DashboardItem item={item} setNewData={setNewData} key={index} />
 					))}
 				</ul>
 			</div>
@@ -77,5 +63,36 @@ export default function DashboardTableCategories(props: IProps) {
 				/>
 			) : null}
 		</div>
+	);
+}
+
+function DashboardItem(props: IDashboardItem) {
+	const { setNewData, item } = props;
+	const [isShow, setIsShow] = useState<boolean>(false);
+	return (
+		<>
+			{isShow && (
+				<ModalConfirmation
+					reset={async () => {
+						await removeCategoryById(item.id).finally(async () => {
+							const categories = await getCategories();
+							setNewData(categories);
+							setIsShow(false);
+						});
+					}}
+					closeModal={() => setIsShow(false)}
+					text={'Are you sure?'}
+				/>
+			)}
+			<li className={`${styles.tableRow} ${robotoCondensed.className}`}>
+				<div className={`${styles.col} ${styles.col1}`}>#{item.id}</div>
+				<div className={`${styles.col} ${styles.col2}`}>{item.name}</div>
+				<div className={`${styles.col} ${styles.col3}`}>{item.name}</div>
+				<div className={`${styles.col} ${styles.col4}`}>
+					<RemoveButton callback={() => setIsShow(true)} />
+					<EditButton callback={() => getDashboardCategoriesId(item.id)} />
+				</div>
+			</li>
+		</>
 	);
 }

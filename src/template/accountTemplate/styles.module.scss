@@ -1,10 +1,10 @@
-@import 'src/styles/media.scss';
+@import 'src/styles/media';
 
 .pageWrp {
 	padding: 62px 60px;
 	display: flex;
 	flex-direction: column;
-
+	position: relative;
 	@media only screen and (max-width: $media-md) {
 		padding: 30px 20px;
 	}
@@ -30,13 +30,13 @@
 	position: relative;
 	overflow: hidden;
 
-	@media only screen and (max-width: $media-md){
+	@media only screen and (max-width: $media-md) {
 		gap: 15px;
 	}
 }
 
 .button {
-	padding: 8px 24px;	
+	padding: 8px 24px;
 	border-radius: 60px;
 	font-weight: 300;
 	font-size: 40px;
@@ -45,7 +45,7 @@
 
 	@media only screen and (max-width: $media-md) {
 		font-size: 28px;
-		padding: 4px 12px ;
+		padding: 4px 12px;
 	}
 }
 
@@ -68,4 +68,4 @@
 	left: 53%;
 	transform: translateX(-53%);
 	z-index: 0; /* Ensure the line is beneath the buttons */
-  }
+}

@@ -1,12 +1,16 @@
 'use client';
-import { ErrorMessage, Field, Form, Formik, FormikProps } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import Image from 'next/image';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import * as yup from 'yup';
 
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
 import InputPassword from '@/components/InputPassword/InputPassword';
+import Loader from '@/components/Loader/Loader';
+import MessageError from '@/components/messageError/MessageError';
+import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
+import { updateProfile } from '@/services/profile/profile.service';
 import PhoneInputField from '@/sharedComponenst/phoneInputField/PhoneInputField';
 import { useUser } from '@/store/user/User.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
@@ -24,69 +28,47 @@ import {
 
 import styles from './AccountForm.module.scss';
 
+export interface IFormValuesProfile {
+	first_name?: string;
+	last_name?: string;
+	email?: string;
+	phone_number?: string;
+	country?: string;
+	city?: string;
+	address?: string;
+	postalCode?: string;
+	currentPassword?: string;
+	newPassword?: string;
+	confirmPassword?: string;
+}
+
 export default function AccountForm() {
-	const ref = useRef<FormikProps<FormValues>>(null);
-	const [initialValues, setInitialValues] = useState<FormValues | null>(null);
+	const user = useUser((state) => state.user);
+	const setUser = useUser((state) => state.setUser);
+
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
-	const [preview, setPreview] = useState<string | null>(null);
-	// оксана забереш потім as any;
-	const user = useUser((state) => state.user) as any;
-	console.log(user);
+	const [preview, setPreview] = useState<string | null>(user?.avatar || null);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [success, setSuccess] = useState<string>('');
+	const [error, setError] = useState<string>('');
 
-	interface FormValues {
-		name: string;
-		lastname: string;
-		email: string;
-		phone: string;
-		country: string;
-		city: string;
-		address: string;
-		postalCode: string;
-		currentPassword: string;
-		newPassword: string;
-		confirmPassword: string;
-	}
-
-	useEffect(() => {
-		if (user) {
-			setInitialValues({
-				name: user?.first_name || '',
-				lastname: user?.last_name || '',
-				email: user?.email || '',
-				phone: user?.phone_number || '',
-				country: user?.country || '',
-				city: user?.city || '',
-				address: user?.address || '',
-				postalCode: user?.postalCode || '',
-				currentPassword: user?.currentPassword || '',
-				newPassword: '',
-				confirmPassword: '',
-			});
-			if (user?.avatar) {
-				setPreview(user.avatar);
-			}
+	const handleSubmit = async (values: IFormValuesProfile) => {
+		setIsLoading(true);
+		const res = await updateProfile(values);
+		if (res?.data) {
+			setUser(res.data);
+			setIsLoading(false);
+			setSuccess('Profile updated successfully');
+			setTimeout(() => {
+				setSuccess('');
+			}, 5000);
+		} else {
+			setIsLoading(false);
+			setError(res.error);
+			setTimeout(() => {
+				setError('');
+			}, 5000);
 		}
-	}, [user]);
-
-	const handleSubmit = (values: FormValues) => {
-		const formData = new FormData();
-
-		formData.append('name', values.name);
-		formData.append('lastname', values.lastname);
-		formData.append('email', values.email);
-		formData.append('phone', values.phone);
-		formData.append('country', values.country);
-		formData.append('city', values.city);
-		formData.append('address', values.address);
-		formData.append('postalCode', values.postalCode);
-		formData.append('currentPassword', values.currentPassword);
-		formData.append('newPassword', values.newPassword);
-
-		if (selectedFile) {
-			formData.append('avatar', selectedFile);
-		}
-
-		console.log(formData);
 	};
 
 	const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -102,7 +84,7 @@ export default function AccountForm() {
 		}
 	};
 
-	if (!initialValues) {
+	if (!user) {
 		return <div>Loading...</div>;
 	}
 
@@ -134,10 +116,10 @@ export default function AccountForm() {
 			<Formik
 				validationSchema={yup
 					.object({
-						name: nameValid,
-						lastname: latNameValid,
+						first_name: nameValid,
+						last_name: latNameValid,
 						email: emailValid,
-						phone: phoneValid,
+						phone_number: phoneValid,
 						country: countryValid,
 						city: cityValid,
 						address: addressValid,
@@ -150,12 +132,26 @@ export default function AccountForm() {
 							.oneOf([yup.ref('newPassword')], 'Passwords must match'),
 					})
 					.required()}
-				innerRef={ref}
-				initialValues={initialValues}
+				initialValues={{
+					first_name: user?.first_name || '',
+					last_name: user?.last_name || '',
+					email: user?.email || '',
+					phone_number: user?.phone_number || '',
+					country: user?.country || '',
+					city: user?.city || '',
+					address: user?.address || '',
+					postalCode: user?.postalCode || '',
+					currentPassword: '',
+					newPassword: '',
+					confirmPassword: '',
+				}}
 				onSubmit={handleSubmit}
 			>
 				{() => (
 					<Form className={styles.formContainer}>
+						{isLoading && <Loader className={styles.loader} />}
+						{success !== '' && <MessageSuccess text={success} />}
+						{error !== '' && <MessageError text={error} />}
 						<div className={styles.formGroup}>
 							<h2 className={styles.title}>Personal data</h2>
 							<div className={styles.inputContainer}>
@@ -163,14 +159,14 @@ export default function AccountForm() {
 									className={styles.input}
 									title={'First name'}
 									type={'text'}
-									name={'name'}
+									name={'first_name'}
 									placeholder={'John'}
 								/>
 								<Input
 									className={styles.input}
 									title={'Last name'}
 									type={'text'}
-									name={'lastname'}
+									name={'last_name'}
 									placeholder={'Doe'}
 								/>
 							</div>
@@ -187,18 +183,18 @@ export default function AccountForm() {
 								<div className={styles.phoneInputContainer}>
 									<label
 										className={`${styles.phoneInputText} ${robotoCondensed.className}`}
-										htmlFor="phone"
+										htmlFor="phone_number"
 									>
 										Phone Number
 									</label>
 									<Field
-										name="phone"
+										name="phone_number"
 										placeholder={'+38 066 666 66 66'}
 										component={PhoneInputField}
 									/>
 									<ErrorMessage
 										className={styles.error}
-										name="phone"
+										name="phone_number"
 										component="div"
 									/>
 								</div>
@@ -263,13 +259,15 @@ export default function AccountForm() {
 							</div>
 						</div>
 						<div className={styles.actions}>
-							<button
-								type="button"
-								className={styles.deleteButton}
-								onClick={() => console.log('Account deleted')}
-							>
-								Delete account
-							</button>
+							{user?.user_role !== 'Admin' && (
+								<button
+									type="button"
+									className={styles.deleteButton}
+									onClick={() => console.log('Account deleted')}
+								>
+									Delete account
+								</button>
+							)}
 							<Button
 								type="submit"
 								className={styles.saveButton}

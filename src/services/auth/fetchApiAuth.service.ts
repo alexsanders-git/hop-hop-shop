@@ -80,8 +80,9 @@ export const fetchWithAuth = async (
 
 		console.log(json);
 
-		if (!json || !json.data) throw new Error('No data found.');
-
+		if (!json || !json.data) {
+			return json;
+		}
 		return json;
 	} catch (error: unknown) {
 		console.error('Error fetching data:', error);
