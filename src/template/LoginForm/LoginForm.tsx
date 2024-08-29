@@ -28,76 +28,80 @@ export default function LoginForm() {
 	const [error, setError] = useState<string>('');
 
 	return (
-		<Formik
-			initialValues={{
-				email: '',
-				password: '',
-			}}
-			validationSchema={yup
-				.object({
-					email: emailValid,
-					// password: passwordValid,
-				})
-				.required()}
-			onSubmit={async (values) => {
-				setIsLoading(true);
-				const res = await fetchWithAuth('auth/login/', {
-					method: 'POST',
-					body: JSON.stringify({
-						email: values.email,
-						password: values.password,
-					}),
-				});
-				if (res.data) {
-					setIsLoading(false);
-					Cookies.set(CookiesEnums.access_token, res.data.access);
-					setUser(res.data.user);
-					navigate.push('/');
-				} else if (res.error) {
-					setIsLoading(false);
-					setError(res.error);
-				}
-			}}
-		>
-			{({ isValid, dirty }) => (
-				<Form className={styles.form}>
-					{isLoading && <Loader className={styles.loader} />}
-					{error !== '' && <MessageError text={error} />}
-					<Input
-						title={'Email'}
-						type={'email'}
-						name={'email'}
-						placeholder={'Enter Email'}
-					/>
-					<InputPassword
-						title={'Password'}
-						name={'password'}
-						placeholder={'Enter Password'}
-					/>
-					<div className={styles.buttonsWrap}>
-						<Link className={styles.forgot} href={'#'}>
-							I forgot my password
-						</Link>
-						<Button
-							// disabled={!(isValid && dirty)}
-							type={'submit'}
-							style={'primary'}
-							text={'Log in!'}
-						></Button>
-						<ButtonLink
-							className={styles.buttonLink}
-							href={'/registration'}
-							style={'secondary'}
-							text={'Create an account'}
+		<>
+			<Formik
+				initialValues={{
+					email: '',
+					password: '',
+				}}
+				validationSchema={yup
+					.object({
+						email: emailValid,
+						// password: passwordValid,
+					})
+					.required()}
+				onSubmit={async (values) => {
+					setIsLoading(true);
+					const res = await fetchWithAuth('auth/login/', {
+						method: 'POST',
+						body: JSON.stringify({
+							email: values.email,
+							password: values.password,
+						}),
+					});
+					if (res.data) {
+						setIsLoading(false);
+						Cookies.set(CookiesEnums.access_token, res.data.access);
+						setUser(res.data.user);
+						navigate.push('/');
+					} else if (res.error) {
+						setIsLoading(false);
+						setError(res.error);
+					}
+				}}
+			>
+				{({ isValid, dirty }) => (
+					<Form className={styles.form}>
+						{isLoading && <Loader className={styles.loader} />}
+						{error !== '' && <MessageError text={error} />}
+						<Input
+							title={'Email'}
+							type={'email'}
+							name={'email'}
+							placeholder={'Enter Email'}
 						/>
-						{error !== '' && <div className={styles.error}>{error}</div>}
-						<div className={styles.google}>
-							<span className={robotoCondensed.className}>Or sing in with</span>
-							<Google className={styles.googleImage} />
+						<InputPassword
+							title={'Password'}
+							name={'password'}
+							placeholder={'Enter Password'}
+						/>
+						<div className={styles.buttonsWrap}>
+							<Link className={styles.forgot} href={'#'}>
+								I forgot my password
+							</Link>
+							<Button
+								// disabled={!(isValid && dirty)}
+								type={'submit'}
+								style={'primary'}
+								text={'Log in!'}
+							></Button>
+							<ButtonLink
+								className={styles.buttonLink}
+								href={'/registration'}
+								style={'secondary'}
+								text={'Create an account'}
+							/>
+							{error !== '' && <div className={styles.error}>{error}</div>}
+							<div className={styles.google}>
+								<span className={robotoCondensed.className}>
+									Or sing in with
+								</span>
+								<Google className={styles.googleImage} />
+							</div>
 						</div>
-					</div>
-				</Form>
-			)}
-		</Formik>
+					</Form>
+				)}
+			</Formik>
+		</>
 	);
 }
