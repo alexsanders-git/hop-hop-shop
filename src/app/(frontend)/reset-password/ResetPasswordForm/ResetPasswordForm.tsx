@@ -5,11 +5,11 @@ import { useState } from 'react';
 import * as yup from 'yup';
 
 import Button from '@/components/Button/Button';
-import InputPassword from '@/components/Input/Input';
+import InputPassword from '@/components/InputPassword/InputPassword';
+import { SuccessActionModal } from '@/components/SuccessActionModal/SuccessActionModal';
 import { passwordValid } from '@/validation/checkout/validation';
 
 import styles from './ResetPasswordForm.module.scss';
-import { Modal } from '../ResetPasswordSuccessModal/ResetPasswordSuccessModal';
 
 export interface IFormValuesProfile {
 	newPassword?: string;
@@ -45,13 +45,11 @@ export default function ResetPasswordForm() {
 				{() => (
 					<Form className={styles.form}>
 						<InputPassword
-							type={'password'}
 							title={'New password'}
 							name={'newPassword'}
 							placeholder={'New password'}
 						/>
 						<InputPassword
-							type={'password'}
 							title={'Confirm password'}
 							name={'confirmPassword'}
 							placeholder={'Confirm password'}
@@ -65,7 +63,13 @@ export default function ResetPasswordForm() {
 					</Form>
 				)}
 			</Formik>
-			<Modal show={showModal} onClose={() => setShowModal(false)} />
+			<SuccessActionModal
+				show={showModal}
+				onClose={() => setShowModal(false)}
+				title={'Woohoo! You did it!'}
+				text={`You've successfully reset your password. You're ready to rock and
+						roll again!`}
+			/>
 		</>
 	);
 }

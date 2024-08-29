@@ -8,6 +8,7 @@ import * as yup from 'yup';
 
 import Button from '@/components/Button/Button';
 import ButtonLink from '@/components/ButtonLink/ButtonLink';
+import ForgotPasswordModal from '@/components/ForgotPasswordModal/ForgotPasswordModal';
 import Input from '@/components/Input/Input';
 import InputPassword from '@/components/InputPassword/InputPassword';
 import Loader from '@/components/Loader/Loader';
@@ -26,82 +27,82 @@ export default function LoginForm() {
 	const navigate = useRouter();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string>('');
+	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
 	return (
-		<>
-			<Formik
-				initialValues={{
-					email: '',
-					password: '',
-				}}
-				validationSchema={yup
-					.object({
-						email: emailValid,
-						// password: passwordValid,
-					})
-					.required()}
-				onSubmit={async (values) => {
-					setIsLoading(true);
-					const res = await fetchWithAuth('auth/login/', {
-						method: 'POST',
-						body: JSON.stringify({
-							email: values.email,
-							password: values.password,
-						}),
-					});
-					if (res.data) {
-						setIsLoading(false);
-						Cookies.set(CookiesEnums.access_token, res.data.access);
-						setUser(res.data.user);
-						navigate.push('/');
-					} else if (res.error) {
-						setIsLoading(false);
-						setError(res.error);
-					}
-				}}
-			>
-				{({ isValid, dirty }) => (
-					<Form className={styles.form}>
-						{isLoading && <Loader className={styles.loader} />}
-						{error !== '' && <MessageError text={error} />}
-						<Input
-							title={'Email'}
-							type={'email'}
-							name={'email'}
-							placeholder={'Enter Email'}
+		<Formik
+			initialValues={{
+				email: '',
+				password: '',
+			}}
+			validationSchema={yup
+				.object({
+					email: emailValid,
+					// password: passwordValid,
+				})
+				.required()}
+			onSubmit={async (values) => {
+				setIsLoading(true);
+				const res = await fetchWithAuth('auth/login/', {
+					method: 'POST',
+					body: JSON.stringify({
+						email: values.email,
+						password: values.password,
+					}),
+				});
+				if (res.data) {
+					setIsLoading(false);
+					Cookies.set(CookiesEnums.access_token, res.data.access);
+					setUser(res.data.user);
+					navigate.push('/');
+				} else if (res.error) {
+					setIsLoading(false);
+					setError(res.error);
+				}
+			}}
+		>
+			{({ isValid, dirty }) => (
+				<Form className={styles.form}>
+					{isLoading && <Loader className={styles.loader} />}
+					{error !== '' && <MessageError text={error} />}
+					<Input
+						title={'Email'}
+						type={'email'}
+						name={'email'}
+						placeholder={'Enter Email'}
+					/>
+					<InputPassword
+						title={'Password'}
+						name={'password'}
+						placeholder={'Enter Password'}
+					/>
+					<div className={styles.buttonsWrap}>
+						<p className={styles.forgot} onClick={() => setIsModalOpen(true)}>
+							I forgot my password
+						</p>
+						<Button
+							// disabled={!(isValid && dirty)}
+							type={'submit'}
+							style={'primary'}
+							text={'Log in!'}
+						></Button>
+						<ButtonLink
+							className={styles.buttonLink}
+							href={'/registration'}
+							style={'secondary'}
+							text={'Create an account'}
 						/>
-						<InputPassword
-							title={'Password'}
-							name={'password'}
-							placeholder={'Enter Password'}
-						/>
-						<div className={styles.buttonsWrap}>
-							<Link className={styles.forgot} href={'#'}>
-								I forgot my password
-							</Link>
-							<Button
-								// disabled={!(isValid && dirty)}
-								type={'submit'}
-								style={'primary'}
-								text={'Log in!'}
-							></Button>
-							<ButtonLink
-								className={styles.buttonLink}
-								href={'/registration'}
-								style={'secondary'}
-								text={'Create an account'}
-							/>
-							{error !== '' && <div className={styles.error}>{error}</div>}
-							<div className={styles.google}>
-								<span className={robotoCondensed.className}>
-									Or sing in with
-								</span>
-								<Google className={styles.googleImage} />
-							</div>
+						{error !== '' && <div className={styles.error}>{error}</div>}
+						<div className={styles.google}>
+							<span className={robotoCondensed.className}>Or sing in with</span>
+							<Google className={styles.googleImage} />
 						</div>
-					</Form>
-				)}
-			</Formik>
-		</>
+					</div>
+					{isModalOpen && (
+						<ForgotPasswordModal onClose={() => setIsModalOpen(false)} />
+					)}
+				</Form>
+			)}
+		</Formik>
 	);
 }

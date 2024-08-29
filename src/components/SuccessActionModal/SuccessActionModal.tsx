@@ -1,9 +1,9 @@
 import Image from 'next/image';
 
-import Button from '@/components/Button/Button';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './SuccessActionModal.module.scss';
+import ButtonLink from '../ButtonLink/ButtonLink';
 
 interface ModalProps {
 	show: boolean;
@@ -28,11 +28,6 @@ export const SuccessActionModal: React.FC<ModalProps> = ({
 					<p className={`${styles.subtitle} ${robotoCondensed.className}`}>
 						{text}
 					</p>
-					<Button
-						text={'Back to shopping!'}
-						onClick={onClose}
-						className={styles.closeButton}
-					></Button>
 				</div>
 				<div className={styles.imageWrapper}>
 					<Image
@@ -42,6 +37,11 @@ export const SuccessActionModal: React.FC<ModalProps> = ({
 						alt={'like'}
 					/>
 				</div>
+				<ButtonLink
+					href={'/'}
+					text={'Back to shopping!'}
+					className={styles.closeButton}
+				></ButtonLink>
 			</div>
 		</div>
 	);

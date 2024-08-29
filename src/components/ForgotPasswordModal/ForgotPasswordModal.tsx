@@ -9,9 +9,14 @@ import styles from './ForgotPasswordModal.module.scss';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
 
-export default function ForgotPasswordModal() {
+interface ModalProps {
+	onClose: () => void;
+}
+
+export default function ForgotPasswordModal({ onClose }: ModalProps) {
 	const handleSubmit = (values: { email: string }) => {
-		console.log(email);
+		console.log(values.email);
+		// onClose();
 	};
 
 	return (
@@ -36,6 +41,7 @@ export default function ForgotPasswordModal() {
 									text={'Cancel'}
 									style={'secondary'}
 									className={styles.button}
+									onClick={onClose}
 								/>
 								<Button
 									text={'Send reset link'}
