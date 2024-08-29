@@ -10,7 +10,7 @@ interface ModalProps {
 	onClose: () => void;
 }
 
-export const Modal: React.FC<ModalProps> = ({ show, onClose }) => {
+export const Modal: React.FC<ModalProps> = ({ show }) => {
 	if (!show) return null;
 
 	return (
@@ -34,7 +34,6 @@ export const Modal: React.FC<ModalProps> = ({ show, onClose }) => {
 				<ButtonLink
 					href={'/'}
 					text={'Back to shopping!'}
-					onClick={onClose}
 					className={styles.closeButton}
 				></ButtonLink>
 			</div>

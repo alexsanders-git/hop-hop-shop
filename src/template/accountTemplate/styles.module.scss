@@ -62,10 +62,10 @@
 	content: '';
 	display: block;
 	position: absolute;
-	width: 2px; /* Width of the line */
-	height: 50%; /* Height of the line */
+	width: 2px; 
+	height: 50%; 
 	background-color: var(--black-color);
 	left: 48%;
-	transform: translateX(-53%);
-	z-index: 0; /* Ensure the line is beneath the buttons */
+	transform: translateX(-48%);
+	z-index: 0; 
 }

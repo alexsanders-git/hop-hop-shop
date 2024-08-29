@@ -45,13 +45,13 @@ export default function ResetPasswordForm() {
 				{() => (
 					<Form className={styles.form}>
 						<InputPassword
-							className={styles.input}
+							type={'password'}
 							title={'New password'}
 							name={'newPassword'}
 							placeholder={'New password'}
 						/>
 						<InputPassword
-							className={styles.input}
+							type={'password'}
 							title={'Confirm password'}
 							name={'confirmPassword'}
 							placeholder={'Confirm password'}
