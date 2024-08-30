@@ -12,10 +12,11 @@ import styles from './styles.module.scss';
 
 interface IProps {
 	product: IProduct;
+	className?: string;
 }
 
 export default function ProductIdDesktopSwiper(props: IProps) {
-	const { product } = props;
+	const { product, className = '' } = props;
 
 	const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
 	const swiperRef = useRef<SwiperClass | null>(null);
@@ -32,7 +33,7 @@ export default function ProductIdDesktopSwiper(props: IProps) {
 	};
 
 	return (
-		<div className={styles.swiperWrapper}>
+		<div className={`${styles.swiperWrapper} ${className}`}>
 			<div className={styles.swiperContainer}>
 				<button
 					onClick={handleNext}

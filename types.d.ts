@@ -100,3 +100,19 @@ interface IDashboardSearch {
 	id: number;
 	name: string;
 }
+
+interface ICoupon {
+	id: number;
+	code: string;
+	discount: number;
+	active: boolean;
+	valid_from: string;
+	valid_to: string;
+}
+
+interface INews {
+	id: number;
+	title: string;
+	date: string;
+	images?: IImage | IImage[];
+}

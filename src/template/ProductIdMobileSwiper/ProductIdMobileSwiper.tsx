@@ -10,13 +10,15 @@ import styles from './styles.module.scss';
 
 interface IProps {
 	product: IProduct;
+	className?: string;
+	isPreview?: boolean;
 }
 
 export default function ProductIdMobileSwiper(props: IProps) {
-	const { product } = props;
+	const { product, className = '', isPreview = false } = props;
 
 	return (
-		<div className={styles.swiperContainer}>
+		<div className={`${styles.swiperContainer} ${className}`}>
 			<Swiper
 				pagination={{
 					clickable: true,
@@ -28,7 +30,11 @@ export default function ProductIdMobileSwiper(props: IProps) {
 				className={styles.swiper}
 			>
 				{product && (
-					<AddToFavoriteButton className={styles.icon} product={product} />
+					<AddToFavoriteButton
+						isPreview={isPreview}
+						className={styles.icon}
+						product={product}
+					/>
 				)}
 
 				{getImages(product?.images).map((img, key) => (
