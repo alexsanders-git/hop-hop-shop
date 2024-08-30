@@ -33,10 +33,6 @@
 .responsiveTable {
 	padding: 0;
 	margin: 0;
-	//height: 680px;
-	//@media screen and (max-width: $media-lg) {
-	//	height: 505px;
-	//}
 	@media screen and (max-width: $media-md) {
 		width: 800px;
 	}
@@ -105,10 +101,6 @@
 	.tableRow {
 		border-top: 2px solid var(--primary-color);
 		padding: 16px 0;
-
-		&:last-child {
-			border-bottom: 2px solid var(--primary-color);
-		}
 
 		@media screen and (max-width: $media-lg) {
 			padding: 12px 0;

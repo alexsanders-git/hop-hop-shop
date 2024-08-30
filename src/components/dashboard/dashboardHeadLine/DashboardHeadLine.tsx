@@ -10,7 +10,13 @@ interface IProps {
 	text: string;
 	textButton?: string;
 	buttonLink?: string;
-	searchType: 'products' | 'users' | 'orders' | 'categories';
+	searchType:
+		| 'products'
+		| 'users'
+		| 'orders'
+		| 'categories'
+		| 'coupons'
+		| 'news';
 }
 
 export default function DashboardHeadLine(props: IProps) {

@@ -48,7 +48,6 @@ function UserLink() {
 	const router = useRouter();
 
 	const logout = async () => {
-		console.log('logout function called');
 		const res = await Logout();
 		if (res) {
 			setIsShow(false);
@@ -71,6 +70,11 @@ function UserLink() {
 					<Link href="/account/orders" onClick={() => setIsShow(false)}>
 						Orders
 					</Link>
+					{user.user_role === 'Admin' && (
+						<Link href="/dashboard" onClick={() => setIsShow(false)}>
+							Dashboard
+						</Link>
+					)}
 					<button
 						className={styles.btn}
 						onClick={() => logout()}

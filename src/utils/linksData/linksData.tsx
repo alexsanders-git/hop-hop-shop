@@ -4,4 +4,6 @@ export const sidebarLinks = [
 	{ name: 'Categories', path: '/dashboard/categories' },
 	{ name: 'Orders', path: '/dashboard/orders' },
 	{ name: 'Users List', path: '/dashboard/users' },
+	{ name: 'News', path: '/dashboard/news' },
+	{ name: 'Coupons', path: '/dashboard/coupons' },
 ];

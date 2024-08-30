@@ -17,7 +17,7 @@ import { fetchWithAuth } from '@/services/auth/fetchApiAuth.service';
 import { useUser } from '@/store/user/User.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import { CookiesEnums } from '@/utils/enums/cookiesEnums';
-import { emailValid } from '@/validation/checkout/validation';
+import { emailValid, passwordValid } from '@/validation/checkout/validation';
 
 import styles from './styles.module.scss';
 import Google from '../../../public/login/google.svg';
@@ -38,7 +38,7 @@ export default function LoginForm() {
 			validationSchema={yup
 				.object({
 					email: emailValid,
-					// password: passwordValid,
+					password: passwordValid,
 				})
 				.required()}
 			onSubmit={async (values) => {
@@ -81,7 +81,7 @@ export default function LoginForm() {
 							I forgot my password
 						</p>
 						<Button
-							// disabled={!(isValid && dirty)}
+							disabled={!(isValid && dirty)}
 							type={'submit'}
 							style={'primary'}
 							text={'Log in!'}

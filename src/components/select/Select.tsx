@@ -9,25 +9,25 @@ export interface IProps {
 	className?: string;
 	defaultValue?: {
 		name: string;
-		id: number;
+		id: number | string;
 	};
 	options?:
 		| {
 				name: string;
-				id: number;
+				id: number | string;
 		  }[]
 		| null;
 	text: string;
 }
 
 export default function Select(props: IProps) {
-	const { defaultValue, text, options, ...rest } = props;
+	const { className = '', defaultValue, text, options, ...rest } = props;
 	const [field, meta] = useField(rest);
 
 	const inputClassName = `${styles.searchInput} ${meta.touched && meta.error ? styles.inputError : meta.touched ? styles.inputSuccess : ''}`;
 
 	return (
-		<div className={styles.wrapper}>
+		<div className={`${styles.wrapper} ${className}`}>
 			<span className={`${styles.text} ${robotoCondensed.className}`}>
 				{text}
 			</span>

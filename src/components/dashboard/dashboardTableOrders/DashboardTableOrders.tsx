@@ -9,6 +9,7 @@ import {
 	removeOrderById,
 } from '@/services/dashboard/orders/dashboard.orders.service';
 import { robotoCondensed } from '@/styles/fonts/fonts';
+import { formatDate } from '@/utils/func/formatDate';
 import { getDashboardOrdersId } from '@/utils/paths/dashboard/dashboard.paths';
 
 import styles from './styles.module.scss';
@@ -58,7 +59,7 @@ export default function DashboardTableOrders(props: IProps) {
 								{item.total_price}
 							</div>
 							<div className={`${styles.col} ${styles.col5}`}>
-								{item.created_at}
+								{formatDate(item.created_at)}
 							</div>
 							<div className={`${styles.col} ${styles.col6}`}>
 								<RemoveButton

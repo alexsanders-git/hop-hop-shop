@@ -6,6 +6,7 @@ export const getDashboardCategoriesServer = async (): Promise<
 > => {
 	return await fetchData<IResponse<ICategory>>('shop/categories/');
 };
+
 export const getCategories = async (): Promise<IResponse<ICategory>> => {
 	const res = await fetchWithAuth('shop/categories/');
 	return res.data as IResponse<ICategory>;
