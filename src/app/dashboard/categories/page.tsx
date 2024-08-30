@@ -22,7 +22,7 @@ export default async function DashboardCategories() {
 				buttonLink={getDashboardCategoriesCreate()}
 				searchType={'categories'}
 			/>
-			{categories.items.length > 0 ? (
+			{categories && categories.items.length > 0 ? (
 				<DashboardTableCategories categories={categories} />
 			) : (
 				<EmptyDataBlock />

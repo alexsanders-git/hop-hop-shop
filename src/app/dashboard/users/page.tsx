@@ -8,12 +8,10 @@ import styles from './styles.module.scss';
 export default async function DashboardUsers() {
 	const users = await getUsersDashboardServer();
 
-	console.log(users);
-
 	return (
 		<div className={styles.wrapper}>
 			<DashboardHeadLine searchType={'users'} compact={true} text={'Users'} />
-			{users.items.length > 0 ? (
+			{users && users.items.length > 0 ? (
 				<DashboardTableUsers users={users} />
 			) : (
 				<EmptyDataBlock />

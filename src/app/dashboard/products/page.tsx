@@ -22,7 +22,7 @@ export default async function DashboardProducts() {
 				buttonLink={getDashboardProductsCreate()}
 				searchType={'products'}
 			/>
-			{products.items.length > 0 ? (
+			{products && products.items.length > 0 ? (
 				<DashboardTableProducts products={products} />
 			) : (
 				<EmptyDataBlock />
