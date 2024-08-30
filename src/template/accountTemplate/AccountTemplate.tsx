@@ -31,16 +31,16 @@ export default function AccountTemplate(props: IProps) {
 		<div className={styles.pageWrp}>
 			<div className={styles.buttonWrp}>
 				<button
-					className={`${styles.button}  ${query === 'account' ? styles.active : ''}`}
-					onClick={() => handleButtonClick('account')}
-				>
-					Account
-				</button>
-				<button
 					className={`${styles.button}  ${query === 'orders' ? styles.active : ''}`}
 					onClick={() => handleButtonClick('orders')}
 				>
 					Orders
+				</button>
+				<button
+					className={`${styles.button}  ${query === 'account' ? styles.active : ''}`}
+					onClick={() => handleButtonClick('account')}
+				>
+					Account
 				</button>
 			</div>
 			<h1 className={styles.title}>

@@ -8,6 +8,7 @@ import * as yup from 'yup';
 
 import Button from '@/components/Button/Button';
 import ButtonLink from '@/components/ButtonLink/ButtonLink';
+import ForgotPasswordModal from '@/components/ForgotPasswordModal/ForgotPasswordModal';
 import Input from '@/components/Input/Input';
 import InputPassword from '@/components/InputPassword/InputPassword';
 import Loader from '@/components/Loader/Loader';
@@ -26,6 +27,7 @@ export default function LoginForm() {
 	const navigate = useRouter();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string>('');
+	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
 	return (
 		<Formik
@@ -75,9 +77,9 @@ export default function LoginForm() {
 						placeholder={'Enter Password'}
 					/>
 					<div className={styles.buttonsWrap}>
-						<Link className={styles.forgot} href={'#'}>
+						<p className={styles.forgot} onClick={() => setIsModalOpen(true)}>
 							I forgot my password
-						</Link>
+						</p>
 						<Button
 							disabled={!(isValid && dirty)}
 							type={'submit'}
@@ -96,6 +98,9 @@ export default function LoginForm() {
 							<Google className={styles.googleImage} />
 						</div>
 					</div>
+					{isModalOpen && (
+						<ForgotPasswordModal onClose={() => setIsModalOpen(false)} />
+					)}
 				</Form>
 			)}
 		</Formik>
