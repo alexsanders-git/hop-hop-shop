@@ -22,7 +22,8 @@ export default async function DashboardCoupons() {
 				buttonLink={getDashboardCouponsCreate()}
 				searchType={'coupons'}
 			/>
-			{coupons.items.length > 0 ? (
+			{/*@ts-ignore*/}
+			{coupons && coupons?.length > 0 ? (
 				// @ts-ignore
 				<DashboardTableCoupons coupons={coupons} />
 			) : (
