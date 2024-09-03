@@ -1,12 +1,12 @@
 'use client';
 
 import { Form, Formik } from 'formik';
-import { useState } from 'react';
 import * as yup from 'yup';
 
 import Button from '@/components/Button/Button';
 import InputPassword from '@/components/InputPassword/InputPassword';
-import { SuccessActionModal } from '@/components/SuccessActionModal/SuccessActionModal';
+import SuccessActionModal from '@/components/SuccessActionModal/SuccessActionModal';
+import useOutside from '@/hooks/useOutside';
 import { passwordValid } from '@/validation/checkout/validation';
 
 import styles from './ResetPasswordForm.module.scss';
@@ -17,11 +17,15 @@ export interface IFormValuesProfile {
 }
 
 export default function ResetPasswordForm() {
-	const [showModal, setShowModal] = useState(false);
+	const {
+		ref: modalRef,
+		isShow: isModalOpen,
+		setIsShow: setIsModalOpen,
+	} = useOutside(false);
 
 	const handleSubmit = (values: IFormValuesProfile) => {
 		console.log(values);
-		setShowModal(true);
+		setIsModalOpen(true);
 	};
 
 	return (
@@ -64,8 +68,9 @@ export default function ResetPasswordForm() {
 				)}
 			</Formik>
 			<SuccessActionModal
-				show={showModal}
-				onClose={() => setShowModal(false)}
+				ref={modalRef}
+				show={isModalOpen}
+				onClose={() => setIsModalOpen(false)}
 				title={'Woohoo! You did it!'}
 				text={`You've successfully reset your password. You're ready to rock and
 						roll again!`}
