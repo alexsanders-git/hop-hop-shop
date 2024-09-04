@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { forwardRef, Ref } from 'react';
 
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
@@ -12,17 +13,15 @@ interface ModalProps {
 	onClose: () => void;
 }
 
-export const SuccessActionModal: React.FC<ModalProps> = ({
-	show,
-	title,
-	text,
-	onClose,
-}) => {
+const SuccessActionModal = forwardRef(function SuccessActionModal(
+	{ show, title, text, onClose }: ModalProps,
+	ref: Ref<HTMLDivElement>,
+) {
 	if (!show) return null;
 
 	return (
 		<div className={styles.backdrop}>
-			<div className={styles.modalBody}>
+			<div className={styles.modalBody} ref={ref}>
 				<div className={styles.textPart}>
 					<h2 className={styles.title}>{title}</h2>
 					<p className={`${styles.subtitle} ${robotoCondensed.className}`}>
@@ -45,4 +44,7 @@ export const SuccessActionModal: React.FC<ModalProps> = ({
 			</div>
 		</div>
 	);
-};
+});
+
+SuccessActionModal.displayName = 'SuccessActionModal';
+export default SuccessActionModal;
