@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 
 import DashboardHeadLine from '@/components/dashboard/dashboardHeadLine/DashboardHeadLine';
 import DashboardTableCategories from '@/components/dashboard/dashboardTableCategories/DashboardTableCategories';
+import EmptyDataBlock from '@/components/dashboard/emptyDataBlock/EmptyDataBlock';
 import { getDashboardCategoriesServer } from '@/services/dashboard/categories/dashboard.categories.service';
 import { getDashboardCategoriesCreate } from '@/utils/paths/dashboard/dashboard.paths';
 
@@ -21,7 +22,11 @@ export default async function DashboardCategories() {
 				buttonLink={getDashboardCategoriesCreate()}
 				searchType={'categories'}
 			/>
-			<DashboardTableCategories categories={categories} />
+			{categories && categories.items.length > 0 ? (
+				<DashboardTableCategories categories={categories} />
+			) : (
+				<EmptyDataBlock />
+			)}
 		</div>
 	);
 }

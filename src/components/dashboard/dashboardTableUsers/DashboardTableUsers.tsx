@@ -3,7 +3,6 @@ import { useState } from 'react';
 
 import EditButton from '@/components/dashboard/editButton/editButton';
 import Pagination from '@/components/dashboard/pagination/Pagination';
-import RemoveButton from '@/components/dashboard/removeButton/RemoveButton';
 import { getDashboardUsers } from '@/services/dashboard/users/dashboard.users.service';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import { getDashboardUsersId } from '@/utils/paths/dashboard/dashboard.paths';
@@ -21,6 +20,8 @@ export default function DashboardTableUsers(props: IProps) {
 	const header = [
 		{ name: 'User ID' },
 		{ name: 'Name' },
+		{ name: 'Lastname' },
+		{ name: 'Phone' },
 		{ name: 'Email' },
 		{ name: 'Actions' },
 	];
@@ -43,11 +44,16 @@ export default function DashboardTableUsers(props: IProps) {
 						>
 							<div className={`${styles.col} ${styles.col1}`}>#{item.id}</div>
 							<div className={`${styles.col} ${styles.col2}`}>
-								{item.first_name} {item.last_name}
+								{item.first_name}
 							</div>
-							<div className={`${styles.col} ${styles.col3}`}>{item.email}</div>
+							<div className={`${styles.col} ${styles.col3}`}>
+								{item.last_name}
+							</div>
 							<div className={`${styles.col} ${styles.col4}`}>
-								<RemoveButton callback={() => {}} />
+								{item.phone_number}
+							</div>
+							<div className={`${styles.col} ${styles.col5}`}>{item.email}</div>
+							<div className={`${styles.col} ${styles.col6}`}>
 								<EditButton callback={() => getDashboardUsersId(item.id)} />
 							</div>
 						</li>

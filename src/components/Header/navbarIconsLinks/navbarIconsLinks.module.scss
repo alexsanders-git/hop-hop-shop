@@ -112,6 +112,7 @@
 			line-height: 133%;
 			width: 100%;
 			text-align: center;
+			border-bottom: 2px solid var(--primary-color);
 		}
 
 		&:nth-child(2) {
@@ -132,9 +133,7 @@
 			}
 		}
 
-		&:hover {
-			background-color: #E5A282;
-		}
+		@include header-links-states;
 	}
 
 	.test {
@@ -168,9 +167,6 @@
 		border-radius: 0;
 		box-shadow: none;
 		background-color: transparent;
-
-		&:hover {
-			background-color: #E5A282;
-		}
+		@include header-links-states;
 	}
 }

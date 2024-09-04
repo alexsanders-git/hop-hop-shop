@@ -6,6 +6,5 @@ type Props = {
 	};
 };
 export default async function AccountPage({ params: { query } }: Props) {
-	console.log(query);
 	return <AccountTemplate query={query} />;
 }

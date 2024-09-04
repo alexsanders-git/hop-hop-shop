@@ -1,11 +1,13 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 import { londrinaSolid, robotoCondensed } from '@/styles/fonts/fonts';
+import CreditCardDetector from '@/utils/CreditCardDetector';
 
 import styles from './styles.module.scss';
 
 function CreditCard(props: { className: string; formik: any }) {
 	const { className = '', formik } = props;
+	const [maxDigits, setMaxDigits] = useState(19); // Встановлення початкового максимального ліміту
 
 	const formatCardNumber = (value: string) => {
 		const cleaned = value.replace(/\D+/g, ''); // Видалити всі нечислові символи
@@ -13,22 +15,28 @@ function CreditCard(props: { className: string; formik: any }) {
 		return match ? match.join(' ') : '';
 	};
 
-	const formatCard = (value: string) => {
-		return value.replace(/\D+/g, ''); // Видалити всі нечислові символи
-	};
-
 	const handleCustomChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		let formattedValue = value;
 
 		if (name === 'cardNumber') {
-			// Обмежуємо введення до 19 символів (включаючи пробіли)
 			const cleanedValue = value.replace(/\D+/g, ''); // Видалити всі нечислові символи
-			if (cleanedValue.length <= 16) {
-				// 16 цифр + 3 пробіли = 19 символів
-				formattedValue = formatCardNumber(value);
+			const cardInfo = CreditCardDetector.getInfo(cleanedValue.slice(0, 4)); // Визначити тип картки за першими 4 цифрами
+
+			// Оновлення maxDigits на основі типу картки
+			if (cardInfo.type !== 'unknown') {
+				const totalDigits = cardInfo.blocks.reduce(
+					(sum: number, block: number) => sum + block,
+					0,
+				);
+				setMaxDigits(totalDigits);
+				console.log('maxDigits', totalDigits);
+			}
+
+			if (cleanedValue.length <= maxDigits) {
+				formattedValue = formatCardNumber(cleanedValue);
 			} else {
-				formattedValue = formatCardNumber(cleanedValue.slice(0, 16));
+				formattedValue = formatCardNumber(cleanedValue.slice(0, maxDigits));
 			}
 		} else if (name === 'expiryDate') {
 			formattedValue = value.replace(/\D+/g, ''); // Видалити всі нечислові символи
@@ -39,11 +47,12 @@ function CreditCard(props: { className: string; formik: any }) {
 					formattedValue.slice(0, 2) + '/' + formattedValue.slice(2, 4);
 			}
 		} else if (name === 'cvv') {
-			formattedValue = formatCard(value);
+			formattedValue = value.replace(/\D+/g, ''); // Видалити всі нечислові символи
 		}
 
 		formik.setFieldValue(name, formattedValue);
 	};
+
 	return (
 		<form onSubmit={formik.handleSubmit}>
 			<div
@@ -73,7 +82,7 @@ function CreditCard(props: { className: string; formik: any }) {
 					<input
 						name="cardNumber"
 						type="text"
-						maxLength={19}
+						maxLength={maxDigits + Math.floor(maxDigits / 4)} // Динамічне обмеження maxLength з урахуванням пробілів
 						placeholder="1234 1234 1234 1234"
 						onChange={handleCustomChange}
 						onBlur={formik.handleBlur}
