@@ -1,6 +1,7 @@
 'use client';
 
 import { Formik, Form } from 'formik';
+import { forwardRef, Ref } from 'react';
 import * as yup from 'yup';
 
 import { emailValid } from '@/validation/checkout/validation';
@@ -11,17 +12,20 @@ import Input from '../Input/Input';
 
 interface ModalProps {
 	onClose: () => void;
+	onSubmit: (values: { email: string }) => void;
 }
 
-export default function ForgotPasswordModal({ onClose }: ModalProps) {
+const ForgotPasswordModal = forwardRef(function ForgotPasswordModal(
+	{ onClose, onSubmit }: ModalProps,
+	ref: Ref<HTMLDivElement>,
+) {
 	const handleSubmit = (values: { email: string }) => {
-		console.log(values.email);
-		// onClose();
+		onSubmit(values);
 	};
 
 	return (
 		<div className={styles.backdrop}>
-			<div className={styles.modalBody}>
+			<div className={styles.modalBody} ref={ref}>
 				<h1 className={styles.title}>Forgot Password</h1>
 				<Formik
 					initialValues={{ email: '' }}
@@ -56,4 +60,7 @@ export default function ForgotPasswordModal({ onClose }: ModalProps) {
 			</div>
 		</div>
 	);
-}
+});
+
+ForgotPasswordModal.displayName = 'ForgotPasswordModal';
+export default ForgotPasswordModal;
