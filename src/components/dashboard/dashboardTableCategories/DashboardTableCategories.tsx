@@ -6,11 +6,11 @@ import ModalConfirmation from '@/components/dashboard/modalConfirmation/ModalСo
 import Pagination from '@/components/dashboard/pagination/Pagination';
 import RemoveButton from '@/components/dashboard/removeButton/RemoveButton';
 import {
-	getCategories,
 	getDashboardCategories,
 	removeCategoryById,
 } from '@/services/dashboard/categories/dashboard.categories.service';
 import { robotoCondensed } from '@/styles/fonts/fonts';
+import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import { getDashboardCategoriesId } from '@/utils/paths/dashboard/dashboard.paths';
 
 import styles from './styles.module.scss';
@@ -58,7 +58,9 @@ export default function DashboardTableCategories(props: IProps) {
 					pageSize={PageSize}
 					onPageChange={async (page) => {
 						const res = await getDashboardCategories(page);
-						setNewData(res);
+						if ('items' in res && res.items) {
+							setNewData(res);
+						}
 					}}
 				/>
 			) : null}
@@ -74,11 +76,16 @@ function DashboardItem(props: IDashboardItem) {
 			{isShow && (
 				<ModalConfirmation
 					reset={async () => {
-						await removeCategoryById(item.id).finally(async () => {
-							const categories = await getCategories();
-							setNewData(categories);
-							setIsShow(false);
-						});
+						const res = await removeCategoryById(item.id);
+						if ('detail' in res && res.detail) {
+							const categories = await getDashboardCategories(1);
+							if ('items' in categories && categories.items) {
+								setNewData(categories);
+								setIsShow(false);
+								await revalidateFunc('/dashboard/categories');
+								await revalidateFunc('/');
+							}
+						}
 					}}
 					closeModal={() => setIsShow(false)}
 					text={'Are you sure?'}

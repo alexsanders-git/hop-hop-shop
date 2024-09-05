@@ -50,7 +50,7 @@ export default function DashboardCouponCreate() {
 					...values,
 					active: values.active === 'true',
 				});
-				if (res.success) {
+				if ('id' in res && res.id) {
 					resetForm();
 					setIsLoading(false);
 					setSuccess(true);
@@ -58,9 +58,9 @@ export default function DashboardCouponCreate() {
 					setTimeout(() => {
 						router.push('/dashboard/coupons');
 					}, 2000);
-				} else {
+				} else if ('error' in res && res.error) {
 					setIsLoading(false);
-					setError(res.error);
+					setError(res.error.message);
 				}
 			}}
 		>

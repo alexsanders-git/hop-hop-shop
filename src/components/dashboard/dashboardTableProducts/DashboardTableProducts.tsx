@@ -60,7 +60,7 @@ export default function DashboardTableProducts(props: IProps) {
 					pageSize={PageSize}
 					onPageChange={async (page) => {
 						const res = await getDashboardProducts(page);
-						setNewData(res);
+						if ('items' in res && res.items) setNewData(res);
 					}}
 				/>
 			) : null}
@@ -76,11 +76,14 @@ function DashboardItem(props: IDashboardItem) {
 			{isShow && (
 				<ModalConfirmation
 					reset={async () => {
-						await removeProductById(item.id).finally(async () => {
+						const res = await removeProductById(item.id);
+						if ('detail' in res && res.detail) {
 							const products = await getDashboardProducts(1);
-							setNewData(products);
-							setIsShow(false);
-						});
+							if ('items' in products && products.items) {
+								setNewData(products);
+								setIsShow(false);
+							}
+						}
 					}}
 					closeModal={() => setIsShow(false)}
 					text={'Are you sure?'}

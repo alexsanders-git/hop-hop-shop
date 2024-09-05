@@ -154,20 +154,22 @@ export default function EditProduct(props: IProps) {
 								formData.append('uploaded_images', file);
 							});
 						}
-						if (res.success && formData) {
-							const resUpload = await createProductImage(res.data.id, formData);
-							if (resUpload.success) {
+						if ('name' in res && res.name && formData) {
+							const resUpload = await createProductImage(res.id, formData);
+
+							if ('status' in resUpload && resUpload.status) {
 								setIsLoading(false);
 								setSuccess('Product was updated');
 								resetForm();
 								setSelectedFiles([]);
 								setPreviews([]);
 								await revalidateFunc('/dashboard/products');
+								await revalidateFunc('/');
 								setTimeout(() => {
 									router.push('/dashboard/products');
 								}, 2000);
-							} else {
-								setError(resUpload.error);
+							} else if ('error' in resUpload && resUpload.error) {
+								setError(resUpload.error.message);
 							}
 						}
 					} else {
@@ -175,13 +177,14 @@ export default function EditProduct(props: IProps) {
 							SKU: Math.floor(Math.random() * 1000),
 							...values,
 						});
-						if (res) {
+						if ('name' in res && res.name) {
 							setIsLoading(false);
 							setSuccess('Product was updated');
 							resetForm();
 							setSelectedFiles([]);
 							setPreviews([]);
 							await revalidateFunc('/dashboard/products');
+							await revalidateFunc('/');
 							setTimeout(() => {
 								router.push('/dashboard/products');
 							}, 2000);
@@ -199,8 +202,10 @@ export default function EditProduct(props: IProps) {
 							<ModalConfirmation
 								reset={async () => {
 									setIsLoading(true);
-									await removeProductById(product.id).finally(async () => {
+									const res = await removeProductById(product.id);
+									if ('detail' in res && res.detail) {
 										await revalidateFunc('/dashboard/products');
+										await revalidateFunc('/');
 										setIsLoading(false);
 										setSuccess('Product was deleted');
 										setModal(false);
@@ -210,7 +215,7 @@ export default function EditProduct(props: IProps) {
 										setTimeout(() => {
 											router.push('/dashboard/products');
 										}, 2000);
-									});
+									}
 								}}
 								closeModal={() => setModal(false)}
 								text={'Are you sure?'}

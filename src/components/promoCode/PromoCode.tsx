@@ -30,10 +30,10 @@ export default function PromoCode(props: InterfacePromoCode) {
 	useEffect(() => {
 		const fetchProduct = async () => {
 			const couponData = await addCoupon(debouncedValue);
-			if (couponData?.success === true) {
-				setData({ message: 'success' });
+			if (couponData === '') {
+				setData({ message: 'Success' });
 			} else {
-				setData({ error: couponData?.error });
+				setData({ error: couponData });
 			}
 		};
 

@@ -47,17 +47,18 @@ const refreshAuthToken = async (isFile: boolean) => {
 			credentials: 'include',
 		});
 		Cookies.remove(CookiesEnums.access_token);
+		Cookies.remove(CookiesEnums.refresh_token);
 		Cookies.remove(UserEnum.user);
 		return false;
 	}
 };
 
 // при роботі з авторизацією
-export const fetchWithAuth = async (
+export const fetchWithAuth = async <T>(
 	url: string,
 	options = {},
 	isFile = false,
-) => {
+): Promise<T | IResponseError> => {
 	try {
 		let response = await fetch(`${baseUrl}${url}`, {
 			...options,
@@ -77,15 +78,17 @@ export const fetchWithAuth = async (
 		}
 
 		const json = await response.json();
-
-		console.log(json);
-
-		if (!json || !json.data) {
-			return json;
+		if (json.success) {
+			return json.data as T;
+		} else {
+			return {
+				error: {
+					message: json.error?.message || 'Unknown error occurred.',
+				},
+			} as IResponseError;
 		}
-		return json;
-	} catch (error: unknown) {
-		console.error('Error fetching data:', error);
-		return error;
+	} catch (error) {
+		console.error(`Error fetching data in ${url}`, error);
+		throw error;
 	}
 };

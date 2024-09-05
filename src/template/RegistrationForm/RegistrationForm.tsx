@@ -17,6 +17,7 @@ import Checkbox from '@/sharedComponenst/checkbox/Checkbox';
 import PhoneInputField from '@/sharedComponenst/phoneInputField/PhoneInputField';
 import { useUser } from '@/store/user/User.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
+import { IResponseAuth } from '@/types/response/response';
 import { CookiesEnums } from '@/utils/enums/cookiesEnums';
 import {
 	emailValid,
@@ -61,25 +62,35 @@ export default function RegistrationForm() {
 				.required()}
 			onSubmit={async (values) => {
 				setIsLoading(true);
-				const res = await fetchWithCookies('/auth/registration/', {
-					method: 'POST',
-					body: JSON.stringify({
-						first_name: values.name,
-						last_name: values.last_name,
-						email: values.email,
-						password: values.password,
-						phone_number: values.phone,
-					}),
-				});
-				if (res.success === true) {
+				const res = await fetchWithCookies<IResponseAuth>(
+					'/auth/registration/',
+					{
+						method: 'POST',
+						body: JSON.stringify({
+							first_name: values.name,
+							last_name: values.last_name,
+							email: values.email,
+							password: values.password,
+							phone_number: values.phone,
+						}),
+					},
+				);
+				if ('user' in res && res.user) {
 					setIsLoading(false);
-					Cookies.set(CookiesEnums.access_token, res.data.access);
-					setUser(res.data.user);
+					Cookies.set(CookiesEnums.access_token, res.access_token.value, {
+						expires: res.access_token.expires,
+					});
+					Cookies.set(CookiesEnums.refresh_token, res.refresh_token.value, {
+						expires: res.refresh_token.expires,
+						secure: true,
+						sameSite: 'None',
+						path: '/',
+					});
+					setUser(res.user);
 					navigate.push('/');
-				}
-				if (res.error) {
+				} else if ('error' in res && res.error) {
 					setIsLoading(false);
-					setError(res.error);
+					setError(res.error.message);
 				}
 			}}
 		>

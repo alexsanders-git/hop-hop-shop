@@ -2,11 +2,14 @@ import { fetchWithAuth } from '@/services/auth/fetchApiAuth.service';
 import { fetchWithAuthServer } from '@/services/auth/fetchApiAuthServer.service';
 
 export const getUsersDashboardServer = async () => {
-	const res = await fetchWithAuthServer('auth/customers/', {
+	return await fetchWithAuthServer<IResponse<IUser>>('auth/customers/', {
 		method: 'GET',
 	});
-	console.log(res);
-	return res.data as IResponse<IUser>;
+};
+export const getDashboardUsers = async (page: number) => {
+	return await fetchWithAuth<IResponse<IUser>>(`/auth/customers?page=${page}`, {
+		method: 'GET',
+	});
 };
 
 // export const removeUserById = async (id: number) => {
@@ -15,10 +18,3 @@ export const getUsersDashboardServer = async () => {
 // 	});
 // 	return res as boolean;
 // };
-
-export const getDashboardUsers = async (page: number) => {
-	const res = await fetchWithAuth(`/auth/customers?page=${page}`, {
-		method: 'GET',
-	});
-	return res.data as IResponse<IUser>;
-};

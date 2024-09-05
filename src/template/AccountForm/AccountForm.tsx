@@ -10,7 +10,7 @@ import InputPassword from '@/components/InputPassword/InputPassword';
 import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
-import { updateProfile } from '@/services/profile/profile.service';
+import { useMutation } from '@/hooks/useMutation';
 import PhoneInputField from '@/sharedComponenst/phoneInputField/PhoneInputField';
 import { useUser } from '@/store/user/User.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
@@ -45,29 +45,22 @@ export interface IFormValuesProfile {
 export default function AccountForm() {
 	const user = useUser((state) => state.user);
 	const setUser = useUser((state) => state.setUser);
+	const { error, mutate, isLoading } = useMutation<IUser>({
+		url: 'auth/profile/',
+		options: {
+			method: 'PATCH',
+		},
+	});
 
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [preview, setPreview] = useState<string | null>(user?.avatar || null);
-	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [success, setSuccess] = useState<string>('');
-	const [error, setError] = useState<string>('');
 
 	const handleSubmit = async (values: IFormValuesProfile) => {
-		setIsLoading(true);
-		const res = await updateProfile(values);
-		if (res?.data) {
-			setUser(res.data);
-			setIsLoading(false);
+		const res = await mutate(values);
+		if (res) {
+			setUser(res);
 			setSuccess('Profile updated successfully');
-			setTimeout(() => {
-				setSuccess('');
-			}, 5000);
-		} else {
-			setIsLoading(false);
-			setError(res.error);
-			setTimeout(() => {
-				setError('');
-			}, 5000);
 		}
 	};
 
@@ -116,20 +109,21 @@ export default function AccountForm() {
 			<Formik
 				validationSchema={yup
 					.object({
-						first_name: nameValid,
-						last_name: latNameValid,
-						email: emailValid,
-						phone_number: phoneValid,
-						country: countryValid,
-						city: cityValid,
-						address: addressValid,
-						postalCode: postalCodeValid,
-						currentPassword: passwordValid,
-						newPassword: passwordValid,
+						first_name: nameValid.optional(),
+						last_name: latNameValid.optional(),
+						email: emailValid.optional(),
+						phone_number: phoneValid.optional(),
+						country: countryValid.optional(),
+						city: cityValid.optional(),
+						address: addressValid.optional(),
+						postalCode: postalCodeValid.optional(),
+						currentPassword: passwordValid.optional(),
+						newPassword: passwordValid.optional(),
 						confirmPassword: yup
 							.string()
 							.required('Confirm Password is required')
-							.oneOf([yup.ref('newPassword')], 'Passwords must match'),
+							.oneOf([yup.ref('newPassword')], 'Passwords must match')
+							.optional(),
 					})
 					.required()}
 				initialValues={{
@@ -151,7 +145,7 @@ export default function AccountForm() {
 					<Form className={styles.formContainer}>
 						{isLoading && <Loader className={styles.loader} />}
 						{success !== '' && <MessageSuccess text={success} />}
-						{error !== '' && <MessageError text={error} />}
+						{error && <MessageError text={error} />}
 						<div className={styles.formGroup}>
 							<h2 className={styles.title}>Personal data</h2>
 							<div className={styles.inputContainer}>

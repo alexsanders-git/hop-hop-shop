@@ -12,6 +12,7 @@ import styles from './page.module.scss';
 
 export default function ShoppingCartPage() {
 	const totalPrice = useCart((state) => state?.cart?.total_price || 0);
+	const total_items = useCart((state) => state?.cart?.total_items || 0);
 	const subTotal = useCart((state) => state?.cart?.subtotal_price || 0);
 	const fetchCart = useCart((state) => state?.fetchCart);
 	const router = useRouter();
@@ -38,7 +39,7 @@ export default function ShoppingCartPage() {
 							className={styles.discount}
 							open={open}
 							setOpen={setOpen}
-							disabled={totalPrice === 0}
+							disabled={total_items === 0}
 						/>
 						<div className={`${styles.pricesWrp} ${styles.totalPriceWrp}`}>
 							<p>Total</p>
@@ -48,7 +49,7 @@ export default function ShoppingCartPage() {
 					<Button
 						text={'Checkout'}
 						style={'primary'}
-						disabled={totalPrice === 0}
+						disabled={total_items === 0}
 						onClick={() => router.push('/checkout')}
 						className={styles.buttonCheckout}
 					/>

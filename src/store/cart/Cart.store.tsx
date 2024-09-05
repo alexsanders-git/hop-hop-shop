@@ -3,16 +3,15 @@ import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 import { fetchWithCookies } from '@/services/cookies/cookies.service';
-import { fetchDataCart } from '@/services/fetchData';
+import { fetchData } from '@/services/fetchData';
 import {
-	ApiResponseFetchCart,
-	InterfaceCouponResponse,
-	InterfaceFetchCartData,
-} from '@/store/cart/Cart.interface';
+	IResponseCouponApply,
+	IResponseGetCart,
+} from '@/types/response/response';
 import CookieStorage from '@/utils/cookieStorage';
 
 interface IState {
-	cart: InterfaceFetchCartData | null;
+	cart: IResponseGetCart | null;
 }
 
 interface IActions {
@@ -20,7 +19,7 @@ interface IActions {
 	addItemToCart: (id: number) => Promise<void>;
 	subtractItemFromCart: (id: number) => Promise<void>;
 	removeItemFromCart: (id: number) => Promise<void>;
-	addCoupon: (coupon: string) => Promise<InterfaceCouponResponse>;
+	addCoupon: (coupon: string) => Promise<string>;
 }
 
 export const useCart = create<IState & IActions>()(
@@ -30,10 +29,14 @@ export const useCart = create<IState & IActions>()(
 				cart: null,
 				fetchCart: async () => {
 					try {
-						const data: ApiResponseFetchCart = await fetchDataCart('/cart/');
-						set((state) => {
-							state.cart = data.data;
-						});
+						const res = await fetchData<IResponseGetCart>('cart/');
+						if ('products' in res && res.products) {
+							set((state) => {
+								state.cart = res;
+							});
+						} else if ('error' in res && res.error) {
+							console.error(res.error.message);
+						}
 					} catch (error) {
 						console.error('Failed to fetch cart data:', error);
 					}
@@ -41,14 +44,13 @@ export const useCart = create<IState & IActions>()(
 
 				addItemToCart: async (id: number) => {
 					try {
-						const data: ApiResponseFetchCart = await fetchDataCart(
-							`/cart/add/${id}/`,
-							{
-								method: 'POST',
-							},
-						);
-						if (data) {
+						const res = await fetchData<IResponseGetCart>(`cart/add/${id}/`, {
+							method: 'POST',
+						});
+						if ('products' in res && res.products) {
 							await useCart.getState().fetchCart();
+						} else if ('error' in res && res.error) {
+							console.error(res.error.message);
 						}
 					} catch (error) {
 						console.error('Failed to add item to cart:', error);
@@ -57,14 +59,16 @@ export const useCart = create<IState & IActions>()(
 
 				subtractItemFromCart: async (id: number) => {
 					try {
-						const data: ApiResponseFetchCart = await fetchDataCart(
-							`/cart/subtract/${id}/`,
+						const res = await fetchData<IResponseGetCart>(
+							`cart/subtract/${id}/`,
 							{
 								method: 'POST',
 							},
 						);
-						if (data) {
+						if ('products' in res && res.products) {
 							await useCart.getState().fetchCart();
+						} else if ('error' in res && res.error) {
+							console.error(res.error.message);
 						}
 					} catch (error) {
 						console.error('Failed to subtract item from cart:', error);
@@ -73,14 +77,16 @@ export const useCart = create<IState & IActions>()(
 
 				removeItemFromCart: async (id: number) => {
 					try {
-						const data: ApiResponseFetchCart = await fetchDataCart(
-							`/cart/remove/${id}/`,
+						const res = await fetchData<IResponseGetCart>(
+							`cart/remove/${id}/`,
 							{
 								method: 'DELETE',
 							},
 						);
-						if (data) {
+						if ('products' in res && res.products) {
 							await useCart.getState().fetchCart();
+						} else if ('error' in res && res.error) {
+							console.error(res.error.message);
 						}
 					} catch (error) {
 						console.error('Failed to remove item from cart:', error);
@@ -88,8 +94,8 @@ export const useCart = create<IState & IActions>()(
 				},
 
 				addCoupon: async (coupon: string): Promise<any | undefined> => {
-					const res: InterfaceCouponResponse = await fetchWithCookies(
-						'/cart/coupon/',
+					const res = await fetchWithCookies<IResponseCouponApply>(
+						'/cart/coupon/apply/',
 						{
 							method: 'POST',
 							headers: {
@@ -98,10 +104,12 @@ export const useCart = create<IState & IActions>()(
 							body: JSON.stringify({ code: coupon }),
 						},
 					);
-					if (res?.success) {
+					if ('products' in res && res.products) {
 						await useCart.getState().fetchCart();
+						return '';
+					} else if ('error' in res && res.error) {
+						return res.error.message;
 					}
-					return res;
 				},
 			})),
 			{

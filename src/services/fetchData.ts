@@ -1,85 +1,59 @@
-export async function fetchData<T>(endpoint: string): Promise<T> {
+export async function fetchData<T>(
+	endpoint: string,
+	options?: RequestInit,
+): Promise<T | IResponseError> {
 	const baseURL = process.env.NEXT_PUBLIC_API_URL;
-
+	const url = `${baseURL}/${endpoint}`;
 	try {
-		const response = await fetch(`${baseURL}/${endpoint}`, {
+		const response = await fetch(url, {
 			next: {
 				revalidate: 200,
 			},
 			credentials: 'include',
+			...options,
 		});
 
-		if (!response.ok) throw new Error('Unable to fetch posts.');
-
 		const json = await response.json();
-
-		if (!json || !json.data) throw new Error('No data found.');
-
-		return json.data as T;
+		if (json.success) {
+			return json.data as T;
+		} else {
+			return {
+				error: {
+					message: json.error?.message || 'Unknown error occurred.',
+				},
+			} as IResponseError;
+		}
 	} catch (error) {
-		console.error('Error fetching data:', error);
+		console.error(`Error fetching data: ${url}`, error);
 		throw error;
 	}
 }
 
-export const fetchDataCart = async (url: string, options?: RequestInit) => {
-	const baseURL = process.env.NEXT_PUBLIC_API_URL;
-	const response = await fetch(`${baseURL}${url}`, {
-		credentials: 'include',
-		...options,
-	});
-	if (!response.ok) {
-		throw new Error(`HTTP error! status: ${response.status}`);
-	}
-	return response.json();
-};
-
-export const getCategories = async (): Promise<IResponse<ICategory>> => {
+export const getCategories = async (): Promise<
+	IResponseError | IResponse<ICategory>
+> => {
 	return await fetchData<IResponse<ICategory>>('shop/categories/');
 };
 
-export const getCategoriesById = async (id: string): Promise<ICategory> => {
+export const getCategoriesById = async (
+	id: string,
+): Promise<IResponseError | ICategory> => {
 	return await fetchData<ICategory>(`shop/categories/${id}`);
 };
 
 export const getProductsByCategory = async (
 	id: string,
-): Promise<IResponse<IProduct>> => {
+): Promise<IResponseError | IResponse<IProduct>> => {
 	return await fetchData<IResponse<IProduct>>(`shop/products/?category=${id}`);
 };
-
-export const getSearchProducts = async (
-	search: string,
-): Promise<IResponse<IProduct>> => {
-	return await fetchData<IResponse<IProduct>>(`shop/products/?name=${search}`);
-};
-
-export const getLatestArrivalProducts = async (): Promise<IProduct[]> => {
+export const getLatestArrivalProducts = async (): Promise<
+	IResponseError | IProduct[]
+> => {
 	return await fetchData<IProduct[]>('shop/products/latest_arrival/');
 };
 
-export const getPopularProducts = async (): Promise<IProduct[]> => {
+export const getPopularProducts = async (): Promise<
+	IResponseError | IProduct[]
+> => {
 	return await fetchData<IProduct[]>('shop/products/popular/');
-};
-
-export const fetchDataProductPage = async (id: string): Promise<IProduct> => {
-	try {
-		const baseURL = process.env.NEXT_PUBLIC_API_URL;
-
-		const res = await fetch(`${baseURL}/shop/products/${id}/`, {
-			next: {
-				revalidate: 200,
-			},
-		});
-		if (!res.ok) {
-			throw new Error(`Error fetching product data: ${res.statusText}`);
-		}
-
-		const json = await res.json();
-		const product: IProduct = json.data;
-		return product;
-	} catch (error) {
-		console.error('Error fetching data:', error);
-		throw error;
-	}
 };

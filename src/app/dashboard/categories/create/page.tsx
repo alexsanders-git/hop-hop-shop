@@ -65,21 +65,23 @@ export default function DashboardCategoriesCreate() {
 				if (selectedFile) {
 					formData.append('image', selectedFile);
 				}
-				if (res.success && formData) {
-					const resUpload = await createCategoryImage(res.data.id, formData);
-					if (resUpload.success) {
+
+				if ('id' in res && res.id && formData) {
+					const resUpload = await createCategoryImage(res.id, formData);
+					if ('image' in resUpload && resUpload.image) {
 						resetForm();
 						setSelectedFile(null);
 						setPreview(null);
 						setIsLoading(false);
 						setSuccess(true);
 						await revalidateFunc('/dashboard/categories');
+						await revalidateFunc('/');
 						setTimeout(() => {
 							router.push('/dashboard/categories');
 						}, 2000);
-					} else {
+					} else if ('error' in resUpload && resUpload.error) {
 						setIsLoading(false);
-						setError(resUpload.error);
+						setError(resUpload.error.message);
 					}
 				}
 			}}

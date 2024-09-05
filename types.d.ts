@@ -90,15 +90,16 @@ interface IPagination {
 }
 
 interface IResponseError {
-	success: boolean;
-	type?: string;
-	code?: string;
-	error: string;
+	error: {
+		message: string;
+	};
 }
 
 interface IDashboardSearch {
-	id: number;
-	name: string;
+	items: {
+		id: number;
+		name: string;
+	}[];
 }
 
 interface ICoupon {
@@ -115,4 +116,9 @@ interface INews {
 	title: string;
 	date: string;
 	images?: IImage | IImage[];
+}
+
+interface IToken {
+	value: string;
+	expires: number;
 }

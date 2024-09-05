@@ -2,7 +2,10 @@ import Cookies from 'js-cookie';
 
 import { CookiesEnums, UserEnum } from '@/utils/enums/cookiesEnums';
 
-export const fetchWithCookies = async (url: string, options?: RequestInit) => {
+export const fetchWithCookies = async <T>(
+	url: string,
+	options?: RequestInit,
+): Promise<T | IResponseError> => {
 	const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 	try {
@@ -15,12 +18,22 @@ export const fetchWithCookies = async (url: string, options?: RequestInit) => {
 			},
 		});
 
-		return response.json();
+		const json = await response.json();
+		if (json.success) {
+			return json.data as T;
+		} else {
+			return {
+				error: {
+					message: json.error?.message || 'Unknown error occurred.',
+				},
+			} as IResponseError;
+		}
 	} catch (error) {
 		console.error('Fetch failed:', error);
-		return error;
+		throw error;
 	}
 };
+
 export const Logout = async () => {
 	const baseURL = process.env.NEXT_PUBLIC_API_URL;
 	const token = Cookies.get(CookiesEnums.access_token);
@@ -36,6 +49,7 @@ export const Logout = async () => {
 		});
 		if (response.status === 204 || response.status === 200) {
 			Cookies.remove(CookiesEnums.access_token);
+			Cookies.remove(CookiesEnums.refresh_token);
 			Cookies.remove(UserEnum.user);
 			return true;
 		} else {

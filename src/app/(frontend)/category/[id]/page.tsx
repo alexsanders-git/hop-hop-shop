@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import SectionContainer from '@/components/SectionContainer/SectionContainer';
 import { getCategoriesById, getProductsByCategory } from '@/services/fetchData';
+import { isValid } from '@/utils/func/isValid';
 
 import styles from './page.module.scss';
 
@@ -14,22 +15,23 @@ type Props = {
 
 export default async function CategoryPage({ params: { id } }: Props) {
 	const category = await getCategoriesById(id);
-	const responce = await getProductsByCategory(id);
-	const products = responce.items;
+	const products = await getProductsByCategory(id);
 
-	if (!category) {
-		notFound();
+	if (
+		!isValid<ICategory>(category) ||
+		!isValid<IResponse<IProduct>>(products)
+	) {
+		return notFound();
 	}
 
 	return (
 		<section className={styles.section}>
 			<SectionContainer>
-				{/*хз що там було ілья змінив респонс*/}
-				{/*<h2 className={styles.title}>Category {category?.name}</h2>*/}
+				<h2 className={styles.title}>Category {category?.name}</h2>
 
 				<div className={styles.products}>
-					{products.length > 0 ? (
-						products.map((product) => (
+					{products?.items.length > 0 ? (
+						products.items.map((product) => (
 							<div className={styles.product} key={product.id}>
 								<ProductCard product={product} />
 							</div>
