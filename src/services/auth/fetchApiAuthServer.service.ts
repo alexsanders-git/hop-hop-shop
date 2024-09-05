@@ -5,7 +5,7 @@ import { CookiesEnums } from '@/utils/enums/cookiesEnums';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL + '/';
 
-const prepareHeaders = () => {
+const prepareHeadersServer = () => {
 	const headers = new Headers();
 
 	const token = cookies().get(CookiesEnums.access_token);
@@ -18,20 +18,29 @@ const prepareHeaders = () => {
 };
 
 // при роботі з авторизацією
-export const fetchWithAuthServer = async (url: string, options = {}) => {
+export const fetchWithAuthServer = async <T>(
+	url: string,
+	options = {},
+): Promise<T | IResponseError> => {
 	try {
 		let response = await fetch(`${baseUrl}${url}`, {
 			...options,
-			headers: prepareHeaders(),
+			headers: prepareHeadersServer(),
 			credentials: 'include',
 		});
 
 		const json = await response.json();
-		console.log(json);
-		if (!json || !json.data) throw new Error('No data found.');
-		return json;
-	} catch (error: unknown) {
-		console.error('Error fetching data:', error);
-		return error;
+		if (json.success) {
+			return json.data as T;
+		} else {
+			return {
+				error: {
+					message: json.error?.message || 'Unknown error occurred.',
+				},
+			} as IResponseError;
+		}
+	} catch (error) {
+		console.error(`Error fetching data in ${url}`, error);
+		throw error;
 	}
 };

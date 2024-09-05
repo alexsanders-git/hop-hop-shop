@@ -9,10 +9,11 @@ import 'swiper/css/pagination';
 
 import AddToFavoriteButton from '@/components/AddToFavoriteButton/AddToFavoriteButton';
 import ProductIdActions from '@/components/ProductIdActions/ProductIdActions';
-import { fetchDataProductPage } from '@/services/fetchData';
+import { fetchData } from '@/services/fetchData';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import ProductIdDesktopSwiper from '@/template/ProductIdDesktopSwiper/ProductIdDesktopSwiper';
 import ProductIdMobileSwiper from '@/template/ProductIdMobileSwiper/ProductIdMobileSwiper';
+import { isValid } from '@/utils/func/isValid';
 import { getImages } from '@/utils/typeGuards';
 
 import styles from './page.module.scss';
@@ -24,11 +25,14 @@ type Props = {
 };
 
 export default async function ProductPage({ params: { id } }: Props) {
-	const product = await fetchDataProductPage(id);
-	if (!product) {
-		notFound();
+	const product = await fetchData<IProduct>(`shop/products/${id}/`);
+
+	if (!isValid<IProduct>(product)) {
+		return notFound();
 	}
+
 	const imagesArr = getImages(product.images);
+
 	return (
 		<section className={styles.wrapper}>
 			<div className={styles.productPage}>

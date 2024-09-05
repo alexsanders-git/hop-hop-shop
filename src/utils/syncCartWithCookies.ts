@@ -1,8 +1,8 @@
 import Cookies from 'js-cookie';
 
-import { InterfaceFetchCartData } from '@/store/cart/Cart.interface';
+import { IResponseGetCart } from '@/types/response/response';
 
-export const syncCartWithCookies = (cart: InterfaceFetchCartData | null) => {
+export const syncCartWithCookies = (cart: IResponseGetCart | null) => {
 	if (cart) {
 		Cookies.set('cart', JSON.stringify(cart), {
 			sameSite: 'Lax', // or 'Strict' or 'None', depending on your needs

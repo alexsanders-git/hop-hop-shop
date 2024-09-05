@@ -2,22 +2,28 @@ import { fetchWithAuth } from '@/services/auth/fetchApiAuth.service';
 import { fetchData } from '@/services/fetchData';
 
 export const getProductsDashboardServer = async (): Promise<
-	IResponse<IProduct>
+	IResponseError | IResponse<IProduct>
 > => {
 	return await fetchData<IResponse<IProduct>>('shop/products/');
 };
 
 export const removeProductById = async (id: number) => {
-	const res = await fetchWithAuth(`shop/products/${id}`, { method: 'DELETE' });
-	return res as boolean;
+	return await fetchWithAuth<{ detail: string }>(`shop/products/${id}`, {
+		method: 'DELETE',
+	});
 };
 
-export const getDashboardProducts = async (page: number) => {
-	const res = await fetchWithAuth(`shop/products?page=${page}`, {
-		method: 'GET',
-	});
-	return res.data as IResponse<IProduct>;
+export const getDashboardProducts = async (
+	page: number,
+): Promise<IResponseError | IResponse<IProduct>> => {
+	return await fetchWithAuth<IResponse<IProduct>>(
+		`shop/products?page=${page}`,
+		{
+			method: 'GET',
+		},
+	);
 };
+
 export const createProduct = async (data: {
 	name: string;
 	description: string;
@@ -25,14 +31,14 @@ export const createProduct = async (data: {
 	price: string;
 	SKU?: number;
 }) => {
-	const res = await fetchWithAuth('shop/products/', {
+	return await fetchWithAuth<IProduct>('shop/products/', {
 		method: 'POST',
 		body: JSON.stringify(data),
 	});
-	return res;
 };
+
 export const createProductImage = async (id: number, data: FormData) => {
-	const res = await fetchWithAuth(
+	return await fetchWithAuth<{ status: string }>(
 		`shop/products/${id}/upload-images/`,
 		{
 			method: 'POST',
@@ -40,14 +46,14 @@ export const createProductImage = async (id: number, data: FormData) => {
 		},
 		true,
 	);
-	return res;
 };
+
 export const getProductByID = async (id: string) => {
-	const res = await fetchWithAuth(`shop/products/${id}`, {
+	return await fetchWithAuth<IProduct>(`shop/products/${id}`, {
 		method: 'GET',
 	});
-	return res.data as IProduct;
 };
+
 export const updateProduct = async (
 	id: number,
 	data: {
@@ -58,9 +64,8 @@ export const updateProduct = async (
 		SKU?: number;
 	},
 ) => {
-	const res = await fetchWithAuth(`shop/products/${id}/`, {
+	return await fetchWithAuth<IProduct>(`shop/products/${id}/`, {
 		method: 'PATCH',
 		body: JSON.stringify(data),
 	});
-	return res;
 };

@@ -4,13 +4,14 @@ import DashboardHeadLine from '@/components/dashboard/dashboardHeadLine/Dashboar
 import DashboardTableCategories from '@/components/dashboard/dashboardTableCategories/DashboardTableCategories';
 import EmptyDataBlock from '@/components/dashboard/emptyDataBlock/EmptyDataBlock';
 import { getDashboardCategoriesServer } from '@/services/dashboard/categories/dashboard.categories.service';
+import { isValid } from '@/utils/func/isValid';
 import { getDashboardCategoriesCreate } from '@/utils/paths/dashboard/dashboard.paths';
 
 import styles from './styles.module.scss';
 
 export default async function DashboardCategories() {
 	const categories = await getDashboardCategoriesServer();
-	if (!categories) {
+	if (!isValid<IResponse<ICategory>>(categories)) {
 		return notFound();
 	}
 	return (

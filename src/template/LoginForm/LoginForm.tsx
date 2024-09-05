@@ -2,7 +2,7 @@
 import { Form, Formik } from 'formik';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import * as yup from 'yup';
 
 import ActionModal from '@/components/ActionModal/ActionModal';
@@ -14,9 +14,10 @@ import InputPassword from '@/components/InputPassword/InputPassword';
 import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
 import useOutside from '@/hooks/useOutside';
-import { fetchWithAuth } from '@/services/auth/fetchApiAuth.service';
+import { fetchWithCookies } from '@/services/cookies/cookies.service';
 import { useUser } from '@/store/user/User.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
+import { IResponseAuth } from '@/types/response/response';
 import { CookiesEnums } from '@/utils/enums/cookiesEnums';
 import { emailValid, passwordValid } from '@/validation/checkout/validation';
 
@@ -89,26 +90,34 @@ export default function LoginForm() {
 				validationSchema={yup
 					.object({
 						email: emailValid,
-						// password: passwordValid,
+						password: passwordValid,
 					})
 					.required()}
 				onSubmit={async (values) => {
 					setIsLoading(true);
-					const res = await fetchWithAuth('auth/login/', {
+					const res = await fetchWithCookies<IResponseAuth>('/auth/login/', {
 						method: 'POST',
 						body: JSON.stringify({
 							email: values.email,
 							password: values.password,
 						}),
 					});
-					if (res.data) {
+					if ('user' in res && res.user) {
 						setIsLoading(false);
-						Cookies.set(CookiesEnums.access_token, res.data.access);
-						setUser(res.data.user);
+						Cookies.set(CookiesEnums.access_token, res.access_token.value, {
+							expires: res.access_token.expires,
+						});
+						Cookies.set(CookiesEnums.refresh_token, res.refresh_token.value, {
+							expires: res.refresh_token.expires,
+							secure: true,
+							sameSite: 'None',
+							path: '/',
+						});
+						setUser(res.user);
 						navigate.push('/');
-					} else if (res.error) {
+					} else if ('error' in res && res.error) {
 						setIsLoading(false);
-						setError(res.error);
+						setError(res.error.message);
 					}
 				}}
 			>
@@ -135,7 +144,7 @@ export default function LoginForm() {
 								I forgot my password
 							</p>
 							<Button
-								// disabled={!(isValid && dirty)}
+								disabled={!(isValid && dirty)}
 								type={'submit'}
 								style={'primary'}
 								text={'Log in!'}

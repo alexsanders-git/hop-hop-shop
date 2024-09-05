@@ -2,8 +2,8 @@
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-import AccountForm from '@/app/(frontend)/account/AccountForm/AccountForm';
-import OrdersForm from '@/app/(frontend)/account/OrdersForm/OrdersForm';
+import AccountForm from '@/template/AccountForm/AccountForm';
+import OrdersForm from '@/template/OrdersForm/OrdersForm';
 
 import styles from './styles.module.scss';
 

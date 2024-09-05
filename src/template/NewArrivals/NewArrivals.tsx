@@ -9,6 +9,10 @@ import styles from './NewArrivals.module.scss';
 export default async function NewArrivals() {
 	const products = await getLatestArrivalProducts();
 
+	if (!Array.isArray(products) || ('error' in products && products.error)) {
+		return <div>error</div>;
+	}
+
 	return (
 		<section className={styles.section}>
 			<div className={styles.ribbonWrapper}>

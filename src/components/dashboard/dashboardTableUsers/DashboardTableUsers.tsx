@@ -16,7 +16,6 @@ interface IProps {
 export default function DashboardTableUsers(props: IProps) {
 	const { users } = props;
 	const [newData, setNewData] = useState<IResponse<IUser>>(users);
-
 	const header = [
 		{ name: 'User ID' },
 		{ name: 'Name' },
@@ -67,7 +66,9 @@ export default function DashboardTableUsers(props: IProps) {
 					pageSize={10}
 					onPageChange={async (page) => {
 						const res = await getDashboardUsers(page);
-						setNewData(res);
+						if ('items' in res && res.items) {
+							setNewData(res);
+						}
 					}}
 				/>
 			) : null}

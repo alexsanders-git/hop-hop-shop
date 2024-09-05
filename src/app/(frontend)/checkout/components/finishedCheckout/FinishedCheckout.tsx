@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import Order from '@/app/(frontend)/checkout/components/order/Order';
@@ -8,6 +9,7 @@ import { fetchWithCookies } from '@/services/cookies/cookies.service';
 import Checkbox from '@/sharedComponenst/checkbox/Checkbox';
 import { useCart } from '@/store/cart/Cart.store';
 import { useCheckout } from '@/store/checkout/Checkout.store';
+import { IResponseCheckout } from '@/types/response/response';
 
 import styles from './styles.module.scss';
 
@@ -18,6 +20,7 @@ export default function FinishedCheckout() {
 	const personalData = useCheckout((state) => state.personalData);
 	const [error, setError] = useState<string>('');
 	const fetchCart = useCart((state) => state.fetchCart);
+	const navigate = useRouter();
 	return (
 		<div>
 			<div className={styles.order}>
@@ -40,30 +43,34 @@ export default function FinishedCheckout() {
 				className={styles.placeOrder}
 				text={'Place order'}
 				onClick={async () => {
-					const res = await fetchWithCookies('/checkout/checkout/', {
-						method: 'POST',
-						body: JSON.stringify({
-							first_name: personalData!.phone,
-							last_name: personalData!.lastname,
-							email: personalData!.email,
-							phone: personalData!.phone,
-							shipping_country: deliveryAddress!.country,
-							shipping_city: deliveryAddress!.city,
-							shipping_address: deliveryAddress!.address,
-							shipping_postcode: deliveryAddress!.postalCode,
-							card_information: {
-								card_number: creditCard!.cardNumber,
-								expiry_month: creditCard!.expiryDate.slice(0, 2),
-								expiry_year: `20${creditCard!.expiryDate.slice(-2)}`,
-								cvc: creditCard!.cvv,
-							},
-						}),
-					});
-					if (res.data) {
+					const res = await fetchWithCookies<IResponseCheckout>(
+						'/checkout/checkout/',
+						{
+							method: 'POST',
+							body: JSON.stringify({
+								first_name: personalData!.phone,
+								last_name: personalData!.lastname,
+								email: personalData!.email,
+								phone: personalData!.phone,
+								shipping_country: deliveryAddress!.country,
+								shipping_city: deliveryAddress!.city,
+								shipping_address: deliveryAddress!.address,
+								shipping_postcode: deliveryAddress!.postalCode,
+								card_information: {
+									card_number: creditCard!.cardNumber,
+									expiry_month: creditCard!.expiryDate.slice(0, 2),
+									expiry_year: `20${creditCard!.expiryDate.slice(-2)}`,
+									cvc: creditCard!.cvv,
+								},
+							}),
+						},
+					);
+					if ('order' in res && res.order) {
 						fetchCart();
+						navigate.push('/thanks-for-order');
 					}
-					if (res.error) {
-						setError(res.error);
+					if ('error' in res && res.error) {
+						setError(res.error.message);
 					}
 				}}
 			/>

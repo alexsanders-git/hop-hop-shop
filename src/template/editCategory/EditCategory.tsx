@@ -18,6 +18,7 @@ import {
 	removeCategoryById,
 	updateCategory,
 } from '@/services/dashboard/categories/dashboard.categories.service';
+import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
@@ -68,31 +69,36 @@ export default function EditCategory(props: IProps) {
 				if (selectedFile) {
 					const formData = new FormData();
 					formData.append('image', selectedFile);
+
 					const res = await updateCategory(category.id, values);
-					if (res.success && formData) {
-						const resUpload = await createCategoryImage(res.data.id, formData);
-						if (resUpload.success) {
+					if ('id' in res && res.id && formData) {
+						const resUpload = await createCategoryImage(res.id, formData);
+						if ('image' in resUpload && resUpload.image) {
 							setIsLoading(false);
 							setSuccess('Category updated successfully');
+							await revalidateFunc('/dashboard/categories');
+							await revalidateFunc('/');
 							setTimeout(() => {
 								router.push('/dashboard/categories');
 							}, 2000);
-						} else {
+						} else if ('error' in resUpload && resUpload.error) {
 							setIsLoading(false);
-							setError(resUpload.error);
+							setError(resUpload.error.message);
 						}
 					}
 				} else {
 					const res = await updateCategory(category.id, values);
-					if (res) {
+					if ('id' in res && res.id) {
 						setIsLoading(false);
 						setSuccess('Category updated successfully');
+						await revalidateFunc('/dashboard/categories');
+						await revalidateFunc('/');
 						setTimeout(() => {
 							router.push('/dashboard/categories');
 						}, 2000);
-					} else {
+					} else if ('error' in res && res.error) {
 						setIsLoading(false);
-						setError(res.error);
+						setError(res.error.message);
 					}
 				}
 			}}
@@ -108,14 +114,16 @@ export default function EditCategory(props: IProps) {
 							reset={async () => {
 								setIsLoading(true);
 								const res = await removeCategoryById(category.id);
-								if (res) {
+								if ('detail' in res && res.detail) {
 									setModal(false);
 									setIsLoading(false);
 									setSuccess('Category deleted successfully');
+									await revalidateFunc('/dashboard/categories');
+									await revalidateFunc('/');
 									setTimeout(() => {
 										router.push('/dashboard/categories');
 									}, 2000);
-								} else {
+								} else if ('error' in res && res.error) {
 									setIsLoading(false);
 									setError('Something went wrong');
 								}

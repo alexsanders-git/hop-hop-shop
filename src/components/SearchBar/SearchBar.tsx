@@ -2,10 +2,10 @@
 
 import { Search, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { forwardRef, Ref, useEffect, useState } from 'react';
+import { forwardRef, Ref, useState } from 'react';
 
 import { useDebounce } from '@/hooks/useDebounce';
-import { getSearchProducts } from '@/services/fetchData';
+import { useFetch } from '@/hooks/useFetch';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './SearchBar.module.scss';
@@ -16,32 +16,23 @@ interface SearchBarProps {
 
 function SearchBar(props: SearchBarProps, ref: Ref<HTMLDivElement>) {
 	const { handleSearchButton } = props;
-	const [data, setData] = useState<IProduct[]>([]);
 	const [query, setQuery] = useState('');
 	const debouncedSearch = useDebounce(query.toLowerCase(), 500);
 	const router = useRouter();
+
+	const { error, data } = useFetch<IResponse<IProduct>>({
+		endpoint: `shop/products/?name=${debouncedSearch}`,
+		skip: debouncedSearch === '',
+	});
 
 	const handleSuggestionClick = (id: number) => {
 		router.push(`/product/${id}`);
 		handleSearchButton(false);
 	};
 
-	useEffect(() => {
-		const fetchProduct = async () => {
-			try {
-				const productData = await getSearchProducts(debouncedSearch);
-				if (productData) {
-					setData(productData.items);
-				}
-			} catch (error) {
-				console.error('error: ', error);
-			}
-		};
-
-		if (debouncedSearch !== '') {
-			fetchProduct();
-		}
-	}, [debouncedSearch]);
+	if (error) {
+		console.error('Error fetching search data:', error);
+	}
 
 	return (
 		<div ref={ref} className={styles.searchContainer}>
@@ -65,11 +56,11 @@ function SearchBar(props: SearchBarProps, ref: Ref<HTMLDivElement>) {
 				className={`${styles.searchInput} ${robotoCondensed.className} ${query ? styles.searchInputWithQuery : ''}`}
 				placeholder="Search"
 			/>
-			{data.length > 0 && debouncedSearch.length > 0 && (
+			{data && data.items.length > 0 && debouncedSearch.length > 0 && (
 				<div className={styles.suggestionsWrapper}>
 					<div className={styles.suggestionsWrapperScrollBar}>
 						<div className={styles.suggestionsContainer}>
-							{data.map((suggestion, index) => (
+							{data.items.map((suggestion, index) => (
 								<div
 									key={index}
 									className={styles.suggestionItem}

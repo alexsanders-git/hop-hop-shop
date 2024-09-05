@@ -3,7 +3,7 @@ import { Form, Formik, FormikProps } from 'formik';
 import { CircleX } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import * as yup from 'yup';
 
 import image from '@/assets/png/Newdescription.png';
@@ -17,7 +17,7 @@ import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
 import Select from '@/components/select/Select';
 import Textarea from '@/components/textarea/Textarea';
-import { getCategories } from '@/services/dashboard/categories/dashboard.categories.service';
+import { useFetchAuth } from '@/hooks/useFetchAuth';
 import {
 	createProduct,
 	createProductImage,
@@ -37,9 +37,6 @@ interface FormValues {
 }
 
 export default function DashboardProductsCreate() {
-	const [categories, setCategories] = useState<null | IResponse<ICategory>>(
-		null,
-	);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [showPrePublish, setShowPrePublish] = useState<boolean>(false);
 	const [success, setSuccess] = useState(false);
@@ -49,7 +46,12 @@ export default function DashboardProductsCreate() {
 	const [previews, setPreviews] = useState<{ image: string; name: string }[]>(
 		[],
 	);
-
+	const { data: categories } = useFetchAuth<IResponse<ICategory>>({
+		endpoint: 'shop/categories/',
+		options: {
+			method: 'GET',
+		},
+	});
 	const formikRef = useRef<FormikProps<FormValues>>(null);
 	const fileInputRef = useRef<null | HTMLInputElement>(null);
 	const router = useRouter();
@@ -75,22 +77,13 @@ export default function DashboardProductsCreate() {
 			});
 		}
 	};
+
 	const handleRemoveImage = (index: number) => {
 		const newPreviews = previews.filter((_, i) => i !== index);
 		setPreviews(newPreviews);
 		const newSelectedFiles = selectedFiles.filter((_, i) => i !== index);
 		setSelectedFiles(newSelectedFiles);
 	};
-
-	useEffect(() => {
-		const fetchData = async () => {
-			const res = await getCategories();
-			if (res) {
-				setCategories(res);
-			}
-		};
-		fetchData();
-	}, []);
 
 	return (
 		<>
@@ -145,20 +138,22 @@ export default function DashboardProductsCreate() {
 							formData.append('uploaded_images', file);
 						});
 					}
-					if (res.success && formData) {
-						const resUpload = await createProductImage(res.data.id, formData);
-						if (resUpload.success) {
+					if ('name' in res && res.name && formData) {
+						const resUpload = await createProductImage(res.id, formData);
+
+						if ('status' in resUpload && resUpload.status) {
 							setIsLoading(false);
 							setSuccess(true);
 							resetForm();
 							setSelectedFiles([]);
 							setPreviews([]);
 							await revalidateFunc('/dashboard/products');
+							await revalidateFunc('/');
 							setTimeout(() => {
 								router.push('/dashboard/products');
 							}, 2000);
-						} else {
-							setError(resUpload.error);
+						} else if ('error' in resUpload && resUpload.error) {
+							setError(resUpload.error.message);
 						}
 					}
 				}}

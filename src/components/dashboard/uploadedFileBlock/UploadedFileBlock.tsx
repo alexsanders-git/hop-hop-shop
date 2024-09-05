@@ -1,4 +1,5 @@
 import { Trash2 } from 'lucide-react';
+import Image from 'next/image';
 
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
@@ -14,7 +15,13 @@ export default function UploadedFileBlock(props: IProps) {
 	const { image, handleRemoveImage, index } = props;
 	return (
 		<div className={styles.wrapper}>
-			<img className={styles.image} src={image.image} alt={image.name} />
+			<Image
+				width={78}
+				height={78}
+				className={styles.image}
+				src={image.image}
+				alt={image.name}
+			/>
 			<span className={`${styles.text} ${robotoCondensed.className}`}>
 				Product {image.name}
 			</span>

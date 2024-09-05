@@ -3,9 +3,10 @@ import { useState } from 'react';
 
 import EditButton from '@/components/dashboard/editButton/editButton';
 import ModalConfirmation from '@/components/dashboard/modalConfirmation/ModalСonfirmation';
+import Pagination from '@/components/dashboard/pagination/Pagination';
 import RemoveButton from '@/components/dashboard/removeButton/RemoveButton';
 import {
-	getCoupons,
+	getDashboardCoupons,
 	removeCouponById,
 } from '@/services/dashboard/coupons/dashboard.coupons.service';
 import { robotoCondensed } from '@/styles/fonts/fonts';
@@ -15,18 +16,18 @@ import { getDashboardCouponsId } from '@/utils/paths/dashboard/dashboard.paths';
 import styles from './styles.module.scss';
 
 interface IProps {
-	coupons: ICoupon[];
+	coupons: IResponse<ICoupon>;
 }
 
 interface IDashboardItem {
-	setNewData: (data: ICoupon[]) => void;
+	setNewData: (data: IResponse<ICoupon>) => void;
 	item: ICoupon;
 }
 
 const PageSize = 10;
 export default function DashboardTableCoupons(props: IProps) {
 	const { coupons } = props;
-	const [newData, setNewData] = useState<ICoupon[]>(coupons);
+	const [newData, setNewData] = useState<IResponse<ICoupon>>(coupons);
 
 	const header = [
 		{ name: 'Coupon ID' },
@@ -47,25 +48,24 @@ export default function DashboardTableCoupons(props: IProps) {
 							</div>
 						))}
 					</li>
-					{/*{newData?.items?.map((item, index: number) => (*/}
-					{/*	<DashboardItem item={item} setNewData={setNewData} key={index} />*/}
-					{/*))}*/}
-					{newData?.map((item, index: number) => (
+					{newData?.items?.map((item, index: number) => (
 						<DashboardItem item={item} setNewData={setNewData} key={index} />
 					))}
 				</ul>
 			</div>
-			{/*{newData?.items_count > PageSize ? (*/}
-			{/*	<Pagination*/}
-			{/*		currentPage={newData?.pagination?.current_page}*/}
-			{/*		totalCount={newData?.items_count}*/}
-			{/*		pageSize={PageSize}*/}
-			{/*		onPageChange={async (page) => {*/}
-			{/*			const res = await getDashboardCoupons(page);*/}
-			{/*			setNewData(res);*/}
-			{/*		}}*/}
-			{/*	/>*/}
-			{/*) : null}*/}
+			{newData?.items_count > PageSize ? (
+				<Pagination
+					currentPage={newData?.pagination?.current_page}
+					totalCount={newData?.items_count}
+					pageSize={PageSize}
+					onPageChange={async (page) => {
+						const coupons = await getDashboardCoupons(page);
+						if ('items' in coupons && coupons.items.length) {
+							setNewData(coupons);
+						}
+					}}
+				/>
+			) : null}
 		</div>
 	);
 }
@@ -78,12 +78,14 @@ function DashboardItem(props: IDashboardItem) {
 			{isShow && (
 				<ModalConfirmation
 					reset={async () => {
-						await removeCouponById(item.id).finally(async () => {
-							const coupons = await getCoupons();
-							// @ts-ignore
-							setNewData(coupons);
-							setIsShow(false);
-						});
+						const res = await removeCouponById(item.id);
+						if ('detail' in res && res.detail) {
+							const coupons = await getDashboardCoupons(1);
+							if ('items' in coupons && coupons.items.length) {
+								setNewData(coupons);
+								setIsShow(false);
+							}
+						}
 					}}
 					closeModal={() => setIsShow(false)}
 					text={'Are you sure?'}

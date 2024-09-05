@@ -17,6 +17,7 @@ import {
 	updateCoupon,
 } from '@/services/dashboard/coupons/dashboard.coupons.service';
 import { formatDate } from '@/utils/func/formatDate';
+import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
@@ -59,15 +60,16 @@ export default function EditCoupon(props: IProps) {
 					...values,
 					active: values.active === 'true',
 				});
-				if (res) {
+				if ('id' in res) {
 					setIsLoading(false);
-					setSuccess('Category updated successfully');
+					setSuccess('Coupon updated successfully');
+					await revalidateFunc('/dashboard/coupons');
 					setTimeout(() => {
 						router.push('/dashboard/coupons');
 					}, 2000);
-				} else {
+				} else if ('error' in res && res.error) {
 					setIsLoading(false);
-					setError(res.error);
+					setError(res.error.message);
 				}
 			}}
 		>

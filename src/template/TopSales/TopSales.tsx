@@ -8,7 +8,9 @@ import styles from './TopSales.module.scss';
 
 export default async function TopSales() {
 	const products = await getPopularProducts();
-
+	if (!Array.isArray(products) || ('error' in products && products.error)) {
+		return <div>error</div>;
+	}
 	return (
 		<section>
 			<div className={styles.ribbonWrapper}>

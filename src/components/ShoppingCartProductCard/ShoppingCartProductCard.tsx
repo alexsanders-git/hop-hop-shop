@@ -1,16 +1,14 @@
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 
-import { InterfaceProductCart } from '@/store/cart/Cart.interface';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import { getImages } from '@/utils/typeGuards';
 
 import styles from './ShoppingCartProductCart.module.scss';
 
 interface ShoppingCartProductCardProps {
-	product: InterfaceProductCart;
+	product: IProduct;
 	quantity: number;
 	onIncrease: () => void;
 	onDecrease: () => void;
@@ -21,7 +19,6 @@ export default function ShoppingCartProductCard(
 	props: ShoppingCartProductCardProps,
 ) {
 	const { product, quantity, onIncrease, onDecrease, onRemove } = props;
-	console.log(product.category);
 
 	return (
 		<div className={styles.cardWrp}>

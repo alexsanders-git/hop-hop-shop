@@ -1,4 +1,4 @@
-import AccountForm from '@/app/(frontend)/account/AccountForm/AccountForm';
+import AccountForm from '@/template/AccountForm/AccountForm';
 
 import styles from './styles.module.scss';
 
