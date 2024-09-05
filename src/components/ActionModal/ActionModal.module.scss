@@ -14,7 +14,6 @@
 	z-index: 1000;
 }
 
-
 .modalBody {
 	background-color: var(--beige-color);
 	padding: 28px;
@@ -34,6 +33,10 @@
 		grid-template-rows: auto auto;
 		grid-gap: 16px;
 		padding: 20px;
+
+		&.error {
+			grid-template-columns: auto 1fr;
+		}
 	}
 }
 
@@ -74,8 +77,12 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	grid-column: 2; 
+	grid-column: 2;
 	grid-row: 1 / span 2;
+
+	&.error {
+		margin-bottom: -60px;
+	}
 
 	@media only screen and (max-width: $media-md) {
 		grid-column: 2;
@@ -83,6 +90,14 @@
 		justify-content: flex-end;
 		width: 56px;
 		height: 100px;
+
+		&.error {
+			grid-column: 2;
+			grid-row: 1 / span 2;
+			width: 105px;
+			height: 194px;
+			margin-bottom: -20px;
+		}
 	}
 }
 
@@ -90,7 +105,8 @@
 	font-size: 36px;
 	line-height: 1.06;
 	justify-self: end;
-	grid-column:  span 1;
+	grid-column: 1;
+	text-align: center;
 
 	@media only screen and (max-width: $media-md) {
 		grid-column: 1 / span 2;
@@ -101,5 +117,11 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+
+		&.error {
+			justify-self: end;
+			grid-column: 1;
+			text-align: center;
+		}
 	}
 }
