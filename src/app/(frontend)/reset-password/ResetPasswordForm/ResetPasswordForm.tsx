@@ -3,9 +3,9 @@
 import { Form, Formik } from 'formik';
 import * as yup from 'yup';
 
+import ActionModal from '@/components/ActionModal/ActionModal';
 import Button from '@/components/Button/Button';
 import InputPassword from '@/components/InputPassword/InputPassword';
-import SuccessActionModal from '@/components/SuccessActionModal/SuccessActionModal';
 import useOutside from '@/hooks/useOutside';
 import { passwordValid } from '@/validation/checkout/validation';
 
@@ -67,13 +67,14 @@ export default function ResetPasswordForm() {
 					</Form>
 				)}
 			</Formik>
-			<SuccessActionModal
+			<ActionModal
 				ref={modalRef}
 				show={isModalOpen}
 				onClose={() => setIsModalOpen(false)}
 				title={'Woohoo! You did it!'}
 				text={`You've successfully reset your password. You're ready to rock and
 						roll again!`}
+				type={'success'}
 			/>
 		</>
 	);

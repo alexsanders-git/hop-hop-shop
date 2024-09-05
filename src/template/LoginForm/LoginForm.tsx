@@ -1,11 +1,11 @@
 'use client';
 import { Form, Formik } from 'formik';
 import Cookies from 'js-cookie';
-// import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import * as yup from 'yup';
 
+import ActionModal from '@/components/ActionModal/ActionModal';
 import Button from '@/components/Button/Button';
 import ButtonLink from '@/components/ButtonLink/ButtonLink';
 import ForgotPasswordModal from '@/components/ForgotPasswordModal/ForgotPasswordModal';
@@ -13,7 +13,6 @@ import Input from '@/components/Input/Input';
 import InputPassword from '@/components/InputPassword/InputPassword';
 import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
-import SuccessActionModal from '@/components/SuccessActionModal/SuccessActionModal';
 import useOutside from '@/hooks/useOutside';
 import { fetchWithAuth } from '@/services/auth/fetchApiAuth.service';
 import { useUser } from '@/store/user/User.store';
@@ -30,36 +29,56 @@ export default function LoginForm() {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string>('');
 	const {
-		ref: modalRef,
-		isShow: isModalOpen,
-		setIsShow: setIsModalOpen,
+		ref: forgotPasswordModalRef,
+		isShow: isForgotPasswordModalOpen,
+		setIsShow: setIsForgotPasswordModalOpen,
 	} = useOutside(false);
 
-	const successModalRef = useRef<HTMLDivElement>(null);
-	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
+	const {
+		ref: successModalRef,
+		isShow: isSuccessModalOpen,
+		setIsShow: setIsSuccessModalOpen,
+	} = useOutside(false);
+
+	const {
+		ref: errorModalRef,
+		isShow: isErrorModalOpen,
+		setIsShow: setIsErrorModalOpen,
+	} = useOutside(false);
 
 	const handleForgotPasswordSubmit = (values: { email: string }) => {
 		console.log(values.email);
-		setIsModalOpen(false);
-		setIsSuccessModalOpen(true);
+		setIsForgotPasswordModalOpen(false);
+		setIsErrorModalOpen(true);
 	};
 
 	return (
 		<>
-			{isModalOpen && (
+			{isForgotPasswordModalOpen && (
 				<ForgotPasswordModal
-					ref={modalRef}
-					onClose={() => setIsModalOpen(false)}
+					ref={forgotPasswordModalRef}
+					onClose={() => setIsForgotPasswordModalOpen(false)}
 					onSubmit={handleForgotPasswordSubmit}
 				/>
 			)}
 			{isSuccessModalOpen && (
-				<SuccessActionModal
+				<ActionModal
 					ref={successModalRef}
 					show={isSuccessModalOpen}
 					title="Thank you!"
 					text="If this is a registered email address, an email will be sent to the address provided."
+					type={'success'}
 					onClose={() => setIsSuccessModalOpen(false)}
+				/>
+			)}
+			{isErrorModalOpen && (
+				<ActionModal
+					ref={errorModalRef}
+					show={isErrorModalOpen}
+					title="Oh no!"
+					text="Looks like you entered an email that’s doing the cha-cha instead of following the rules. Please try again!"
+					type={'error'}
+					onClose={() => setIsErrorModalOpen(false)}
 				/>
 			)}
 			<Formik
@@ -109,7 +128,10 @@ export default function LoginForm() {
 							placeholder={'Enter Password'}
 						/>
 						<div className={styles.buttonsWrap}>
-							<p className={styles.forgot} onClick={() => setIsModalOpen(true)}>
+							<p
+								className={styles.forgot}
+								onClick={() => setIsForgotPasswordModalOpen(true)}
+							>
 								I forgot my password
 							</p>
 							<Button
