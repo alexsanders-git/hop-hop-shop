@@ -17,7 +17,10 @@ export default function OrderDetailsPictures() {
 		<div className={styles.iconsWrapper}>
 			{orderStages.map((stage, index) => (
 				<div className={styles.elementWrapper} key={index}>
-					<div className={styles.iconWrapper}>
+					<div
+						className={`${index < 2 ? styles.active : ''} 
+					${styles.iconWrapper}`}
+					>
 						<stage.icon className={styles.icon} />
 					</div>
 					<p className={styles.label}>{stage.label}</p>
