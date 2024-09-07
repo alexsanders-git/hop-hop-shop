@@ -6,7 +6,7 @@ interface IUseMutationResult<T> {
 	data?: T | null;
 	error?: string | null;
 	isLoading: boolean;
-	mutate: (data: any) => Promise<T | undefined>;
+	mutate: (data: any) => Promise<IResponseJson<T> | undefined>;
 }
 
 interface IProps {
@@ -34,10 +34,10 @@ export function useMutation<T>(props: IProps): IUseMutationResult<T> {
 				isFile,
 			);
 
-			if (res && typeof res === 'object' && 'error' in res) {
+			if (!res.success) {
 				setError(res.error.message);
 			} else {
-				setData(res);
+				setData(res.data);
 				return res;
 			}
 		} catch (err) {

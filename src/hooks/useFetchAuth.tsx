@@ -34,11 +34,11 @@ export function useFetchAuth<T>(props: IProps): UseFetchResult<T> {
 				try {
 					const res = await fetchWithAuth<T>(endpoint, options, isFile);
 
-					if (res && typeof res === 'object' && 'error' in res) {
+					if (!res.success) {
 						setError(res.error.message);
 					} else {
-						setData(res);
-						return res;
+						setData(res.data);
+						return res.data;
 					}
 				} catch (err) {
 					setError('Fetch error occurred');

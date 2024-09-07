@@ -38,7 +38,7 @@ export default function DashboardCouponCreate() {
 					discount: yup
 						.number()
 						.min(0, 'Can`t be less than 0')
-						.max(100, 'Can`t be more than 100')
+						.max(99, 'Can`t be more than 99')
 						.required('Обов’язкове поле'),
 					active: categoryValid('Active'),
 					valid_to: categoryValid('Valid Until'),
@@ -50,7 +50,7 @@ export default function DashboardCouponCreate() {
 					...values,
 					active: values.active === 'true',
 				});
-				if ('id' in res && res.id) {
+				if (res.success) {
 					resetForm();
 					setIsLoading(false);
 					setSuccess(true);
@@ -58,7 +58,7 @@ export default function DashboardCouponCreate() {
 					setTimeout(() => {
 						router.push('/dashboard/coupons');
 					}, 2000);
-				} else if ('error' in res && res.error) {
+				} else if (!res.success) {
 					setIsLoading(false);
 					setError(res.error.message);
 				}

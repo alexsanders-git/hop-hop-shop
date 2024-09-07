@@ -71,9 +71,9 @@ export default function EditCategory(props: IProps) {
 					formData.append('image', selectedFile);
 
 					const res = await updateCategory(category.id, values);
-					if ('id' in res && res.id && formData) {
-						const resUpload = await createCategoryImage(res.id, formData);
-						if ('image' in resUpload && resUpload.image) {
+					if (res.success && formData) {
+						const resUpload = await createCategoryImage(res.data.id, formData);
+						if (resUpload.success) {
 							setIsLoading(false);
 							setSuccess('Category updated successfully');
 							await revalidateFunc('/dashboard/categories');
@@ -81,14 +81,14 @@ export default function EditCategory(props: IProps) {
 							setTimeout(() => {
 								router.push('/dashboard/categories');
 							}, 2000);
-						} else if ('error' in resUpload && resUpload.error) {
+						} else if (!res.success) {
 							setIsLoading(false);
 							setError(resUpload.error.message);
 						}
 					}
 				} else {
 					const res = await updateCategory(category.id, values);
-					if ('id' in res && res.id) {
+					if (res.success) {
 						setIsLoading(false);
 						setSuccess('Category updated successfully');
 						await revalidateFunc('/dashboard/categories');
@@ -96,7 +96,7 @@ export default function EditCategory(props: IProps) {
 						setTimeout(() => {
 							router.push('/dashboard/categories');
 						}, 2000);
-					} else if ('error' in res && res.error) {
+					} else if (!res.success) {
 						setIsLoading(false);
 						setError(res.error.message);
 					}
@@ -114,7 +114,7 @@ export default function EditCategory(props: IProps) {
 							reset={async () => {
 								setIsLoading(true);
 								const res = await removeCategoryById(category.id);
-								if ('detail' in res && res.detail) {
+								if (res.success) {
 									setModal(false);
 									setIsLoading(false);
 									setSuccess('Category deleted successfully');
@@ -123,7 +123,7 @@ export default function EditCategory(props: IProps) {
 									setTimeout(() => {
 										router.push('/dashboard/categories');
 									}, 2000);
-								} else if ('error' in res && res.error) {
+								} else if (!res.success) {
 									setIsLoading(false);
 									setError('Something went wrong');
 								}

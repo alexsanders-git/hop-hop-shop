@@ -7,7 +7,7 @@ export const getUsersDashboardServer = async () => {
 	});
 };
 export const getDashboardUsers = async (page: number) => {
-	return await fetchWithAuth<IResponse<IUser>>(`/auth/customers?page=${page}`, {
+	return await fetchWithAuth<IResponse<IUser>>(`auth/customers?page=${page}`, {
 		method: 'GET',
 	});
 };

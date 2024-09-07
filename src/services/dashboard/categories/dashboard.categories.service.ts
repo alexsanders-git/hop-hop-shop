@@ -2,13 +2,13 @@ import { fetchWithAuth } from '@/services/auth/fetchApiAuth.service';
 import { fetchData } from '@/services/fetchData';
 
 export const getDashboardCategoriesServer = async (): Promise<
-	IResponseError | IResponse<ICategory>
+	IResponseJson<IResponse<ICategory>>
 > => {
 	return await fetchData<IResponse<ICategory>>('shop/categories/');
 };
 
 export const getCategories = async (): Promise<
-	IResponseError | IResponse<ICategory>
+	IResponseJson<IResponse<ICategory>>
 > => {
 	return await fetchWithAuth<IResponse<ICategory>>('shop/categories/');
 };

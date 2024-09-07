@@ -4,6 +4,12 @@ interface IResponse<T> {
 	pagination: IPagination;
 }
 
+interface IPaginationResponse<T> {
+	items: T[];
+	items_count: number;
+	pagination: IPagination;
+}
+
 interface IPlaceholder {
 	empty: boolean;
 }
@@ -121,4 +127,12 @@ interface INews {
 interface IToken {
 	value: string;
 	expires: number;
+}
+
+interface IResponseJson<T> {
+	success: boolean;
+	data: T;
+	error: {
+		message: string;
+	};
 }

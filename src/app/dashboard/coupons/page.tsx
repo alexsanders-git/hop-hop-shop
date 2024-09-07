@@ -4,7 +4,6 @@ import DashboardHeadLine from '@/components/dashboard/dashboardHeadLine/Dashboar
 import DashboardTableCoupons from '@/components/dashboard/dashboardTableCoupons/DashboardTableCoupons';
 import EmptyDataBlock from '@/components/dashboard/emptyDataBlock/EmptyDataBlock';
 import { getDashboardCouponsServer } from '@/services/dashboard/coupons/dashboard.coupons.service';
-import { isValid } from '@/utils/func/isValid';
 import { getDashboardCouponsCreate } from '@/utils/paths/dashboard/dashboard.paths';
 
 import styles from './styles.module.scss';
@@ -12,7 +11,7 @@ import styles from './styles.module.scss';
 export default async function DashboardCoupons() {
 	const coupons = await getDashboardCouponsServer();
 
-	if (!isValid<IResponse<ICoupon>>(coupons)) {
+	if (!coupons.success) {
 		return notFound();
 	}
 	return (
@@ -24,8 +23,8 @@ export default async function DashboardCoupons() {
 				buttonLink={getDashboardCouponsCreate()}
 				searchType={'coupons'}
 			/>
-			{coupons && coupons?.items.length > 0 ? (
-				<DashboardTableCoupons coupons={coupons} />
+			{coupons?.data.items.length > 0 ? (
+				<DashboardTableCoupons coupons={coupons.data} />
 			) : (
 				<EmptyDataBlock />
 			)}

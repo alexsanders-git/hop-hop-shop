@@ -1,7 +1,7 @@
 export async function fetchData<T>(
 	endpoint: string,
 	options?: RequestInit,
-): Promise<T | IResponseError> {
+): Promise<IResponseJson<T>> {
 	const baseURL = process.env.NEXT_PUBLIC_API_URL;
 	const url = `${baseURL}/${endpoint}`;
 	try {
@@ -13,16 +13,7 @@ export async function fetchData<T>(
 			...options,
 		});
 
-		const json = await response.json();
-		if (json.success) {
-			return json.data as T;
-		} else {
-			return {
-				error: {
-					message: json.error?.message || 'Unknown error occurred.',
-				},
-			} as IResponseError;
-		}
+		return (await response.json()) as IResponseJson<T>;
 	} catch (error) {
 		console.error(`Error fetching data: ${url}`, error);
 		throw error;
@@ -30,30 +21,30 @@ export async function fetchData<T>(
 }
 
 export const getCategories = async (): Promise<
-	IResponseError | IResponse<ICategory>
+	IResponseJson<IResponse<ICategory>>
 > => {
 	return await fetchData<IResponse<ICategory>>('shop/categories/');
 };
 
 export const getCategoriesById = async (
 	id: string,
-): Promise<IResponseError | ICategory> => {
+): Promise<IResponseJson<ICategory>> => {
 	return await fetchData<ICategory>(`shop/categories/${id}`);
 };
 
 export const getProductsByCategory = async (
 	id: string,
-): Promise<IResponseError | IResponse<IProduct>> => {
+): Promise<IResponseJson<IResponse<IProduct>>> => {
 	return await fetchData<IResponse<IProduct>>(`shop/products/?category=${id}`);
 };
 export const getLatestArrivalProducts = async (): Promise<
-	IResponseError | IProduct[]
+	IResponseJson<IProduct[]>
 > => {
 	return await fetchData<IProduct[]>('shop/products/latest_arrival/');
 };
 
 export const getPopularProducts = async (): Promise<
-	IResponseError | IProduct[]
+	IResponseJson<IProduct[]>
 > => {
 	return await fetchData<IProduct[]>('shop/products/popular/');
 };

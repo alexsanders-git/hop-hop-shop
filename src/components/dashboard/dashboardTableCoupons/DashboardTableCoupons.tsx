@@ -60,8 +60,8 @@ export default function DashboardTableCoupons(props: IProps) {
 					pageSize={PageSize}
 					onPageChange={async (page) => {
 						const coupons = await getDashboardCoupons(page);
-						if ('items' in coupons && coupons.items.length) {
-							setNewData(coupons);
+						if (coupons.success) {
+							setNewData(coupons.data);
 						}
 					}}
 				/>
@@ -79,10 +79,10 @@ function DashboardItem(props: IDashboardItem) {
 				<ModalConfirmation
 					reset={async () => {
 						const res = await removeCouponById(item.id);
-						if ('detail' in res && res.detail) {
+						if (res.success) {
 							const coupons = await getDashboardCoupons(1);
-							if ('items' in coupons && coupons.items.length) {
-								setNewData(coupons);
+							if (coupons.success) {
+								setNewData(coupons.data);
 								setIsShow(false);
 							}
 						}

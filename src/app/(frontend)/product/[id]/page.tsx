@@ -13,7 +13,6 @@ import { fetchData } from '@/services/fetchData';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import ProductIdDesktopSwiper from '@/template/ProductIdDesktopSwiper/ProductIdDesktopSwiper';
 import ProductIdMobileSwiper from '@/template/ProductIdMobileSwiper/ProductIdMobileSwiper';
-import { isValid } from '@/utils/func/isValid';
 import { getImages } from '@/utils/typeGuards';
 
 import styles from './page.module.scss';
@@ -27,30 +26,30 @@ type Props = {
 export default async function ProductPage({ params: { id } }: Props) {
 	const product = await fetchData<IProduct>(`shop/products/${id}/`);
 
-	if (!isValid<IProduct>(product)) {
+	if (!product.success) {
 		return notFound();
 	}
 
-	const imagesArr = getImages(product.images);
+	const imagesArr = getImages(product.data.images);
 
 	return (
 		<section className={styles.wrapper}>
 			<div className={styles.productPage}>
 				{imagesArr.length ? (
 					<>
-						<ProductIdMobileSwiper product={product} />
-						<ProductIdDesktopSwiper product={product} />
+						<ProductIdMobileSwiper product={product.data} />
+						<ProductIdDesktopSwiper product={product.data} />
 					</>
 				) : (
 					<div className={styles.defaultImageWrapper}>
 						<div className={styles.mobileActions}>
-							<AddToFavoriteButton product={product} />
+							<AddToFavoriteButton product={product.data} />
 						</div>
 						<Image
 							src="/default-image.png"
 							width={500}
 							height={500}
-							alt={product.name}
+							alt={product.data.name}
 							className={styles.img}
 						/>
 					</div>
@@ -59,20 +58,20 @@ export default async function ProductPage({ params: { id } }: Props) {
 					<div className={styles.info}>
 						<div className={styles.info__wrapper}>
 							<div className={styles.info__title}>
-								<h1 className={styles.title}>{product?.name}</h1>
+								<h1 className={styles.title}>{product?.data.name}</h1>
 								<span
 									className={`${styles.subTitle} ${robotoCondensed.className}`}
 								>
-									{product?.category?.name}
+									{product?.data.category?.name}
 								</span>
 							</div>
-							<span className={styles.price}>${product?.price}</span>
+							<span className={styles.price}>${product?.data.price}</span>
 						</div>
 						<p className={`${styles.desc} ${robotoCondensed.className}`}>
-							{product?.description}
+							{product?.data.description}
 						</p>
 					</div>
-					<ProductIdActions product={product} />
+					<ProductIdActions product={product.data} />
 				</div>
 			</div>
 		</section>

@@ -2,7 +2,7 @@ import { fetchWithAuth } from '@/services/auth/fetchApiAuth.service';
 import { fetchData } from '@/services/fetchData';
 
 export const getDashboardCouponsServer = async (): Promise<
-	IResponseError | IResponse<ICoupon>
+	IResponseJson<IResponse<ICoupon>>
 > => {
 	return await fetchData<IResponse<ICoupon>>('cart/coupon/');
 };

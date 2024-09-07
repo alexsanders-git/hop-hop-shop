@@ -66,8 +66,8 @@ export default function DashboardTableUsers(props: IProps) {
 					pageSize={10}
 					onPageChange={async (page) => {
 						const res = await getDashboardUsers(page);
-						if ('items' in res && res.items) {
-							setNewData(res);
+						if (res.success) {
+							setNewData(res.data);
 						}
 					}}
 				/>

@@ -4,14 +4,13 @@ import DashboardHeadLine from '@/components/dashboard/dashboardHeadLine/Dashboar
 import DashboardTableCategories from '@/components/dashboard/dashboardTableCategories/DashboardTableCategories';
 import EmptyDataBlock from '@/components/dashboard/emptyDataBlock/EmptyDataBlock';
 import { getDashboardCategoriesServer } from '@/services/dashboard/categories/dashboard.categories.service';
-import { isValid } from '@/utils/func/isValid';
 import { getDashboardCategoriesCreate } from '@/utils/paths/dashboard/dashboard.paths';
 
 import styles from './styles.module.scss';
 
 export default async function DashboardCategories() {
 	const categories = await getDashboardCategoriesServer();
-	if (!isValid<IResponse<ICategory>>(categories)) {
+	if (!categories.success) {
 		return notFound();
 	}
 	return (
@@ -23,8 +22,8 @@ export default async function DashboardCategories() {
 				buttonLink={getDashboardCategoriesCreate()}
 				searchType={'categories'}
 			/>
-			{categories && categories.items.length > 0 ? (
-				<DashboardTableCategories categories={categories} />
+			{categories.data.items.length > 0 ? (
+				<DashboardTableCategories categories={categories.data} />
 			) : (
 				<EmptyDataBlock />
 			)}
