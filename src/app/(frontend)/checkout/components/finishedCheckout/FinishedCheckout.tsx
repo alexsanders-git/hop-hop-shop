@@ -5,8 +5,8 @@ import { useState } from 'react';
 
 import Order from '@/app/(frontend)/checkout/components/order/Order';
 import Button from '@/components/Button/Button';
+import Checkbox from '@/components/checkbox/Checkbox';
 import { fetchWithCookies } from '@/services/cookies/cookies.service';
-import Checkbox from '@/sharedComponenst/checkbox/Checkbox';
 import { useCart } from '@/store/cart/Cart.store';
 import { useCheckout } from '@/store/checkout/Checkout.store';
 import { IResponseCheckout } from '@/types/response/response';
@@ -65,11 +65,11 @@ export default function FinishedCheckout() {
 							}),
 						},
 					);
-					if ('order' in res && res.order) {
+					if (res.success) {
 						fetchCart();
 						navigate.push('/thanks-for-order');
 					}
-					if ('error' in res && res.error) {
+					if (!res.success) {
 						setError(res.error.message);
 					}
 				}}

@@ -4,14 +4,13 @@ import DashboardHeadLine from '@/components/dashboard/dashboardHeadLine/Dashboar
 import DashboardTableProducts from '@/components/dashboard/dashboardTableProducts/DashboardTableProducts';
 import EmptyDataBlock from '@/components/dashboard/emptyDataBlock/EmptyDataBlock';
 import { getProductsDashboardServer } from '@/services/dashboard/products/dashboard.products.service';
-import { isValid } from '@/utils/func/isValid';
 import { getDashboardProductsCreate } from '@/utils/paths/dashboard/dashboard.paths';
 
 import styles from './styles.module.scss';
 
 export default async function DashboardProducts() {
 	const products = await getProductsDashboardServer();
-	if (!isValid<IResponse<IProduct>>(products)) {
+	if (!products.success) {
 		return notFound();
 	}
 
@@ -24,8 +23,8 @@ export default async function DashboardProducts() {
 				buttonLink={getDashboardProductsCreate()}
 				searchType={'products'}
 			/>
-			{products && products.items.length > 0 ? (
-				<DashboardTableProducts products={products} />
+			{products.data.items.length > 0 ? (
+				<DashboardTableProducts products={products.data} />
 			) : (
 				<EmptyDataBlock />
 			)}

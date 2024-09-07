@@ -10,8 +10,8 @@ import InputPassword from '@/components/InputPassword/InputPassword';
 import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
+import PhoneInputField from '@/components/phoneInputField/PhoneInputField';
 import { useMutation } from '@/hooks/useMutation';
-import PhoneInputField from '@/sharedComponenst/phoneInputField/PhoneInputField';
 import { useUser } from '@/store/user/User.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import {
@@ -58,8 +58,8 @@ export default function AccountForm() {
 
 	const handleSubmit = async (values: IFormValuesProfile) => {
 		const res = await mutate(values);
-		if (res) {
-			setUser(res);
+		if (res?.success) {
+			setUser(res.data);
 			setSuccess('Profile updated successfully');
 		}
 	};

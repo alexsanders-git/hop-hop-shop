@@ -61,8 +61,8 @@ export default function DashboardTableOrders(props: IProps) {
 					pageSize={10}
 					onPageChange={async (page) => {
 						const res = await getDashboardOrders(page);
-						if ('items' in res && res.items) {
-							setNewData(res);
+						if (res.success) {
+							setNewData(res.data);
 						}
 					}}
 				/>
@@ -80,10 +80,10 @@ function DashboardItem(props: IDashboardItem) {
 				<ModalConfirmation
 					reset={async () => {
 						const res = await removeOrderById(item.id);
-						if ('detail' in res && res.detail) {
+						if (res.success) {
 							const orders = await getDashboardOrders(1);
-							if ('items' in orders && orders.items) {
-								setNewData(orders);
+							if (orders.success) {
+								setNewData(orders.data);
 								setIsShow(false);
 							}
 						}

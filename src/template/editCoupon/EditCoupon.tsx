@@ -60,14 +60,14 @@ export default function EditCoupon(props: IProps) {
 					...values,
 					active: values.active === 'true',
 				});
-				if ('id' in res) {
+				if (res.success) {
 					setIsLoading(false);
 					setSuccess('Coupon updated successfully');
 					await revalidateFunc('/dashboard/coupons');
 					setTimeout(() => {
 						router.push('/dashboard/coupons');
 					}, 2000);
-				} else if ('error' in res && res.error) {
+				} else if (!res.success) {
 					setIsLoading(false);
 					setError(res.error.message);
 				}
@@ -84,7 +84,7 @@ export default function EditCoupon(props: IProps) {
 							reset={async () => {
 								setIsLoading(true);
 								const res = await removeCouponById(coupon.id);
-								if (res) {
+								if (res.success) {
 									setModal(false);
 									setIsLoading(false);
 									setSuccess('Coupon deleted successfully');

@@ -58,7 +58,7 @@ export const fetchWithAuth = async <T>(
 	url: string,
 	options = {},
 	isFile = false,
-): Promise<T | IResponseError> => {
+): Promise<IResponseJson<T>> => {
 	try {
 		let response = await fetch(`${baseUrl}${url}`, {
 			...options,
@@ -77,16 +77,7 @@ export const fetchWithAuth = async <T>(
 			}
 		}
 
-		const json = await response.json();
-		if (json.success) {
-			return json.data as T;
-		} else {
-			return {
-				error: {
-					message: json.error?.message || 'Unknown error occurred.',
-				},
-			} as IResponseError;
-		}
+		return (await response.json()) as IResponseJson<T>;
 	} catch (error) {
 		console.error(`Error fetching data in ${url}`, error);
 		throw error;

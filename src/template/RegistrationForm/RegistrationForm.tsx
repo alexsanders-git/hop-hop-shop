@@ -8,13 +8,13 @@ import * as yup from 'yup';
 
 import Button from '@/components/Button/Button';
 import ButtonLink from '@/components/ButtonLink/ButtonLink';
+import Checkbox from '@/components/checkbox/Checkbox';
 import Input from '@/components/Input/Input';
 import InputPassword from '@/components/InputPassword/InputPassword';
 import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
+import PhoneInputField from '@/components/phoneInputField/PhoneInputField';
 import { fetchWithCookies } from '@/services/cookies/cookies.service';
-import Checkbox from '@/sharedComponenst/checkbox/Checkbox';
-import PhoneInputField from '@/sharedComponenst/phoneInputField/PhoneInputField';
 import { useUser } from '@/store/user/User.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import { IResponseAuth } from '@/types/response/response';
@@ -75,20 +75,24 @@ export default function RegistrationForm() {
 						}),
 					},
 				);
-				if ('user' in res && res.user) {
+				if (res.success) {
 					setIsLoading(false);
-					Cookies.set(CookiesEnums.access_token, res.access_token.value, {
-						expires: res.access_token.expires,
+					Cookies.set(CookiesEnums.access_token, res.data.access_token.value, {
+						expires: res.data.access_token.expires,
 					});
-					Cookies.set(CookiesEnums.refresh_token, res.refresh_token.value, {
-						expires: res.refresh_token.expires,
-						secure: true,
-						sameSite: 'None',
-						path: '/',
-					});
-					setUser(res.user);
+					Cookies.set(
+						CookiesEnums.refresh_token,
+						res.data.refresh_token.value,
+						{
+							expires: res.data.refresh_token.expires,
+							secure: true,
+							sameSite: 'None',
+							path: '/',
+						},
+					);
+					setUser(res.data.user);
 					navigate.push('/');
-				} else if ('error' in res && res.error) {
+				} else if (!res.success) {
 					setIsLoading(false);
 					setError(res.error.message);
 				}

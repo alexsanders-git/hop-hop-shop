@@ -154,10 +154,10 @@ export default function EditProduct(props: IProps) {
 								formData.append('uploaded_images', file);
 							});
 						}
-						if ('name' in res && res.name && formData) {
-							const resUpload = await createProductImage(res.id, formData);
+						if (res.success && formData) {
+							const resUpload = await createProductImage(res.data.id, formData);
 
-							if ('status' in resUpload && resUpload.status) {
+							if (resUpload.success) {
 								setIsLoading(false);
 								setSuccess('Product was updated');
 								resetForm();
@@ -168,7 +168,7 @@ export default function EditProduct(props: IProps) {
 								setTimeout(() => {
 									router.push('/dashboard/products');
 								}, 2000);
-							} else if ('error' in resUpload && resUpload.error) {
+							} else if (!resUpload.success) {
 								setError(resUpload.error.message);
 							}
 						}
@@ -177,7 +177,7 @@ export default function EditProduct(props: IProps) {
 							SKU: Math.floor(Math.random() * 1000),
 							...values,
 						});
-						if ('name' in res && res.name) {
+						if (res.success) {
 							setIsLoading(false);
 							setSuccess('Product was updated');
 							resetForm();

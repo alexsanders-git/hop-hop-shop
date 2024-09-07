@@ -2,7 +2,7 @@ import { fetchWithAuth } from '@/services/auth/fetchApiAuth.service';
 import { fetchData } from '@/services/fetchData';
 
 export const getProductsDashboardServer = async (): Promise<
-	IResponseError | IResponse<IProduct>
+	IResponseJson<IResponse<IProduct>>
 > => {
 	return await fetchData<IResponse<IProduct>>('shop/products/');
 };
@@ -15,7 +15,7 @@ export const removeProductById = async (id: number) => {
 
 export const getDashboardProducts = async (
 	page: number,
-): Promise<IResponseError | IResponse<IProduct>> => {
+): Promise<IResponseJson<IResponse<IProduct>>> => {
 	return await fetchWithAuth<IResponse<IProduct>>(
 		`shop/products?page=${page}`,
 		{

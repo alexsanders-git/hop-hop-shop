@@ -30,11 +30,11 @@ export const useCart = create<IState & IActions>()(
 				fetchCart: async () => {
 					try {
 						const res = await fetchData<IResponseGetCart>('cart/');
-						if ('products' in res && res.products) {
+						if (res.success) {
 							set((state) => {
-								state.cart = res;
+								state.cart = res.data;
 							});
-						} else if ('error' in res && res.error) {
+						} else if (!res.success) {
 							console.error(res.error.message);
 						}
 					} catch (error) {
@@ -47,9 +47,9 @@ export const useCart = create<IState & IActions>()(
 						const res = await fetchData<IResponseGetCart>(`cart/add/${id}/`, {
 							method: 'POST',
 						});
-						if ('products' in res && res.products) {
+						if (res.success) {
 							await useCart.getState().fetchCart();
-						} else if ('error' in res && res.error) {
+						} else if (!res.success) {
 							console.error(res.error.message);
 						}
 					} catch (error) {
@@ -65,9 +65,9 @@ export const useCart = create<IState & IActions>()(
 								method: 'POST',
 							},
 						);
-						if ('products' in res && res.products) {
+						if (res.success) {
 							await useCart.getState().fetchCart();
-						} else if ('error' in res && res.error) {
+						} else if (!res.success) {
 							console.error(res.error.message);
 						}
 					} catch (error) {
@@ -83,9 +83,9 @@ export const useCart = create<IState & IActions>()(
 								method: 'DELETE',
 							},
 						);
-						if ('products' in res && res.products) {
+						if (res.success) {
 							await useCart.getState().fetchCart();
-						} else if ('error' in res && res.error) {
+						} else if (!res.success) {
 							console.error(res.error.message);
 						}
 					} catch (error) {
@@ -104,10 +104,10 @@ export const useCart = create<IState & IActions>()(
 							body: JSON.stringify({ code: coupon }),
 						},
 					);
-					if ('products' in res && res.products) {
+					if (res.success) {
 						await useCart.getState().fetchCart();
 						return '';
-					} else if ('error' in res && res.error) {
+					} else if (!res.success) {
 						return res.error.message;
 					}
 				},

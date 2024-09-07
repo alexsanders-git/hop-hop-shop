@@ -58,8 +58,8 @@ export default function DashboardTableCategories(props: IProps) {
 					pageSize={PageSize}
 					onPageChange={async (page) => {
 						const res = await getDashboardCategories(page);
-						if ('items' in res && res.items) {
-							setNewData(res);
+						if (res.success) {
+							setNewData(res.data);
 						}
 					}}
 				/>
@@ -77,10 +77,10 @@ function DashboardItem(props: IDashboardItem) {
 				<ModalConfirmation
 					reset={async () => {
 						const res = await removeCategoryById(item.id);
-						if ('detail' in res && res.detail) {
+						if (res.success) {
 							const categories = await getDashboardCategories(1);
-							if ('items' in categories && categories.items) {
-								setNewData(categories);
+							if (categories.success) {
+								setNewData(categories.data);
 								setIsShow(false);
 								await revalidateFunc('/dashboard/categories');
 								await revalidateFunc('/');

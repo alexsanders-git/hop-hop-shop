@@ -7,7 +7,7 @@ import Accordion from '@/app/(frontend)/checkout/components/accordion/Accordion'
 import ReadyData from '@/app/(frontend)/checkout/components/readyData/ReadyData';
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
-import PhoneInputField from '@/sharedComponenst/phoneInputField/PhoneInputField';
+import PhoneInputField from '@/components/phoneInputField/PhoneInputField';
 import { useCheckout } from '@/store/checkout/Checkout.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import {

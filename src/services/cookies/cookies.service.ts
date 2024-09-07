@@ -5,7 +5,7 @@ import { CookiesEnums, UserEnum } from '@/utils/enums/cookiesEnums';
 export const fetchWithCookies = async <T>(
 	url: string,
 	options?: RequestInit,
-): Promise<T | IResponseError> => {
+): Promise<IResponseJson<T>> => {
 	const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 	try {
@@ -18,16 +18,8 @@ export const fetchWithCookies = async <T>(
 			},
 		});
 
-		const json = await response.json();
-		if (json.success) {
-			return json.data as T;
-		} else {
-			return {
-				error: {
-					message: json.error?.message || 'Unknown error occurred.',
-				},
-			} as IResponseError;
-		}
+		const json = (await response.json()) as IResponseJson<T>;
+		return json;
 	} catch (error) {
 		console.error('Fetch failed:', error);
 		throw error;

@@ -102,20 +102,28 @@ export default function LoginForm() {
 							password: values.password,
 						}),
 					});
-					if ('user' in res && res.user) {
+					if (res.success) {
 						setIsLoading(false);
-						Cookies.set(CookiesEnums.access_token, res.access_token.value, {
-							expires: res.access_token.expires,
-						});
-						Cookies.set(CookiesEnums.refresh_token, res.refresh_token.value, {
-							expires: res.refresh_token.expires,
-							secure: true,
-							sameSite: 'None',
-							path: '/',
-						});
-						setUser(res.user);
+						Cookies.set(
+							CookiesEnums.access_token,
+							res.data.access_token.value,
+							{
+								expires: res.data.access_token.expires,
+							},
+						);
+						Cookies.set(
+							CookiesEnums.refresh_token,
+							res.data.refresh_token.value,
+							{
+								expires: res.data.refresh_token.expires,
+								secure: true,
+								sameSite: 'None',
+								path: '/',
+							},
+						);
+						setUser(res.data.user);
 						navigate.push('/');
-					} else if ('error' in res && res.error) {
+					} else if (!res.success) {
 						setIsLoading(false);
 						setError(res.error.message);
 					}
