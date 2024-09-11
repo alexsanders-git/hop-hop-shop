@@ -4,6 +4,8 @@ export function middleware(request: NextRequest) {
 	const { pathname, origin } = request.nextUrl;
 	const cartCookie = request.cookies.get('cart');
 	const userCookie = request.cookies.get('user');
+	console.log('userCookie: ', userCookie);
+
 	if (pathname.startsWith('/checkout')) {
 		if (
 			!cartCookie ||
@@ -14,6 +16,17 @@ export function middleware(request: NextRequest) {
 			return NextResponse.redirect(new URL('/cart', origin));
 		}
 	}
+
+	if (pathname.startsWith('/login') || pathname.startsWith('/registration')) {
+		if (
+			userCookie &&
+			userCookie.value &&
+			JSON.parse(userCookie.value)?.state?.user !== null
+		) {
+			return NextResponse.redirect(new URL('/', origin));
+		}
+	}
+
 	if (pathname.startsWith('/dashboard')) {
 		if (
 			!userCookie ||
@@ -23,6 +36,7 @@ export function middleware(request: NextRequest) {
 			return NextResponse.redirect(new URL('/login', origin));
 		}
 	}
+
 	if (pathname.startsWith('/account')) {
 		if (
 			!userCookie ||
@@ -36,5 +50,11 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-	matcher: ['/checkout', '/dashboard/:path*', '/account/:path*'],
+	matcher: [
+		'/checkout',
+		'/login',
+		'/registration',
+		'/dashboard/:path*',
+		'/account/:path*',
+	],
 };
