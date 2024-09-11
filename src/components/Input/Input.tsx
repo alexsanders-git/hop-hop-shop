@@ -18,12 +18,10 @@ export default function Input(props: IInputProps) {
 	const inputClassName = `${styles.input} ${meta.touched && meta.error ? styles.inputError : meta.touched ? styles.inputSuccess : ''}`;
 
 	return (
-		<div className={`${styles.inputWrapper} ${className}`}>
-			{title && (
-				<span className={`${styles.title} ${robotoCondensed.className}`}>
-					{title}
-				</span>
-			)}
+		<div
+			className={`${styles.inputWrapper} ${robotoCondensed.className} ${className}`}
+		>
+			{title && <span className={styles.title}>{title}</span>}
 			<input {...field} {...rest} className={inputClassName} />
 			{meta.touched && meta.error ? (
 				<span className={`${styles.error}`}>{meta.error}</span>

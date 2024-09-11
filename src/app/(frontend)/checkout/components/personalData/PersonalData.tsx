@@ -99,7 +99,7 @@ export default function PersonalData() {
 													component={PhoneInputField}
 												/>
 												<ErrorMessage
-													className={styles.error}
+													className={`${styles.error} ${robotoCondensed.className}`}
 													name="phone"
 													component="div"
 												/>

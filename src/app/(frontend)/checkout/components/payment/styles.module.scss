@@ -23,13 +23,16 @@
 			height: 40px;
 		}
 	}
+
 	@media only screen and (max-width: $media-lg) {
 		margin-bottom: 16px;
 		gap: 16px;
 	}
+
 	@media only screen and (max-width: $media-sm) {
 		flex-wrap: wrap;
 		gap: 13px;
+
 		.deliveryImage {
 			object-fit: contain;
 			width: 60px;
@@ -43,7 +46,8 @@
 	flex-direction: row;
 	justify-content: space-between;
 
-	.input:nth-child(1), .input:nth-child(3) {
+	.input:nth-child(1),
+	.input:nth-child(3) {
 		margin-right: 20px;
 	}
 
@@ -84,6 +88,7 @@
 	cursor: pointer;
 	gap: 10px;
 	margin-bottom: 25px;
+
 	@media only screen and (max-width: $media-lg) {
 		margin-bottom: 16px;
 	}
@@ -97,6 +102,7 @@
 	padding: 3px;
 	background-color: #DFE7EB;
 	box-shadow: 1px 1px 0 1px var(--primary-color);
+
 	@media only screen and (max-width: $media-lg) {
 		width: 16px;
 		height: 16px;
@@ -115,6 +121,7 @@
 	font-size: 26px;
 	font-weight: 300;
 	line-height: 29px;
+
 	@media only screen and (max-width: $media-lg) {
 		font-size: 20px;
 		font-weight: 300;

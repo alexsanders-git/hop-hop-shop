@@ -1,6 +1,8 @@
 import { FieldInputProps, FormikProps } from 'formik';
 import PhoneInput from 'react-phone-number-input';
 
+import { robotoCondensed } from '@/styles/fonts/fonts';
+
 import 'react-phone-number-input/style.css';
 
 import styles from './styles.module.scss';
@@ -15,7 +17,7 @@ export default function PhoneInputField(props: IPhoneInputField) {
 	const inputClassName = `${styles.phoneInput} ${form.touched[field.name] && form.errors[field.name] ? styles.inputError : form.touched[field.name] ? styles.inputSuccess : ''}`;
 
 	return (
-		<div className={inputClassName}>
+		<div className={`${inputClassName} ${robotoCondensed.className}`}>
 			<PhoneInput
 				{...field}
 				{...rest}

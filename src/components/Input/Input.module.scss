@@ -6,6 +6,7 @@
 	margin-bottom: 40px;
 	display: flex;
 	flex-direction: column;
+
 	@media only screen and (max-width: $media-lg) {
 		margin-bottom: 16px;
 	}
@@ -15,7 +16,8 @@
 	font-size: 22px;
 	font-weight: 400;
 	line-height: 27px;
-	margin-bottom: 15px;
+	margin-bottom: 10px;
+
 	@media only screen and (max-width: $media-lg) {
 		font-size: 16px;
 		line-height: 20px;
@@ -65,7 +67,7 @@
 	width: 100%;
 	display: block;
 	position: absolute;
-	top: calc(100% + 10px);
+	top: calc(100% + 5px);
 	left: 50%;
 	transform: translateX(-50%);
 	font-size: 16px;

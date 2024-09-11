@@ -40,16 +40,25 @@
 		justify-content: space-between;
 
 		.input {
+			width: 100%;
+			max-width: calc(50% - 10px);
 			margin-bottom: 30px;
+
+			@media only screen and (max-width: $media-xl) {
+				max-width: unset;
+			}
 		}
 
-		.input:nth-child(1), .input:nth-child(3) {
+		.input:nth-child(1),
+		.input:nth-child(3) {
 			margin-right: 20px;
 		}
 
-		@media only screen and (max-width: $media-xxl) {
+		@media only screen and (max-width: $media-xl) {
 			flex-direction: column;
-			.input:nth-child(1), .input:nth-child(3) {
+
+			.input:nth-child(1),
+			.input:nth-child(3) {
 				margin-right: 0;
 			}
 		}
@@ -68,6 +77,7 @@
 	display: flex;
 	flex-direction: column;
 	max-width: 270px;
+
 	@media only screen and (max-width: $media-xxl) {
 		max-width: none;
 	}
@@ -85,6 +95,7 @@
 	font-weight: 400;
 	line-height: 27px;
 	margin-bottom: 15px;
+
 	@media only screen and (max-width: $media-lg) {
 		font-size: 16px;
 		line-height: 20px;
