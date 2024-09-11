@@ -1,31 +1,44 @@
 'use client';
 
 import { Form, Formik } from 'formik';
+import { useSearchParams } from 'next/navigation';
 import * as yup from 'yup';
 
 import ActionModal from '@/components/ActionModal/ActionModal';
 import Button from '@/components/Button/Button';
 import InputPassword from '@/components/InputPassword/InputPassword';
 import useOutside from '@/hooks/useOutside';
+import { resetPassword } from '@/services/auth/passwordResetApi';
 import { passwordValid } from '@/validation/checkout/validation';
 
 import styles from './ResetPasswordForm.module.scss';
 
 export interface IFormValuesProfile {
-	newPassword?: string;
-	confirmPassword?: string;
+	newPassword: string;
+	confirmPassword: string;
 }
 
 export default function ResetPasswordForm() {
+	const searchParams = useSearchParams();
+
+	const token = searchParams.get('key') || '';
+	const user_email = searchParams.get('email') || '';
+	console.log(user_email);
+
 	const {
 		ref: modalRef,
 		isShow: isModalOpen,
 		setIsShow: setIsModalOpen,
 	} = useOutside(false);
 
-	const handleSubmit = (values: IFormValuesProfile) => {
-		console.log(values);
-		setIsModalOpen(true);
+	const handleSubmit = async (values: IFormValuesProfile) => {
+		const res = await resetPassword(
+			token,
+			user_email,
+			values.newPassword,
+			values.confirmPassword,
+		);
+		console.log(res);
 	};
 
 	return (
