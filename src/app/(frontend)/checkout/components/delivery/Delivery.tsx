@@ -38,17 +38,17 @@ export default function Delivery() {
 			innerRef={ref}
 			validationSchema={yup
 				.object({
-					country: countryValid,
-					city: cityValid,
-					address: addressValid,
-					postalCode: postalCodeValid,
+					shipping_country: countryValid,
+					shipping_city: cityValid,
+					shipping_address: addressValid,
+					shipping_postcode: postalCodeValid,
 				})
 				.required()}
 			initialValues={{
-				country: '',
-				city: '',
-				address: '',
-				postalCode: '',
+				shipping_country: '',
+				shipping_city: '',
+				shipping_address: '',
+				shipping_postcode: '',
 			}}
 			onSubmit={async (values) => {
 				setPayment(true);
@@ -120,10 +120,10 @@ export default function Delivery() {
 						)}
 						{opened && (
 							<ReadyData
-								firstText={ref?.current?.values.country}
-								secondText={ref?.current?.values.city}
-								thirdText={ref?.current?.values.address}
-								fourText={ref?.current?.values.postalCode}
+								firstText={ref?.current?.values?.shipping_country}
+								secondText={ref?.current?.values.shipping_city}
+								thirdText={ref?.current?.values.shipping_address}
+								fourText={ref?.current?.values.shipping_postcode}
 								setOpened={() => setOpened(!opened)}
 							/>
 						)}

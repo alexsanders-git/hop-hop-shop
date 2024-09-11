@@ -1,3 +1,8 @@
+import { notFound } from 'next/navigation';
+
+import { getOderById } from '@/services/dashboard/orders/dashboard.orders.service';
+import DashboardOrderDetails from '@/template/dashboardOrderDetails/DashboardOrderDetails';
+
 type Props = {
 	params: {
 		id: string;
@@ -5,5 +10,9 @@ type Props = {
 };
 
 export default async function DashboardOrderEdit({ params: { id } }: Props) {
-	return <div>edit order {id}</div>;
+	const order = await getOderById(Number(id));
+	if (!order.success) {
+		return notFound();
+	}
+	return <DashboardOrderDetails order={order.data} />;
 }

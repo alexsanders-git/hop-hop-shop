@@ -3,11 +3,11 @@ import { Pencil } from 'lucide-react';
 import styles from './styles.module.scss';
 
 export interface IReadyData {
-	firstText?: string;
-	secondText?: string;
-	thirdText?: string;
-	fourText?: string;
-	fiveText?: string;
+	firstText?: string | null;
+	secondText?: string | null;
+	thirdText?: string | null;
+	fourText?: string | null;
+	fiveText?: string | null;
 	setOpened: () => void;
 }
 

@@ -8,12 +8,6 @@ import styles from './CategoryGrid.module.scss';
 
 type CategoryOrPlaceholder = ICategory | IPlaceholder;
 
-function isCategories(
-	categories: IResponse<ICategory> | IResponseError,
-): categories is IResponse<ICategory> {
-	return !('error' in categories);
-}
-
 export default async function CategoryGrid() {
 	// Функція для створення заглушок
 	const createPlaceholder = (): IPlaceholder => ({
@@ -22,11 +16,11 @@ export default async function CategoryGrid() {
 
 	// Отримуємо категорії
 	const categoriesResponse = await getCategories();
-	if (!isCategories(categoriesResponse)) {
+	if (!categoriesResponse.success) {
 		return <div>Error</div>;
 	}
 
-	const categories: CategoryOrPlaceholder[] = categoriesResponse.items;
+	const categories: CategoryOrPlaceholder[] = categoriesResponse.data.items;
 
 	// Перевіряємо, чи кількість елементів кратна 8, якщо ні - додаємо заглушки
 	const remainder = categories?.length % 8;

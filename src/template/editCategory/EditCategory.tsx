@@ -14,9 +14,9 @@ import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
 import Textarea from '@/components/textarea/Textarea';
 import {
-	createCategoryImage,
 	removeCategoryById,
 	updateCategory,
+	updateCategoryImage,
 } from '@/services/dashboard/categories/dashboard.categories.service';
 import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import { categoryValid } from '@/validation/dashboard/category/validation';
@@ -72,7 +72,7 @@ export default function EditCategory(props: IProps) {
 
 					const res = await updateCategory(category.id, values);
 					if (res.success && formData) {
-						const resUpload = await createCategoryImage(res.data.id, formData);
+						const resUpload = await updateCategoryImage(res.data.id, formData);
 						if (resUpload.success) {
 							setIsLoading(false);
 							setSuccess('Category updated successfully');
@@ -81,7 +81,7 @@ export default function EditCategory(props: IProps) {
 							setTimeout(() => {
 								router.push('/dashboard/categories');
 							}, 2000);
-						} else if (!res.success) {
+						} else {
 							setIsLoading(false);
 							setError(resUpload.error.message);
 						}
@@ -96,7 +96,7 @@ export default function EditCategory(props: IProps) {
 						setTimeout(() => {
 							router.push('/dashboard/categories');
 						}, 2000);
-					} else if (!res.success) {
+					} else {
 						setIsLoading(false);
 						setError(res.error.message);
 					}
