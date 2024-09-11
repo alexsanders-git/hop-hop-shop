@@ -66,7 +66,9 @@ function DashboardSearchBar(props: IProps) {
 				data?.items?.length > 0 &&
 				debouncedSearch.length > 0 &&
 				!open && (
-					<div className={styles.suggestionsWrapper}>
+					<div
+						className={`${styles.suggestionsWrapper} ${robotoCondensed.className}`}
+					>
 						<div className={styles.suggestionsWrapperScrollBar}>
 							<div className={styles.suggestionsContainer}>
 								{data.items.map((suggestion, index) => (
