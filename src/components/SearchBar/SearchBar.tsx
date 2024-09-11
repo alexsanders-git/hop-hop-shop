@@ -57,7 +57,9 @@ function SearchBar(props: SearchBarProps, ref: Ref<HTMLDivElement>) {
 				placeholder="Search"
 			/>
 			{data && data.items.length > 0 && debouncedSearch.length > 0 && (
-				<div className={styles.suggestionsWrapper}>
+				<div
+					className={`${styles.suggestionsWrapper} ${robotoCondensed.className}`}
+				>
 					<div className={styles.suggestionsWrapperScrollBar}>
 						<div className={styles.suggestionsContainer}>
 							{data.items.map((suggestion, index) => (
