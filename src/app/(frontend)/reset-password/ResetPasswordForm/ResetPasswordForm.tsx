@@ -1,6 +1,7 @@
 'use client';
 
 import { Form, Formik } from 'formik';
+import { useSearchParams } from 'next/navigation';
 import * as yup from 'yup';
 
 import ActionModal from '@/components/ActionModal/ActionModal';
@@ -17,6 +18,10 @@ export interface IFormValuesProfile {
 }
 
 export default function ResetPasswordForm() {
+	const searchParams = useSearchParams();
+
+	console.log(searchParams);
+
 	const {
 		ref: modalRef,
 		isShow: isModalOpen,
