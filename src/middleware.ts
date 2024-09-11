@@ -37,6 +37,16 @@ export function middleware(request: NextRequest) {
 		}
 	}
 
+	if (pathname.startsWith('/test-page')) {
+		if (
+			!userCookie ||
+			!userCookie.value ||
+			JSON.parse(userCookie?.value)?.state?.user?.user_role !== 'Admin'
+		) {
+			return NextResponse.redirect(new URL('/', origin));
+		}
+	}
+
 	if (pathname.startsWith('/account')) {
 		if (
 			!userCookie ||
@@ -55,6 +65,7 @@ export const config = {
 		'/login',
 		'/registration',
 		'/dashboard/:path*',
+		'/test-page',
 		'/account/:path*',
 	],
 };
