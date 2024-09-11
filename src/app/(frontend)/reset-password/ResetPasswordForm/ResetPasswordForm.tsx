@@ -18,9 +18,7 @@ export interface IFormValuesProfile {
 }
 
 export default function ResetPasswordForm() {
-	const searchParams = useSearchParams();
-
-	console.log(searchParams);
+	// const searchParams = useSearchParams();
 
 	const {
 		ref: modalRef,
