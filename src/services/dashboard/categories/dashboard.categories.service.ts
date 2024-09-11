@@ -66,3 +66,14 @@ export const createCategoryImage = async (id: number, data: FormData) => {
 		true,
 	);
 };
+
+export const updateCategoryImage = async (id: number, data: FormData) => {
+	return await fetchWithAuth<{ image: string }>(
+		`shop/categories/${id}/upload-image/`,
+		{
+			method: 'PATCH',
+			body: data,
+		},
+		true,
+	);
+};

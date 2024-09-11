@@ -50,9 +50,14 @@ interface IUser extends IDeliveryAddress {
 	email: string;
 	first_name: string;
 	last_name: string;
-	user_role: UserRole.Admin | UserRole.User;
+	user_role: UserRole.Admin | UserRole.User | UserRole.Owner;
 	phone_number: string;
 	avatar: string | null;
+	is_staff: boolean;
+	is_active: boolean;
+
+	// потім видалити це поле
+	image?: string;
 }
 
 interface IPersonalData {
@@ -63,10 +68,10 @@ interface IPersonalData {
 }
 
 interface IDeliveryAddress {
-	country: string;
-	city: string;
-	postalCode: string;
-	address: string;
+	shipping_country: string | null;
+	shipping_city: string | null;
+	shipping_address: string | null;
+	shipping_postcode: string | null;
 }
 
 interface ICreditCard {
@@ -87,6 +92,7 @@ interface IOrders {
 enum UserRole {
 	User = 'User',
 	Admin = 'Admin',
+	Owner = 'Owner',
 }
 
 interface IPagination {
@@ -135,4 +141,20 @@ interface IResponseJson<T> {
 	error: {
 		message: string;
 	};
+}
+
+interface IOrderDetails {
+	id: number;
+	customer: null | IUser;
+	first_name: string;
+	last_name: string;
+	email: string;
+	phone: string;
+	shipping_country: string;
+	shipping_city: string;
+	shipping_address: string;
+	shipping_postcode: string;
+	paid: boolean;
+	status: string;
+	items: IProduct[];
 }

@@ -9,7 +9,7 @@ import styles from './NewArrivals.module.scss';
 export default async function NewArrivals() {
 	const products = await getLatestArrivalProducts();
 
-	if (!Array.isArray(products) || ('error' in products && products.error)) {
+	if (!products.success) {
 		return <div>error</div>;
 	}
 
@@ -29,7 +29,7 @@ export default async function NewArrivals() {
 			<SectionContainer>
 				<h2 className={styles.title}>New Arrivals</h2>
 
-				<ProductsSlider products={products} />
+				<ProductsSlider products={products.data} />
 			</SectionContainer>
 		</section>
 	);

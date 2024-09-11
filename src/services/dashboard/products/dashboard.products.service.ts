@@ -47,6 +47,16 @@ export const createProductImage = async (id: number, data: FormData) => {
 		true,
 	);
 };
+export const updateProductImage = async (id: number, data: FormData) => {
+	return await fetchWithAuth<{ status: string }>(
+		`shop/products/${id}/upload-images/`,
+		{
+			method: 'PATCH',
+			body: data,
+		},
+		true,
+	);
+};
 
 export const getProductByID = async (id: string) => {
 	return await fetchWithAuth<IProduct>(`shop/products/${id}`, {
@@ -68,4 +78,12 @@ export const updateProduct = async (
 		method: 'PATCH',
 		body: JSON.stringify(data),
 	});
+};
+export const removeProduct = async (id: number, imageId: number) => {
+	return await fetchWithAuth<any>(
+		`shop/products/${id}/delete-image/${imageId}`,
+		{
+			method: 'DELETE',
+		},
+	);
 };

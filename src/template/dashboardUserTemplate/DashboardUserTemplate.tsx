@@ -1,19 +1,19 @@
 'use client';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 import * as yup from 'yup';
 
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
-import InputPassword from '@/components/InputPassword/InputPassword';
 import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
 import PhoneInputField from '@/components/phoneInputField/PhoneInputField';
-import { updateProfile } from '@/services/dashboard/users/dashboard.users.service';
-import { useUser } from '@/store/user/User.store';
+import { updateDashboardUsers } from '@/services/dashboard/users/dashboard.users.service';
 import { robotoCondensed } from '@/styles/fonts/fonts';
+import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import {
 	addressValid,
 	cityValid,
@@ -21,12 +21,11 @@ import {
 	emailValid,
 	latNameValid,
 	nameValid,
-	passwordValid,
 	phoneValid,
 	postalCodeValid,
 } from '@/validation/checkout/validation';
 
-import styles from './AccountForm.module.scss';
+import styles from './DashboardUserTemplate.module.scss';
 
 export interface IFormValuesProfile {
 	first_name?: string;
@@ -42,15 +41,13 @@ export interface IFormValuesProfile {
 	confirmPassword?: string;
 }
 
-export default function AccountForm() {
-	const user = useUser((state) => state.user);
-	const setUser = useUser((state) => state.setUser);
-
+export default function DashboardUserTemplate({ user }: { user: IUser }) {
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
-	const [preview, setPreview] = useState<string | null>(user?.avatar || null);
+	const [preview, setPreview] = useState<string | null>(user?.image || null);
 	const [success, setSuccess] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [error, setError] = useState('');
+	const [error, setError] = useState<string>('');
+	const router = useRouter();
 
 	const handleSubmit = async (values: IFormValuesProfile) => {
 		const formData = new FormData();
@@ -65,12 +62,13 @@ export default function AccountForm() {
 			formData.append('image', selectedFile);
 		}
 
-		const res = await updateProfile(formData);
+		const res = await updateDashboardUsers(user.id, formData);
 		if (res?.success) {
-			setUser(res.data);
-			setSuccess('Profile updated successfully');
+			await revalidateFunc('/dashboard/users');
+			setSuccess('User updated successfully');
+			router.push('/dashboard/users');
 		} else {
-			setError(res?.error.message || 'Something went wrong');
+			setError('Something went wrong');
 		}
 	};
 
@@ -86,10 +84,6 @@ export default function AccountForm() {
 			reader.readAsDataURL(file);
 		}
 	};
-
-	if (!user) {
-		return <div>Loading...</div>;
-	}
 
 	return (
 		<div className={styles.container}>
@@ -127,13 +121,6 @@ export default function AccountForm() {
 						shipping_city: cityValid.optional(),
 						shipping_address: addressValid.optional(),
 						shipping_postcode: postalCodeValid.optional(),
-						currentPassword: passwordValid.optional(),
-						newPassword: passwordValid.optional(),
-						confirmPassword: yup
-							.string()
-							.required('Confirm Password is required')
-							.oneOf([yup.ref('newPassword')], 'Passwords must match')
-							.optional(),
 					})
 					.required()}
 				initialValues={{
@@ -145,9 +132,6 @@ export default function AccountForm() {
 					shipping_city: user?.shipping_city || '',
 					shipping_address: user?.shipping_address || '',
 					shipping_postcode: user?.shipping_postcode || '',
-					currentPassword: '',
-					newPassword: '',
-					confirmPassword: '',
 				}}
 				onSubmit={handleSubmit}
 			>
@@ -239,31 +223,8 @@ export default function AccountForm() {
 								/>
 							</div>
 						</div>
-						<div className={styles.formGroup}>
-							<h2 className={styles.title}>Password</h2>
-							<InputPassword
-								className={styles.input}
-								title={'Current password'}
-								name={'currentPassword'}
-								placeholder={'Current password'}
-							/>
-							<div className={styles.inputContainer}>
-								<InputPassword
-									className={styles.input}
-									title={'New password'}
-									name={'newPassword'}
-									placeholder={'New password'}
-								/>
-								<InputPassword
-									className={styles.input}
-									title={'Confirm password'}
-									name={'confirmPassword'}
-									placeholder={'Confirm password'}
-								/>
-							</div>
-						</div>
 						<div className={styles.actions}>
-							{user?.user_role !== 'Admin' && (
+							{user?.user_role === 'Owner' && (
 								<button
 									type="button"
 									className={styles.deleteButton}
