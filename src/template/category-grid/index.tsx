@@ -7,14 +7,13 @@ import { getCategories } from '@/services/fetchData';
 
 import styles from './styles.module.scss';
 
-const chunkArray = (array, size) => {
-	// Функція для розбиття масиву на підмасиви заданого розміру
-	const chunked_arr = [];
+function chunkArray<T>(array: T[], size: number): T[][] {
+	const chunkedArray: T[][] = [];
 	for (let i = 0; i < array.length; i += size) {
-		chunked_arr.push(array.slice(i, i + size));
+		chunkedArray.push(array.slice(i, i + size));
 	}
-	return chunked_arr;
-};
+	return chunkedArray;
+}
 
 export default async function CategoryGrid() {
 	// Отримуємо категорії
