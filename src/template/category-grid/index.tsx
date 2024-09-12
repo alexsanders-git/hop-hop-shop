@@ -7,6 +7,15 @@ import { getCategories } from '@/services/fetchData';
 
 import styles from './styles.module.scss';
 
+const chunkArray = (array, size) => {
+	// Функція для розбиття масиву на підмасиви заданого розміру
+	const chunked_arr = [];
+	for (let i = 0; i < array.length; i += size) {
+		chunked_arr.push(array.slice(i, i + size));
+	}
+	return chunked_arr;
+};
+
 export default async function CategoryGrid() {
 	// Отримуємо категорії
 	const categoriesResponse = await getCategories();
@@ -16,6 +25,8 @@ export default async function CategoryGrid() {
 	}
 
 	const categories = categoriesResponse.data.items;
+
+	const chunkedCategories = chunkArray(categories, 3);
 
 	return (
 		<section id="category">
@@ -35,9 +46,9 @@ export default async function CategoryGrid() {
 			</SectionContainer>
 
 			<div className={styles.cards}>
-				<SectionContainer>
-					<div className={styles.cardsWrapper}>
-						{categories.map((category) => (
+				{chunkedCategories.map((row, rowIndex) => (
+					<div key={rowIndex} className={styles.cardsRow}>
+						{row.map((category) => (
 							<Link
 								href={`/category/${category.id}`}
 								className={styles.card}
@@ -55,7 +66,7 @@ export default async function CategoryGrid() {
 							</Link>
 						))}
 					</div>
-				</SectionContainer>
+				))}
 			</div>
 		</section>
 	);
