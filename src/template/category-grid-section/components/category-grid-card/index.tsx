@@ -13,6 +13,7 @@ export default function CategoryGridCard({ category, className }: IProps) {
 		<Link
 			href={`/category/${category.id}`}
 			className={`${styles.card} ${className}`}
+			data-aos="fade-up"
 		>
 			<div className={styles.imageWrapper}>
 				<Image
