@@ -36,6 +36,12 @@ export const resetPassword = async (
 			},
 		});
 	} catch (error) {
-		return { success: false, message: 'Unknown error occured' };
+		return {
+			success: false,
+			data: null,
+			error: {
+				message: 'Unknown error occurred',
+			},
+		};
 	}
 };

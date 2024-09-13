@@ -23,8 +23,8 @@
 	aspect-ratio: 1;
 	border-radius: 100%;
 	border-width: 4px;
-	border-color: var(--black-color);
-	box-shadow: 0 4px 0 4px #2a2f2d;
+	border-color: var(--primary-color);
+	box-shadow: 0 4px 0 4px var(--primary-color);
 	position: relative;
 	overflow: hidden;
 

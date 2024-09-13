@@ -2,6 +2,7 @@
 
 import { Form, Formik } from 'formik';
 import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import * as yup from 'yup';
 
 import ActionModal from '@/components/ActionModal/ActionModal';
@@ -19,6 +20,7 @@ export interface IFormValuesProfile {
 }
 
 export default function ResetPasswordForm() {
+	const [errorMessage, setErrorMessage] = useState('');
 	const searchParams = useSearchParams();
 
 	const token = searchParams.get('key') || '';
@@ -26,9 +28,15 @@ export default function ResetPasswordForm() {
 	console.log(user_email);
 
 	const {
-		ref: modalRef,
-		isShow: isModalOpen,
-		setIsShow: setIsModalOpen,
+		ref: successModalRef,
+		isShow: isSuccessModalOpen,
+		setIsShow: setIsSuccessModalOpen,
+	} = useOutside(false);
+
+	const {
+		ref: errorModalRef,
+		isShow: isErrorModalOpen,
+		setIsShow: setIsErrorModalOpen,
 	} = useOutside(false);
 
 	const handleSubmit = async (values: IFormValuesProfile) => {
@@ -38,6 +46,13 @@ export default function ResetPasswordForm() {
 			values.newPassword,
 			values.confirmPassword,
 		);
+
+		if (res.success) {
+			setIsSuccessModalOpen(true);
+		} else {
+			setErrorMessage(res.error?.message || 'An unknown error occurred');
+			setIsErrorModalOpen(true);
+		}
 		console.log(res);
 	};
 
@@ -80,15 +95,27 @@ export default function ResetPasswordForm() {
 					</Form>
 				)}
 			</Formik>
-			<ActionModal
-				ref={modalRef}
-				show={isModalOpen}
-				onClose={() => setIsModalOpen(false)}
-				title={'Woohoo! You did it!'}
-				text={`You've successfully reset your password. You're ready to rock and
+			{isSuccessModalOpen && (
+				<ActionModal
+					ref={successModalRef}
+					show={isSuccessModalOpen}
+					onClose={() => setIsSuccessModalOpen(false)}
+					title={'Woohoo! You did it!'}
+					text={`You've successfully reset your password. You're ready to rock and
 						roll again!`}
-				type={'success'}
-			/>
+					type={'success'}
+				/>
+			)}
+			{isErrorModalOpen && (
+				<ActionModal
+					ref={errorModalRef}
+					show={isErrorModalOpen}
+					onClose={() => setIsErrorModalOpen(false)}
+					title={'Oh no!'}
+					text={errorMessage}
+					type={'error'}
+				/>
+			)}
 		</>
 	);
 }
