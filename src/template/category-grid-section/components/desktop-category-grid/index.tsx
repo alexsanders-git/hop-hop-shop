@@ -1,5 +1,4 @@
-import Link from 'next/link';
-import Image from 'next/image';
+import CategoryGridCard from '../category-grid-card';
 
 import chunkArray from '@/utils/chunkArray';
 
@@ -17,21 +16,11 @@ export default function DesktopCategoryGrid({ categories }: IProps) {
 			{chunkedCategories.map((row, rowIndex) => (
 				<div key={rowIndex} className={styles.cardsRow}>
 					{row.map((category) => (
-						<Link
-							href={`/category/${category.id}`}
-							className={styles.card}
+						<CategoryGridCard
 							key={category.id}
-						>
-							<div className={styles.imageWrapper}>
-								<Image
-									src={category.image || '/default-image.png'}
-									width={335}
-									height={560}
-									alt={category.name}
-								/>
-							</div>
-							<div className={styles.categoryName}>{category.name}</div>
-						</Link>
+							className={styles.card}
+							category={category}
+						/>
 					))}
 				</div>
 			))}

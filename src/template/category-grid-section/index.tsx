@@ -2,11 +2,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import SectionContainer from '@/components/SectionContainer/SectionContainer';
+import CategoryGrid from './components/category-grid';
 
 import { getCategories } from '@/services/fetchData';
 
 import styles from './styles.module.scss';
-import CategoryGrid from './components/category-grid';
 
 export default async function CategoryGridSection() {
 	const categoriesResponse = await getCategories();
