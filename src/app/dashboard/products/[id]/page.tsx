@@ -10,7 +10,6 @@ type Props = {
 
 export default async function DashboardProductsId({ params: { id } }: Props) {
 	const product = await getProductByID(id);
-	// const categories = await getAllCategories();
 
 	if (!product.success) {
 		return notFound();
