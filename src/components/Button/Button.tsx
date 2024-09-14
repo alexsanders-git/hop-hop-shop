@@ -1,15 +1,16 @@
 'use client';
 
+import React from 'react';
+import styles from './Button.module.scss';
+
 interface IButtonProps {
 	text: string;
-	onClick?: () => void;
+	onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 	className?: string;
 	disabled?: boolean;
 	type?: 'button' | 'submit' | 'reset';
 	style?: 'primary' | 'secondary';
 }
-
-import styles from './Button.module.scss';
 
 export default function Button({
 	text,
@@ -24,7 +25,7 @@ export default function Button({
 			type={type}
 			disabled={disabled}
 			className={`${styles.button} ${className} ${style === 'secondary' ? styles.secondary : styles.primary}`}
-			onClick={onClick}
+			onClick={(e) => (onClick ? onClick(e) : null)}
 		>
 			{text}
 		</button>

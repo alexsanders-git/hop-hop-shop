@@ -12,7 +12,7 @@ interface IProps {
 	buttonLink?: string;
 	searchType:
 		| 'products'
-		| 'users'
+		| 'customers'
 		| 'orders'
 		| 'categories'
 		| 'coupons'

@@ -56,21 +56,25 @@ function SearchBar(props: SearchBarProps, ref: Ref<HTMLDivElement>) {
 				className={`${styles.searchInput} ${robotoCondensed.className} ${query ? styles.searchInputWithQuery : ''}`}
 				placeholder="Search"
 			/>
-			{data && data.items.length > 0 && debouncedSearch.length > 0 && (
+			{data && debouncedSearch.length > 0 && (
 				<div
 					className={`${styles.suggestionsWrapper} ${robotoCondensed.className}`}
 				>
 					<div className={styles.suggestionsWrapperScrollBar}>
 						<div className={styles.suggestionsContainer}>
-							{data.items.map((suggestion, index) => (
-								<div
-									key={index}
-									className={styles.suggestionItem}
-									onClick={() => handleSuggestionClick(suggestion.id)}
-								>
-									{suggestion.name}
-								</div>
-							))}
+							{data.items.length > 0 ? (
+								data.items.map((suggestion, index) => (
+									<div
+										key={index}
+										className={styles.suggestionItem}
+										onClick={() => handleSuggestionClick(suggestion.id)}
+									>
+										{suggestion.name}
+									</div>
+								))
+							) : (
+								<div className={styles.notFound}>No data found</div>
+							)}
 						</div>
 					</div>
 				</div>

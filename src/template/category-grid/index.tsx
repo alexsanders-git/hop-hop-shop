@@ -3,19 +3,16 @@ import Link from 'next/link';
 
 import SectionContainer from '@/components/SectionContainer/SectionContainer';
 
-import { getCategories } from '@/services/fetchData';
+import { getAllCategories } from '@/services/fetchData';
 
 import styles from './styles.module.scss';
 
 export default async function CategoryGrid() {
-	// Отримуємо категорії
-	const categoriesResponse = await getCategories();
+	const categories = await getAllCategories();
 
-	if (!categoriesResponse.success && categoriesResponse.data.items.length > 0) {
+	if (!categories.success) {
 		return <div>Error</div>;
 	}
-
-	const categories = categoriesResponse.data.items;
 
 	return (
 		<section id="category">
@@ -37,7 +34,7 @@ export default async function CategoryGrid() {
 			<div className={styles.cards}>
 				<SectionContainer>
 					<div className={styles.cardsWrapper}>
-						{categories.map((category) => (
+						{categories.data.map((category) => (
 							<Link
 								href={`/category/${category.id}`}
 								className={styles.card}

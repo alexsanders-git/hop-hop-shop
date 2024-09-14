@@ -3,8 +3,9 @@ import { useField } from 'formik';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './Input.module.scss';
+import { InputHTMLAttributes } from 'react';
 
-interface IInputProps {
+interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
 	type: string;
 	name: string;
 	placeholder: string;

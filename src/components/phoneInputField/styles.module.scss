@@ -1,6 +1,37 @@
-@import "../../styles/media";
+@import "src/styles/mixins";
 
-.phoneInput {
+.inputWrapper {
+	position: relative;
+	width: 100%;
+	margin-bottom: 40px;
+	display: flex;
+	flex-direction: column;
+
+	@media only screen and (max-width: $media-lg) {
+		margin-bottom: 16px;
+	}
+
+	input {
+		&::placeholder {
+			opacity: 0.5 !important;
+		}
+	}
+}
+
+.title {
+	font-size: 22px;
+	font-weight: 400;
+	line-height: 27px;
+	margin-bottom: 10px;
+
+	@media only screen and (max-width: $media-lg) {
+		font-size: 16px;
+		line-height: 20px;
+		margin-bottom: 7px;
+	}
+}
+
+.input {
 	padding: 12px 24px;
 	font-size: 20px;
 	line-height: 1.1;
@@ -18,8 +49,7 @@
 	}
 
 	&::placeholder {
-		opacity: 1;
-		color: var(#507178);
+		opacity: 0.5 !important;
 	}
 
 	&:active,
@@ -37,3 +67,18 @@
 		box-shadow: 2px 2px 0 2px var(--error-color);
 	}
 }
+
+
+.error {
+	width: 100%;
+	display: block;
+	position: absolute;
+	top: calc(100% + 5px);
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 16px;
+	line-height: 1;
+	color: var(--error-color);
+	z-index: 50;
+}
+

@@ -1,6 +1,4 @@
 import { notFound } from 'next/navigation';
-
-import { getCategories } from '@/services/dashboard/categories/dashboard.categories.service';
 import { getProductByID } from '@/services/dashboard/products/dashboard.products.service';
 import EditProduct from '@/template/editProduct/EditProduct';
 
@@ -12,11 +10,11 @@ type Props = {
 
 export default async function DashboardProductsId({ params: { id } }: Props) {
 	const product = await getProductByID(id);
-	const categories = await getCategories();
+	// const categories = await getAllCategories();
 
-	if (!categories.success || !product.success) {
+	if (!product.success) {
 		return notFound();
 	}
 
-	return <EditProduct product={product.data} categories={categories.data} />;
+	return <EditProduct product={product.data} />;
 }

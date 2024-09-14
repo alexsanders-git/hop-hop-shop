@@ -1,24 +1,32 @@
 'use client';
 import { useState } from 'react';
-
-import Button from '@/components/Button/Button';
 import PromoCode from '@/components/promoCode/PromoCode';
 import { useCart } from '@/store/cart/Cart.store';
 import { londrinaSolid, robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './styles.module.scss';
+import ButtonLink from '@/components/ButtonLink/ButtonLink';
+import { useUser } from '@/store/user/User.store';
 
 export default function Order() {
 	const subtotalPrice = useCart((state) => state.cart?.subtotal_price || 0);
 	const products = useCart((state) => state.cart?.products || []);
+	const user = useUser((state) => state.user);
 	const totalPrice = useCart((state) => state.cart?.total_price || 0);
 	const [open, setOpen] = useState<boolean>(false);
 
 	return (
 		<div className={styles.wrapper}>
-			<div className={styles.buttonWrapper}>
-				<Button className={styles.buttonOrange} text={'Log in'} />
-			</div>
+			{!user && (
+				<div className={styles.buttonWrapper}>
+					<ButtonLink
+						style={'primary'}
+						href={'/login'}
+						className={styles.buttonOrange}
+						text={'Log in'}
+					/>
+				</div>
+			)}
 			<div className={styles.container}>
 				<h1 className={styles.title}>Your Order</h1>
 				<div className={styles.productMap}>

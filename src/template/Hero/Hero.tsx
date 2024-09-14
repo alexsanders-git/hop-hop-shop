@@ -43,7 +43,7 @@ export default function Hero() {
 
 						<div className={styles.imgMobile}>
 							<Image
-								layout="responsive"
+								// layout="responsive"
 								width={366}
 								height={232}
 								src="/manFromHeroSectionMobile.svg"
@@ -56,7 +56,7 @@ export default function Hero() {
 
 					<div className={styles.imgDesktop}>
 						<Image
-							layout="cover"
+							// layout="cover"
 							width={513}
 							height={714}
 							src="/manFromHeroSection.svg"

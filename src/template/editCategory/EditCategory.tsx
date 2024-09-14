@@ -52,6 +52,15 @@ export default function EditCategory(props: IProps) {
 		}
 	};
 
+	const repeatFunc = async () => {
+		await revalidateFunc('/dashboard/categories');
+		await revalidateFunc('/dashboard/products');
+		await revalidateFunc('/', 'layout');
+		setTimeout(() => {
+			router.push('/dashboard/categories');
+		}, 2000);
+	};
+
 	return (
 		<Formik
 			initialValues={{
@@ -76,11 +85,7 @@ export default function EditCategory(props: IProps) {
 						if (resUpload.success) {
 							setIsLoading(false);
 							setSuccess('Category updated successfully');
-							await revalidateFunc('/dashboard/categories');
-							await revalidateFunc('/');
-							setTimeout(() => {
-								router.push('/dashboard/categories');
-							}, 2000);
+							await repeatFunc();
 						} else {
 							setIsLoading(false);
 							setError(resUpload.error.message);
@@ -91,11 +96,7 @@ export default function EditCategory(props: IProps) {
 					if (res.success) {
 						setIsLoading(false);
 						setSuccess('Category updated successfully');
-						await revalidateFunc('/dashboard/categories');
-						await revalidateFunc('/');
-						setTimeout(() => {
-							router.push('/dashboard/categories');
-						}, 2000);
+						await repeatFunc();
 					} else {
 						setIsLoading(false);
 						setError(res.error.message);
@@ -107,8 +108,10 @@ export default function EditCategory(props: IProps) {
 				<Form className={styles.wrapper}>
 					{isLoading && <Loader className={styles.loader} />}
 
-					{success !== '' && <MessageSuccess text={success} />}
-					{error !== '' && <MessageError text={error} />}
+					{success !== '' && (
+						<MessageSuccess type={'dashboard'} text={success} />
+					)}
+					{error !== '' && <MessageError type={'dashboard'} text={error} />}
 					{modal && (
 						<ModalConfirmation
 							reset={async () => {
