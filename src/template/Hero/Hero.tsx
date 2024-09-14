@@ -48,6 +48,9 @@ export default function Hero() {
 								height={232}
 								src="/manFromHeroSectionMobile.svg"
 								alt="image"
+								data-aos="fade-down"
+								data-aos-easing="linear"
+								data-aos-duration="500"
 							/>
 
 							<ButtonLink href="#category" text="Product" />
@@ -61,6 +64,9 @@ export default function Hero() {
 							height={714}
 							src="/manFromHeroSection.svg"
 							alt="image"
+							data-aos="fade-down"
+							data-aos-easing="linear"
+							data-aos-duration="500"
 						/>
 					</div>
 				</div>
