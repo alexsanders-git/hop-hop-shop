@@ -51,7 +51,6 @@ interface IImage {
 
 export default function EditProduct(props: IProps) {
 	const { product } = props;
-	// const categories = await getAllCategories();
 
 	const { data: categories } = useFetch<ICategory[]>({
 		endpoint: 'shop/categories/all/',
@@ -59,7 +58,6 @@ export default function EditProduct(props: IProps) {
 			method: 'GET',
 		},
 	});
-	// console.log(Math.ceil(1.2));
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [success, setSuccess] = useState<string>('');
@@ -112,8 +110,8 @@ export default function EditProduct(props: IProps) {
 				setSuccess('');
 			}, 2000);
 			await revalidateFunc('/dashboard/products');
-			await revalidateFunc(`/dashboard/products/${product.id}`);
-			await revalidateFunc(`/product/${product.id}`);
+			await revalidateFunc('/dashboard/products/[id]', 'page');
+			await revalidateFunc('/product/[id]', 'page');
 			await revalidateFunc('/');
 		} else {
 			setError('Image was not deleted');

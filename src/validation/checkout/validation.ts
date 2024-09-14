@@ -36,6 +36,7 @@ export const emailValid = yup
 
 export const phoneValid = yup
 	.string()
+	.max(17, 'Phone number is too long')
 	.matches(
 		/^[\d\s+]+$/,
 		'Phone number can only contain plus, space, and numbers',

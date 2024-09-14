@@ -87,9 +87,15 @@
 .error {
 	width: 100%;
 	display: block;
-	font-size: 16px;
 	line-height: 1;
 	color: var(--error-color);
+	font-size: 24px;
+	font-weight: 300;
+
+	@media screen and (max-width: $media-md) {
+		font-size: 18px;
+		line-height: 24px;
+	}
 }
 
 .errorMessage {
