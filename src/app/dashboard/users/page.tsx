@@ -11,11 +11,15 @@ export default async function DashboardUsers() {
 	const users = await getUsersDashboardServer();
 
 	if (!users.success) {
-		return notFound();
+		notFound();
 	}
 	return (
 		<div className={styles.wrapper}>
-			<DashboardHeadLine searchType={'users'} compact={true} text={'Users'} />
+			<DashboardHeadLine
+				searchType={'customers'}
+				compact={true}
+				text={'Users'}
+			/>
 			{users.data.items.length > 0 ? (
 				<DashboardTableUsers users={users.data} />
 			) : (

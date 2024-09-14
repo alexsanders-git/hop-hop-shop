@@ -114,7 +114,7 @@
 	}
 
 	.col {
-		flex-basis: 16%;
+		flex-basis: 14%;
 	}
 
 	.col1 {
@@ -125,14 +125,18 @@
 		}
 	}
 
+	.col4 {
+		//flex-basis: 20%;
+	}
+
 	.col2,
 	.col3,
 	.col4,
-	.col5 {
+	.col5, .col6 {
 		text-align: center;
 	}
 
-	.col6 {
+	.col7 {
 		padding-right: 25px;
 		display: flex;
 		justify-content: flex-end;

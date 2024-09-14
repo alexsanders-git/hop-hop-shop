@@ -33,12 +33,6 @@ export const emailValid = yup
 	.string()
 	.email('Invalid email format')
 	.required('Email is required');
-// .required(AppErrors.RequiredField)
-// .max(256, AppErrors.maxLengthEmail)
-// .matches(
-// 	/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/,
-// 	AppErrors.InvalidEmail,
-// );
 
 export const phoneValid = yup
 	.string()

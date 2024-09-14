@@ -30,10 +30,11 @@ import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
+import { useFetch } from '@/hooks/useFetch';
 
 export interface IProps {
 	product: IProduct;
-	categories: IResponse<ICategory>;
+	// categories: ICategory[];
 }
 
 interface FormValues {
@@ -49,7 +50,16 @@ interface IImage {
 }
 
 export default function EditProduct(props: IProps) {
-	const { product, categories } = props;
+	const { product } = props;
+	// const categories = await getAllCategories();
+
+	const { data: categories } = useFetch<ICategory[]>({
+		endpoint: 'shop/categories/all/',
+		options: {
+			method: 'GET',
+		},
+	});
+	// console.log(Math.ceil(1.2));
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [success, setSuccess] = useState<string>('');
@@ -123,7 +133,7 @@ export default function EditProduct(props: IProps) {
 						description: `${formikRef.current?.values.description}`,
 						id: 0,
 						price: Number(formikRef.current?.values.price),
-						category: categories!.items.filter(
+						category: categories!.filter(
 							(category) =>
 								category.id === Number(formikRef.current!.values.category),
 						)[0],
@@ -222,9 +232,10 @@ export default function EditProduct(props: IProps) {
 				{({ isValid, dirty, resetForm }) => (
 					<Form className={styles.wrapper}>
 						{isLoading && <Loader className={styles.loader} />}
-
-						{success !== '' && <MessageSuccess text={success} />}
-						{error !== '' && <MessageError text={error} />}
+						{success !== '' && (
+							<MessageSuccess type={'dashboard'} text={success} />
+						)}
+						{error !== '' && <MessageError type={'dashboard'} text={error} />}
 						{modal && (
 							<ModalConfirmation
 								reset={async () => {
@@ -278,7 +289,7 @@ export default function EditProduct(props: IProps) {
 									name={'category'}
 									options={
 										categories
-											? categories.items
+											? categories
 													.map((item) => ({
 														name: item.name,
 														id: item.id,

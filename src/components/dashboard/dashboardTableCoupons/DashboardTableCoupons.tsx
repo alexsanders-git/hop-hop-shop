@@ -14,6 +14,9 @@ import { formatDate } from '@/utils/func/formatDate';
 import { getDashboardCouponsId } from '@/utils/paths/dashboard/dashboard.paths';
 
 import styles from './styles.module.scss';
+import MessageError from '@/components/messageError/MessageError';
+import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
+import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 
 interface IProps {
 	coupons: IResponse<ICoupon>;
@@ -22,15 +25,20 @@ interface IProps {
 interface IDashboardItem {
 	setNewData: (data: IResponse<ICoupon>) => void;
 	item: ICoupon;
+	setError: (text: string | null) => void;
+	setSuccess: (text: string | null) => void;
 }
 
 const PageSize = 10;
 export default function DashboardTableCoupons(props: IProps) {
 	const { coupons } = props;
 	const [newData, setNewData] = useState<IResponse<ICoupon>>(coupons);
+	const [error, setError] = useState<string | null>(null);
+	const [success, setSuccess] = useState<string | null>(null);
 
 	const header = [
 		{ name: 'Coupon ID' },
+		{ name: 'Name' },
 		{ name: 'Status' },
 		{ name: 'Discount amount ' },
 		{ name: 'Valid from' },
@@ -38,40 +46,53 @@ export default function DashboardTableCoupons(props: IProps) {
 		{ name: 'Actions' },
 	];
 	return (
-		<div className={styles.wrapper}>
-			<div className={styles.container}>
-				<ul className={styles.responsiveTable}>
-					<li className={`${styles.tableHeader}`}>
-						{header.map((item, i) => (
-							<div key={i} className={`${styles.col} ${styles[`col${i + 1}`]}`}>
-								{item.name}
-							</div>
+		<>
+			{error && <MessageError type={'dashboard'} text={error} />}
+			{success && <MessageSuccess type={'dashboard'} text={success} />}
+			<div className={styles.wrapper}>
+				<div className={styles.container}>
+					<ul className={styles.responsiveTable}>
+						<li className={`${styles.tableHeader}`}>
+							{header.map((item, i) => (
+								<div
+									key={i}
+									className={`${styles.col} ${styles[`col${i + 1}`]}`}
+								>
+									{item.name}
+								</div>
+							))}
+						</li>
+						{newData?.items?.map((item, index: number) => (
+							<DashboardItem
+								item={item}
+								setNewData={setNewData}
+								key={index}
+								setError={setError}
+								setSuccess={setSuccess}
+							/>
 						))}
-					</li>
-					{newData?.items?.map((item, index: number) => (
-						<DashboardItem item={item} setNewData={setNewData} key={index} />
-					))}
-				</ul>
+					</ul>
+				</div>
+				{newData?.items_count > PageSize ? (
+					<Pagination
+						currentPage={newData?.pagination?.current_page}
+						totalCount={newData?.items_count}
+						pageSize={PageSize}
+						onPageChange={async (page) => {
+							const coupons = await getDashboardCoupons(page);
+							if (coupons.success) {
+								setNewData(coupons.data);
+							}
+						}}
+					/>
+				) : null}
 			</div>
-			{newData?.items_count > PageSize ? (
-				<Pagination
-					currentPage={newData?.pagination?.current_page}
-					totalCount={newData?.items_count}
-					pageSize={PageSize}
-					onPageChange={async (page) => {
-						const coupons = await getDashboardCoupons(page);
-						if (coupons.success) {
-							setNewData(coupons.data);
-						}
-					}}
-				/>
-			) : null}
-		</div>
+		</>
 	);
 }
 
 function DashboardItem(props: IDashboardItem) {
-	const { setNewData, item } = props;
+	const { setNewData, item, setSuccess, setError } = props;
 	const [isShow, setIsShow] = useState<boolean>(false);
 	return (
 		<>
@@ -84,7 +105,18 @@ function DashboardItem(props: IDashboardItem) {
 							if (coupons.success) {
 								setNewData(coupons.data);
 								setIsShow(false);
+								setSuccess(`Coupon ${item.code} has been removed`);
+								await revalidateFunc('/dashboard/coupons');
+								setTimeout(() => {
+									setSuccess(null);
+								}, 3000);
 							}
+						} else {
+							setIsShow(false);
+							setError(res.error.message || 'Something went wrong');
+							setTimeout(() => {
+								setError(null);
+							}, 5000);
 						}
 					}}
 					closeModal={() => setIsShow(false)}
@@ -93,17 +125,18 @@ function DashboardItem(props: IDashboardItem) {
 			)}
 			<li className={`${styles.tableRow} ${robotoCondensed.className}`}>
 				<div className={`${styles.col} ${styles.col1}`}>#{item.id}</div>
-				<div className={`${styles.col} ${styles.col2}`}>
+				<div className={`${styles.col} ${styles.col2}`}>#{item.code}</div>
+				<div className={`${styles.col} ${styles.col3}`}>
 					{item.active ? 'Active' : 'Inactive'}
 				</div>
-				<div className={`${styles.col} ${styles.col3}`}>{item.discount}%</div>
-				<div className={`${styles.col} ${styles.col4}`}>
+				<div className={`${styles.col} ${styles.col4}`}>{item.discount}%</div>
+				<div className={`${styles.col} ${styles.col5}`}>
 					{formatDate(item.valid_from)}
 				</div>
-				<div className={`${styles.col} ${styles.col5}`}>
+				<div className={`${styles.col} ${styles.col6}`}>
 					{formatDate(item.valid_to)}
 				</div>
-				<div className={`${styles.col} ${styles.col6}`}>
+				<div className={`${styles.col} ${styles.col7}`}>
 					<RemoveButton callback={() => setIsShow(true)} />
 					<EditButton callback={() => getDashboardCouponsId(item.id)} />
 				</div>

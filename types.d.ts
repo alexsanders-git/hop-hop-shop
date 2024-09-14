@@ -4,12 +4,6 @@ interface IResponse<T> {
 	pagination: IPagination;
 }
 
-interface IPaginationResponse<T> {
-	items: T[];
-	items_count: number;
-	pagination: IPagination;
-}
-
 interface IPlaceholder {
 	empty: boolean;
 }
@@ -64,7 +58,7 @@ interface IPersonalData {
 	name: string;
 	lastname: string;
 	email: string;
-	phone: string;
+	phone_number: string;
 }
 
 interface IDeliveryAddress {
@@ -111,6 +105,7 @@ interface IDashboardSearch {
 	items: {
 		id: number;
 		name: string;
+		first_name?: string;
 	}[];
 }
 

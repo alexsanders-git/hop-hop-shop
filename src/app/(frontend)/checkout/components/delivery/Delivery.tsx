@@ -1,7 +1,7 @@
 'use client';
 import { Form, Formik, FormikProps } from 'formik';
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
 
 import Accordion from '@/app/(frontend)/checkout/components/accordion/Accordion';
@@ -22,16 +22,33 @@ import fedEx from '../../../../../../public/delivery/feedEx.png';
 import tnt from '../../../../../../public/delivery/tnt.png';
 import united from '../../../../../../public/delivery/united.png';
 import usp from '../../../../../../public/delivery/usp.png';
+import { useUser } from '@/store/user/User.store';
 
 export default function Delivery() {
 	const [opened, setOpened] = useState(false);
 	const ref = useRef<FormikProps<IDeliveryAddress>>(null);
+	const user = useUser((state) => state.user);
 	const { delivery } = useCheckout((state) => state.checkout);
 	const setDelivery = useCheckout((state) => state.setDelivery);
 	const setPayment = useCheckout((state) => state.setPayment);
 	const setDeliveryAddress = useCheckout((state) => state.setDeliveryAddress);
 
 	const deliveryImages = [dhl, fedEx, united, usp, tnt];
+
+	useEffect(() => {
+		if (user && ref.current && user.shipping_country && user.shipping_city) {
+			ref.current.setValues({
+				shipping_country: user.shipping_country,
+				shipping_city: user.shipping_city,
+				shipping_address: user.shipping_address,
+				shipping_postcode: user.shipping_postcode,
+			});
+			ref.current.touched.shipping_country = true;
+			ref.current.touched.shipping_city = true;
+			ref.current.touched.shipping_address = true;
+			ref.current.touched.shipping_postcode = true;
+		}
+	}, [user]);
 
 	return (
 		<Formik
@@ -82,14 +99,14 @@ export default function Delivery() {
 										className={styles.input}
 										title={'Country'}
 										type={'text'}
-										name={'country'}
+										name={'shipping_country'}
 										placeholder={'country'}
 									/>
 									<Input
 										className={styles.input}
 										title={'City'}
 										type={'text'}
-										name={'city'}
+										name={'shipping_city'}
 										placeholder={'city'}
 									/>
 								</div>
@@ -98,14 +115,14 @@ export default function Delivery() {
 										className={styles.input}
 										title={'Address'}
 										type={'text'}
-										name={'address'}
+										name={'shipping_address'}
 										placeholder={'address'}
 									/>
 									<Input
 										className={styles.input}
 										title={'Postal Code'}
 										type={'text'}
-										name={'postalCode'}
+										name={'shipping_postcode'}
 										placeholder={'postal code'}
 									/>
 								</div>

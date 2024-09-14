@@ -4,18 +4,16 @@ import Link from 'next/link';
 import SectionContainer from '@/components/SectionContainer/SectionContainer';
 import CategoryGrid from './components/category-grid';
 
-import { getCategories } from '@/services/fetchData';
+import { getAllCategories } from '@/services/fetchData';
 
 import styles from './styles.module.scss';
 
 export default async function CategoryGridSection() {
-	const categoriesResponse = await getCategories();
+	const categories = await getAllCategories();
 
-	if (!categoriesResponse.success && categoriesResponse.data.items.length > 0) {
+	if (!categories.success && categories.data.length > 0) {
 		return <div>Error</div>;
 	}
-
-	const categories = categoriesResponse.data.items;
 
 	return (
 		<section id="category">
@@ -35,7 +33,7 @@ export default async function CategoryGridSection() {
 			</SectionContainer>
 
 			<div className={styles.cards}>
-				<CategoryGrid categories={categories} />
+				<CategoryGrid categories={categories.data} />
 			</div>
 		</section>
 	);
