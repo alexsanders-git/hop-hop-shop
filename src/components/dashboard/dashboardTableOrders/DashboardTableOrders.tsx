@@ -31,13 +31,15 @@ interface IDashboardItem {
 
 export default function DashboardTableOrders(props: IProps) {
 	const { orders } = props;
+	console.log(orders);
 
 	const [newData, setNewData] = useState<IResponse<IOrders>>(orders);
 	const [error, setError] = useState<string | null>(null);
 	const [success, setSuccess] = useState<string | null>(null);
 	const header = [
 		{ name: 'Order ID' },
-		{ name: 'Status' },
+		{ name: 'Order Status ' },
+		{ name: 'Payment Status ' },
 		{ name: 'Quantity' },
 		{ name: 'Price' },
 		{ name: 'Date' },
@@ -123,15 +125,20 @@ function DashboardItem(props: IDashboardItem) {
 			)}
 			<li className={`${styles.tableRow} ${robotoCondensed.className}`}>
 				<div className={`${styles.col} ${styles.col1}`}>#{item.id}</div>
-				<div className={`${styles.col} ${styles.col2}`}>{item.status}</div>
+				<div className={`${styles.col} ${styles.col2}`}>
+					{item.order_status}
+				</div>
 				<div className={`${styles.col} ${styles.col3}`}>
+					{item.payment_status}
+				</div>
+				<div className={`${styles.col} ${styles.col4}`}>
 					{item.total_quantity}
 				</div>
-				<div className={`${styles.col} ${styles.col4}`}>{item.total_price}</div>
-				<div className={`${styles.col} ${styles.col5}`}>
+				<div className={`${styles.col} ${styles.col5}`}>{item.total_price}</div>
+				<div className={`${styles.col} ${styles.col6}`}>
 					{formatDate(item.created_at)}
 				</div>
-				<div className={`${styles.col} ${styles.col6}`}>
+				<div className={`${styles.col} ${styles.col7}`}>
 					<RemoveButton callback={() => setIsShow(true)} />
 					<EditButton callback={() => getDashboardOrdersId(item.id)} />
 				</div>

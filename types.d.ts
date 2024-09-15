@@ -77,7 +77,8 @@ interface ICreditCard {
 
 interface IOrders {
 	id: number;
-	status: string;
+	order_status: string;
+	payment_status: string;
 	created_at: string;
 	total_quantity: string;
 	total_price: string;
