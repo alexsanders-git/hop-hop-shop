@@ -4,7 +4,6 @@ export function middleware(request: NextRequest) {
 	const { pathname, searchParams, origin } = request.nextUrl;
 	const cartCookie = request.cookies.get('cart');
 	const userCookie = request.cookies.get('user');
-	console.log('userCookie: ', userCookie);
 
 	if (pathname.startsWith('/checkout')) {
 		if (
