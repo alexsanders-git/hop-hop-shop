@@ -43,11 +43,14 @@ export default function Hero() {
 
 						<div className={styles.imgMobile}>
 							<Image
-								layout="responsive"
+								// layout="responsive"
 								width={366}
 								height={232}
 								src="/manFromHeroSectionMobile.svg"
 								alt="image"
+								data-aos="fade-down"
+								data-aos-easing="linear"
+								data-aos-duration="500"
 							/>
 
 							<ButtonLink href="#category" text="Product" />
@@ -56,11 +59,14 @@ export default function Hero() {
 
 					<div className={styles.imgDesktop}>
 						<Image
-							layout="cover"
+							// layout="cover"
 							width={513}
 							height={714}
 							src="/manFromHeroSection.svg"
 							alt="image"
+							data-aos="fade-down"
+							data-aos-easing="linear"
+							data-aos-duration="500"
 						/>
 					</div>
 				</div>

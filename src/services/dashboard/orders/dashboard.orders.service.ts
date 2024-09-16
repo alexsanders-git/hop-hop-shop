@@ -12,7 +12,11 @@ export const removeOrderById = async (id: number) => {
 		method: 'DELETE',
 	});
 };
-
+export const getOderById = async (id: number) => {
+	return await fetchWithAuthServer<IOrderDetails>(`checkout/orders/${id}`, {
+		method: 'GET',
+	});
+};
 export const getDashboardOrders = async (page: number) => {
 	return await fetchWithAuth<IResponse<IOrders>>(
 		`checkout/orders?page=${page}`,

@@ -1,6 +1,33 @@
 @import "src/styles/mixins";
 
+.wrapper {
+	position: fixed;
+	top: 75px;
+	width: 100%;
+	right: 0;
+	left: 0;
+	z-index: 5000;
+}
+
 .container {
+	display: flex;
+	justify-content: flex-end;
+	flex: 1 1 auto;
+	width: 100%;
+	max-width: 1440px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 40px;
+	padding-right: 60px;
+
+	@media screen and (max-width: $media-md) {
+		padding-left: 20px;
+		padding-right: 40px;
+
+	}
+}
+
+.text {
 	padding: 15px 50px;
 	display: grid;
 	place-items: center;
@@ -9,8 +36,9 @@
 	background-color: var(--error-color);
 	color: white;
 	border-radius: 20px;
-	position: absolute;
 	text-wrap: wrap;
-	right: 20px;
-	top: 75px;
+}
+
+.changeWidth {
+	max-width: 1800px;
 }

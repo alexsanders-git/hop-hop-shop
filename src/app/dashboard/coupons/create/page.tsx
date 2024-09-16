@@ -37,7 +37,7 @@ export default function DashboardCouponCreate() {
 					code: categoryValid('Name'),
 					discount: yup
 						.number()
-						.min(0, 'Can`t be less than 0')
+						.min(1, 'Can`t be less than 0')
 						.max(99, 'Can`t be more than 99')
 						.required('Обов’язкове поле'),
 					active: categoryValid('Active'),
@@ -48,6 +48,7 @@ export default function DashboardCouponCreate() {
 				setIsLoading(true);
 				const res = await createCoupon({
 					...values,
+					valid_to: values.valid_to.split('-').reverse().join('-'),
 					active: values.active === 'true',
 				});
 				if (res.success) {
@@ -68,8 +69,10 @@ export default function DashboardCouponCreate() {
 				<Form className={styles.wrapper}>
 					{isLoading && <Loader />}
 
-					{success && <MessageSuccess text={'Your Coupon Added!'} />}
-					{error !== '' && <MessageError text={error} />}
+					{success && (
+						<MessageSuccess type={'dashboard'} text={'Your Coupon Added!'} />
+					)}
+					{error !== '' && <MessageError type={'dashboard'} text={error} />}
 					{modal && (
 						<ModalConfirmation
 							reset={() => {
@@ -117,12 +120,14 @@ export default function DashboardCouponCreate() {
 									name={'discount'}
 									title={'Discount amount, %'}
 									type={'number'}
+									min={1}
+									max={99}
 									placeholder={'Enter discount amount'}
 								/>
 								<Input
 									name={'valid_to'}
 									title={'Valid until'}
-									type={'text'}
+									type={'date'}
 									placeholder={'Enter valid until'}
 								/>
 							</div>

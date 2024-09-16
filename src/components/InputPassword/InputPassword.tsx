@@ -21,12 +21,10 @@ export default function InputPassword(props: InterfaceInputPassword) {
 	const [openPass, setOpenPass] = useState<boolean>(true);
 
 	return (
-		<div className={`${styles.inputWrapper} ${className}`}>
-			{title && (
-				<span className={`${styles.title} ${robotoCondensed.className}`}>
-					{title}
-				</span>
-			)}
+		<div
+			className={`${styles.inputWrapper} ${robotoCondensed.className} ${className}`}
+		>
+			{title && <span className={styles.title}>{title}</span>}
 			<input
 				{...field}
 				{...rest}

@@ -1,5 +1,5 @@
 'use client';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import Cookies from 'js-cookie';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -43,7 +43,7 @@ export default function RegistrationForm() {
 				name: '',
 				last_name: '',
 				email: '',
-				phone: '',
+				phone_number: '',
 				password: '',
 				confPassword: '',
 			}}
@@ -51,7 +51,7 @@ export default function RegistrationForm() {
 				.object({
 					name: nameValid,
 					last_name: latNameValid,
-					phone: phoneValid,
+					phone_number: phoneValid,
 					email: emailValid,
 					password: passwordValid,
 					confPassword: yup
@@ -71,7 +71,7 @@ export default function RegistrationForm() {
 							last_name: values.last_name,
 							email: values.email,
 							password: values.password,
-							phone_number: values.phone,
+							phone_number: values.phone_number,
 						}),
 					},
 				);
@@ -95,6 +95,9 @@ export default function RegistrationForm() {
 				} else if (!res.success) {
 					setIsLoading(false);
 					setError(res.error.message);
+					setTimeout(() => {
+						setError('');
+					}, 10000);
 				}
 			}}
 		>
@@ -123,31 +126,28 @@ export default function RegistrationForm() {
 							name={'email'}
 							placeholder={'Enter Email'}
 						/>
-						<div className={styles.phoneInputWrapper}>
-							<label
-								className={`${styles.phoneInputText} ${robotoCondensed.className}`}
-								htmlFor="phone"
-							>
-								Phone Number
-							</label>
-							<Field
-								name="phone"
-								placeholder={'+38 066 666 66 66'}
-								component={PhoneInputField}
-							/>
-							<ErrorMessage
-								className={styles.error}
-								name="phone"
-								component="div"
-							/>
-						</div>
+						<Field
+							name={'phone_number'}
+							placeholder={'+38 066 666 66 66'}
+							title={'Phone Number'}
+							component={
+								PhoneInputField<{
+									name: string;
+									last_name: string;
+									email: string;
+									phone_number: string;
+									password: string;
+									confPassword: string;
+								}>
+							}
+						/>
 					</div>
 					<div className={styles.inputWrapper}>
 						<InputPassword
 							title={'Password'}
 							name={'password'}
 							placeholder={'Enter Password'}
-						/>{' '}
+						/>
 						<InputPassword
 							title={'Confirm Password '}
 							name={'confPassword'}

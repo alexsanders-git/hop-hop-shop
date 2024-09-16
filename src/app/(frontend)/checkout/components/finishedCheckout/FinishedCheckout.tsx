@@ -21,6 +21,7 @@ export default function FinishedCheckout() {
 	const [error, setError] = useState<string>('');
 	const fetchCart = useCart((state) => state.fetchCart);
 	const navigate = useRouter();
+
 	return (
 		<div>
 			<div className={styles.order}>
@@ -48,14 +49,14 @@ export default function FinishedCheckout() {
 						{
 							method: 'POST',
 							body: JSON.stringify({
-								first_name: personalData!.phone,
+								first_name: personalData!.name,
 								last_name: personalData!.lastname,
 								email: personalData!.email,
-								phone: personalData!.phone,
-								shipping_country: deliveryAddress!.country,
-								shipping_city: deliveryAddress!.city,
-								shipping_address: deliveryAddress!.address,
-								shipping_postcode: deliveryAddress!.postalCode,
+								phone: personalData!.phone_number,
+								shipping_country: deliveryAddress!.shipping_country,
+								shipping_city: deliveryAddress!.shipping_city,
+								shipping_address: deliveryAddress!.shipping_city,
+								shipping_postcode: deliveryAddress!.shipping_postcode,
 								card_information: {
 									card_number: creditCard!.cardNumber,
 									expiry_month: creditCard!.expiryDate.slice(0, 2),

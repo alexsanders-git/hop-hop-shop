@@ -17,7 +17,6 @@ import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
 import Select from '@/components/select/Select';
 import Textarea from '@/components/textarea/Textarea';
-import { useFetchAuth } from '@/hooks/useFetchAuth';
 import {
 	createProduct,
 	createProductImage,
@@ -28,6 +27,7 @@ import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
+import { useFetch } from '@/hooks/useFetch';
 
 interface FormValues {
 	name: string;
@@ -46,8 +46,8 @@ export default function DashboardProductsCreate() {
 	const [previews, setPreviews] = useState<{ image: string; name: string }[]>(
 		[],
 	);
-	const { data: categories } = useFetchAuth<IResponse<ICategory>>({
-		endpoint: 'shop/categories/',
+	const { data: categories } = useFetch<ICategory[]>({
+		endpoint: 'shop/categories/all/',
 		options: {
 			method: 'GET',
 		},
@@ -95,7 +95,7 @@ export default function DashboardProductsCreate() {
 						description: `${formikRef.current?.values.description}`,
 						id: 0,
 						price: Number(formikRef.current?.values.price),
-						category: categories!.items.filter(
+						category: categories!.filter(
 							(category) =>
 								category.id === Number(formikRef.current!.values.category),
 						)[0],
@@ -161,8 +161,10 @@ export default function DashboardProductsCreate() {
 				{({ isValid, dirty, resetForm }) => (
 					<Form className={styles.wrapper}>
 						{isLoading && <Loader className={styles.loader} />}
-						{success && <MessageSuccess text={'Your Product Added!'} />}
-						{error !== '' && <MessageError text={error} />}
+						{success && (
+							<MessageSuccess type={'dashboard'} text={'Your Product Added!'} />
+						)}
+						{error !== '' && <MessageError type={'dashboard'} text={error} />}
 						{modal && (
 							<ModalConfirmation
 								reset={() => {
@@ -200,7 +202,7 @@ export default function DashboardProductsCreate() {
 									name={'category'}
 									options={
 										categories
-											? categories.items.map((item) => ({
+											? categories.map((item) => ({
 													name: item.name,
 													id: item.id,
 												}))

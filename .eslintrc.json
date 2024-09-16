@@ -45,26 +45,6 @@
 			"error",
 			"always"
 		],
-		"import/order": [
-			"error",
-			{
-				"groups": [
-					"builtin",
-					"external",
-					"internal",
-					[
-						"parent",
-						"sibling",
-						"index"
-					]
-				],
-				"newlines-between": "always",
-				"alphabetize": {
-					"order": "asc",
-					"caseInsensitive": true
-				}
-			}
-		],
 		"react/no-unescaped-entities": 0,
 		"no-unused-vars": "off",
 		"no-undef": "off"

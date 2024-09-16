@@ -16,8 +16,8 @@
 	line-height: 25px;
 	letter-spacing: -0.02em;
 	border-radius: 32px;
-	border: 2px solid var(--black-color);
-	box-shadow: 2px 2px 0 2px var(--black-color);
+	border: 2px solid var(--primary-color);
+	box-shadow: 2px 2px 0 2px var(--primary-color);
 	background-color: var(--white-color);
 
 
@@ -59,6 +59,7 @@
 }
 
 .suggestionItem {
+	font-weight: 700;
 	padding: 8px;
 	cursor: pointer;
 	transition: all .4s ease;
@@ -79,6 +80,7 @@
 	justify-content: center;
 	z-index: 15;
 	top: 36%;
+
 	@media screen and (max-width: $media-md) {
 		top: 33%;
 
@@ -95,8 +97,17 @@
 	justify-content: center;
 	z-index: 15;
 	top: 36%;
+
 	@media screen and (max-width: $media-md) {
 		top: 33%;
 
 	}
+}
+
+.notFound {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 20px;
+	font-weight: 700;
 }

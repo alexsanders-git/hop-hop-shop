@@ -22,16 +22,36 @@ function DashboardSearchBar(props: IProps) {
 	const router = useRouter();
 	const [open, setOpen] = useState<boolean>(false);
 
+	const mappingsSearch: { [key: string]: string } = {
+		customers: 'search',
+		products: 'name',
+		orders: 'id',
+		categories: 'name',
+		coupons: 'name',
+		news: 'name',
+	};
+
+	const mappingsUrl: { [key: string]: string } = {
+		customers: 'auth/customers',
+		products: 'shop/products',
+		orders: 'checkout/orders',
+		categories: 'shop/categories',
+		coupons: 'cart/coupon',
+		news: 'news',
+	};
+
 	const { data } = useFetchAuth<IDashboardSearch>({
-		endpoint: `shop/${type}/?name=${debouncedSearch}`,
+		endpoint: `${mappingsUrl[type]}/?${mappingsSearch[type]}=${debouncedSearch}`,
 		skip: debouncedSearch === '',
 		options: {
 			method: 'GET',
 		},
 	});
 
+	console.log(data);
+
 	const handleSuggestionClick = (id: number) => {
-		router.push(`/dashboard/${type}/${id}`);
+		router.push(`/dashboard/${type === 'customers' ? 'users' : type}/${id}`);
 		setQuery('');
 		setOpen(true);
 	};
@@ -62,26 +82,29 @@ function DashboardSearchBar(props: IProps) {
 				placeholder="Search"
 			/>
 			{/*eslint-disable*/}
-			{data &&
-				data?.items?.length > 0 &&
-				debouncedSearch.length > 0 &&
-				!open && (
-					<div className={styles.suggestionsWrapper}>
-						<div className={styles.suggestionsWrapperScrollBar}>
-							<div className={styles.suggestionsContainer}>
-								{data.items.map((suggestion, index) => (
+			{data && debouncedSearch.length > 0 && (
+				<div
+					className={`${styles.suggestionsWrapper} ${robotoCondensed.className}`}
+				>
+					<div className={styles.suggestionsWrapperScrollBar}>
+						<div className={styles.suggestionsContainer}>
+							{data?.items?.length > 0 ? (
+								data.items.map((suggestion, index) => (
 									<div
 										key={index}
 										className={styles.suggestionItem}
 										onClick={() => handleSuggestionClick(suggestion.id)}
 									>
-										{suggestion.name}
+										{suggestion.name || suggestion.first_name || suggestion.id}
 									</div>
-								))}
-							</div>
+								))
+							) : (
+								<div className={styles.notFound}>No data found</div>
+							)}
 						</div>
 					</div>
-				)}
+				</div>
+			)}
 			{/*	eslint-enable*/}
 		</div>
 	);

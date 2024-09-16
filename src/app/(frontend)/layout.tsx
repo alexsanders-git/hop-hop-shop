@@ -11,6 +11,7 @@ import '@/styles/variables.scss';
 import '@/styles/globals.scss';
 
 import styles from './page.module.scss';
+import Initializer from '@/components/initializer';
 
 export const metadata: Metadata = {
 	title: 'HopHopShop',
@@ -32,6 +33,8 @@ export default function RootLayout({
 					</main>
 					<Footer />
 				</div>
+
+				<Initializer />
 
 				<Script id="clarity-script" strategy="afterInteractive">
 					{`

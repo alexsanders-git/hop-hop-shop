@@ -20,6 +20,7 @@ export default function DashboardTableUsers(props: IProps) {
 		{ name: 'User ID' },
 		{ name: 'Name' },
 		{ name: 'Lastname' },
+		{ name: 'Role' },
 		{ name: 'Phone' },
 		{ name: 'Email' },
 		{ name: 'Actions' },
@@ -49,10 +50,13 @@ export default function DashboardTableUsers(props: IProps) {
 								{item.last_name}
 							</div>
 							<div className={`${styles.col} ${styles.col4}`}>
+								{item.user_role}
+							</div>
+							<div className={`${styles.col} ${styles.col5}`}>
 								{item.phone_number}
 							</div>
-							<div className={`${styles.col} ${styles.col5}`}>{item.email}</div>
-							<div className={`${styles.col} ${styles.col6}`}>
+							<div className={`${styles.col} ${styles.col6}`}>{item.email}</div>
+							<div className={`${styles.col} ${styles.col7}`}>
 								<EditButton callback={() => getDashboardUsersId(item.id)} />
 							</div>
 						</li>

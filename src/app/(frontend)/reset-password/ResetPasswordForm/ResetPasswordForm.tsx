@@ -26,6 +26,7 @@ export default function ResetPasswordForm() {
 	const token = searchParams.get('key') || '';
 	const user_email = searchParams.get('email') || '';
 
+
 	const {
 		ref: successModalRef,
 		isShow: isSuccessModalOpen,

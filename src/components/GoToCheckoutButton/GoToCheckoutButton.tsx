@@ -1,6 +1,6 @@
 'use client';
 
-import { BaggageClaim } from 'lucide-react';
+import { DollarSign } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { useCart } from '@/store/cart/Cart.store';
@@ -32,7 +32,7 @@ export default function GoToCheckoutButton({ product, className }: IProps) {
 			className={`${styles.button} ${className}`}
 			onClick={() => GoToCheckoutHandler()}
 		>
-			<BaggageClaim />
+			<DollarSign />
 		</button>
 	);
 }

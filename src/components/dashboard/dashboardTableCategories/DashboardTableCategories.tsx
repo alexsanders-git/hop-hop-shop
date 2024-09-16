@@ -14,6 +14,9 @@ import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import { getDashboardCategoriesId } from '@/utils/paths/dashboard/dashboard.paths';
 
 import styles from './styles.module.scss';
+import MessageError from '@/components/messageError/MessageError';
+import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
+import { truncateText } from '@/utils/func/truncateText';
 
 interface IProps {
 	categories: IResponse<ICategory>;
@@ -22,13 +25,16 @@ interface IProps {
 interface IDashboardItem {
 	setNewData: (data: IResponse<ICategory>) => void;
 	item: ICategory;
+	setError: (text: string | null) => void;
+	setSuccess: (text: string | null) => void;
 }
 
 const PageSize = 10;
 export default function DashboardTableCategories(props: IProps) {
 	const { categories } = props;
 	const [newData, setNewData] = useState<IResponse<ICategory>>(categories);
-
+	const [error, setError] = useState<string | null>(null);
+	const [success, setSuccess] = useState<string | null>(null);
 	const header = [
 		{ name: 'ID' },
 		{ name: 'Category' },
@@ -36,40 +42,53 @@ export default function DashboardTableCategories(props: IProps) {
 		{ name: 'Actions' },
 	];
 	return (
-		<div className={styles.wrapper}>
-			<div className={styles.container}>
-				<ul className={styles.responsiveTable}>
-					<li className={`${styles.tableHeader}`}>
-						{header.map((item, i) => (
-							<div key={i} className={`${styles.col} ${styles[`col${i + 1}`]}`}>
-								{item.name}
-							</div>
+		<>
+			{error && <MessageError type={'dashboard'} text={error} />}
+			{success && <MessageSuccess type={'dashboard'} text={success} />}
+			<div className={styles.wrapper}>
+				<div className={styles.container}>
+					<ul className={styles.responsiveTable}>
+						<li className={`${styles.tableHeader}`}>
+							{header.map((item, i) => (
+								<div
+									key={i}
+									className={`${styles.col} ${styles[`col${i + 1}`]}`}
+								>
+									{item.name}
+								</div>
+							))}
+						</li>
+						{newData?.items?.map((item, index: number) => (
+							<DashboardItem
+								item={item}
+								setNewData={setNewData}
+								key={index}
+								setError={setError}
+								setSuccess={setSuccess}
+							/>
 						))}
-					</li>
-					{newData?.items?.map((item, index: number) => (
-						<DashboardItem item={item} setNewData={setNewData} key={index} />
-					))}
-				</ul>
+					</ul>
+				</div>
+				{newData?.items_count > PageSize ? (
+					<Pagination
+						currentPage={newData?.pagination?.current_page}
+						totalCount={newData?.items_count}
+						pageSize={PageSize}
+						onPageChange={async (page) => {
+							const res = await getDashboardCategories(page);
+							if (res.success) {
+								setNewData(res.data);
+							}
+						}}
+					/>
+				) : null}
 			</div>
-			{newData?.items_count > PageSize ? (
-				<Pagination
-					currentPage={newData?.pagination?.current_page}
-					totalCount={newData?.items_count}
-					pageSize={PageSize}
-					onPageChange={async (page) => {
-						const res = await getDashboardCategories(page);
-						if (res.success) {
-							setNewData(res.data);
-						}
-					}}
-				/>
-			) : null}
-		</div>
+		</>
 	);
 }
 
 function DashboardItem(props: IDashboardItem) {
-	const { setNewData, item } = props;
+	const { setNewData, item, setSuccess, setError } = props;
 	const [isShow, setIsShow] = useState<boolean>(false);
 	return (
 		<>
@@ -82,9 +101,19 @@ function DashboardItem(props: IDashboardItem) {
 							if (categories.success) {
 								setNewData(categories.data);
 								setIsShow(false);
+								setSuccess(`Category ${item.id} was deleted}`);
 								await revalidateFunc('/dashboard/categories');
 								await revalidateFunc('/');
+								setTimeout(() => {
+									setSuccess(null);
+								}, 3000);
 							}
+						} else {
+							setIsShow(false);
+							setError('Something went wrong');
+							setTimeout(() => {
+								setError(null);
+							}, 5000);
 						}
 					}}
 					closeModal={() => setIsShow(false)}
@@ -94,7 +123,9 @@ function DashboardItem(props: IDashboardItem) {
 			<li className={`${styles.tableRow} ${robotoCondensed.className}`}>
 				<div className={`${styles.col} ${styles.col1}`}>#{item.id}</div>
 				<div className={`${styles.col} ${styles.col2}`}>{item.name}</div>
-				<div className={`${styles.col} ${styles.col3}`}>{item.name}</div>
+				<div className={`${styles.col} ${styles.col3}`}>
+					{truncateText(item.description, 60)}
+				</div>
 				<div className={`${styles.col} ${styles.col4}`}>
 					<RemoveButton callback={() => setIsShow(true)} />
 					<EditButton callback={() => getDashboardCategoriesId(item.id)} />

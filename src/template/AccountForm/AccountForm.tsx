@@ -1,7 +1,7 @@
 'use client';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikProps } from 'formik';
 import Image from 'next/image';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
 
 import Button from '@/components/Button/Button';
@@ -11,9 +11,8 @@ import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
 import PhoneInputField from '@/components/phoneInputField/PhoneInputField';
-import { useMutation } from '@/hooks/useMutation';
+import { updateProfile } from '@/services/dashboard/users/dashboard.users.service';
 import { useUser } from '@/store/user/User.store';
-import { robotoCondensed } from '@/styles/fonts/fonts';
 import {
 	addressValid,
 	cityValid,
@@ -32,11 +31,11 @@ export interface IFormValuesProfile {
 	first_name?: string;
 	last_name?: string;
 	email?: string;
-	phone_number?: string;
-	country?: string;
-	city?: string;
-	address?: string;
-	postalCode?: string;
+	phone_number: string;
+	shipping_country?: string;
+	shipping_city?: string;
+	shipping_address?: string;
+	shipping_postcode?: string;
 	currentPassword?: string;
 	newPassword?: string;
 	confirmPassword?: string;
@@ -45,22 +44,36 @@ export interface IFormValuesProfile {
 export default function AccountForm() {
 	const user = useUser((state) => state.user);
 	const setUser = useUser((state) => state.setUser);
-	const { error, mutate, isLoading } = useMutation<IUser>({
-		url: 'auth/profile/',
-		options: {
-			method: 'PATCH',
-		},
-	});
+	const ref = useRef<FormikProps<IFormValuesProfile>>(null);
 
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [preview, setPreview] = useState<string | null>(user?.avatar || null);
 	const [success, setSuccess] = useState<string>('');
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [error, setError] = useState('');
 
 	const handleSubmit = async (values: IFormValuesProfile) => {
-		const res = await mutate(values);
+		const formData = new FormData();
+
+		Object.entries(values).forEach(([key, value]) => {
+			if (value != '') {
+				formData.append(key, value);
+			}
+		});
+
+		if (selectedFile) {
+			formData.append('avatar', selectedFile);
+		}
+
+		const res = await updateProfile(formData);
 		if (res?.success) {
 			setUser(res.data);
 			setSuccess('Profile updated successfully');
+			setTimeout(() => {
+				setSuccess('');
+			}, 3000);
+		} else {
+			setError(res?.error.message || 'Something went wrong');
 		}
 	};
 
@@ -77,10 +90,35 @@ export default function AccountForm() {
 		}
 	};
 
+	useEffect(() => {
+		if (user && ref.current) {
+			setPreview(user.avatar);
+			ref.current.setValues({
+				first_name: user.first_name,
+				last_name: user.last_name,
+				email: user.email,
+				phone_number: user.phone_number,
+				shipping_country: user.shipping_country || '',
+				shipping_city: user.shipping_city || '',
+				shipping_address: user.shipping_address || '',
+				shipping_postcode: user.shipping_postcode || '',
+			});
+			ref.current.touched.first_name = true;
+			ref.current.touched.last_name = true;
+			ref.current.touched.email = true;
+			ref.current.touched.phone_number = true;
+
+			ref.current.touched.shipping_country = true;
+			ref.current.touched.shipping_city = true;
+			ref.current.touched.shipping_address = true;
+			ref.current.touched.shipping_postcode = true;
+		}
+	}, [user]);
+
 	if (!user) {
 		return <div>Loading...</div>;
 	}
-
+	console.log(ref?.current?.values);
 	return (
 		<div className={styles.container}>
 			<div className={styles.imgWrp}>
@@ -107,16 +145,17 @@ export default function AccountForm() {
 				</label>
 			</div>
 			<Formik
+				innerRef={ref}
 				validationSchema={yup
 					.object({
 						first_name: nameValid.optional(),
 						last_name: latNameValid.optional(),
 						email: emailValid.optional(),
 						phone_number: phoneValid.optional(),
-						country: countryValid.optional(),
-						city: cityValid.optional(),
-						address: addressValid.optional(),
-						postalCode: postalCodeValid.optional(),
+						shipping_country: countryValid.optional(),
+						shipping_city: cityValid.optional(),
+						shipping_address: addressValid.optional(),
+						shipping_postcode: postalCodeValid.optional(),
 						currentPassword: passwordValid.optional(),
 						newPassword: passwordValid.optional(),
 						confirmPassword: yup
@@ -127,14 +166,14 @@ export default function AccountForm() {
 					})
 					.required()}
 				initialValues={{
-					first_name: user?.first_name || '',
-					last_name: user?.last_name || '',
-					email: user?.email || '',
-					phone_number: user?.phone_number || '',
-					country: user?.country || '',
-					city: user?.city || '',
-					address: user?.address || '',
-					postalCode: user?.postalCode || '',
+					first_name: '',
+					last_name: '',
+					email: '',
+					phone_number: '',
+					shipping_country: '',
+					shipping_city: '',
+					shipping_address: '',
+					shipping_postcode: '',
 					currentPassword: '',
 					newPassword: '',
 					confirmPassword: '',
@@ -145,7 +184,7 @@ export default function AccountForm() {
 					<Form className={styles.formContainer}>
 						{isLoading && <Loader className={styles.loader} />}
 						{success !== '' && <MessageSuccess text={success} />}
-						{error && <MessageError text={error} />}
+						{error !== '' && <MessageError text={error} />}
 						<div className={styles.formGroup}>
 							<h2 className={styles.title}>Personal data</h2>
 							<div className={styles.inputContainer}>
@@ -174,24 +213,13 @@ export default function AccountForm() {
 									name={'email'}
 									placeholder={'exname@mail.com'}
 								/>
-								<div className={styles.phoneInputContainer}>
-									<label
-										className={`${styles.phoneInputText} ${robotoCondensed.className}`}
-										htmlFor="phone_number"
-									>
-										Phone Number
-									</label>
-									<Field
-										name="phone_number"
-										placeholder={'+38 066 666 66 66'}
-										component={PhoneInputField}
-									/>
-									<ErrorMessage
-										className={styles.error}
-										name="phone_number"
-										component="div"
-									/>
-								</div>
+								<Field
+									className={styles.input}
+									name={'phone_number'}
+									placeholder={'+38 066 666 66 66'}
+									title={'Phone Number'}
+									component={PhoneInputField<IFormValuesProfile>}
+								/>
 							</div>
 						</div>
 						<div className={styles.formGroup}>
@@ -201,14 +229,14 @@ export default function AccountForm() {
 									className={styles.input}
 									title={'Country'}
 									type={'text'}
-									name={'country'}
+									name={'shipping_country'}
 									placeholder={'France'}
 								/>
 								<Input
 									className={styles.input}
 									title={'City'}
 									type={'text'}
-									name={'city'}
+									name={'shipping_city'}
 									placeholder={'Marsel'}
 								/>
 							</div>
@@ -217,14 +245,14 @@ export default function AccountForm() {
 									className={styles.input}
 									title={'Address'}
 									type={'text'}
-									name={'address'}
+									name={'shipping_address'}
 									placeholder={'Some str 6, 8'}
 								/>
 								<Input
 									className={styles.input}
 									title={'Postal Code'}
 									type={'text'}
-									name={'postalCode'}
+									name={'shipping_postcode'}
 									placeholder={'03039'}
 								/>
 							</div>

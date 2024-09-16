@@ -4,12 +4,6 @@ interface IResponse<T> {
 	pagination: IPagination;
 }
 
-interface IPaginationResponse<T> {
-	items: T[];
-	items_count: number;
-	pagination: IPagination;
-}
-
 interface IPlaceholder {
 	empty: boolean;
 }
@@ -50,23 +44,28 @@ interface IUser extends IDeliveryAddress {
 	email: string;
 	first_name: string;
 	last_name: string;
-	user_role: UserRole.Admin | UserRole.User;
+	user_role: UserRole.Admin | UserRole.User | UserRole.Owner;
 	phone_number: string;
 	avatar: string | null;
+	is_staff: boolean;
+	is_active: boolean;
+
+	// потім видалити це поле
+	image?: string;
 }
 
 interface IPersonalData {
 	name: string;
 	lastname: string;
 	email: string;
-	phone: string;
+	phone_number: string;
 }
 
 interface IDeliveryAddress {
-	country: string;
-	city: string;
-	postalCode: string;
-	address: string;
+	shipping_country: string | null;
+	shipping_city: string | null;
+	shipping_address: string | null;
+	shipping_postcode: string | null;
 }
 
 interface ICreditCard {
@@ -78,7 +77,8 @@ interface ICreditCard {
 
 interface IOrders {
 	id: number;
-	status: string;
+	order_status: string;
+	payment_status: string;
 	created_at: string;
 	total_quantity: string;
 	total_price: string;
@@ -87,6 +87,7 @@ interface IOrders {
 enum UserRole {
 	User = 'User',
 	Admin = 'Admin',
+	Owner = 'Owner',
 }
 
 interface IPagination {
@@ -105,6 +106,7 @@ interface IDashboardSearch {
 	items: {
 		id: number;
 		name: string;
+		first_name?: string;
 	}[];
 }
 
@@ -135,4 +137,20 @@ interface IResponseJson<T> {
 	error: {
 		message: string;
 	};
+}
+
+interface IOrderDetails {
+	id: number;
+	customer: null | IUser;
+	first_name: string;
+	last_name: string;
+	email: string;
+	phone: string;
+	shipping_country: string;
+	shipping_city: string;
+	shipping_address: string;
+	shipping_postcode: string;
+	paid: boolean;
+	status: string;
+	items: IProduct[];
 }

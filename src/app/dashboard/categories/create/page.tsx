@@ -75,7 +75,8 @@ export default function DashboardCategoriesCreate() {
 						setIsLoading(false);
 						setSuccess(true);
 						await revalidateFunc('/dashboard/categories');
-						await revalidateFunc('/');
+						await revalidateFunc('/dashboard/products');
+						await revalidateFunc('/', 'layout');
 						setTimeout(() => {
 							router.push('/dashboard/categories');
 						}, 2000);
@@ -90,8 +91,10 @@ export default function DashboardCategoriesCreate() {
 				<Form className={styles.wrapper}>
 					{isLoading && <Loader />}
 
-					{success && <MessageSuccess text={'Your Category Added!'} />}
-					{error !== '' && <MessageError text={error} />}
+					{success && (
+						<MessageSuccess type={'dashboard'} text={'Your Category Added!'} />
+					)}
+					{error !== '' && <MessageError type={'dashboard'} text={error} />}
 					{modal && (
 						<ModalConfirmation
 							reset={() => {

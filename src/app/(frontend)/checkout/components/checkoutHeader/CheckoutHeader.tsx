@@ -1,13 +1,15 @@
 'use client';
-import Button from '@/components/Button/Button';
 import { useCart } from '@/store/cart/Cart.store';
 
 import styles from './styles.module.scss';
+import ButtonLink from '@/components/ButtonLink/ButtonLink';
+import { useUser } from '@/store/user/User.store';
 
 export default function CheckoutHeader() {
 	const totalItems = useCart((state) => state.cart?.total_items || 0);
 	const totalPrice = useCart((state) => state.cart?.total_price || 0);
 	const subtotalPrice = useCart((state) => state.cart?.subtotal_price || 0);
+	const user = useUser((state) => state.user);
 
 	return (
 		<div className={styles.container}>
@@ -18,9 +20,16 @@ export default function CheckoutHeader() {
 					{totalPrice < subtotalPrice ? subtotalPrice : totalPrice}
 				</span>
 			</div>
-			<div className={styles.buttonWrapper}>
-				<Button className={styles.buttonHead} text={'Log in'} />
-			</div>
+			{!user && (
+				<div className={styles.buttonWrapper}>
+					<ButtonLink
+						style={'primary'}
+						href={'/login'}
+						className={styles.buttonHead}
+						text={'Log in'}
+					/>
+				</div>
+			)}
 		</div>
 	);
 }

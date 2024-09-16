@@ -19,9 +19,10 @@ import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
 import Select from '@/components/select/Select';
 import Textarea from '@/components/textarea/Textarea';
 import {
-	createProductImage,
+	removeProduct,
 	removeProductById,
 	updateProduct,
+	updateProductImage,
 } from '@/services/dashboard/products/dashboard.products.service';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import PrePublishProduct from '@/template/prePublishProduct/PrePublishProduct';
@@ -29,10 +30,11 @@ import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
+import { useFetch } from '@/hooks/useFetch';
 
 export interface IProps {
 	product: IProduct;
-	categories: IResponse<ICategory>;
+	// categories: ICategory[];
 }
 
 interface FormValues {
@@ -42,8 +44,20 @@ interface FormValues {
 	price: number;
 }
 
+interface IImage {
+	image: string;
+	id: number;
+}
+
 export default function EditProduct(props: IProps) {
-	const { product, categories } = props;
+	const { product } = props;
+
+	const { data: categories } = useFetch<ICategory[]>({
+		endpoint: 'shop/categories/all/',
+		options: {
+			method: 'GET',
+		},
+	});
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [success, setSuccess] = useState<string>('');
@@ -86,9 +100,25 @@ export default function EditProduct(props: IProps) {
 		const newSelectedFiles = selectedFiles.filter((_, i) => i !== index);
 		setSelectedFiles(newSelectedFiles);
 	};
-	const handleRemoveImages = (index: number) => {
-		const newImages = images.filter((_, i) => i !== index);
-		setImages(newImages);
+	const handleRemoveImages = async (index: number, image: IImage) => {
+		const res = await removeProduct(product.id, image.id);
+		if (res.success) {
+			const newImages = images.filter((_, i) => i !== index);
+			setImages(newImages);
+			setSuccess('Image was deleted');
+			setTimeout(() => {
+				setSuccess('');
+			}, 2000);
+			await revalidateFunc('/dashboard/products');
+			await revalidateFunc('/dashboard/products/[id]', 'page');
+			await revalidateFunc('/product/[id]', 'page');
+			await revalidateFunc('/');
+		} else {
+			setError('Image was not deleted');
+			setTimeout(() => {
+				setError('');
+			}, 2000);
+		}
 	};
 	return (
 		<>
@@ -101,7 +131,7 @@ export default function EditProduct(props: IProps) {
 						description: `${formikRef.current?.values.description}`,
 						id: 0,
 						price: Number(formikRef.current?.values.price),
-						category: categories!.items.filter(
+						category: categories!.filter(
 							(category) =>
 								category.id === Number(formikRef.current!.values.category),
 						)[0],
@@ -154,8 +184,9 @@ export default function EditProduct(props: IProps) {
 								formData.append('uploaded_images', file);
 							});
 						}
+
 						if (res.success && formData) {
-							const resUpload = await createProductImage(res.data.id, formData);
+							const resUpload = await updateProductImage(res.data.id, formData);
 
 							if (resUpload.success) {
 								setIsLoading(false);
@@ -164,6 +195,8 @@ export default function EditProduct(props: IProps) {
 								setSelectedFiles([]);
 								setPreviews([]);
 								await revalidateFunc('/dashboard/products');
+								await revalidateFunc(`/dashboard/products/${product.id}`);
+								await revalidateFunc(`/product/${product.id}`);
 								await revalidateFunc('/');
 								setTimeout(() => {
 									router.push('/dashboard/products');
@@ -184,6 +217,8 @@ export default function EditProduct(props: IProps) {
 							setSelectedFiles([]);
 							setPreviews([]);
 							await revalidateFunc('/dashboard/products');
+							await revalidateFunc(`/dashboard/products/${product.id}`);
+							await revalidateFunc(`/product/${product.id}`);
 							await revalidateFunc('/');
 							setTimeout(() => {
 								router.push('/dashboard/products');
@@ -195,16 +230,18 @@ export default function EditProduct(props: IProps) {
 				{({ isValid, dirty, resetForm }) => (
 					<Form className={styles.wrapper}>
 						{isLoading && <Loader className={styles.loader} />}
-
-						{success !== '' && <MessageSuccess text={success} />}
-						{error !== '' && <MessageError text={error} />}
+						{success !== '' && (
+							<MessageSuccess type={'dashboard'} text={success} />
+						)}
+						{error !== '' && <MessageError type={'dashboard'} text={error} />}
 						{modal && (
 							<ModalConfirmation
 								reset={async () => {
 									setIsLoading(true);
 									const res = await removeProductById(product.id);
-									if ('detail' in res && res.detail) {
+									if (res.success) {
 										await revalidateFunc('/dashboard/products');
+										await revalidateFunc(`/product/${product.id}`);
 										await revalidateFunc('/');
 										setIsLoading(false);
 										setSuccess('Product was deleted');
@@ -250,7 +287,7 @@ export default function EditProduct(props: IProps) {
 									name={'category'}
 									options={
 										categories
-											? categories.items
+											? categories
 													.map((item) => ({
 														name: item.name,
 														id: item.id,
@@ -321,7 +358,7 @@ export default function EditProduct(props: IProps) {
 											key={index}
 											index={index}
 											handleRemoveImages={handleRemoveImages}
-											image={img.image}
+											image={img}
 										/>
 									))}
 								{previews.length > 1 &&

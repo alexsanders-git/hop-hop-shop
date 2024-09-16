@@ -48,3 +48,8 @@ export const getPopularProducts = async (): Promise<
 > => {
 	return await fetchData<IProduct[]>('shop/products/popular/');
 };
+export const getAllCategories = async (): Promise<
+	IResponseJson<ICategory[]>
+> => {
+	return await fetchData<ICategory[]>('shop/categories/all/');
+};

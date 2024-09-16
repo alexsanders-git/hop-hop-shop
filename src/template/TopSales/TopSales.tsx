@@ -8,7 +8,7 @@ import styles from './TopSales.module.scss';
 
 export default async function TopSales() {
 	const products = await getPopularProducts();
-	if (!Array.isArray(products) || ('error' in products && products.error)) {
+	if (!products.success) {
 		return <div>error</div>;
 	}
 	return (
@@ -27,7 +27,7 @@ export default async function TopSales() {
 			<SectionContainer>
 				<h2 className={styles.title}>Top Sales</h2>
 
-				<ProductsSlider products={products} />
+				<ProductsSlider products={products.data} />
 			</SectionContainer>
 		</section>
 	);

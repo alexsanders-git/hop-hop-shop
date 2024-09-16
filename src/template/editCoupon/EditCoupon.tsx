@@ -16,7 +16,6 @@ import {
 	removeCouponById,
 	updateCoupon,
 } from '@/services/dashboard/coupons/dashboard.coupons.service';
-import { formatDate } from '@/utils/func/formatDate';
 import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import { categoryValid } from '@/validation/dashboard/category/validation';
 
@@ -40,7 +39,7 @@ export default function EditCoupon(props: IProps) {
 				code: coupon.code,
 				discount: coupon.discount,
 				active: `${coupon.active}`,
-				valid_to: formatDate(coupon.valid_to),
+				valid_to: coupon.valid_to,
 			}}
 			validationSchema={yup
 				.object({
@@ -49,7 +48,7 @@ export default function EditCoupon(props: IProps) {
 						.number()
 						.min(0, 'Can`t be less than 0')
 						.max(100, 'Can`t be more than 100')
-						.required('Обов’язкове поле'),
+						.required('Field is required '),
 					active: categoryValid('Active'),
 					valid_to: categoryValid('Valid Until'),
 				})
@@ -58,6 +57,7 @@ export default function EditCoupon(props: IProps) {
 				setIsLoading(true);
 				const res = await updateCoupon(coupon.id, {
 					...values,
+					valid_to: values.valid_to.split('-').reverse().join('-'),
 					active: values.active === 'true',
 				});
 				if (res.success) {
@@ -77,8 +77,10 @@ export default function EditCoupon(props: IProps) {
 				<Form className={styles.wrapper}>
 					{isLoading && <Loader className={styles.loader} />}
 
-					{success !== '' && <MessageSuccess text={success} />}
-					{error !== '' && <MessageError text={error} />}
+					{success !== '' && (
+						<MessageSuccess type={'dashboard'} text={success} />
+					)}
+					{error !== '' && <MessageError type={'dashboard'} text={error} />}
 					{modal && (
 						<ModalConfirmation
 							reset={async () => {
@@ -143,7 +145,7 @@ export default function EditCoupon(props: IProps) {
 								<Input
 									name={'valid_to'}
 									title={'Valid until'}
-									type={'text'}
+									type={'date'}
 									placeholder={'Enter valid until'}
 								/>
 							</div>

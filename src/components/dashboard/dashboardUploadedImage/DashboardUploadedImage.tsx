@@ -5,10 +5,15 @@ import { useState } from 'react';
 
 import styles from './styles.module.scss';
 
-interface IProps {
+interface IImage {
 	image: string;
+	id: number;
+}
+
+interface IProps {
+	image: IImage;
 	index: number;
-	handleRemoveImages: (index: number) => void;
+	handleRemoveImages: (index: number, image: IImage) => void;
 }
 
 export default function DashboardUploadedImage(props: IProps) {
@@ -16,7 +21,7 @@ export default function DashboardUploadedImage(props: IProps) {
 	const [isHovered, setIsHovered] = useState<boolean>(false);
 	return (
 		<div
-			key={index + image}
+			key={index + image.image}
 			className={styles.firstPreview}
 			onMouseEnter={() => {
 				setIsHovered(true);
@@ -28,7 +33,7 @@ export default function DashboardUploadedImage(props: IProps) {
 			{isHovered && (
 				<div
 					onClick={() => {
-						handleRemoveImages(index);
+						handleRemoveImages(index, image);
 					}}
 					className={styles.removeImage}
 				>
@@ -39,7 +44,7 @@ export default function DashboardUploadedImage(props: IProps) {
 				className={styles.firstImage}
 				width={480}
 				height={470}
-				src={image}
+				src={image.image}
 				alt={'image'}
 			/>
 		</div>
