@@ -25,18 +25,11 @@ export default function ResetPasswordForm() {
 
 	const token = searchParams.get('key') || '';
 	const user_email = searchParams.get('email') || '';
-	console.log(user_email);
 
 	const {
 		ref: successModalRef,
 		isShow: isSuccessModalOpen,
 		setIsShow: setIsSuccessModalOpen,
-	} = useOutside(false);
-
-	const {
-		ref: errorModalRef,
-		isShow: isErrorModalOpen,
-		setIsShow: setIsErrorModalOpen,
 	} = useOutside(false);
 
 	const handleSubmit = async (values: IFormValuesProfile) => {
@@ -51,9 +44,7 @@ export default function ResetPasswordForm() {
 			setIsSuccessModalOpen(true);
 		} else {
 			setErrorMessage(res.error?.message || 'An unknown error occurred');
-			setIsErrorModalOpen(true);
 		}
-		console.log(res);
 	};
 
 	return (
@@ -86,6 +77,9 @@ export default function ResetPasswordForm() {
 							name={'confirmPassword'}
 							placeholder={'Confirm password'}
 						/>
+						{errorMessage && (
+							<div className={styles.errorMessage}>{errorMessage}</div>
+						)}
 						<Button
 							type="submit"
 							className={styles.resetButton}
@@ -104,16 +98,6 @@ export default function ResetPasswordForm() {
 					text={`You've successfully reset your password. You're ready to rock and
 						roll again!`}
 					type={'success'}
-				/>
-			)}
-			{isErrorModalOpen && (
-				<ActionModal
-					ref={errorModalRef}
-					show={isErrorModalOpen}
-					onClose={() => setIsErrorModalOpen(false)}
-					title={'Oh no!'}
-					text={errorMessage}
-					type={'error'}
 				/>
 			)}
 		</>
