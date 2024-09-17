@@ -62,6 +62,9 @@ export const fetchWithAuth = async <T>(
 	try {
 		let response = await fetch(`${baseUrl}${url}`, {
 			...options,
+			next: {
+				revalidate: 200,
+			},
 			headers: prepareHeaders(isFile),
 			credentials: 'include',
 		});

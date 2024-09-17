@@ -8,7 +8,13 @@ import styles from './styles.module.scss';
 
 export default function DashboardSidebar() {
 	const pathname = usePathname();
-	const isActive = (path: string) => path === pathname;
+	const isActive = (path: string) => {
+		// Якщо шлях є точним або є специфічним підшляхом
+		if (path === '/dashboard') {
+			return pathname === path; // Точна відповідність для "/dashboard"
+		}
+		return pathname.startsWith(path); // Для інших шляхів використовується startsWith
+	};
 	return (
 		<aside className={styles.sidebar}>
 			<ul>

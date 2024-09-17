@@ -55,6 +55,8 @@ export default function EditCategory(props: IProps) {
 	const repeatFunc = async () => {
 		await revalidateFunc('/dashboard/categories');
 		await revalidateFunc('/dashboard/products');
+		await revalidateFunc('/dashboard/categories/[id]', 'page');
+		await revalidateFunc('/categories/[id]', 'page');
 		await revalidateFunc('/', 'layout');
 		setTimeout(() => {
 			router.push('/dashboard/categories');
@@ -73,7 +75,7 @@ export default function EditCategory(props: IProps) {
 					description: categoryValid('Description'),
 				})
 				.required()}
-			onSubmit={async (values, { resetForm }) => {
+			onSubmit={async (values) => {
 				setIsLoading(true);
 				if (selectedFile) {
 					const formData = new FormData();
@@ -107,28 +109,29 @@ export default function EditCategory(props: IProps) {
 			{({ isValid }) => (
 				<Form className={styles.wrapper}>
 					{isLoading && <Loader className={styles.loader} />}
-
 					{success !== '' && (
 						<MessageSuccess type={'dashboard'} text={success} />
 					)}
 					{error !== '' && <MessageError type={'dashboard'} text={error} />}
 					{modal && (
 						<ModalConfirmation
+							className={styles.modal}
 							reset={async () => {
 								setIsLoading(true);
 								const res = await removeCategoryById(category.id);
 								if (res.success) {
-									setModal(false);
 									setIsLoading(false);
+									setModal(false);
 									setSuccess('Category deleted successfully');
 									await revalidateFunc('/dashboard/categories');
-									await revalidateFunc('/');
+									await revalidateFunc('/dashboard/products');
 									setTimeout(() => {
 										router.push('/dashboard/categories');
 									}, 2000);
 								} else if (!res.success) {
 									setIsLoading(false);
-									setError('Something went wrong');
+									setModal(false);
+									setError(res.error.message || 'Something went wrong');
 								}
 							}}
 							closeModal={() => setModal(false)}

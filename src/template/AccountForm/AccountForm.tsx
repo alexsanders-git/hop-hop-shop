@@ -53,6 +53,7 @@ export default function AccountForm() {
 	const [error, setError] = useState('');
 
 	const handleSubmit = async (values: IFormValuesProfile) => {
+		setIsLoading(true);
 		const formData = new FormData();
 
 		Object.entries(values).forEach(([key, value]) => {
@@ -67,12 +68,14 @@ export default function AccountForm() {
 
 		const res = await updateProfile(formData);
 		if (res?.success) {
+			setIsLoading(false);
 			setUser(res.data);
 			setSuccess('Profile updated successfully');
 			setTimeout(() => {
 				setSuccess('');
 			}, 3000);
 		} else {
+			setIsLoading(false);
 			setError(res?.error.message || 'Something went wrong');
 		}
 	};
@@ -118,7 +121,6 @@ export default function AccountForm() {
 	if (!user) {
 		return <div>Loading...</div>;
 	}
-	console.log(ref?.current?.values);
 	return (
 		<div className={styles.container}>
 			<div className={styles.imgWrp}>

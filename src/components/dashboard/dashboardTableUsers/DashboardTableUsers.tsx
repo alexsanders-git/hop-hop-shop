@@ -65,6 +65,7 @@ export default function DashboardTableUsers(props: IProps) {
 			</div>
 			{newData?.items?.length > 0 ? (
 				<Pagination
+					num_pages={newData?.pagination?.num_pages}
 					currentPage={newData?.pagination?.current_page}
 					totalCount={newData?.items_count}
 					pageSize={10}

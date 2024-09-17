@@ -16,6 +16,7 @@ export interface IResponseCheckout {
 		shipping_address: string;
 		shipping_postcode: string;
 	};
+	payment_id: string;
 	message: string;
 	sessionid: unknown | null;
 }

@@ -48,7 +48,9 @@ export default function DashboardUserTemplate({ user }: { user: IUser }) {
 	const [error, setError] = useState<string>('');
 	const router = useRouter();
 	const ref = useRef<FormikProps<IFormValuesProfile>>(null);
+
 	const handleSubmit = async (values: IFormValuesProfile) => {
+		setIsLoading(true);
 		const formData = new FormData();
 
 		Object.entries(values).forEach(([key, value]) => {
@@ -63,11 +65,17 @@ export default function DashboardUserTemplate({ user }: { user: IUser }) {
 
 		const res = await updateDashboardUsers(user.id, formData);
 		if (res?.success) {
+			setIsLoading(false);
+			setError('');
+			setSuccess(`User ${user.id} updated successfully`);
 			await revalidateFunc('/dashboard/users');
-			setSuccess('User updated successfully');
-			router.push('/dashboard/users');
+			await revalidateFunc('/dashboard/users/[id]', 'page');
+			setTimeout(() => {
+				setSuccess('');
+				router.push('/dashboard/users');
+			}, 3000);
 		} else {
-			setError('Something went wrong');
+			setError(res.error.message || 'Something went wrong');
 		}
 	};
 
@@ -163,9 +171,12 @@ export default function DashboardUserTemplate({ user }: { user: IUser }) {
 				{() => (
 					<Form className={styles.formContainer}>
 						{isLoading && <Loader className={styles.loader} />}
-						{success !== '' && <MessageSuccess text={success} />}
-						{error !== '' && <MessageError text={error} />}
+						{success !== '' && (
+							<MessageSuccess type={'dashboard'} text={success} />
+						)}
+						{error !== '' && <MessageError type={'dashboard'} text={error} />}
 						<div className={styles.formGroup}>
+							<div className={styles.userId}>User #{user.id}</div>
 							<h2 className={styles.title}>Personal data</h2>
 							<div className={styles.inputContainer}>
 								<Input

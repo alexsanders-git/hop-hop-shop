@@ -17,6 +17,7 @@ import styles from './styles.module.scss';
 import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
 import { truncateText } from '@/utils/func/truncateText';
+import Loader from '@/components/Loader/Loader';
 
 interface IProps {
 	categories: IResponse<ICategory>;
@@ -27,6 +28,7 @@ interface IDashboardItem {
 	item: ICategory;
 	setError: (text: string | null) => void;
 	setSuccess: (text: string | null) => void;
+	setIsLoading: (isLoading: boolean) => void;
 }
 
 const PageSize = 10;
@@ -35,6 +37,7 @@ export default function DashboardTableCategories(props: IProps) {
 	const [newData, setNewData] = useState<IResponse<ICategory>>(categories);
 	const [error, setError] = useState<string | null>(null);
 	const [success, setSuccess] = useState<string | null>(null);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const header = [
 		{ name: 'ID' },
 		{ name: 'Category' },
@@ -43,6 +46,7 @@ export default function DashboardTableCategories(props: IProps) {
 	];
 	return (
 		<>
+			{isLoading && <Loader />}
 			{error && <MessageError type={'dashboard'} text={error} />}
 			{success && <MessageSuccess type={'dashboard'} text={success} />}
 			<div className={styles.wrapper}>
@@ -65,12 +69,14 @@ export default function DashboardTableCategories(props: IProps) {
 								key={index}
 								setError={setError}
 								setSuccess={setSuccess}
+								setIsLoading={setIsLoading}
 							/>
 						))}
 					</ul>
 				</div>
 				{newData?.items_count > PageSize ? (
 					<Pagination
+						num_pages={newData?.pagination?.num_pages}
 						currentPage={newData?.pagination?.current_page}
 						totalCount={newData?.items_count}
 						pageSize={PageSize}
@@ -88,29 +94,35 @@ export default function DashboardTableCategories(props: IProps) {
 }
 
 function DashboardItem(props: IDashboardItem) {
-	const { setNewData, item, setSuccess, setError } = props;
+	const { setNewData, item, setSuccess, setError, setIsLoading } = props;
 	const [isShow, setIsShow] = useState<boolean>(false);
 	return (
 		<>
 			{isShow && (
 				<ModalConfirmation
 					reset={async () => {
+						setIsLoading(true);
 						const res = await removeCategoryById(item.id);
 						if (res.success) {
 							const categories = await getDashboardCategories(1);
 							if (categories.success) {
+								setIsLoading(false);
 								setNewData(categories.data);
 								setIsShow(false);
 								setSuccess(`Category ${item.id} was deleted}`);
 								await revalidateFunc('/dashboard/categories');
-								await revalidateFunc('/');
+								await revalidateFunc('/dashboard/products');
+								await revalidateFunc('/dashboard/categories/[id]', 'page');
+								await revalidateFunc('/categories/[id]', 'page');
+								await revalidateFunc('/', 'layout');
 								setTimeout(() => {
 									setSuccess(null);
 								}, 3000);
 							}
 						} else {
+							setIsLoading(false);
 							setIsShow(false);
-							setError('Something went wrong');
+							setError(res.error.message || 'Something went wrong');
 							setTimeout(() => {
 								setError(null);
 							}, 5000);
