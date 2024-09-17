@@ -5,6 +5,8 @@
 	display: flex;
 	flex-direction: column;
 	gap: 32px;
+	position: relative;
+	height: 100%;
 	@media screen and (max-width: $media-lg) {
 		padding: 20px 30px;
 		gap: 20px;
@@ -281,7 +283,7 @@
 	position: relative;
 	display: flex;
 	align-items: center;
-	z-index: 3000;
+	z-index: 200;
 }
 
 .searchInput {
@@ -293,7 +295,7 @@
 	box-shadow: 2px 2px 0 2px var(--primary-color);
 	background-color: var(--lightgreen-color);
 	letter-spacing: -0.02em;
-	z-index: 1000;
+	z-index: 300;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -319,7 +321,7 @@
 	box-shadow: 2px 2px 0 2px var(--primary-color);
 	background-color: var(--lightgreen-color);
 	border-top: none;
-	z-index: 500;
+	z-index: 200;
 	padding-top: 25px;
 }
 

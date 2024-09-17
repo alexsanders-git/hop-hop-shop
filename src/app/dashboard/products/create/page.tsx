@@ -60,6 +60,7 @@ export default function DashboardProductsCreate() {
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files) {
 			const filesArray = Array.from(event.target.files);
+			console.log(filesArray);
 			setSelectedFiles(filesArray);
 
 			const previewsArray = filesArray.map((file) => {
@@ -73,7 +74,7 @@ export default function DashboardProductsCreate() {
 			});
 
 			Promise.all(previewsArray).then((previews) => {
-				setPreviews(previews);
+				setPreviews((prev) => [...prev, ...previews]);
 			});
 		}
 	};
@@ -127,10 +128,7 @@ export default function DashboardProductsCreate() {
 					.required()}
 				onSubmit={async (values, { resetForm }) => {
 					setIsLoading(true);
-					const res = await createProduct({
-						...values,
-						SKU: Math.floor(Math.random() * 1000),
-					});
+					const res = await createProduct(values);
 					const formData = new FormData();
 
 					if (selectedFiles) {
@@ -150,9 +148,11 @@ export default function DashboardProductsCreate() {
 							await revalidateFunc('/dashboard/products');
 							await revalidateFunc('/');
 							setTimeout(() => {
+								setSuccess(false);
 								router.push('/dashboard/products');
 							}, 2000);
 						} else if (!resUpload.success) {
+							setIsLoading(false);
 							setError(resUpload.error.message);
 						}
 					}
@@ -167,6 +167,7 @@ export default function DashboardProductsCreate() {
 						{error !== '' && <MessageError type={'dashboard'} text={error} />}
 						{modal && (
 							<ModalConfirmation
+								className={styles.height}
 								reset={() => {
 									setModal(false);
 									resetForm();

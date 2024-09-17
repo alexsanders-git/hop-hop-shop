@@ -6,6 +6,10 @@ import useOutside from '@/hooks/useOutside';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './styles.module.scss';
+import { formatDate } from '@/utils/func/formatDate';
+import Loader from '@/components/Loader/Loader';
+import MessageError from '@/components/messageError/MessageError';
+import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
 
 export interface IProps {
 	order: IOrderDetails;
@@ -63,8 +67,14 @@ export default function DashboardOrderDetails(props: IProps) {
 	const { order } = props;
 	const { ref, isShow, setIsShow } = useOutside(false);
 	const [ordersStatus, setOrdersStatus] = useState<string>(status[0]);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [error, setError] = useState<string>('');
+	const [success, setSuccess] = useState<string>('');
 	return (
 		<div className={styles.wrapper}>
+			{isLoading && <Loader />}
+			{error !== '' && <MessageError type={'dashboard'} text={error} />}
+			{success !== '' && <MessageSuccess type={'dashboard'} text={success} />}
 			<h1>Order Details</h1>
 			<div className={styles.orderInfo}>
 				<p className={styles.order}>
@@ -72,7 +82,10 @@ export default function DashboardOrderDetails(props: IProps) {
 					<span className={robotoCondensed.className}>#{order.id}</span>
 				</p>
 				<p className={styles.order}>
-					Date: <span className={robotoCondensed.className}>2024-09-03</span>
+					Date:{' '}
+					<span className={robotoCondensed.className}>
+						{formatDate(order.created_at)}
+					</span>
 				</p>
 				<div>
 					<div ref={ref} className={styles.selectWrapper}>
@@ -128,9 +141,10 @@ export default function DashboardOrderDetails(props: IProps) {
 				</div>
 				<div className={styles.userInfo_container}>
 					<h4>Payment</h4>
-					<span>Credit card, John Doe</span>
-					<span>1234 1234 1234 1234</span>
-					<span>+38 066 666 66 66</span>
+					<span>Not ready in Back</span>
+					{/*<span>Credit card, John Doe</span>*/}
+					{/*<span>1234 1234 1234 1234</span>*/}
+					{/*<span>+38 066 666 66 66</span>*/}
 				</div>
 			</div>
 			<div className={styles.table}>
@@ -146,20 +160,26 @@ export default function DashboardOrderDetails(props: IProps) {
 								</div>
 							))}
 						</li>
-						{orderItems.map((item, index) => (
+						{order.items.map((item, index) => (
 							<li
-								key={item.id}
+								key={item.product_id + index}
 								className={`${styles.tableRow} ${robotoCondensed.className}`}
 							>
-								<div className={`${styles.col} ${styles.col1}`}>#{item.id}</div>
+								<div className={`${styles.col} ${styles.col1}`}>
+									#{item.product_id}
+								</div>
 								<div className={`${styles.col} ${styles.col2}`}>
-									{item.name}
+									{item.product_name}
 								</div>
-								<div className={`${styles.col} ${styles.col3}`}>2pcs</div>
+								<div className={`${styles.col} ${styles.col3}`}>
+									{item.quantity}pc
+								</div>
 								<div className={`${styles.col} ${styles.col4}`}>
-									{item.price}
+									{item.product_price}$
 								</div>
-								<div className={`${styles.col} ${styles.col5}`}>$240</div>
+								<div className={`${styles.col} ${styles.col5}`}>
+									{item.total_price}$
+								</div>
 							</li>
 						))}
 					</ul>
@@ -167,23 +187,23 @@ export default function DashboardOrderDetails(props: IProps) {
 						<div className={styles.orderTotal_wrapper}>
 							<div className={styles.orderTotal_item}>
 								<span>Subtotal</span>
-								<span>$720</span>
+								<span>{order.subtotal_price}$</span>
 							</div>
-							<div className={styles.orderTotal_item}>
-								<span>Tax (20%)</span>
-								<span>$144</span>
-							</div>
-							<div className={styles.orderTotal_item}>
-								<span>Discount</span>
-								<span>0%</span>
-							</div>
-							<div className={styles.orderTotal_item}>
-								<span>Shipping Rate</span>
-								<span>$20%</span>
-							</div>
+							{/*<div className={styles.orderTotal_item}>*/}
+							{/*	<span>Tax (20%)</span>*/}
+							{/*	<span>$144</span>*/}
+							{/*</div>*/}
+							{/*<div className={styles.orderTotal_item}>*/}
+							{/*	<span>Discount</span>*/}
+							{/*	<span>0%</span>*/}
+							{/*</div>*/}
+							{/*<div className={styles.orderTotal_item}>*/}
+							{/*	<span>Shipping Rate</span>*/}
+							{/*	<span>$20%</span>*/}
+							{/*</div>*/}
 							<div className={`${styles.orderTotal_item} ${styles.last}`}>
 								<span>Total</span>
-								<span>$884%</span>
+								<span>{order.total_price}$</span>
 							</div>
 						</div>
 					</div>

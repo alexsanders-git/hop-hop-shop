@@ -3,7 +3,6 @@
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import * as yup from 'yup';
 
 import CreateDashboardHeader from '@/components/dashboard/createDashboardHeader/CreateDashboardHeader';
 import ModalConfirmation from '@/components/dashboard/modalConfirmation/ModalСonfirmation';
@@ -17,9 +16,9 @@ import {
 	updateCoupon,
 } from '@/services/dashboard/coupons/dashboard.coupons.service';
 import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
-import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
+import { validationSchemaCoupon } from '@/validation/coupon/couponValidation';
 
 export interface IProps {
 	coupon: ICoupon;
@@ -33,6 +32,14 @@ export default function EditCoupon(props: IProps) {
 	const [success, setSuccess] = useState('');
 	const [error, setError] = useState('');
 
+	const revalidateData = async () => {
+		await revalidateFunc('/dashboard/coupons');
+		await revalidateFunc('/dashboard/coupons/[id]', 'page');
+		setTimeout(() => {
+			router.push('/dashboard/coupons');
+		}, 2000);
+	};
+
 	return (
 		<Formik
 			initialValues={{
@@ -41,19 +48,8 @@ export default function EditCoupon(props: IProps) {
 				active: `${coupon.active}`,
 				valid_to: coupon.valid_to,
 			}}
-			validationSchema={yup
-				.object({
-					code: categoryValid('Name'),
-					discount: yup
-						.number()
-						.min(0, 'Can`t be less than 0')
-						.max(100, 'Can`t be more than 100')
-						.required('Field is required '),
-					active: categoryValid('Active'),
-					valid_to: categoryValid('Valid Until'),
-				})
-				.required()}
-			onSubmit={async (values, { resetForm }) => {
+			validationSchema={validationSchemaCoupon}
+			onSubmit={async (values) => {
 				setIsLoading(true);
 				const res = await updateCoupon(coupon.id, {
 					...values,
@@ -63,10 +59,7 @@ export default function EditCoupon(props: IProps) {
 				if (res.success) {
 					setIsLoading(false);
 					setSuccess('Coupon updated successfully');
-					await revalidateFunc('/dashboard/coupons');
-					setTimeout(() => {
-						router.push('/dashboard/coupons');
-					}, 2000);
+					await revalidateData();
 				} else if (!res.success) {
 					setIsLoading(false);
 					setError(res.error.message);
@@ -87,15 +80,13 @@ export default function EditCoupon(props: IProps) {
 								setIsLoading(true);
 								const res = await removeCouponById(coupon.id);
 								if (res.success) {
-									setModal(false);
 									setIsLoading(false);
+									setModal(false);
 									setSuccess('Coupon deleted successfully');
-									setTimeout(() => {
-										router.push('/dashboard/coupons');
-									}, 2000);
+									await revalidateData();
 								} else {
 									setIsLoading(false);
-									setError('Something went wrong');
+									setError(res.error.message || 'Something went wrong');
 								}
 							}}
 							closeModal={() => setModal(false)}

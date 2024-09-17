@@ -3,9 +3,14 @@
 .wrapper {
 	position: relative;
 	padding: 50px 60px;
+	height: 100%;
 
-	.loader {
-		height: 100vh;
+	//.loader {
+	//	height: 100vh;
+	//}
+
+	.modal {
+		height: 100%;
 	}
 
 	@media only screen and (max-width: $media-lg) {

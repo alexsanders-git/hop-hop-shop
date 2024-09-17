@@ -14,6 +14,7 @@ export interface InterfacePagination {
 	siblingCount?: number;
 	currentPage: number;
 	pageSize: number;
+	num_pages: number; // Додаємо це поле
 	className?: string;
 }
 
@@ -24,6 +25,7 @@ export default function Pagination(props: InterfacePagination) {
 		siblingCount = 1,
 		currentPage,
 		pageSize,
+		num_pages, // Використовуємо це поле
 		className = '',
 	} = props;
 
@@ -38,12 +40,12 @@ export default function Pagination(props: InterfacePagination) {
 		return null;
 	}
 
-	const onNext = () => {
-		onPageChange(currentPage + 1);
+	const goToFirst = () => {
+		onPageChange(1);
 	};
 
-	const onPrevious = () => {
-		onPageChange(currentPage - 1);
+	const goToLast = () => {
+		onPageChange(num_pages);
 	};
 
 	let lastPage = paginationRange![paginationRange!.length - 1];
@@ -52,7 +54,7 @@ export default function Pagination(props: InterfacePagination) {
 		<ul className={`${styles.paginationContainer}  ${className}`}>
 			<li
 				className={`${styles.paginationItem}  ${currentPage === 1 && styles.disabled}`}
-				onClick={onPrevious}
+				onClick={goToFirst}
 			>
 				<ChevronsRight className={`${styles.arrow}  ${styles.arrowRight}`} />
 			</li>
@@ -80,7 +82,7 @@ export default function Pagination(props: InterfacePagination) {
 			})}
 			<li
 				className={`${styles.paginationItem}  ${currentPage === lastPage && styles.disabled}`}
-				onClick={onNext}
+				onClick={goToLast}
 			>
 				<ChevronsRight className={`${styles.arrow}  `} />
 			</li>

@@ -89,7 +89,7 @@ export default function DashboardCategoriesCreate() {
 		>
 			{({ isValid, dirty, resetForm }) => (
 				<Form className={styles.wrapper}>
-					{isLoading && <Loader />}
+					{isLoading && <Loader className={styles.loader} />}
 
 					{success && (
 						<MessageSuccess type={'dashboard'} text={'Your Category Added!'} />
@@ -97,6 +97,7 @@ export default function DashboardCategoriesCreate() {
 					{error !== '' && <MessageError type={'dashboard'} text={error} />}
 					{modal && (
 						<ModalConfirmation
+							className={styles.modal}
 							reset={() => {
 								setModal(false);
 								setSelectedFile(null);

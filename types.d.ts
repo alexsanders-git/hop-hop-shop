@@ -94,6 +94,7 @@ interface IPagination {
 	next_page: string | null;
 	previous_page: string | null;
 	current_page: number;
+	num_pages: number;
 }
 
 interface IResponseError {
@@ -141,6 +142,7 @@ interface IResponseJson<T> {
 
 interface IOrderDetails {
 	id: number;
+	created_at: string;
 	customer: null | IUser;
 	first_name: string;
 	last_name: string;
@@ -152,5 +154,15 @@ interface IOrderDetails {
 	shipping_postcode: string;
 	paid: boolean;
 	status: string;
-	items: IProduct[];
+	items: {
+		product_id: number;
+		product_name: string;
+		product_price: number;
+		quantity: number;
+		total_price: number;
+	}[];
+	subtotal_price: number;
+	total_price: number;
+	coupon: number;
+	discount: number;
 }

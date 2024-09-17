@@ -17,6 +17,7 @@ import styles from './styles.module.scss';
 import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
 import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
+import Loader from '@/components/Loader/Loader';
 
 interface IProps {
 	orders: IResponse<IOrders>;
@@ -27,15 +28,17 @@ interface IDashboardItem {
 	setNewData: (data: IResponse<IOrders>) => void;
 	setError: (text: string | null) => void;
 	setSuccess: (text: string | null) => void;
+	setIsLoading: (isLoading: boolean) => void;
 }
 
 export default function DashboardTableOrders(props: IProps) {
 	const { orders } = props;
-	console.log(orders);
 
 	const [newData, setNewData] = useState<IResponse<IOrders>>(orders);
 	const [error, setError] = useState<string | null>(null);
 	const [success, setSuccess] = useState<string | null>(null);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+
 	const header = [
 		{ name: 'Order ID' },
 		{ name: 'Order Status ' },
@@ -48,6 +51,7 @@ export default function DashboardTableOrders(props: IProps) {
 
 	return (
 		<>
+			{isLoading && <Loader />}
 			{error && <MessageError type={'dashboard'} text={error} />}
 			{success && <MessageSuccess type={'dashboard'} text={success} />}
 			<div className={styles.wrapper}>
@@ -70,12 +74,14 @@ export default function DashboardTableOrders(props: IProps) {
 								setNewData={setNewData}
 								setSuccess={setSuccess}
 								setError={setError}
+								setIsLoading={setIsLoading}
 							/>
 						))}
 					</ul>
 				</div>
 				{newData?.items?.length > 0 ? (
 					<Pagination
+						num_pages={newData?.pagination?.num_pages}
 						currentPage={newData?.pagination?.current_page}
 						totalCount={newData?.items_count}
 						pageSize={10}
@@ -93,17 +99,19 @@ export default function DashboardTableOrders(props: IProps) {
 }
 
 function DashboardItem(props: IDashboardItem) {
-	const { setNewData, item, setSuccess, setError } = props;
+	const { setNewData, item, setSuccess, setError, setIsLoading } = props;
 	const [isShow, setIsShow] = useState<boolean>(false);
 	return (
 		<>
 			{isShow && (
 				<ModalConfirmation
 					reset={async () => {
+						setIsLoading(true);
 						const res = await removeOrderById(item.id);
 						if (res.success) {
 							const orders = await getDashboardOrders(1);
 							if (orders.success) {
+								setIsLoading(false);
 								setNewData(orders.data);
 								await revalidateFunc('/dashboard/orders');
 								setIsShow(false);
@@ -113,6 +121,7 @@ function DashboardItem(props: IDashboardItem) {
 								}, 3000);
 							}
 						} else {
+							setIsLoading(false);
 							setError(res.error.message || 'Something went wrong');
 							setTimeout(() => {
 								setError(null);
