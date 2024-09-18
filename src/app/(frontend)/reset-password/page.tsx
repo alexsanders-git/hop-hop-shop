@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { Suspense } from 'react';
 
 import styles from './page.module.scss';
 import ResetPasswordForm from './ResetPasswordForm/ResetPasswordForm';
@@ -18,7 +19,9 @@ export default function ResetPasswordPage() {
 					alt={'image'}
 				/>
 			</div>
-			<ResetPasswordForm />
+			<Suspense>
+				<ResetPasswordForm />
+			</Suspense>
 		</div>
 	);
 }
