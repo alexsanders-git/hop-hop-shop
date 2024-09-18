@@ -2,33 +2,49 @@
 
 import { Form, Formik } from 'formik';
 import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import * as yup from 'yup';
 
 import ActionModal from '@/components/ActionModal/ActionModal';
 import Button from '@/components/Button/Button';
 import InputPassword from '@/components/InputPassword/InputPassword';
 import useOutside from '@/hooks/useOutside';
+import { resetPassword } from '@/services/auth/passwordResetApi';
 import { passwordValid } from '@/validation/checkout/validation';
 
 import styles from './ResetPasswordForm.module.scss';
 
 export interface IFormValuesProfile {
-	newPassword?: string;
-	confirmPassword?: string;
+	newPassword: string;
+	confirmPassword: string;
 }
 
 export default function ResetPasswordForm() {
-	// const searchParams = useSearchParams();
+	const [errorMessage, setErrorMessage] = useState('');
+	const searchParams = useSearchParams();
+
+	const token = searchParams.get('key') || '';
+	const user_email = searchParams.get('email') || '';
 
 	const {
-		ref: modalRef,
-		isShow: isModalOpen,
-		setIsShow: setIsModalOpen,
+		ref: successModalRef,
+		isShow: isSuccessModalOpen,
+		setIsShow: setIsSuccessModalOpen,
 	} = useOutside(false);
 
-	const handleSubmit = (values: IFormValuesProfile) => {
-		console.log(values);
-		setIsModalOpen(true);
+	const handleSubmit = async (values: IFormValuesProfile) => {
+		const res = await resetPassword(
+			token,
+			user_email,
+			values.newPassword,
+			values.confirmPassword,
+		);
+
+		if (res.success) {
+			setIsSuccessModalOpen(true);
+		} else {
+			setErrorMessage(res.error?.message || 'An unknown error occurred');
+		}
 	};
 
 	return (
@@ -61,6 +77,9 @@ export default function ResetPasswordForm() {
 							name={'confirmPassword'}
 							placeholder={'Confirm password'}
 						/>
+						{errorMessage && (
+							<div className={styles.errorMessage}>{errorMessage}</div>
+						)}
 						<Button
 							type="submit"
 							className={styles.resetButton}
@@ -70,15 +89,17 @@ export default function ResetPasswordForm() {
 					</Form>
 				)}
 			</Formik>
-			<ActionModal
-				ref={modalRef}
-				show={isModalOpen}
-				onClose={() => setIsModalOpen(false)}
-				title={'Woohoo! You did it!'}
-				text={`You've successfully reset your password. You're ready to rock and
+			{isSuccessModalOpen && (
+				<ActionModal
+					ref={successModalRef}
+					show={isSuccessModalOpen}
+					onClose={() => setIsSuccessModalOpen(false)}
+					title={'Woohoo! You did it!'}
+					text={`You've successfully reset your password. You're ready to rock and
 						roll again!`}
-				type={'success'}
-			/>
+					type={'success'}
+				/>
+			)}
 		</>
 	);
 }

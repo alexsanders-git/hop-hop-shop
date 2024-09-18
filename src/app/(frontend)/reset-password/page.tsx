@@ -1,14 +1,21 @@
 import Image from 'next/image';
+import { Suspense } from 'react';
 
 import styles from './page.module.scss';
 import ResetPasswordForm from './ResetPasswordForm/ResetPasswordForm';
 
-export default function ResetPasswordPage() {
+export default function ResetPasswordPage({
+	searchParams,
+}: {
+	searchParams: Record<string, string | undefined>;
+}) {
+	const userEmail = searchParams['user_email'];
+
 	return (
 		<div className={styles.pageWrapper}>
 			<div>
 				<h1 className={styles.formTitle}>Password Reset</h1>
-				<p className={styles.emailAddress}>user email adress</p>
+				<p className={styles.emailAddress}>for {userEmail}</p>
 			</div>
 			<div className={styles.imageWrapper}>
 				<Image
@@ -18,7 +25,9 @@ export default function ResetPasswordPage() {
 					alt={'image'}
 				/>
 			</div>
-			<ResetPasswordForm />
+			<Suspense>
+				<ResetPasswordForm />
+			</Suspense>
 		</div>
 	);
 }

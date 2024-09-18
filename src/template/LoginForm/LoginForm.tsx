@@ -14,6 +14,7 @@ import InputPassword from '@/components/InputPassword/InputPassword';
 import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
 import useOutside from '@/hooks/useOutside';
+import { requestPasswordReset } from '@/services/auth/passwordResetApi';
 import { fetchWithCookies } from '@/services/cookies/cookies.service';
 import { useUser } from '@/store/user/User.store';
 import { robotoCondensed } from '@/styles/fonts/fonts';
@@ -47,10 +48,16 @@ export default function LoginForm() {
 		setIsShow: setIsErrorModalOpen,
 	} = useOutside(false);
 
-	const handleForgotPasswordSubmit = (values: { email: string }) => {
+	const handleForgotPasswordSubmit = async (values: { email: string }) => {
 		console.log(values.email);
-		setIsForgotPasswordModalOpen(false);
-		setIsErrorModalOpen(true);
+		const result = await requestPasswordReset(values.email);
+		if (result.success) {
+			setIsSuccessModalOpen(true);
+			setIsForgotPasswordModalOpen(false);
+		} else {
+			setIsErrorModalOpen(true);
+			setIsForgotPasswordModalOpen(false);
+		}
 	};
 
 	return (

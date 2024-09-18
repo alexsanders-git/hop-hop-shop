@@ -41,7 +41,6 @@
 			grid-template-columns: auto 1fr;
 			grid-gap: 0;
 			align-items: end;
-
 		}
 	}
 }
@@ -55,7 +54,6 @@
 	grid-row: 1;
 
 	@media only screen and (max-width: $media-md) {
-
 		&.error {
 			margin-bottom: 40px;
 		}
@@ -97,6 +95,10 @@
 		margin-bottom: -35px;
 		align-self: end;
 		height: 100%;
+
+		img {
+			object-fit: contain;
+		}
 	}
 
 	@media only screen and (max-width: $media-md) {
@@ -113,6 +115,10 @@
 			height: fit-content;
 			margin-bottom: -20px;
 			margin-left: -15px;
+
+			img {
+				object-fit: contain;
+			}
 		}
 	}
 }
