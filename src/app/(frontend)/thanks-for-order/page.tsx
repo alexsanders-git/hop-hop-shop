@@ -10,7 +10,7 @@ export default function ThanksPage() {
 	return (
 		<div className={styles.pageWrp}>
 			<div className={styles.titleWrp}>
-				<h1 className={styles.title}>Ta-da!</h1>
+				<h1 className={styles.title}>Ta-da!</h1>{' '}
 				<h1 className={styles.title}> It’s ordered!</h1>
 			</div>
 			<div className={styles.imgWrp}>
@@ -30,14 +30,15 @@ export default function ThanksPage() {
 				<p className={styles.pLinkToOrders}>
 					{' '}
 					You can also view your order details in your account dashboard the
-					<Link href={''} className={styles.linkToOrders}>
+					<Link href={'/account/orders'} className={styles.linkToOrders}>
 						"My Orders"
 					</Link>
 					.
 				</p>
 			</div>
+			{/*in future need change / on /catalog */}
 			<ButtonLink
-				href={''}
+				href={'/'}
 				text={'Back to shopping!'}
 				className={styles.button}
 				style="primary"

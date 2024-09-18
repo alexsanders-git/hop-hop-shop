@@ -34,7 +34,6 @@ import { useFetch } from '@/hooks/useFetch';
 
 export interface IProps {
 	product: IProduct;
-	// categories: ICategory[];
 }
 
 interface FormValues {
@@ -73,12 +72,14 @@ export default function EditProduct(props: IProps) {
 	const router = useRouter();
 	const [showPrePublish, setShowPrePublish] = useState<boolean>(false);
 
+	// const { isModalVisible, confirmNavigation, cancelNavigation } =
+	// 	useUnsavedChanges(false);
+
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files) {
 			const filesArray = Array.from(event.target.files);
 			setImages([]);
 			setSelectedFiles(filesArray);
-
 			const previewsArray = filesArray.map((file) => {
 				const reader = new FileReader();
 				reader.readAsDataURL(file);
@@ -94,12 +95,14 @@ export default function EditProduct(props: IProps) {
 			});
 		}
 	};
+
 	const handleRemovePreview = (index: number) => {
 		const newPreviews = previews.filter((_, i) => i !== index);
 		setPreviews(newPreviews);
 		const newSelectedFiles = selectedFiles.filter((_, i) => i !== index);
 		setSelectedFiles(newSelectedFiles);
 	};
+
 	const handleRemoveImages = async (index: number, image: IImage) => {
 		const res = await removeProduct(product.id, image.id);
 		if (res.success) {
@@ -109,16 +112,20 @@ export default function EditProduct(props: IProps) {
 			setTimeout(() => {
 				setSuccess('');
 			}, 2000);
-			await revalidateFunc('/dashboard/products');
-			await revalidateFunc('/dashboard/products/[id]', 'page');
-			await revalidateFunc('/product/[id]', 'page');
-			await revalidateFunc('/');
+			await revalidateData();
 		} else {
 			setError('Image was not deleted');
 			setTimeout(() => {
 				setError('');
 			}, 2000);
 		}
+	};
+
+	const revalidateData = async () => {
+		await revalidateFunc('/dashboard/products');
+		await revalidateFunc('/dashboard/products/[id]', 'page');
+		await revalidateFunc('/product/[id]', 'page');
+		await revalidateFunc('/', 'layout');
 	};
 	return (
 		<>
@@ -133,7 +140,7 @@ export default function EditProduct(props: IProps) {
 						price: Number(formikRef.current?.values.price),
 						category: categories!.filter(
 							(category) =>
-								category.id === Number(formikRef.current!.values.category),
+								category.id === Number(formikRef.current!.values.category) || 0,
 						)[0],
 						SKU: 0,
 						slug: 'test',
@@ -158,7 +165,7 @@ export default function EditProduct(props: IProps) {
 				initialValues={{
 					name: product.name,
 					description: product.description ? product.description : '',
-					category: product.category.id,
+					category: product.category?.id || 0,
 					price: product.price,
 				}}
 				validationSchema={yup
@@ -173,10 +180,7 @@ export default function EditProduct(props: IProps) {
 					setIsLoading(true);
 
 					if (selectedFiles.length) {
-						const res = await updateProduct(product.id, {
-							SKU: Math.floor(Math.random() * 1000),
-							...values,
-						});
+						const res = await updateProduct(product.id, values);
 						const formData = new FormData();
 
 						if (selectedFiles) {
@@ -194,33 +198,27 @@ export default function EditProduct(props: IProps) {
 								resetForm();
 								setSelectedFiles([]);
 								setPreviews([]);
-								await revalidateFunc('/dashboard/products');
-								await revalidateFunc(`/dashboard/products/${product.id}`);
-								await revalidateFunc(`/product/${product.id}`);
-								await revalidateFunc('/');
+								await revalidateData();
 								setTimeout(() => {
 									router.push('/dashboard/products');
+									setSuccess('');
 								}, 2000);
 							} else if (!resUpload.success) {
+								setIsLoading(false);
 								setError(resUpload.error.message);
 							}
 						}
 					} else {
-						const res = await updateProduct(product.id, {
-							SKU: Math.floor(Math.random() * 1000),
-							...values,
-						});
+						const res = await updateProduct(product.id, values);
 						if (res.success) {
 							setIsLoading(false);
 							setSuccess('Product was updated');
 							resetForm();
 							setSelectedFiles([]);
 							setPreviews([]);
-							await revalidateFunc('/dashboard/products');
-							await revalidateFunc(`/dashboard/products/${product.id}`);
-							await revalidateFunc(`/product/${product.id}`);
-							await revalidateFunc('/');
+							await revalidateData();
 							setTimeout(() => {
+								setSuccess('');
 								router.push('/dashboard/products');
 							}, 2000);
 						}
@@ -229,20 +227,19 @@ export default function EditProduct(props: IProps) {
 			>
 				{({ isValid, dirty, resetForm }) => (
 					<Form className={styles.wrapper}>
-						{isLoading && <Loader className={styles.loader} />}
+						{isLoading && <Loader />}
 						{success !== '' && (
 							<MessageSuccess type={'dashboard'} text={success} />
 						)}
 						{error !== '' && <MessageError type={'dashboard'} text={error} />}
 						{modal && (
 							<ModalConfirmation
+								className={styles.height}
 								reset={async () => {
 									setIsLoading(true);
 									const res = await removeProductById(product.id);
 									if (res.success) {
-										await revalidateFunc('/dashboard/products');
-										await revalidateFunc(`/product/${product.id}`);
-										await revalidateFunc('/');
+										await revalidateData();
 										setIsLoading(false);
 										setSuccess('Product was deleted');
 										setModal(false);
@@ -250,6 +247,7 @@ export default function EditProduct(props: IProps) {
 										setSelectedFiles([]);
 										setPreviews([]);
 										setTimeout(() => {
+											setSuccess('');
 											router.push('/dashboard/products');
 										}, 2000);
 									}
@@ -281,8 +279,8 @@ export default function EditProduct(props: IProps) {
 								{/* eslint-disable */}
 								<Select
 									defaultValue={{
-										name: product.category.name,
-										id: product.category.id,
+										name: product.category?.name || 'No category',
+										id: product.category?.id || 0,
 									}}
 									name={'category'}
 									options={
@@ -292,7 +290,7 @@ export default function EditProduct(props: IProps) {
 														name: item.name,
 														id: item.id,
 													}))
-													.filter((item) => item.id !== product.category.id)
+													.filter((item) => item.id !== product.category?.id)
 											: null
 									}
 									text={'Product Category'}
@@ -391,7 +389,6 @@ export default function EditProduct(props: IProps) {
 					</Form>
 				)}
 			</Formik>
-			;
 		</>
 	);
 }

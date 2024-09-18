@@ -1,8 +1,7 @@
 'use client';
-import { Form, Formik } from 'formik';
+import { Form, Formik, FormikProps } from 'formik';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import * as yup from 'yup';
+import { ChangeEvent, useRef, useState } from 'react';
 
 import CreateDashboardHeader from '@/components/dashboard/createDashboardHeader/CreateDashboardHeader';
 import ModalConfirmation from '@/components/dashboard/modalConfirmation/ModalСonfirmation';
@@ -13,9 +12,9 @@ import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
 import Select from '@/components/select/Select';
 import { createCoupon } from '@/services/dashboard/coupons/dashboard.coupons.service';
 import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
-import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
+import { validationSchemaCoupon } from '@/validation/coupon/couponValidation';
 
 export default function DashboardCouponCreate() {
 	const [modal, setModal] = useState<boolean>(false);
@@ -24,26 +23,35 @@ export default function DashboardCouponCreate() {
 	const [success, setSuccess] = useState(false);
 	const [error, setError] = useState('');
 
+	const ref = useRef<
+		FormikProps<{
+			code: string;
+			discount: number;
+			active: string;
+			valid_to: string;
+		}>
+	>(null);
+
+	const handleCustomChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		if (name === 'discount') {
+			if (Number(value) > 90) {
+				e.target.value = String(90);
+			}
+			ref.current?.handleChange(e);
+		}
+	};
+
 	return (
 		<Formik
+			innerRef={ref}
 			initialValues={{
 				code: '',
 				discount: 0,
 				active: '',
 				valid_to: '',
 			}}
-			validationSchema={yup
-				.object({
-					code: categoryValid('Name'),
-					discount: yup
-						.number()
-						.min(1, 'Can`t be less than 0')
-						.max(99, 'Can`t be more than 99')
-						.required('Обов’язкове поле'),
-					active: categoryValid('Active'),
-					valid_to: categoryValid('Valid Until'),
-				})
-				.required()}
+			validationSchema={validationSchemaCoupon}
 			onSubmit={async (values, { resetForm }) => {
 				setIsLoading(true);
 				const res = await createCoupon({
@@ -121,8 +129,9 @@ export default function DashboardCouponCreate() {
 									title={'Discount amount, %'}
 									type={'number'}
 									min={1}
-									max={99}
+									max={90}
 									placeholder={'Enter discount amount'}
+									onChange={handleCustomChange}
 								/>
 								<Input
 									name={'valid_to'}

@@ -68,7 +68,7 @@ export default function FinishedCheckout() {
 					);
 					if (res.success) {
 						fetchCart();
-						navigate.push('/thanks-for-order');
+						navigate.push(`/thanks-for-order?order_id=${res.data.payment_id}`);
 					}
 					if (!res.success) {
 						setError(res.error.message);

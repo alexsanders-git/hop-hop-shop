@@ -13,8 +13,8 @@ export interface IProps {
 export default function ModalConfirmation(props: IProps) {
 	const { text, reset, closeModal, className = '' } = props;
 	return (
-		<div className={styles.bgWrapper}>
-			<div className={`${styles.container} ${className}`}>
+		<div className={`${styles.bgWrapper} ${className}`}>
+			<div className={styles.container}>
 				<span>{text}</span>
 				<div className={styles.wrapper}>
 					<Button
