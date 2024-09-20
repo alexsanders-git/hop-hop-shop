@@ -23,44 +23,6 @@ const colum = [
 	{ name: 'Total' },
 ];
 
-const orderItems = [
-	{
-		id: 1,
-		name: 'Product Name',
-		quantity: 2,
-		price: 120,
-		total: 240,
-	},
-	{
-		id: 2,
-		name: 'Product Name',
-		quantity: 2,
-		price: 120,
-		total: 240,
-	},
-	{
-		id: 3,
-		name: 'Product Name',
-		quantity: 2,
-		price: 120,
-		total: 240,
-	},
-	{
-		id: 4,
-		name: 'Product Name',
-		quantity: 2,
-		price: 120,
-		total: 240,
-	},
-	{
-		id: 5,
-		name: 'Product Name',
-		quantity: 2,
-		price: 120,
-		total: 240,
-	},
-];
-
 const status = ['Pending', 'Processing', 'Completed', 'Canceled'];
 
 export default function DashboardOrderDetails(props: IProps) {

@@ -28,7 +28,7 @@ function DashboardSearchBar(props: IProps) {
 		orders: 'id',
 		categories: 'name',
 		coupons: 'name',
-		news: 'name',
+		news: 'title',
 	};
 
 	const mappingsUrl: { [key: string]: string } = {
@@ -37,7 +37,7 @@ function DashboardSearchBar(props: IProps) {
 		orders: 'checkout/orders',
 		categories: 'shop/categories',
 		coupons: 'cart/coupon',
-		news: 'news',
+		news: 'news/news',
 	};
 
 	const { data } = useFetchAuth<IDashboardSearch>({
@@ -95,7 +95,10 @@ function DashboardSearchBar(props: IProps) {
 										className={styles.suggestionItem}
 										onClick={() => handleSuggestionClick(suggestion.id)}
 									>
-										{suggestion.name || suggestion.first_name || suggestion.id}
+										{suggestion.name ||
+											suggestion.first_name ||
+											suggestion.title ||
+											suggestion.id}
 									</div>
 								))
 							) : (

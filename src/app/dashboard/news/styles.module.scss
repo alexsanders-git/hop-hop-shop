@@ -5,7 +5,9 @@
 	display: flex;
 	flex-direction: column;
 	gap: 32px;
-	height: 100vh;
+	height: 100%;
+	position: relative;
+
 	@media screen and (max-width: $media-lg) {
 		padding: 20px 30px;
 		gap: 20px;
