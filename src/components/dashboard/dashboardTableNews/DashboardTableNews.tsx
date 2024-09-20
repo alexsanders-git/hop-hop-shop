@@ -19,9 +19,9 @@ import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
-import { typesOfNews } from '@/app/dashboard/news/create/page';
 import useOutside from '@/hooks/useOutside';
 import { ChevronUp } from 'lucide-react';
+import { typesOfNews } from '@/utils/consts/consts';
 
 interface IProps {
 	news: IResponse<INews>;

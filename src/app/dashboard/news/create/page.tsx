@@ -18,14 +18,7 @@ import styles from './styles.module.scss';
 import Select from '@/components/select/Select';
 import { createNews } from '@/services/dashboard/news/dashbpard.news.service';
 import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
-
-export const typesOfNews = [
-	{ name: 'Default', id: 'default' },
-	{ name: 'The Hottest', id: 'hottest' },
-	{ name: 'HopHop choice', id: 'choice' },
-	{ name: 'One Love', id: 'love' },
-	{ name: 'Customer Secret', id: 'secret' },
-];
+import { typesOfNews } from '@/utils/consts/consts';
 
 export default function DashboardNewsCreate() {
 	const [modal, setModal] = useState<boolean>(false);
