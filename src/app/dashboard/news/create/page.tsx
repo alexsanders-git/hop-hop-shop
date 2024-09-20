@@ -15,6 +15,17 @@ import Textarea from '@/components/textarea/Textarea';
 import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
+import Select from '@/components/select/Select';
+import { createNews } from '@/services/dashboard/news/dashbpard.news.service';
+import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
+
+export const typesOfNews = [
+	{ name: 'Default', id: 'default' },
+	{ name: 'The Hottest', id: 'hottest' },
+	{ name: 'HopHop choice', id: 'choice' },
+	{ name: 'One Love', id: 'love' },
+	{ name: 'Customer Secret', id: 'secret' },
+];
 
 export default function DashboardNewsCreate() {
 	const [modal, setModal] = useState<boolean>(false);
@@ -24,7 +35,6 @@ export default function DashboardNewsCreate() {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [success, setSuccess] = useState(false);
 	const [error, setError] = useState('');
-
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files && event.target.files.length > 0) {
 			setSelectedFile(event.target.files[0]);
@@ -43,41 +53,45 @@ export default function DashboardNewsCreate() {
 	return (
 		<Formik
 			initialValues={{
-				name: '',
-				description: '',
+				title: '',
+				content: '',
+				type: '',
 			}}
 			validationSchema={yup
 				.object({
-					name: categoryValid('Title'),
-					description: categoryValid('Description'),
+					title: categoryValid('Title'),
+					content: categoryValid('Content'),
+					type: categoryValid('Type'),
 				})
 				.required()}
 			onSubmit={async (values, { resetForm }) => {
-				alert('Backend not provided');
-				// setIsLoading(true);
-				// const res = await createNews(values);
-				// const formData = new FormData();
-				//
-				// if (selectedFile) {
-				// 	formData.append('image', selectedFile);
-				// }
-				// if (res.success && formData) {
-				// 	const resUpload = await createNewsImage(res.data.id, formData);
-				// 	if (resUpload.success) {
-				// 		resetForm();
-				// 		setSelectedFile(null);
-				// 		setPreview(null);
-				// 		setIsLoading(false);
-				// 		setSuccess(true);
-				// 		await revalidateFunc('/dashboard/news');
-				// 		setTimeout(() => {
-				// 			router.push('/dashboard/news');
-				// 		}, 2000);
-				// 	} else {
-				// 		setIsLoading(false);
-				// 		setError(resUpload.error);
-				// 	}
-				// }
+				setIsLoading(true);
+				const formData = new FormData();
+
+				Object.entries(values).forEach(([key, value]) => {
+					if (value != '') {
+						formData.append(key, value);
+					}
+				});
+
+				if (selectedFile) {
+					formData.append('image', selectedFile);
+				}
+				const res = await createNews(formData);
+				if (res.success) {
+					setIsLoading(false);
+					setSuccess(true);
+					setError('');
+					resetForm();
+					await revalidateFunc('/dashboard/news');
+					await revalidateFunc('/dashboard/news/[id]', 'page');
+					setTimeout(() => {
+						setSuccess(false);
+						router.push('/dashboard/news');
+					}, 2000);
+				} else {
+					setError(res.error.message || 'Something Was Wrong');
+				}
 			}}
 		>
 			{({ isValid, dirty, resetForm }) => (
@@ -113,15 +127,21 @@ export default function DashboardNewsCreate() {
 
 					<div className={styles.formWrapper}>
 						<div className={styles.form}>
+							<Select
+								name={'type'}
+								options={typesOfNews}
+								text={'Type'}
+								defaultValue={typesOfNews[0]}
+							/>
 							<Input
-								name={'name'}
+								name={'title'}
 								title={'Title'}
 								type={'text'}
 								placeholder={'Enter title'}
 							/>
 							<Textarea
-								title={'Description'}
-								name={'description'}
+								title={'Content'}
+								name={'content'}
 								rows={10}
 								placeholder={'Enter description'}
 							/>
