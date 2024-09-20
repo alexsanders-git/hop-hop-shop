@@ -10,7 +10,6 @@ import image from '@/assets/png/Newdescription.png';
 import Button from '@/components/Button/Button';
 import CreateDashboardHeader from '@/components/dashboard/createDashboardHeader/CreateDashboardHeader';
 import ModalConfirmation from '@/components/dashboard/modalConfirmation/ModalСonfirmation';
-import UploadedFileBlock from '@/components/dashboard/uploadedFileBlock/UploadedFileBlock';
 import Input from '@/components/Input/Input';
 import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
@@ -28,12 +27,19 @@ import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
 import { useFetch } from '@/hooks/useFetch';
+import DragAndDropWrapper from '@/app/dashboard/products/create/DragAndDropWrapper';
 
 interface FormValues {
 	name: string;
 	description: string;
 	category: string;
 	price: string;
+}
+
+export interface IPreview {
+	image: string;
+	name: string;
+	uuid: string;
 }
 
 export default function DashboardProductsCreate() {
@@ -43,9 +49,8 @@ export default function DashboardProductsCreate() {
 	const [error, setError] = useState('');
 	const [modal, setModal] = useState<boolean>(false);
 	const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-	const [previews, setPreviews] = useState<{ image: string; name: string }[]>(
-		[],
-	);
+	const [previews, setPreviews] = useState<IPreview[]>([]);
+	console.log(previews);
 	const { data: categories } = useFetch<ICategory[]>({
 		endpoint: 'shop/categories/all/',
 		options: {
@@ -66,9 +71,13 @@ export default function DashboardProductsCreate() {
 			const previewsArray = filesArray.map((file) => {
 				const reader = new FileReader();
 				reader.readAsDataURL(file);
-				return new Promise<{ image: string; name: string }>((resolve) => {
+				return new Promise<IPreview>((resolve) => {
 					reader.onloadend = () => {
-						resolve({ image: reader.result as string, name: file.name });
+						resolve({
+							image: reader.result as string,
+							name: file.name,
+							uuid: crypto.randomUUID(),
+						});
 					};
 				});
 			});
@@ -83,6 +92,25 @@ export default function DashboardProductsCreate() {
 		const newPreviews = previews.filter((_, i) => i !== index);
 		setPreviews(newPreviews);
 		const newSelectedFiles = selectedFiles.filter((_, i) => i !== index);
+		setSelectedFiles(newSelectedFiles);
+	};
+
+	const changeImagePosition = (index: number) => {
+		// Копіюємо масиви для previews та selectedFiles
+		const newPreviews = [...previews];
+		const newSelectedFiles = [...selectedFiles];
+
+		// Міняємо місцями перший елемент і елемент за вказаним індексом
+		const tempPreview = newPreviews[0];
+		newPreviews[0] = newPreviews[index];
+		newPreviews[index] = tempPreview;
+
+		const tempFile = newSelectedFiles[0];
+		newSelectedFiles[0] = newSelectedFiles[index];
+		newSelectedFiles[index] = tempFile;
+
+		// Оновлюємо стейт з новими масивами
+		setPreviews(newPreviews);
 		setSelectedFiles(newSelectedFiles);
 	};
 
@@ -267,17 +295,16 @@ export default function DashboardProductsCreate() {
 										/>
 									</div>
 								)}
-								{previews.length > 1 &&
-									previews
-										.slice(1)
-										.map((preview, index) => (
-											<UploadedFileBlock
-												key={index}
-												image={preview}
-												index={index + 1}
-												handleRemoveImage={handleRemoveImage}
-											/>
-										))}
+								{previews.length > 0 ? (
+									<DragAndDropWrapper
+										changeImagePosition={changeImagePosition}
+										// selectedFiles={selectedFiles}
+										// setSelectedFiles={setSelectedFiles}
+										handleRemoveImage={handleRemoveImage}
+										setPreviews={setPreviews}
+										previews={previews}
+									/>
+								) : null}
 								<div className={styles.uploadImage}>
 									<span
 										className={`${styles.text} ${robotoCondensed.className}`}
