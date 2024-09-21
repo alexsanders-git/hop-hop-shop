@@ -50,7 +50,7 @@ export default function Footer() {
 						</ul>
 						<ul className={`${robotoCondensed.className} ${styles.list}`}>
 							<li>
-								<Link href="#">Contact us</Link>
+								<Link href="/contact-us">Contact us</Link>
 							</li>
 							<li>
 								<Link href="/cookies-policy">Сookies policy</Link>
