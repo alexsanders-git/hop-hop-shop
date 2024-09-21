@@ -62,7 +62,7 @@ export default async function ProductPage({ params: { id } }: Props) {
 								<span
 									className={`${styles.subTitle} ${robotoCondensed.className}`}
 								>
-									{product?.data.category?.name}
+									{product?.data.category?.name || 'No category'}
 								</span>
 							</div>
 							<span className={styles.price}>${product?.data.price}</span>

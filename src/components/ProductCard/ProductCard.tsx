@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { robotoCondensed } from '@/styles/fonts/fonts';
-import { getImages, isArrayOfImages } from '@/utils/typeGuards';
+import { getImages } from '@/utils/typeGuards';
 
 import styles from './ProductCard.module.scss';
 import AddToCartButton from '../AddToCartButton/AddToCartButton';
@@ -61,12 +61,18 @@ export default function ProductCard({
 
 				{showCategory && (
 					<div className={styles.category}>
-						<Link
-							href={`/category/${product.category.id}`}
-							className={robotoCondensed.className}
-						>
-							{product.category.name}
-						</Link>
+						{product?.category?.id ? (
+							<Link
+								href={`/category/${product.category.id}`}
+								className={robotoCondensed.className}
+							>
+								{product.category.name}
+							</Link>
+						) : (
+							<span className={`${robotoCondensed.className}`}>
+								No category
+							</span>
+						)}
 					</div>
 				)}
 			</div>
