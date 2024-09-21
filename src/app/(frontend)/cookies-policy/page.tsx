@@ -14,7 +14,7 @@ const data = {
 		{
 			title: 'Introduction',
 			paragraphs: [
-				'Welcome to “HopHopShop” ("we," "us," "our"). We are committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner. This Cookies Policy explains what cookies are, how we use them, and how you can manage your preferences regarding their use.',
+				'Welcome to “HopHopShop” ("we", "us", "our"). We are committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner. This Cookies Policy explains what cookies are, how we use them, and how you can manage your preferences regarding their use.',
 			],
 			listItems: [],
 			listType: '',
