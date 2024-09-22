@@ -1,4 +1,30 @@
-@import "../../../styles/media";
+@import "../styles/media";
+
+.bodyInner {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	min-height: 100vh;
+	overflow-x: hidden;
+}
+
+.main {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.wrapper {
+	overflow: hidden;
+	background: var(--lightblue-color);
+	border-left: 2px solid var(--primary-color);
+	border-right: 2px solid var(--primary-color);
+	border-bottom: 2px solid var(--primary-color);
+	padding-top: 70px;
+	position: relative;
+}
 
 .notFoundWrapper {
 	display: flex;
