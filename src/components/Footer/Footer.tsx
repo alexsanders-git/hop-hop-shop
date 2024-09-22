@@ -42,9 +42,6 @@ export default function Footer() {
 								<Link href="#">About</Link>
 							</li>
 							<li>
-								<Link href="#">Login</Link>
-							</li>
-							<li>
 								<Link href="/terms-of-use">Terms of use</Link>
 							</li>
 						</ul>
@@ -53,7 +50,7 @@ export default function Footer() {
 								<Link href="/contact-us">Contact us</Link>
 							</li>
 							<li>
-								<Link href="/cookies-policy">Сookies policy</Link>
+								<Link href="/cookies-policy">Cookies policy</Link>
 							</li>
 							<li>
 								<Link href="#">Advertising placement</Link>
