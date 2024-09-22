@@ -20,7 +20,7 @@ const data = {
 			title: 'Definitions',
 			listItems: [
 				'Website" refers to Hophopshop, including all webpages, content, and services available at HopHopShop',
-				'"We," "us," and "our" refer to Hophopshop, the owner and operator of the Website.',
+				'"We", "us", and "our" refer to Hophopshop, the owner and operator of the Website.',
 				'"You" and "your" refer to you, the user or customer of our Website and services.',
 			],
 			listType: 'ul',
