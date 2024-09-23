@@ -1,45 +1,64 @@
 @import "src/styles/media.scss";
 
 .inputWrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+
+	.title {
+		font-size: 26px;
+		font-weight: 300;
+		line-height: 30px;
+		color: var(--primary-color);
+	}
+
+	.imageWrapper {
+		display: flex;
+		gap: 20px;
+		@media screen and (max-width: 500px) {
+			justify-content: space-between;
+			flex-wrap: wrap;
+			gap: 10px;
+		}
+
+		.typeImageWrapper {
+			width: 124px;
+			height: 72px;
+			cursor: pointer;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			transition: var(--transition);
+			border-radius: 16px;
+			border: 2px solid var(--primary-color);
+			box-shadow: 2px 2px 0 2px var(--primary-color);
+			background-color: #FFFFFF;
+
+			&:hover {
+				background-color: var(--beige-color);
+
+				img {
+					opacity: 1;
+				}
+			}
+
+			@media screen and (max-width: 500px) {
+				width: 60px;
+				height: 40px;
+				padding: 10px;
+				&:nth-child(1) {
+					padding: 0;
+
+				}
+			}
+		}
+	}
+
 	.button {
 		text-align: center;
 	}
 }
 
-.deliveryImages {
-	display: flex;
-	flex-direction: row;
-	margin-bottom: 40px;
-	gap: 20px;
-
-	.deliveryImage {
-		cursor: pointer;
-	}
-
-	@media only screen and (max-width: $media-xxl) {
-		.deliveryImage {
-			object-fit: contain;
-			width: 70px;
-			height: 40px;
-		}
-	}
-
-	@media only screen and (max-width: $media-lg) {
-		margin-bottom: 16px;
-		gap: 16px;
-	}
-
-	@media only screen and (max-width: $media-sm) {
-		flex-wrap: wrap;
-		gap: 13px;
-
-		.deliveryImage {
-			object-fit: contain;
-			width: 60px;
-			height: 40px;
-		}
-	}
-}
 
 .inputContainer {
 	display: flex;
@@ -131,6 +150,4 @@
 
 .inactive {
 	opacity: 0.5;
-	user-select: none;
-	pointer-events: none;
 }
