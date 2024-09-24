@@ -92,6 +92,11 @@
 				font-weight: 700;
 				line-height: 28px;
 				margin-bottom: 15px;
+				transition: var(--transition);
+
+				&:hover {
+					color: var(--gray-color);
+				}
 
 				@media only screen and (max-width: $media-xxl) {
 					font-size: 20px;

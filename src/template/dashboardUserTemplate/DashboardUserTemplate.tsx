@@ -181,14 +181,14 @@ export default function DashboardUserTemplate({ user }: { user: IUser }) {
 							<div className={styles.inputContainer}>
 								<Input
 									className={styles.input}
-									title={'First name'}
+									title={'First Name'}
 									type={'text'}
 									name={'first_name'}
 									placeholder={'John'}
 								/>
 								<Input
 									className={styles.input}
-									title={'Last name'}
+									title={'Last Name'}
 									type={'text'}
 									name={'last_name'}
 									placeholder={'Doe'}

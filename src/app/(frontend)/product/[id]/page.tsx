@@ -16,6 +16,7 @@ import ProductIdMobileSwiper from '@/template/ProductIdMobileSwiper/ProductIdMob
 import { getImages } from '@/utils/typeGuards';
 
 import styles from './page.module.scss';
+import Link from 'next/link';
 
 type Props = {
 	params: {
@@ -59,11 +60,12 @@ export default async function ProductPage({ params: { id } }: Props) {
 						<div className={styles.info__wrapper}>
 							<div className={styles.info__title}>
 								<h1 className={styles.title}>{product?.data.name}</h1>
-								<span
+								<Link
+									href={`/category/${product?.data.category?.id}`}
 									className={`${styles.subTitle} ${robotoCondensed.className}`}
 								>
 									{product?.data.category?.name || 'No category'}
-								</span>
+								</Link>
 							</div>
 							<span className={styles.price}>${product?.data.price}</span>
 						</div>
