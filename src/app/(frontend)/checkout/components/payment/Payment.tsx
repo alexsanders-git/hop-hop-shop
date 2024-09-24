@@ -51,18 +51,20 @@ export default function Payment() {
 					<h4 className={styles.title}>Payment methods</h4>
 					<div className={styles.imageWrapper}>
 						{paymentImages.map((item) => (
-							<div key={item.type} className={styles.typeImageWrapper}>
+							<div
+								key={item.type}
+								className={`${styles.typeImageWrapper} ${item.type !== paymentMethod ? styles.inactive : ''}`}
+								onClick={() => {
+									setPaymentMethod(item.type);
+									if (item.type !== 'card') {
+										alert('This payment method is not available yet');
+									}
+								}}
+							>
 								{/* eslint-disable-next-line @next/next/no-img-element */}
 								<img
-									className={` ${item.type !== paymentMethod ? styles.inactive : ''}`}
 									src={`/payment/${item.src}`}
 									alt={`payment type ${item.type}`}
-									onClick={() => {
-										setPaymentMethod(item.type);
-										if (item.type !== 'card') {
-											alert('This payment method is not available yet');
-										}
-									}}
 								/>
 							</div>
 						))}
