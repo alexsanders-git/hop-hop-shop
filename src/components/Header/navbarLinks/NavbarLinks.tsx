@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
 import styles from './NavbarLinks.module.scss';
+import React from 'react';
 
 export default function NavbarLinks() {
 	const router = useRouter();
@@ -34,7 +35,7 @@ export default function NavbarLinks() {
 				PRODUCT
 			</Link>
 			<Link href="#" className={styles.nav_link}>
-				XXXXXXX
+				CATALOG
 			</Link>
 		</ul>
 	);

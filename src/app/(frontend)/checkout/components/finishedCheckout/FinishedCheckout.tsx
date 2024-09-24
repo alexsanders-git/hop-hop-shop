@@ -18,6 +18,7 @@ export default function FinishedCheckout() {
 	const creditCard = useCheckout((state) => state.creditCard);
 	const deliveryAddress = useCheckout((state) => state.deliveryAddress);
 	const personalData = useCheckout((state) => state.personalData);
+	const paymentMethod = useCheckout((state) => state.checkout.paymentMethod);
 	const [error, setError] = useState<string>('');
 	const fetchCart = useCart((state) => state.fetchCart);
 	const navigate = useRouter();
@@ -44,34 +45,40 @@ export default function FinishedCheckout() {
 				className={styles.placeOrder}
 				text={'Place order'}
 				onClick={async () => {
-					const res = await fetchWithCookies<IResponseCheckout>(
-						'/checkout/checkout/',
-						{
-							method: 'POST',
-							body: JSON.stringify({
-								first_name: personalData!.name,
-								last_name: personalData!.lastname,
-								email: personalData!.email,
-								phone: personalData!.phone_number,
-								shipping_country: deliveryAddress!.shipping_country,
-								shipping_city: deliveryAddress!.shipping_city,
-								shipping_address: deliveryAddress!.shipping_city,
-								shipping_postcode: deliveryAddress!.shipping_postcode,
-								card_information: {
-									card_number: creditCard!.cardNumber,
-									expiry_month: creditCard!.expiryDate.slice(0, 2),
-									expiry_year: `20${creditCard!.expiryDate.slice(-2)}`,
-									cvc: creditCard!.cvv,
-								},
-							}),
-						},
-					);
-					if (res.success) {
-						fetchCart();
-						navigate.push(`/thanks-for-order?order_id=${res.data.payment_id}`);
-					}
-					if (!res.success) {
-						setError(res.error.message);
+					if (paymentMethod === 'card') {
+						const res = await fetchWithCookies<IResponseCheckout>(
+							'/checkout/card/',
+							{
+								method: 'POST',
+								body: JSON.stringify({
+									first_name: personalData!.name,
+									last_name: personalData!.lastname,
+									email: personalData!.email,
+									phone: personalData!.phone_number,
+									shipping_country: deliveryAddress!.shipping_country,
+									shipping_city: deliveryAddress!.shipping_city,
+									shipping_address: deliveryAddress!.shipping_city,
+									shipping_postcode: deliveryAddress!.shipping_postcode,
+									card_information: {
+										card_number: creditCard!.cardNumber,
+										expiry_month: creditCard!.expiryDate.slice(0, 2),
+										expiry_year: `20${creditCard!.expiryDate.slice(-2)}`,
+										cvc: creditCard!.cvv,
+									},
+								}),
+							},
+						);
+						if (res.success) {
+							fetchCart();
+							navigate.push(
+								`/thanks-for-order?order_id=${res.data.payment_id}`,
+							);
+						}
+						if (!res.success) {
+							setError(res.error.message);
+						}
+					} else {
+						alert('Payment method not implemented');
 					}
 				}}
 			/>

@@ -13,6 +13,7 @@ export default function Order() {
 	const products = useCart((state) => state.cart?.products || []);
 	const user = useUser((state) => state.user);
 	const totalPrice = useCart((state) => state.cart?.total_price || 0);
+	const coupon = useCart((state) => state?.cart?.coupon || null);
 	const [open, setOpen] = useState<boolean>(false);
 
 	return (
@@ -56,7 +57,7 @@ export default function Order() {
 					<span>Delivery Fee</span>
 					<span>$15</span>
 				</div>
-				<PromoCode open={open} setOpen={setOpen} />
+				<PromoCode open={open} setOpen={setOpen} coupon={coupon} />
 				<div className={styles.total}>
 					<span>Total</span>
 					<span className={londrinaSolid.className}>${totalPrice}</span>

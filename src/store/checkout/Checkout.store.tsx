@@ -7,6 +7,7 @@ interface IState {
 		personal: boolean;
 		delivery: boolean;
 		payment: boolean;
+		paymentMethod: 'card' | 'googlePay' | 'coinbase' | 'paypal';
 	};
 	personalData: IPersonalData | null;
 	deliveryAddress: IDeliveryAddress | null;
@@ -17,6 +18,9 @@ interface IActions {
 	setPersonal: (personal: boolean) => void;
 	setDelivery: (delivery: boolean) => void;
 	setPayment: (payment: boolean) => void;
+	setPaymentMethod: (
+		paymentMethod: 'card' | 'googlePay' | 'coinbase' | 'paypal',
+	) => void;
 
 	setPersonalData: (personalData: IPersonalData) => void;
 	setDeliveryAddress: (deliveryAddress: IDeliveryAddress) => void;
@@ -35,6 +39,7 @@ export const useCheckout = create<IState & IActions>()(
 					personal: true,
 					delivery: false,
 					payment: false,
+					paymentMethod: 'card',
 				},
 				personalData: null,
 				deliveryAddress: null,
@@ -62,6 +67,10 @@ export const useCheckout = create<IState & IActions>()(
 				setCreditCard: (payload) =>
 					set((state) => {
 						state.creditCard = payload;
+					}),
+				setPaymentMethod: (payload) =>
+					set((state) => {
+						state.checkout.paymentMethod = payload;
 					}),
 			})),
 			{ name: 'checkout', partialize },

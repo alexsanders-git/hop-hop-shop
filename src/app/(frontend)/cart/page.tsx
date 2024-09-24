@@ -14,6 +14,7 @@ export default function ShoppingCartPage() {
 	const totalPrice = useCart((state) => state?.cart?.total_price || 0);
 	const total_items = useCart((state) => state?.cart?.total_items || 0);
 	const subTotal = useCart((state) => state?.cart?.subtotal_price || 0);
+	const coupon = useCart((state) => state?.cart?.coupon || null);
 	const fetchCart = useCart((state) => state?.fetchCart);
 	const router = useRouter();
 	const [open, setOpen] = useState<boolean>(false);
@@ -40,6 +41,7 @@ export default function ShoppingCartPage() {
 							open={open}
 							setOpen={setOpen}
 							disabled={total_items === 0}
+							coupon={coupon}
 						/>
 						<div className={`${styles.pricesWrp} ${styles.totalPriceWrp}`}>
 							<p>Total</p>
