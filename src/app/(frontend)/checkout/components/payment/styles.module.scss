@@ -36,10 +36,7 @@
 
 			&:hover {
 				background-color: var(--beige-color);
-
-				img {
-					opacity: 1;
-				}
+				opacity: 1;
 			}
 
 			@media screen and (max-width: 500px) {
