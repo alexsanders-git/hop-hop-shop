@@ -94,10 +94,6 @@
 				margin-bottom: 15px;
 				transition: var(--transition);
 
-				&:hover {
-					color: var(--gray-color);
-				}
-
 				@media only screen and (max-width: $media-xxl) {
 					font-size: 20px;
 					line-height: 22px;
@@ -109,6 +105,12 @@
 					margin-bottom: 25px;
 				}
 			}
+
+			.subTitleLink {
+				&:hover {
+				  color: var(--gray-color);
+				}
+			  }
 
 			.price {
 				font-size: 36px;
