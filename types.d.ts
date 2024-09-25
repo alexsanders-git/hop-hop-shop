@@ -121,13 +121,6 @@ interface ICoupon {
 	valid_to: string;
 }
 
-// interface INews {
-// 	id: number;
-// 	title: string;
-// 	date: string;
-// 	images?: IImage | IImage[];
-// }
-
 interface IToken {
 	value: string;
 	expires: number;

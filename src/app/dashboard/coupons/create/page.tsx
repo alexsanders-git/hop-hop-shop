@@ -70,6 +70,9 @@ export default function DashboardCouponCreate() {
 				} else if (!res.success) {
 					setIsLoading(false);
 					setError(res.error.message);
+					setTimeout(() => {
+						setError('');
+					}, 5000);
 				}
 			}}
 		>

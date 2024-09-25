@@ -26,6 +26,7 @@ type Props = {
 
 export default async function ProductPage({ params: { id } }: Props) {
 	const product = await fetchData<IProduct>(`shop/products/${id}/`);
+	console.log(product.data.images);
 
 	if (!product.success) {
 		return notFound();
@@ -36,7 +37,7 @@ export default async function ProductPage({ params: { id } }: Props) {
 	return (
 		<section className={styles.wrapper}>
 			<div className={styles.productPage}>
-				{imagesArr.length ? (
+				{imagesArr.length > 1 ? (
 					<>
 						<ProductIdMobileSwiper product={product.data} />
 						<ProductIdDesktopSwiper product={product.data} />
@@ -47,7 +48,7 @@ export default async function ProductPage({ params: { id } }: Props) {
 							<AddToFavoriteButton product={product.data} />
 						</div>
 						<Image
-							src="/default-image.png"
+							src={imagesArr[0]?.image || '/default-image.png'}
 							width={500}
 							height={500}
 							alt={product.data.name}

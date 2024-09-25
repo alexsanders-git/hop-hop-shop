@@ -11,21 +11,22 @@ import { validationSchemaCreditCard } from '@/validation/creditCard/creditCard.v
 import styles from './styles.module.scss';
 import CreditCard from '@/app/(frontend)/checkout/components/creditCard/CreditCard';
 
-const paymentImages = [
+type CreditCardType = 'card' | 'googlePay' | 'coinbase' | 'paypal';
+
+const paymentImages: { type: CreditCardType; src: string }[] = [
 	{ type: 'card', src: 'card.svg' },
 	{ type: 'googlePay', src: 'google_pay.svg' },
 	{ type: 'paypal', src: 'paypal.svg' },
 	{ type: 'coinbase', src: 'coinbase.svg' },
 ];
 
-type CreditCardType = 'card' | 'googlePay' | 'coinbase' | 'paypal';
-
 export default function Payment() {
 	const [opened, setOpened] = useState(false);
 	const { payment } = useCheckout((state) => state.checkout);
 	const setPayment = useCheckout((state) => state.setPayment);
+	const paymentMethod = useCheckout((state) => state.checkout.paymentMethod);
+	const setPaymentMethod = useCheckout((state) => state.setPaymentMethod);
 	const setCreditCard = useCheckout((state) => state.setCreditCard);
-	const [type, setType] = useState<CreditCardType>('card');
 
 	const onSubmit = (values: ICreditCard) => {
 		setCreditCard(values);
@@ -50,23 +51,25 @@ export default function Payment() {
 					<h4 className={styles.title}>Payment methods</h4>
 					<div className={styles.imageWrapper}>
 						{paymentImages.map((item) => (
-							<div key={item.type} className={styles.typeImageWrapper}>
+							<div
+								key={item.type}
+								className={`${styles.typeImageWrapper} ${item.type !== paymentMethod ? styles.inactive : ''}`}
+								onClick={() => {
+									setPaymentMethod(item.type);
+									if (item.type !== 'card') {
+										alert('This payment method is not available yet');
+									}
+								}}
+							>
 								{/* eslint-disable-next-line @next/next/no-img-element */}
 								<img
-									className={` ${item.type !== type ? styles.inactive : ''}`}
 									src={`/payment/${item.src}`}
 									alt={`payment type ${item.type}`}
-									onClick={() => {
-										setType(item.type as CreditCardType);
-										if (item.type !== 'card') {
-											alert('This payment method is not available yet');
-										}
-									}}
 								/>
 							</div>
 						))}
 					</div>
-					{type === 'card' && <CreditCard formik={formik} />}
+					{paymentMethod === 'card' && <CreditCard formik={formik} />}
 					<Button
 						className={styles.button}
 						onClick={formik.submitForm}
