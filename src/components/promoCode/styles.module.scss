@@ -62,7 +62,7 @@
 	border: 2px solid var(--primary-color);
 	border-radius: 32px;
 	box-shadow: 2px 2px 0 2px var(--primary-color);
-	text-align: left;
+	text-align: center;
 	background: var(--lightgreen-color);
 
 
@@ -100,12 +100,6 @@
 	}
 }
 
-.CuponeArrow {
-	position: absolute;
-	z-index: 50;
-	right: 20px;
-	top: 15px;
-}
 
 .error {
 	display: none;

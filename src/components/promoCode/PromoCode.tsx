@@ -69,12 +69,6 @@ export default function PromoCode(props: InterfacePromoCode) {
 								placeholder={'Enter code'}
 								className={`${styles.input} ${data?.error && styles.inputError} ${data?.message && styles.inputSuccess}`}
 							/>
-							<Check
-								className={`
-						${styles.CuponeArrow}
-						${data?.error && styles.error}
-						${data?.message && styles.success}`}
-							/>
 							{data?.error && (
 								<div className={styles.errorMessage}>{data.error}</div>
 							)}

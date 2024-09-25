@@ -265,20 +265,20 @@ export default function AccountForm() {
 								className={styles.input}
 								title={'Current Password'}
 								name={'currentPassword'}
-								placeholder={'Current password'}
+								placeholder={'Current Password'}
 							/>
 							<div className={styles.inputContainer}>
 								<InputPassword
 									className={styles.input}
 									title={'New Password'}
 									name={'newPassword'}
-									placeholder={'New password'}
+									placeholder={'New Password'}
 								/>
 								<InputPassword
 									className={styles.input}
 									title={'Confirm Password'}
 									name={'confirmPassword'}
-									placeholder={'Confirm password'}
+									placeholder={'Confirm Password'}
 								/>
 							</div>
 						</div>
