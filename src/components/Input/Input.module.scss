@@ -51,11 +51,12 @@
 
 .input {
 	padding: 12px 24px;
-	font-size: 20px;
+	font-size: 21px;
+	font-weight: 700;
 	line-height: 1.1;
 	border: 2px solid var(--primary-color);
 	border-radius: 32px;
-	box-shadow: 2px 2px 0 2px var(--primary-color);
+	box-shadow: 3px 3px 0 3px var(--primary-color);
 	text-align: left;
 	background: var(--lightgreen-color);
 
@@ -65,6 +66,10 @@
 		font-size: 16px;
 		line-height: 18px;
 	}
+	@media only screen and (max-width: $media-md) {
+		box-shadow: 2px 2px 0 2px var(--primary-color);
+	}
+
 
 	&::placeholder {
 		opacity: 0.5;

@@ -8,6 +8,7 @@ import {
 	latNameValid,
 	nameValid,
 	phoneValid,
+	messageValid,
 } from '@/validation/checkout/validation';
 
 import Input from '@/components/Input/Input';
@@ -22,6 +23,7 @@ export interface IFormValuesProfile {
 	last_name?: string;
 	email?: string;
 	phone_number: string;
+	message: string;
 }
 
 const handleSubmit = (values: IFormValuesProfile) => {
@@ -38,6 +40,7 @@ export default function ContactUsForm() {
 						last_name: latNameValid,
 						email: emailValid,
 						phone_number: phoneValid,
+						message: messageValid,
 					})
 					.required()}
 				initialValues={{
