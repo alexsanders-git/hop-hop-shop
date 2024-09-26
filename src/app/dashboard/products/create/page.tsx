@@ -10,7 +10,6 @@ import image from '@/assets/png/Newdescription.png';
 import Button from '@/components/Button/Button';
 import CreateDashboardHeader from '@/components/dashboard/createDashboardHeader/CreateDashboardHeader';
 import ModalConfirmation from '@/components/dashboard/modalConfirmation/ModalСonfirmation';
-import UploadedFileBlock from '@/components/dashboard/uploadedFileBlock/UploadedFileBlock';
 import Input from '@/components/Input/Input';
 import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
@@ -28,6 +27,13 @@ import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
 import { useFetch } from '@/hooks/useFetch';
+import { closestCenter, DndContext, DragEndEvent } from '@dnd-kit/core';
+import {
+	arrayMove,
+	SortableContext,
+	verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import UploadedFileBlock from '@/components/dashboard/uploadedFileBlock/UploadedFileBlock';
 
 interface FormValues {
 	name: string;
@@ -36,16 +42,27 @@ interface FormValues {
 	price: string;
 }
 
+export interface IPreview {
+	image: string;
+	name: string;
+	id: string;
+	fileId: string;
+}
+
+interface FileWithId {
+	id: string;
+	file: File;
+}
+
 export default function DashboardProductsCreate() {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [showPrePublish, setShowPrePublish] = useState<boolean>(false);
 	const [success, setSuccess] = useState(false);
 	const [error, setError] = useState('');
 	const [modal, setModal] = useState<boolean>(false);
-	const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-	const [previews, setPreviews] = useState<{ image: string; name: string }[]>(
-		[],
-	);
+	const [selectedFiles, setSelectedFiles] = useState<FileWithId[]>([]);
+	const [previews, setPreviews] = useState<IPreview[]>([]);
+
 	const { data: categories } = useFetch<ICategory[]>({
 		endpoint: 'shop/categories/all/',
 		options: {
@@ -59,16 +76,26 @@ export default function DashboardProductsCreate() {
 
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files) {
-			const filesArray = Array.from(event.target.files);
-			console.log(filesArray);
-			setSelectedFiles(filesArray);
+			const filesArray = Array.from(event.target.files || []);
 
-			const previewsArray = filesArray.map((file) => {
+			const filesWithId: FileWithId[] = filesArray.map((file) => ({
+				id: crypto.randomUUID(),
+				file,
+			}));
+
+			setSelectedFiles((prevFiles) => [...prevFiles, ...filesWithId]);
+
+			const previewsArray = filesWithId.map(({ file, id }) => {
 				const reader = new FileReader();
 				reader.readAsDataURL(file);
-				return new Promise<{ image: string; name: string }>((resolve) => {
+				return new Promise<IPreview>((resolve) => {
 					reader.onloadend = () => {
-						resolve({ image: reader.result as string, name: file.name });
+						resolve({
+							image: reader.result as string,
+							name: file.name,
+							id: crypto.randomUUID(),
+							fileId: id,
+						});
 					};
 				});
 			});
@@ -79,11 +106,51 @@ export default function DashboardProductsCreate() {
 		}
 	};
 
-	const handleRemoveImage = (index: number) => {
-		const newPreviews = previews.filter((_, i) => i !== index);
+	const handleRemoveImage = (preview: IPreview) => {
+		const newPreviews = previews.filter((item) => item.id !== preview.id);
 		setPreviews(newPreviews);
-		const newSelectedFiles = selectedFiles.filter((_, i) => i !== index);
+		const newSelectedFiles = selectedFiles.filter(
+			(item) => item.id !== preview.fileId,
+		);
 		setSelectedFiles(newSelectedFiles);
+	};
+
+	const changeImagePosition = (index: number) => {
+		// Копіюємо масиви для previews та selectedFiles
+		const newPreviews = [...previews];
+		const newSelectedFiles = [...selectedFiles];
+
+		// Міняємо місцями перший елемент і елемент за вказаним індексом
+		const tempPreview = newPreviews[0];
+		newPreviews[0] = newPreviews[index];
+		newPreviews[index] = tempPreview;
+
+		const tempFile = newSelectedFiles[0];
+		newSelectedFiles[0] = newSelectedFiles[index];
+		newSelectedFiles[index] = tempFile;
+
+		// Оновлюємо стейт з новими масивами
+		setPreviews(newPreviews);
+		setSelectedFiles(newSelectedFiles);
+	};
+
+	const onDragEnd = (event: DragEndEvent) => {
+		const { active, over } = event;
+		if (over?.id) {
+			if (active.id === over.id) {
+				return;
+			}
+			setPreviews((previews) => {
+				const oldIndex = previews.findIndex(
+					(preview) => preview.id === active.id,
+				);
+
+				const newIndex = previews.findIndex(
+					(preview) => preview.id === over.id,
+				);
+				return arrayMove(previews, oldIndex, newIndex);
+			});
+		}
 	};
 
 	return (
@@ -128,12 +195,15 @@ export default function DashboardProductsCreate() {
 					.required()}
 				onSubmit={async (values, { resetForm }) => {
 					setIsLoading(true);
-					const res = await createProduct(values);
+					const res = await createProduct({
+						...values,
+						category: values.category === '0' ? null : values.category,
+					});
 					const formData = new FormData();
 
 					if (selectedFiles) {
 						selectedFiles.forEach((file) => {
-							formData.append('uploaded_images', file);
+							formData.append('uploaded_images', file.file);
 						});
 					}
 					if (res.success && formData) {
@@ -203,10 +273,15 @@ export default function DashboardProductsCreate() {
 									name={'category'}
 									options={
 										categories
-											? categories.map((item) => ({
-													name: item.name,
-													id: item.id,
-												}))
+											? categories
+													.map((item) => ({
+														name: item.name,
+														id: item.id,
+													}))
+													.concat({
+														name: 'No Category',
+														id: 0,
+													})
 											: null
 									}
 									text={'Product Category'}
@@ -251,7 +326,7 @@ export default function DashboardProductsCreate() {
 										{isHovered && previews[0].image && (
 											<div
 												onClick={() => {
-													handleRemoveImage(0);
+													handleRemoveImage(previews[0]);
 												}}
 												className={styles.removeImage}
 											>
@@ -267,17 +342,31 @@ export default function DashboardProductsCreate() {
 										/>
 									</div>
 								)}
-								{previews.length > 1 &&
-									previews
-										.slice(1)
-										.map((preview, index) => (
-											<UploadedFileBlock
-												key={index}
-												image={preview}
-												index={index + 1}
-												handleRemoveImage={handleRemoveImage}
-											/>
-										))}
+								{previews.length > 0 ? (
+									<DndContext
+										collisionDetection={closestCenter}
+										onDragEnd={onDragEnd}
+									>
+										<SortableContext
+											items={previews}
+											strategy={verticalListSortingStrategy}
+										>
+											{previews.map((preview, index) => {
+												return (
+													<UploadedFileBlock
+														visibility={index === 0}
+														key={preview.id}
+														preview={preview}
+														handleRemoveImage={() => handleRemoveImage(preview)}
+														changeImagePosition={() =>
+															changeImagePosition(index)
+														}
+													/>
+												);
+											})}
+										</SortableContext>
+									</DndContext>
+								) : null}
 								<div className={styles.uploadImage}>
 									<span
 										className={`${styles.text} ${robotoCondensed.className}`}

@@ -83,3 +83,9 @@ ol {
 ::-webkit-scrollbar-button {
 	display: none;
 }
+
+.product-drag-drop {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}

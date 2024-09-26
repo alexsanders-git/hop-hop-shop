@@ -11,7 +11,6 @@ import Button from '@/components/Button/Button';
 import CreateDashboardHeader from '@/components/dashboard/createDashboardHeader/CreateDashboardHeader';
 import DashboardUploadedImage from '@/components/dashboard/dashboardUploadedImage/DashboardUploadedImage';
 import ModalConfirmation from '@/components/dashboard/modalConfirmation/ModalСonfirmation';
-import UploadedFileBlock from '@/components/dashboard/uploadedFileBlock/UploadedFileBlock';
 import Input from '@/components/Input/Input';
 import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
@@ -31,6 +30,7 @@ import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
 import { useFetch } from '@/hooks/useFetch';
+import UploadedFileBlockOld from '@/components/dashboard/UploadedFileBlockOld/UploadedFileBlockOld';
 
 export interface IProps {
 	product: IProduct;
@@ -363,7 +363,7 @@ export default function EditProduct(props: IProps) {
 									previews
 										.slice(1)
 										.map((preview, index) => (
-											<UploadedFileBlock
+											<UploadedFileBlockOld
 												key={index}
 												image={preview}
 												index={index + 1}
