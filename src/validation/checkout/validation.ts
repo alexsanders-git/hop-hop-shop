@@ -74,3 +74,7 @@ export const passwordValid = yup
 		/[!@#$%^&*(),.?":{}|<>]/,
 		'Password must contain at least one special character',
 	);
+
+export const messageValid = yup
+	.string()
+	.required('Message is a required field');

@@ -28,6 +28,7 @@ export interface IResponseCouponApply {
 	total_price: number;
 	coupon_is_used: number;
 	sessionid: unknown | null;
+	coupon: { name: string; discount: number } | null;
 }
 
 interface IProductDetails {
@@ -43,4 +44,5 @@ export interface IResponseGetCart {
 	total_items: number;
 	subtotal_price: number;
 	coupon_is_used: boolean;
+	coupon: { name: string; discount: number } | null;
 }

@@ -1,5 +1,5 @@
-@import "src/styles/media.scss";
-@import "src/styles/mixins";
+@import 'src/styles/media.scss';
+@import 'src/styles/mixins';
 
 .footer {
 	padding: 53px 0 20px 0;
@@ -9,7 +9,6 @@
 		padding: 40px 31px;
 	}
 }
-
 
 .wrapper {
 	display: flex;
@@ -62,7 +61,7 @@
 	svg {
 		width: 15px;
 		height: 15px;
-		color: var(--primary-color);;
+		color: var(--primary-color);
 	}
 
 	&:hover {
@@ -72,7 +71,6 @@
 			color: var(--beige-color);
 			fill: var(--beige-color);
 		}
-
 	}
 }
 
@@ -129,17 +127,18 @@
 
 	li {
 		padding-bottom: 28px;
-		@include footer-links-states;
 
 		@media only screen and (max-width: $media-lg) {
 			padding-bottom: 24px;
-
 		}
+	}
+
+	a {
+		@include footer-links-states;
 	}
 
 	@media only screen and (max-width: $media-lg) {
 		width: auto;
-		height: 112px;
 		font-size: 16px;
 		line-height: 100%;
 	}

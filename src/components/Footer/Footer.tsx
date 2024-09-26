@@ -42,18 +42,15 @@ export default function Footer() {
 								<Link href="#">About</Link>
 							</li>
 							<li>
-								<Link href="#">Login</Link>
-							</li>
-							<li>
 								<Link href="/terms-of-use">Terms of use</Link>
 							</li>
 						</ul>
 						<ul className={`${robotoCondensed.className} ${styles.list}`}>
 							<li>
-								<Link href="#">Contact us</Link>
+								<Link href="/contact-us">Contact us</Link>
 							</li>
 							<li>
-								<Link href="/cookies-policy">Сookies policy</Link>
+								<Link href="/cookies-policy">Cookies policy</Link>
 							</li>
 							<li>
 								<Link href="#">Advertising placement</Link>

@@ -1,28 +1,31 @@
 'use client';
-import { useFormik, useFormikContext } from 'formik';
-import Image from 'next/image';
+import { useFormik } from 'formik';
 import { useState } from 'react';
 
 import Accordion from '@/app/(frontend)/checkout/components/accordion/Accordion';
-import CreditCard from '@/app/(frontend)/checkout/components/creditCard/CreditCard';
 import ReadyData from '@/app/(frontend)/checkout/components/readyData/ReadyData';
 import Button from '@/components/Button/Button';
 import { useCheckout } from '@/store/checkout/Checkout.store';
 import { validationSchemaCreditCard } from '@/validation/creditCard/creditCard.validation';
 
 import styles from './styles.module.scss';
-import applePay from '../../../../../../public/payment/apple_pay.png';
-import bitcoin from '../../../../../../public/payment/bitcoin.png';
-import googlePay from '../../../../../../public/payment/google_pay.png';
-import paypal from '../../../../../../public/payment/paypal.png';
+import CreditCard from '@/app/(frontend)/checkout/components/creditCard/CreditCard';
 
-const deliveryImages = [applePay, googlePay, paypal, bitcoin];
+type CreditCardType = 'card' | 'googlePay' | 'coinbase' | 'paypal';
+
+const paymentImages: { type: CreditCardType; src: string }[] = [
+	{ type: 'card', src: 'card.svg' },
+	{ type: 'googlePay', src: 'google_pay.svg' },
+	{ type: 'paypal', src: 'paypal.svg' },
+	{ type: 'coinbase', src: 'coinbase.svg' },
+];
 
 export default function Payment() {
 	const [opened, setOpened] = useState(false);
-	const [isChecked, setIsChecked] = useState<'card' | 'online'>('card');
 	const { payment } = useCheckout((state) => state.checkout);
 	const setPayment = useCheckout((state) => state.setPayment);
+	const paymentMethod = useCheckout((state) => state.checkout.paymentMethod);
+	const setPaymentMethod = useCheckout((state) => state.setPaymentMethod);
 	const setCreditCard = useCheckout((state) => state.setCreditCard);
 
 	const onSubmit = (values: ICreditCard) => {
@@ -45,50 +48,28 @@ export default function Payment() {
 		<Accordion setActive={setPayment} active={payment} title={'Payment'}>
 			{!opened && (
 				<div className={styles.inputWrapper}>
-					<div className={`${styles.choseMethod}`}>
-						<div
-							onClick={() => setIsChecked('online')}
-							className={`${styles.checkboxWrapper}`}
-						>
-							<div className={`${styles.checkbox}`}>
-								{isChecked === 'online' && (
-									<div className={styles.checkboxBackground}></div>
-								)}
-							</div>
-							<div className={styles.checkboxText}>Payment methods</div>
-						</div>
-						<div
-							className={`${styles.deliveryImages} ${isChecked === 'card' && styles.inactive}`}
-						>
-							{deliveryImages.map((img, index) => (
-								<Image
-									className={styles.deliveryImage}
-									key={index}
-									width={90}
-									height={50}
-									src={img}
-									alt="delivery-image"
+					<h4 className={styles.title}>Payment methods</h4>
+					<div className={styles.imageWrapper}>
+						{paymentImages.map((item) => (
+							<div
+								key={item.type}
+								className={`${styles.typeImageWrapper} ${item.type !== paymentMethod ? styles.inactive : ''}`}
+								onClick={() => {
+									setPaymentMethod(item.type);
+									if (item.type !== 'card') {
+										alert('This payment method is not available yet');
+									}
+								}}
+							>
+								{/* eslint-disable-next-line @next/next/no-img-element */}
+								<img
+									src={`/payment/${item.src}`}
+									alt={`payment type ${item.type}`}
 								/>
-							))}
-						</div>
-					</div>
-					<div className={`${styles.cardMethod}`}>
-						<div
-							onClick={() => setIsChecked('card')}
-							className={`${styles.checkboxWrapper}`}
-						>
-							<div className={`${styles.checkbox}`}>
-								{isChecked === 'card' && (
-									<div className={styles.checkboxBackground}></div>
-								)}
 							</div>
-							<div className={styles.checkboxText}>Credit card</div>
-						</div>
-						<CreditCard
-							formik={formik}
-							className={isChecked === 'online' ? styles.inactive : ''}
-						/>
+						))}
 					</div>
+					{paymentMethod === 'card' && <CreditCard formik={formik} />}
 					<Button
 						className={styles.button}
 						onClick={formik.submitForm}

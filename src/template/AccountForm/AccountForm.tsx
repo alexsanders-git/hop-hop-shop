@@ -192,14 +192,14 @@ export default function AccountForm() {
 							<div className={styles.inputContainer}>
 								<Input
 									className={styles.input}
-									title={'First name'}
+									title={'First Name'}
 									type={'text'}
 									name={'first_name'}
 									placeholder={'John'}
 								/>
 								<Input
 									className={styles.input}
-									title={'Last name'}
+									title={'Last Name'}
 									type={'text'}
 									name={'last_name'}
 									placeholder={'Doe'}
@@ -263,22 +263,22 @@ export default function AccountForm() {
 							<h2 className={styles.title}>Password</h2>
 							<InputPassword
 								className={styles.input}
-								title={'Current password'}
+								title={'Current Password'}
 								name={'currentPassword'}
-								placeholder={'Current password'}
+								placeholder={'Current Password'}
 							/>
 							<div className={styles.inputContainer}>
 								<InputPassword
 									className={styles.input}
-									title={'New password'}
+									title={'New Password'}
 									name={'newPassword'}
-									placeholder={'New password'}
+									placeholder={'New Password'}
 								/>
 								<InputPassword
 									className={styles.input}
-									title={'Confirm password'}
+									title={'Confirm Password'}
 									name={'confirmPassword'}
-									placeholder={'Confirm password'}
+									placeholder={'Confirm Password'}
 								/>
 							</div>
 						</div>

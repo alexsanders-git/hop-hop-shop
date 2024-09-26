@@ -27,7 +27,13 @@ import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
 import { useFetch } from '@/hooks/useFetch';
-import DragAndDropWrapper from '@/app/dashboard/products/create/DragAndDropWrapper';
+import { closestCenter, DndContext, DragEndEvent } from '@dnd-kit/core';
+import {
+	arrayMove,
+	SortableContext,
+	verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import UploadedFileBlock from '@/components/dashboard/uploadedFileBlock/UploadedFileBlock';
 
 interface FormValues {
 	name: string;
@@ -39,7 +45,13 @@ interface FormValues {
 export interface IPreview {
 	image: string;
 	name: string;
-	uuid: string;
+	id: string;
+	fileId: string;
+}
+
+interface FileWithId {
+	id: string;
+	file: File;
 }
 
 export default function DashboardProductsCreate() {
@@ -48,9 +60,9 @@ export default function DashboardProductsCreate() {
 	const [success, setSuccess] = useState(false);
 	const [error, setError] = useState('');
 	const [modal, setModal] = useState<boolean>(false);
-	const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+	const [selectedFiles, setSelectedFiles] = useState<FileWithId[]>([]);
 	const [previews, setPreviews] = useState<IPreview[]>([]);
-	console.log(previews);
+
 	const { data: categories } = useFetch<ICategory[]>({
 		endpoint: 'shop/categories/all/',
 		options: {
@@ -64,11 +76,16 @@ export default function DashboardProductsCreate() {
 
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files) {
-			const filesArray = Array.from(event.target.files);
-			console.log(filesArray);
-			setSelectedFiles(filesArray);
+			const filesArray = Array.from(event.target.files || []);
 
-			const previewsArray = filesArray.map((file) => {
+			const filesWithId: FileWithId[] = filesArray.map((file) => ({
+				id: crypto.randomUUID(),
+				file,
+			}));
+
+			setSelectedFiles((prevFiles) => [...prevFiles, ...filesWithId]);
+
+			const previewsArray = filesWithId.map(({ file, id }) => {
 				const reader = new FileReader();
 				reader.readAsDataURL(file);
 				return new Promise<IPreview>((resolve) => {
@@ -76,7 +93,8 @@ export default function DashboardProductsCreate() {
 						resolve({
 							image: reader.result as string,
 							name: file.name,
-							uuid: crypto.randomUUID(),
+							id: crypto.randomUUID(),
+							fileId: id,
 						});
 					};
 				});
@@ -88,10 +106,12 @@ export default function DashboardProductsCreate() {
 		}
 	};
 
-	const handleRemoveImage = (index: number) => {
-		const newPreviews = previews.filter((_, i) => i !== index);
+	const handleRemoveImage = (preview: IPreview) => {
+		const newPreviews = previews.filter((item) => item.id !== preview.id);
 		setPreviews(newPreviews);
-		const newSelectedFiles = selectedFiles.filter((_, i) => i !== index);
+		const newSelectedFiles = selectedFiles.filter(
+			(item) => item.id !== preview.fileId,
+		);
 		setSelectedFiles(newSelectedFiles);
 	};
 
@@ -112,6 +132,25 @@ export default function DashboardProductsCreate() {
 		// Оновлюємо стейт з новими масивами
 		setPreviews(newPreviews);
 		setSelectedFiles(newSelectedFiles);
+	};
+
+	const onDragEnd = (event: DragEndEvent) => {
+		const { active, over } = event;
+		if (over?.id) {
+			if (active.id === over.id) {
+				return;
+			}
+			setPreviews((previews) => {
+				const oldIndex = previews.findIndex(
+					(preview) => preview.id === active.id,
+				);
+
+				const newIndex = previews.findIndex(
+					(preview) => preview.id === over.id,
+				);
+				return arrayMove(previews, oldIndex, newIndex);
+			});
+		}
 	};
 
 	return (
@@ -156,12 +195,15 @@ export default function DashboardProductsCreate() {
 					.required()}
 				onSubmit={async (values, { resetForm }) => {
 					setIsLoading(true);
-					const res = await createProduct(values);
+					const res = await createProduct({
+						...values,
+						category: values.category === '0' ? null : values.category,
+					});
 					const formData = new FormData();
 
 					if (selectedFiles) {
 						selectedFiles.forEach((file) => {
-							formData.append('uploaded_images', file);
+							formData.append('uploaded_images', file.file);
 						});
 					}
 					if (res.success && formData) {
@@ -231,10 +273,15 @@ export default function DashboardProductsCreate() {
 									name={'category'}
 									options={
 										categories
-											? categories.map((item) => ({
-													name: item.name,
-													id: item.id,
-												}))
+											? categories
+													.map((item) => ({
+														name: item.name,
+														id: item.id,
+													}))
+													.concat({
+														name: 'No Category',
+														id: 0,
+													})
 											: null
 									}
 									text={'Product Category'}
@@ -279,7 +326,7 @@ export default function DashboardProductsCreate() {
 										{isHovered && previews[0].image && (
 											<div
 												onClick={() => {
-													handleRemoveImage(0);
+													handleRemoveImage(previews[0]);
 												}}
 												className={styles.removeImage}
 											>
@@ -296,14 +343,29 @@ export default function DashboardProductsCreate() {
 									</div>
 								)}
 								{previews.length > 0 ? (
-									<DragAndDropWrapper
-										changeImagePosition={changeImagePosition}
-										// selectedFiles={selectedFiles}
-										// setSelectedFiles={setSelectedFiles}
-										handleRemoveImage={handleRemoveImage}
-										setPreviews={setPreviews}
-										previews={previews}
-									/>
+									<DndContext
+										collisionDetection={closestCenter}
+										onDragEnd={onDragEnd}
+									>
+										<SortableContext
+											items={previews}
+											strategy={verticalListSortingStrategy}
+										>
+											{previews.map((preview, index) => {
+												return (
+													<UploadedFileBlock
+														visibility={index === 0}
+														key={preview.id}
+														preview={preview}
+														handleRemoveImage={() => handleRemoveImage(preview)}
+														changeImagePosition={() =>
+															changeImagePosition(index)
+														}
+													/>
+												);
+											})}
+										</SortableContext>
+									</DndContext>
 								) : null}
 								<div className={styles.uploadImage}>
 									<span

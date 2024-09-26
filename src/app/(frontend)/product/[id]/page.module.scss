@@ -56,7 +56,8 @@
 				display: flex;
 				flex-direction: column;
 
-				@media only screen and (max-width: $media-lg) {}
+				@media only screen and (max-width: $media-lg) {
+				}
 			}
 
 			&__wrapper {
@@ -92,6 +93,7 @@
 				font-weight: 700;
 				line-height: 28px;
 				margin-bottom: 15px;
+				transition: var(--transition);
 
 				@media only screen and (max-width: $media-xxl) {
 					font-size: 20px;
@@ -102,6 +104,12 @@
 					font-size: 16px;
 					line-height: 18px;
 					margin-bottom: 25px;
+				}
+			}
+
+			.subTitleLink {
+				&:hover {
+					color: var(--gray-color);
 				}
 			}
 
@@ -128,6 +136,7 @@
 				font-size: 20px;
 				font-weight: 400;
 				line-height: 24px;
+				word-break: normal;
 
 				@media only screen and (max-width: $media-xxl) {
 					font-size: 16px;
@@ -154,6 +163,7 @@
 	border-radius: 24px;
 	border: 4px solid var(--primary-color);
 	box-shadow: 2px 2px 0 2px var(--primary-color);
+	overflow: hidden;
 }
 
 .mobileActions {

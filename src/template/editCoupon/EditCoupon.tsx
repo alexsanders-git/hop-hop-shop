@@ -63,6 +63,9 @@ export default function EditCoupon(props: IProps) {
 				} else if (!res.success) {
 					setIsLoading(false);
 					setError(res.error.message);
+					setTimeout(() => {
+						setError('');
+					}, 5000);
 				}
 			}}
 		>

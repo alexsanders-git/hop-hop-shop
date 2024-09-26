@@ -16,6 +16,7 @@ import ProductIdMobileSwiper from '@/template/ProductIdMobileSwiper/ProductIdMob
 import { getImages } from '@/utils/typeGuards';
 
 import styles from './page.module.scss';
+import Link from 'next/link';
 
 type Props = {
 	params: {
@@ -25,6 +26,7 @@ type Props = {
 
 export default async function ProductPage({ params: { id } }: Props) {
 	const product = await fetchData<IProduct>(`shop/products/${id}/`);
+	console.log(product.data.images);
 
 	if (!product.success) {
 		return notFound();
@@ -35,7 +37,7 @@ export default async function ProductPage({ params: { id } }: Props) {
 	return (
 		<section className={styles.wrapper}>
 			<div className={styles.productPage}>
-				{imagesArr.length ? (
+				{imagesArr.length > 1 ? (
 					<>
 						<ProductIdMobileSwiper product={product.data} />
 						<ProductIdDesktopSwiper product={product.data} />
@@ -46,7 +48,7 @@ export default async function ProductPage({ params: { id } }: Props) {
 							<AddToFavoriteButton product={product.data} />
 						</div>
 						<Image
-							src="/default-image.png"
+							src={imagesArr[0]?.image || '/default-image.png'}
 							width={500}
 							height={500}
 							alt={product.data.name}
@@ -59,11 +61,20 @@ export default async function ProductPage({ params: { id } }: Props) {
 						<div className={styles.info__wrapper}>
 							<div className={styles.info__title}>
 								<h1 className={styles.title}>{product?.data.name}</h1>
-								<span
-									className={`${styles.subTitle} ${robotoCondensed.className}`}
-								>
-									{product?.data.category?.name}
-								</span>
+								{product?.data?.category ? (
+									<Link
+										href={`/category/${product?.data.category?.id}`}
+										className={`${styles.subTitle} ${styles.subTitleLink} ${robotoCondensed.className}`}
+									>
+										{product?.data.category?.name}
+									</Link>
+								) : (
+									<span
+										className={`${styles.subTitle} ${robotoCondensed.className}`}
+									>
+										No category
+									</span>
+								)}
 							</div>
 							<span className={styles.price}>${product?.data.price}</span>
 						</div>

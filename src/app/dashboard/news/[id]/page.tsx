@@ -1,3 +1,7 @@
+import { getNewsById } from '@/services/dashboard/news/dashbpard.news.service';
+import EditNews from '@/template/editNews/EditNews';
+import { notFound } from 'next/navigation';
+
 type Props = {
 	params: {
 		id: string;
@@ -5,11 +9,11 @@ type Props = {
 };
 
 export default async function DashboardNewsId({ params: { id } }: Props) {
-	// const category = await getCategoryById(id);
-	//
-	// if (!category) {
-	// 	return notFound();
-	// }
-	// return <EditNews category={category} />;
-	return <div>Dashboard news edit not ready yed</div>;
+	const news = await getNewsById(id);
+	console.log(news);
+
+	if (!news.success) {
+		return notFound();
+	}
+	return <EditNews news={news.data} />;
 }

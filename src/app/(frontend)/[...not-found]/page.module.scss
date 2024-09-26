@@ -1,30 +1,5 @@
 @import "../../../styles/media";
 
-.bodyInner {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	min-height: 100vh;
-	overflow-x: hidden;
-}
-
-.main {
-	flex: 1 1 auto;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-}
-
-.wrapper {
-	flex: 1 1 auto;
-	overflow: hidden;
-	background: var(--lightblue-color);
-	border-left: 2px solid var(--primary-color);
-	border-right: 2px solid var(--primary-color);
-	border-bottom: 2px solid var(--primary-color);
-	padding-top: 70px;
-}
-
 .notFoundWrapper {
 	display: flex;
 	flex-direction: column;
@@ -39,7 +14,6 @@
 	@media only screen and (max-width: $media-sm) {
 		margin-bottom: 20px;
 	}
-
 }
 
 .notFoundImageWrapper {
@@ -54,7 +28,6 @@
 		margin-bottom: 20px;
 		max-width: 320px;
 	}
-
 }
 
 .notFoundDescription {
@@ -69,7 +42,6 @@
 		margin-bottom: 20px;
 		font-size: 20px;
 	}
-
 }
 
 .notFoundSubDescription {
@@ -80,17 +52,4 @@
 		margin-bottom: 24px;
 		font-size: 16px;
 	}
-
-}
-
-
-.cardsWrp {
-	display: flex;
-	gap: 36px;
-
-	& > * {
-		width: 100%;
-		max-width: calc(33.333% - 18px);
-	}
-
 }

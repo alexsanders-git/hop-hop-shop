@@ -1,164 +1,203 @@
-// 'use client';
-//
-// import { Form, Formik } from 'formik';
-// import { useRouter } from 'next/navigation';
-// import { ChangeEvent, useState } from 'react';
-// import * as yup from 'yup';
-//
-// import CreateDashboardHeader from '@/components/dashboard/createDashboardHeader/CreateDashboardHeader';
-// import DashboardUploadImage from '@/components/dashboard/dashboardUploadImage/DashboardUploadImage';
-// import ModalConfirmation from '@/components/dashboard/modalConfirmation/ModalСonfirmation';
-// import Input from '@/components/Input/Input';
-// import Loader from '@/components/Loader/Loader';
-// import MessageError from '@/components/messageError/MessageError';
-// import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
-// import Textarea from '@/components/textarea/Textarea';
-// import {
-// 	createCategoryImage,
-// 	removeCategoryById,
-// 	updateCategory,
-// } from '@/services/dashboard/categories/dashboard.categories.service';
-// import { categoryValid } from '@/validation/dashboard/category/validation';
-//
-// import styles from './styles.module.scss';
-//
-// export interface IProps {
-// 	news: INews;
-// }
-//
-// export default function EditNews(props: IProps) {
-// 	const { news } = props;
-// 	const [modal, setModal] = useState<boolean>(false);
-// 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
-// 	const [preview, setPreview] = useState<string | null>(news.image);
-// 	const router = useRouter();
-// 	const [isLoading, setIsLoading] = useState<boolean>(false);
-// 	const [success, setSuccess] = useState('');
-// 	const [error, setError] = useState('');
-//
-// 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-// 		if (event.target.files && event.target.files.length > 0) {
-// 			setSelectedFile(event.target.files[0]);
-//
-// 			const file = event.target.files[0];
-// 			if (file) {
-// 				const reader = new FileReader();
-// 				reader.onloadend = () => {
-// 					setPreview(reader.result as string);
-// 				};
-// 				reader.readAsDataURL(file);
-// 			}
-// 		}
-// 	};
-//
-// 	return (
-// 		<Formik
-// 			initialValues={{
-// 				name: news.title,
-// 				description: news.date,
-// 			}}
-// 			validationSchema={yup
-// 				.object({
-// 					name: categoryValid('Name'),
-// 					description: categoryValid('Description'),
-// 				})
-// 				.required()}
-// 			onSubmit={async (values, { resetForm }) => {
-// 				setIsLoading(true);
-// 				if (selectedFile) {
-// 					const formData = new FormData();
-// 					formData.append('image', selectedFile);
-// 					const res = await updateCategory(category.id, values);
-// 					if (res.success && formData) {
-// 						const resUpload = await createCategoryImage(res.data.id, formData);
-// 						if (resUpload.success) {
-// 							setIsLoading(false);
-// 							setSuccess('Category updated successfully');
-// 							setTimeout(() => {
-// 								router.push('/dashboard/categories');
-// 							}, 2000);
-// 						} else {
-// 							setIsLoading(false);
-// 							setError(resUpload.error);
-// 						}
-// 					}
-// 				} else {
-// 					const res = await updateCategory(category.id, values);
-// 					if (res) {
-// 						setIsLoading(false);
-// 						setSuccess('Category updated successfully');
-// 						setTimeout(() => {
-// 							router.push('/dashboard/categories');
-// 						}, 2000);
-// 					} else {
-// 						setIsLoading(false);
-// 						setError(res.error);
-// 					}
-// 				}
-// 			}}
-// 		>
-// 			{({ isValid }) => (
-// 				<Form className={styles.wrapper}>
-// 					{isLoading && <Loader className={styles.loader} />}
-//
-// 					{success !== '' && <MessageSuccess text={success} />}
-// 					{error !== '' && <MessageError text={error} />}
-// 					{modal && (
-// 						<ModalConfirmation
-// 							reset={async () => {
-// 								setIsLoading(true);
-// 								const res = await removeCategoryById(category.id);
-// 								if (res) {
-// 									setModal(false);
-// 									setIsLoading(false);
-// 									setSuccess('Category deleted successfully');
-// 									setTimeout(() => {
-// 										router.push('/dashboard/categories');
-// 									}, 2000);
-// 								} else {
-// 									setIsLoading(false);
-// 									setError('Something went wrong');
-// 								}
-// 							}}
-// 							closeModal={() => setModal(false)}
-// 							text={'Are you sure?'}
-// 						/>
-// 					)}
-//
-// 					<CreateDashboardHeader
-// 						title={`Edit Category ${category.id}`}
-// 						callbackApply={() => {}}
-// 						callbackDelete={() => setModal(true)}
-// 						disabledDelete={false}
-// 						disabledApply={!isValid}
-// 						typeApply={'submit'}
-// 						typeDelete={'button'}
-// 					/>
-//
-// 					<div className={styles.formWrapper}>
-// 						<div className={styles.form}>
-// 							<Input
-// 								name={'name'}
-// 								title={'Category Name'}
-// 								type={'text'}
-// 								placeholder={'Enter Category Name'}
-// 							/>
-// 							<Textarea
-// 								title={'Category Description'}
-// 								name={'description'}
-// 								rows={10}
-// 								placeholder={'Enter Category Description'}
-// 							/>
-// 						</div>
-// 						<DashboardUploadImage
-// 							handleFileChange={handleFileChange}
-// 							preview={preview}
-// 							setPreview={setPreview}
-// 							text={'Category Image'}
-// 						/>
-// 					</div>
-// 				</Form>
-// 			)}
-// 		</Formik>
-// 	);
-// }
+'use client';
+import { Form, Formik, FormikProps } from 'formik';
+import { useRouter } from 'next/navigation';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import * as yup from 'yup';
+
+import CreateDashboardHeader from '@/components/dashboard/createDashboardHeader/CreateDashboardHeader';
+import DashboardUploadImage from '@/components/dashboard/dashboardUploadImage/DashboardUploadImage';
+import ModalConfirmation from '@/components/dashboard/modalConfirmation/ModalСonfirmation';
+import Input from '@/components/Input/Input';
+import Loader from '@/components/Loader/Loader';
+import MessageError from '@/components/messageError/MessageError';
+import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
+import Textarea from '@/components/textarea/Textarea';
+import { categoryValid } from '@/validation/dashboard/category/validation';
+
+import styles from './styles.module.scss';
+import Select from '@/components/select/Select';
+import {
+	createNews,
+	deleteNews,
+	updateNews,
+} from '@/services/dashboard/news/dashbpard.news.service';
+import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
+
+const typesOfNews = [
+	{ name: 'Default', id: 'default' },
+	{ name: 'The Hottest', id: 'hottest' },
+	{ name: 'HopHop choice', id: 'choice' },
+	{ name: 'One Love', id: 'love' },
+	{ name: 'Customer Secret', id: 'secret' },
+];
+interface IProps {
+	news: INews;
+}
+
+export default function DashboardNewsEdit(props: IProps) {
+	const { news } = props;
+	const [modal, setModal] = useState<boolean>(false);
+	const [selectedFile, setSelectedFile] = useState<File | null>(null);
+	const [preview, setPreview] = useState<string | null>(null);
+	const router = useRouter();
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [success, setSuccess] = useState(false);
+	const [error, setError] = useState('');
+	const ref = useRef<
+		FormikProps<{
+			title: string;
+			type: string;
+			content: string;
+		}>
+	>(null);
+
+	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+		if (event.target.files && event.target.files.length > 0) {
+			setSelectedFile(event.target.files[0]);
+
+			const file = event.target.files[0];
+			if (file) {
+				const reader = new FileReader();
+				reader.onloadend = () => {
+					setPreview(reader.result as string);
+				};
+				reader.readAsDataURL(file);
+			}
+		}
+	};
+
+	useEffect(() => {
+		if (ref.current) {
+			setPreview(news.image);
+			ref.current.setValues({
+				title: news.title,
+				content: news.content,
+				type: news.type,
+			});
+
+			ref.current.touched.title = true;
+			ref.current.touched.content = true;
+			ref.current.touched.type = true;
+		}
+	}, [news]);
+
+	return (
+		<Formik
+			innerRef={ref}
+			initialValues={{
+				title: '',
+				content: '',
+				type: '',
+			}}
+			validationSchema={yup
+				.object({
+					title: categoryValid('Title'),
+					content: categoryValid('Content'),
+					type: categoryValid('Type'),
+				})
+				.required()}
+			onSubmit={async (values, { resetForm }) => {
+				setIsLoading(true);
+				const formData = new FormData();
+
+				Object.entries(values).forEach(([key, value]) => {
+					if (value != '') {
+						formData.append(key, value);
+					}
+				});
+
+				if (selectedFile) {
+					formData.append('image', selectedFile);
+				}
+				const res = await updateNews(news.id, formData);
+				if (res.success) {
+					setIsLoading(false);
+					setSuccess(true);
+					setError('');
+					resetForm();
+					await revalidateFunc('/dashboard/news');
+					await revalidateFunc('/dashboard/news/[id]', 'page');
+					setTimeout(() => {
+						setSuccess(false);
+						router.push('/dashboard/news');
+					}, 2000);
+				} else {
+					setError(res.error.message || 'Something Was Wrong');
+				}
+			}}
+		>
+			{({ isValid, dirty, resetForm }) => (
+				<Form className={styles.wrapper}>
+					{isLoading && <Loader />}
+
+					{success && <MessageSuccess text={'News deleted successfully'} />}
+					{error !== '' && <MessageError text={error} />}
+					{modal && (
+						<ModalConfirmation
+							reset={async () => {
+								setIsLoading(true);
+								const res = await deleteNews(news.id);
+								if (res.success) {
+									setIsLoading(false);
+									setModal(false);
+									setSuccess(true);
+									await revalidateFunc('/dashboard/news');
+									await revalidateFunc('/dashboard/news/[id]', 'page');
+									setTimeout(() => {
+										router.push('/dashboard/news');
+									}, 2000);
+								} else {
+									setIsLoading(false);
+									setError(res.error.message || 'Something went wrong');
+								}
+							}}
+							closeModal={() => setModal(false)}
+							text={'Are you sure?'}
+						/>
+					)}
+
+					<CreateDashboardHeader
+						title={`Edit News ${news.id}`}
+						callbackApply={() => {}}
+						callbackDelete={() => {
+							setModal(true);
+						}}
+						disabledDelete={false}
+						disabledApply={!(isValid && dirty)}
+						typeApply={'submit'}
+						typeDelete={'button'}
+					/>
+
+					<div className={styles.formWrapper}>
+						<div className={styles.form}>
+							<Select
+								name={'type'}
+								options={typesOfNews}
+								text={'Type'}
+								defaultValue={typesOfNews[0]}
+							/>
+							<Input
+								name={'title'}
+								title={'Title'}
+								type={'text'}
+								placeholder={'Enter title'}
+							/>
+							<Textarea
+								title={'Content'}
+								name={'content'}
+								rows={10}
+								placeholder={'Enter description'}
+							/>
+						</div>
+						<DashboardUploadImage
+							handleFileChange={handleFileChange}
+							preview={preview}
+							setPreview={setPreview}
+							text={'News Image'}
+						/>
+					</div>
+				</Form>
+			)}
+		</Formik>
+	);
+}

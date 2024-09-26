@@ -108,6 +108,7 @@ interface IDashboardSearch {
 		id: number;
 		name: string;
 		first_name?: string;
+		title?: string;
 	}[];
 }
 
@@ -118,13 +119,6 @@ interface ICoupon {
 	active: boolean;
 	valid_from: string;
 	valid_to: string;
-}
-
-interface INews {
-	id: number;
-	title: string;
-	date: string;
-	images?: IImage | IImage[];
 }
 
 interface IToken {
@@ -165,4 +159,13 @@ interface IOrderDetails {
 	total_price: number;
 	coupon: number;
 	discount: number;
+}
+
+interface INews {
+	id: number;
+	title: string;
+	content: string;
+	type: string;
+	image: string;
+	created_at: string;
 }

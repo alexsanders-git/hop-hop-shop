@@ -13,10 +13,11 @@ export interface InterfacePromoCode {
 	setOpen: (open: boolean) => void;
 	className?: string;
 	disabled?: boolean;
+	coupon: { name: string; discount: number } | null;
 }
 
 export default function PromoCode(props: InterfacePromoCode) {
-	const { disabled = false, setOpen, open, className = '' } = props;
+	const { disabled = false, setOpen, open, className = '', coupon } = props;
 	const [value, setValue] = useState<string>('');
 
 	const [data, setData] = useState<{
@@ -37,10 +38,10 @@ export default function PromoCode(props: InterfacePromoCode) {
 			}
 		};
 
-		if (debouncedValue !== '') {
+		if (debouncedValue !== '' && !coupon) {
 			fetchProduct();
 		}
-	}, [addCoupon, debouncedValue]);
+	}, [addCoupon, coupon, debouncedValue]);
 
 	return (
 		<div className={styles.wrapper}>
@@ -48,13 +49,13 @@ export default function PromoCode(props: InterfacePromoCode) {
 				<span>Discount </span>
 				<span
 					onClick={() => setOpen(!open)}
-					className={`${styles.discountWrite} ${!disabled && !open && styles.rotate}`}
+					className={`${styles.discountWrite} ${(coupon || (!disabled && open)) && styles.rotate}`}
 				>
 					Enter code
 					<DiscountArrow />
 				</span>
 			</div>
-			{!disabled && open && (
+			{(coupon || (!disabled && open)) && (
 				<>
 					<div className={`${styles.discountAccept} ${className}`}>
 						<span>
@@ -63,17 +64,12 @@ export default function PromoCode(props: InterfacePromoCode) {
 						</span>
 						<div className={styles.inputWrapper}>
 							<input
+								readOnly={!!coupon}
 								onChange={(e) => setValue(e.target.value)}
-								value={value}
+								value={value || coupon?.name}
 								type={'text'}
 								placeholder={'Enter code'}
-								className={`${styles.input} ${data?.error && styles.inputError} ${data?.message && styles.inputSuccess}`}
-							/>
-							<Check
-								className={`
-						${styles.CuponeArrow}
-						${data?.error && styles.error}
-						${data?.message && styles.success}`}
+								className={`${styles.input} ${data?.error && styles.inputError} ${data?.message && styles.inputSuccess} ${coupon?.discount && styles.inputSuccess}`}
 							/>
 							{data?.error && (
 								<div className={styles.errorMessage}>{data.error}</div>

@@ -94,7 +94,7 @@
 
 .inputContainer {
 	display: flex;
-	gap: 16px;
+	gap: 18px;
 	align-items: center;
 	width: 100%;
 
@@ -113,6 +113,7 @@
 
 	@media only screen and (max-width: $media-sm) {
 		flex-direction: column;
+		gap: 22px;
 	}
 }
 
