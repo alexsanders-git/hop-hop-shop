@@ -1,5 +1,6 @@
 import { fetchWithAuth } from '@/services/auth/fetchApiAuth.service';
 import { fetchData } from '@/services/fetchData';
+import { FormikValues } from 'formik';
 
 export const getDashboardCategoriesServer = async (): Promise<
 	IResponseJson<IResponse<ICategory>>
@@ -33,10 +34,7 @@ export const getCategoryById = async (id: string) => {
 	});
 };
 
-export const createCategory = async (data: {
-	name: string;
-	description: string;
-}) => {
+export const createCategory = async (data: FormikValues) => {
 	return await fetchWithAuth<ICategory>('shop/categories/', {
 		method: 'POST',
 		body: JSON.stringify(data),

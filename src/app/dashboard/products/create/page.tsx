@@ -1,10 +1,9 @@
 'use client';
-import { Form, Formik, FormikProps } from 'formik';
+import { Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import { CircleX } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useRef, useState } from 'react';
-import * as yup from 'yup';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 import image from '@/assets/png/Newdescription.png';
 import Button from '@/components/Button/Button';
@@ -23,7 +22,6 @@ import {
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import PrePublishProduct from '@/template/prePublishProduct/PrePublishProduct';
 import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
-import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
 import { useFetch } from '@/hooks/useFetch';
@@ -34,6 +32,11 @@ import {
 	verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import UploadedFileBlock from '@/components/dashboard/uploadedFileBlock/UploadedFileBlock';
+import { useUnsavedChanges } from '@/hooks/useCloseWindow';
+import {
+	initialValuesEditForm,
+	validationSchemaEditForm,
+} from '@/validation/dashboard/editProduct/editProductValidation';
 
 interface FormValues {
 	name: string;
@@ -55,6 +58,15 @@ interface FileWithId {
 }
 
 export default function DashboardProductsCreate() {
+	const { data: categories, loading: categoriesLoading } = useFetch<
+		ICategory[]
+	>({
+		endpoint: 'shop/categories/all/',
+		options: {
+			method: 'GET',
+		},
+	});
+
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [showPrePublish, setShowPrePublish] = useState<boolean>(false);
 	const [success, setSuccess] = useState(false);
@@ -62,13 +74,9 @@ export default function DashboardProductsCreate() {
 	const [modal, setModal] = useState<boolean>(false);
 	const [selectedFiles, setSelectedFiles] = useState<FileWithId[]>([]);
 	const [previews, setPreviews] = useState<IPreview[]>([]);
-
-	const { data: categories } = useFetch<ICategory[]>({
-		endpoint: 'shop/categories/all/',
-		options: {
-			method: 'GET',
-		},
-	});
+	const [unsaved, setUnsaved] = useState<boolean>(false);
+	const { isModalVisible, confirmNavigation, cancelNavigation } =
+		useUnsavedChanges(unsaved);
 	const formikRef = useRef<FormikProps<FormValues>>(null);
 	const fileInputRef = useRef<null | HTMLInputElement>(null);
 	const router = useRouter();
@@ -153,257 +161,275 @@ export default function DashboardProductsCreate() {
 		}
 	};
 
+	const submitForm = async (
+		values: FormValues,
+		actions: FormikHelpers<FormValues>,
+	) => {
+		setIsLoading(true);
+		const res = await createProduct({
+			...values,
+			category: values.category === '0' ? null : values.category,
+		});
+		const formData = new FormData();
+
+		if (selectedFiles) {
+			selectedFiles.forEach((file) => {
+				formData.append('uploaded_images', file.file);
+			});
+		}
+		if (res.success && formData) {
+			const resUpload = await createProductImage(res.data.id, formData);
+
+			if (resUpload.success) {
+				setIsLoading(false);
+				setSuccess(true);
+				actions.resetForm();
+				setSelectedFiles([]);
+				setPreviews([]);
+				await revalidateFunc('/dashboard/products');
+				await revalidateFunc('/');
+				setTimeout(() => {
+					setSuccess(false);
+					router.push('/dashboard/products');
+				}, 2000);
+			} else if (!resUpload.success) {
+				setIsLoading(false);
+				setError(resUpload.error.message);
+			}
+		}
+	};
+
+	const prePublishProduct = {
+		name: `${formikRef.current?.values.name}`,
+		description: `${formikRef.current?.values.description}`,
+		id: 0,
+		price: Number(formikRef.current?.values.price),
+		category: categories?.filter(
+			(category) => category.id === Number(formikRef.current!.values.category),
+		)[0],
+		SKU: 0,
+		slug: 'test',
+		images: previews.map((preview) => {
+			return {
+				image: preview.image,
+			};
+		}),
+	};
+
 	return (
 		<>
 			{showPrePublish && (
 				<PrePublishProduct
 					setShowPrePublish={setShowPrePublish}
-					product={{
-						name: `${formikRef.current?.values.name}`,
-						description: `${formikRef.current?.values.description}`,
-						id: 0,
-						price: Number(formikRef.current?.values.price),
-						category: categories!.filter(
-							(category) =>
-								category.id === Number(formikRef.current!.values.category),
-						)[0],
-						SKU: 0,
-						slug: 'test',
-						images: previews.map((preview) => {
-							return {
-								image: preview.image,
-							};
-						}),
-					}}
+					product={categoriesLoading ? null : (prePublishProduct as IProduct)}
 				/>
 			)}
 			<Formik
 				innerRef={formikRef}
-				initialValues={{
-					name: '',
-					description: '',
-					category: '',
-					price: '',
-				}}
-				validationSchema={yup
-					.object({
-						name: categoryValid('Name'),
-						description: categoryValid('Description'),
-						category: categoryValid('Category'),
-						price: categoryValid('Price'),
-					})
-					.required()}
-				onSubmit={async (values, { resetForm }) => {
-					setIsLoading(true);
-					const res = await createProduct({
-						...values,
-						category: values.category === '0' ? null : values.category,
-					});
-					const formData = new FormData();
-
-					if (selectedFiles) {
-						selectedFiles.forEach((file) => {
-							formData.append('uploaded_images', file.file);
-						});
-					}
-					if (res.success && formData) {
-						const resUpload = await createProductImage(res.data.id, formData);
-
-						if (resUpload.success) {
-							setIsLoading(false);
-							setSuccess(true);
-							resetForm();
-							setSelectedFiles([]);
-							setPreviews([]);
-							await revalidateFunc('/dashboard/products');
-							await revalidateFunc('/');
-							setTimeout(() => {
-								setSuccess(false);
-								router.push('/dashboard/products');
-							}, 2000);
-						} else if (!resUpload.success) {
-							setIsLoading(false);
-							setError(resUpload.error.message);
-						}
-					}
-				}}
+				initialValues={initialValuesEditForm}
+				validationSchema={validationSchemaEditForm}
+				onSubmit={async (values, actions) => submitForm(values, actions)}
 			>
-				{({ isValid, dirty, resetForm }) => (
-					<Form className={styles.wrapper}>
-						{isLoading && <Loader className={styles.loader} />}
-						{success && (
-							<MessageSuccess type={'dashboard'} text={'Your Product Added!'} />
-						)}
-						{error !== '' && <MessageError type={'dashboard'} text={error} />}
-						{modal && (
-							<ModalConfirmation
-								className={styles.height}
-								reset={() => {
-									setModal(false);
-									resetForm();
-									setSelectedFiles([]);
-									setPreviews([]);
+				{({ isValid, dirty, resetForm, values, initialValues }) => {
+					// eslint-disable-next-line react-hooks/rules-of-hooks
+					useEffect(() => {
+						const hasFormChanged =
+							JSON.stringify(values) !== JSON.stringify(initialValues);
+						const hasFilesChanged = selectedFiles.length > 0;
+						const hasChanges = hasFormChanged || hasFilesChanged;
+						setUnsaved(hasChanges);
+						// eslint-disable-next-line
+					}, [values, initialValues, selectedFiles]);
+					return (
+						<Form className={styles.wrapper}>
+							{isLoading && <Loader className={styles.loader} />}
+							{success && (
+								<MessageSuccess
+									type={'dashboard'}
+									text={'Your Product Added!'}
+								/>
+							)}
+							{error !== '' && <MessageError type={'dashboard'} text={error} />}
+							{modal && (
+								<ModalConfirmation
+									className={styles.height}
+									reset={() => {
+										setModal(false);
+										resetForm();
+										setSelectedFiles([]);
+										setPreviews([]);
+									}}
+									closeModal={() => setModal(false)}
+								/>
+							)}
+							{isModalVisible && (
+								<ModalConfirmation
+									type={'unsaved'}
+									className={styles.height}
+									reset={() => cancelNavigation()}
+									closeModal={() => confirmNavigation()}
+								/>
+							)}
+							<CreateDashboardHeader
+								title={'New Product '}
+								callbackApply={() => {}}
+								callbackDelete={() => {
+									setModal(true);
 								}}
-								closeModal={() => setModal(false)}
-								text={'Are you sure?'}
+								disabledDelete={false}
+								disabledApply={!(isValid && dirty && selectedFiles.length > 0)}
+								typeApply={'submit'}
+								typeDelete={'button'}
 							/>
-						)}
-						<CreateDashboardHeader
-							title={'New Product '}
-							callbackApply={() => {}}
-							callbackDelete={() => {
-								setModal(true);
-							}}
-							disabledDelete={false}
-							disabledApply={!(isValid && dirty && selectedFiles.length > 0)}
-							typeApply={'submit'}
-							typeDelete={'button'}
-						/>
 
-						<div className={styles.container}>
-							<div className={styles.form}>
-								<Input
-									name={'name'}
-									title={'Product Name'}
-									type={'text'}
-									placeholder={'Enter Product Name'}
-								/>
-								{/* eslint-disable */}
-								<Select
-									name={'category'}
-									options={
-										categories
-											? categories
-													.map((item) => ({
-														name: item.name,
-														id: item.id,
-													}))
-													.concat({
-														name: 'No Category',
-														id: 0,
-													})
-											: null
-									}
-									text={'Product Category'}
-								/>
-								{/* eslint-enable*/}
-								<Textarea
-									title={'Product Description'}
-									name={'description'}
-									rows={10}
-									placeholder={'Enter Product Description'}
-								/>
-								<Input
-									name={'price'}
-									title={'Product Price'}
-									type={'text'}
-									placeholder={'Enter Product Price'}
-								/>
-								<div className={styles.buttonWrapper}>
-									<Button
-										text={'Show pre-publish view'}
-										style={'secondary'}
-										disabled={!(isValid && dirty && selectedFiles.length > 0)}
-										onClick={() => setShowPrePublish(true)}
+							<div className={styles.container}>
+								<div className={styles.form}>
+									<Input
+										name={'name'}
+										title={'Product Name'}
+										type={'text'}
+										placeholder={'Enter Product Name'}
 									/>
-								</div>
-							</div>
-							<div className={styles.imageWrapper}>
-								{previews.length > 0 && (
-									<div
-										onMouseEnter={() => {
-											if (previews[0].image) {
-												setIsHovered(true);
-											}
-										}}
-										onMouseLeave={() => {
-											if (previews[0].image) {
-												setIsHovered(false);
-											}
-										}}
-										className={styles.firstPreview}
-									>
-										{isHovered && previews[0].image && (
-											<div
-												onClick={() => {
-													handleRemoveImage(previews[0]);
-												}}
-												className={styles.removeImage}
-											>
-												<CircleX />
-											</div>
-										)}
-										<Image
-											className={styles.firstImage}
-											width={480}
-											height={470}
-											src={previews[0].image}
-											alt={previews[0].name}
+									{/* eslint-disable */}
+									<Select
+										className={categoriesLoading ? styles.inactive : ''}
+										name={'category'}
+										options={
+											categories
+												? categories
+														.map((item) => ({
+															name: item.name,
+															id: item.id,
+														}))
+														.concat({
+															name: 'No Category',
+															id: 0,
+														})
+												: null
+										}
+										text={'Product Category'}
+									/>
+									{/* eslint-enable*/}
+									<Textarea
+										title={'Product Description'}
+										name={'description'}
+										rows={10}
+										placeholder={'Enter Product Description'}
+									/>
+									<Input
+										name={'price'}
+										title={'Product Price'}
+										type={'text'}
+										placeholder={'Enter Product Price'}
+									/>
+									<div className={styles.buttonWrapper}>
+										<Button
+											text={'Show pre-publish view'}
+											style={'secondary'}
+											disabled={!(isValid && dirty && selectedFiles.length > 0)}
+											onClick={() => setShowPrePublish(true)}
 										/>
 									</div>
-								)}
-								{previews.length > 0 ? (
-									<DndContext
-										collisionDetection={closestCenter}
-										onDragEnd={onDragEnd}
-									>
-										<SortableContext
-											items={previews}
-											strategy={verticalListSortingStrategy}
+								</div>
+								<div className={styles.imageWrapper}>
+									{previews.length > 0 && (
+										<div
+											onMouseEnter={() => {
+												if (previews[0].image) {
+													setIsHovered(true);
+												}
+											}}
+											onMouseLeave={() => {
+												if (previews[0].image) {
+													setIsHovered(false);
+												}
+											}}
+											className={styles.firstPreview}
 										>
-											{previews.map((preview, index) => {
-												return (
-													<UploadedFileBlock
-														visibility={index === 0}
-														key={preview.id}
-														preview={preview}
-														handleRemoveImage={() => handleRemoveImage(preview)}
-														changeImagePosition={() =>
-															changeImagePosition(index)
-														}
-													/>
-												);
-											})}
-										</SortableContext>
-									</DndContext>
-								) : null}
-								<div className={styles.uploadImage}>
-									<span
-										className={`${styles.text} ${robotoCondensed.className}`}
-									>
-										Product Gallery
-									</span>
-									<div className={styles.imageContainer}>
-										<input
-											ref={fileInputRef}
-											onChange={handleFileChange}
-											accept="image/png, image/jpeg"
-											className={styles.file}
-											type="file"
-											multiple={true}
-										/>
-										<div className={`${styles.imageContainer_desc}`}>
-											<Image src={image} alt={'image'} />
-											<div
-												className={`${styles.subText} ${robotoCondensed.className}`}
+											{isHovered && previews[0].image && (
+												<div
+													onClick={() => {
+														handleRemoveImage(previews[0]);
+													}}
+													className={styles.removeImage}
+												>
+													<CircleX />
+												</div>
+											)}
+											<Image
+												className={styles.firstImage}
+												width={480}
+												height={470}
+												src={previews[0].image}
+												alt={previews[0].name}
+											/>
+										</div>
+									)}
+									{previews.length > 0 ? (
+										<DndContext
+											collisionDetection={closestCenter}
+											onDragEnd={onDragEnd}
+										>
+											<SortableContext
+												items={previews}
+												strategy={verticalListSortingStrategy}
 											>
-												Drop your imager here, or browse jpeg, png are allowed
+												{previews.map((preview, index) => {
+													return (
+														<UploadedFileBlock
+															visibility={index === 0}
+															key={preview.id}
+															preview={preview}
+															handleRemoveImage={() =>
+																handleRemoveImage(preview)
+															}
+															changeImagePosition={() =>
+																changeImagePosition(index)
+															}
+														/>
+													);
+												})}
+											</SortableContext>
+										</DndContext>
+									) : null}
+									<div className={styles.uploadImage}>
+										<span
+											className={`${styles.text} ${robotoCondensed.className}`}
+										>
+											Product Gallery
+										</span>
+										<div className={styles.imageContainer}>
+											<input
+												ref={fileInputRef}
+												onChange={handleFileChange}
+												accept="image/png, image/jpeg"
+												className={styles.file}
+												type="file"
+												multiple={true}
+											/>
+											<div className={`${styles.imageContainer_desc}`}>
+												<Image src={image} alt={'image'} />
+												<div
+													className={`${styles.subText} ${robotoCondensed.className}`}
+												>
+													Drop your imager here, or browse jpeg, png are allowed
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-								<div className={styles.buttonWrapper}>
-									<Button
-										disabled={!(isValid && dirty && selectedFiles.length > 0)}
-										text={'Show pre-publish view'}
-										style={'secondary'}
-										onClick={() => setShowPrePublish(true)}
-									/>
+									<div className={styles.buttonWrapper}>
+										<Button
+											disabled={!(isValid && dirty && selectedFiles.length > 0)}
+											text={'Show pre-publish view'}
+											style={'secondary'}
+											onClick={() => setShowPrePublish(true)}
+										/>
+									</div>
 								</div>
 							</div>
-						</div>
-					</Form>
-				)}
+						</Form>
+					);
+				}}
 			</Formik>
 		</>
 	);

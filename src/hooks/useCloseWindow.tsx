@@ -6,7 +6,6 @@ export const useUnsavedChanges = (shouldBlockNavigation: boolean) => {
 	const [isModalVisible, setModalVisible] = useState(false);
 	const [nextPath, setNextPath] = useState<string | null>(null);
 
-	// Використовуємо useEffect для перехоплення навігації
 	useEffect(() => {
 		const handleBeforeUnload = (e: BeforeUnloadEvent) => {
 			if (shouldBlockNavigation) {
@@ -19,14 +18,27 @@ export const useUnsavedChanges = (shouldBlockNavigation: boolean) => {
 			if (shouldBlockNavigation) {
 				setNextPath(url); // Запам'ятовуємо куди юзер хоче перейти
 				setModalVisible(true); // Показуємо попап
-				router.replace(window.location.pathname); // Залишаємо користувача на поточній сторінці
+				// Запобігаємо навігації
+				router.replace(window.location.pathname);
 			}
 		};
 
 		window.addEventListener('beforeunload', handleBeforeUnload);
 
+		const handleLinkClick = (event: MouseEvent) => {
+			const target = event.target as HTMLElement;
+			const isLink = target.closest('a');
+			if (isLink && shouldBlockNavigation) {
+				event.preventDefault(); // Запобігаємо переходу
+				handleRouteChange(isLink.getAttribute('href')!); // Викликаємо функцію зміни маршруту
+			}
+		};
+
+		document.addEventListener('click', handleLinkClick);
+
 		return () => {
 			window.removeEventListener('beforeunload', handleBeforeUnload);
+			document.removeEventListener('click', handleLinkClick);
 		};
 	}, [shouldBlockNavigation, router]);
 
@@ -34,6 +46,7 @@ export const useUnsavedChanges = (shouldBlockNavigation: boolean) => {
 		setModalVisible(false);
 		if (nextPath) {
 			router.push(nextPath); // Переходимо на нову сторінку після підтвердження
+			setNextPath(null); // Скидаємо маршрут
 		}
 	};
 

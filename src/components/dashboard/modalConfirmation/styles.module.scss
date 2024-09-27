@@ -12,6 +12,15 @@
 	align-items: center;
 }
 
+.full {
+	position: fixed;
+	z-index: 2200;
+}
+
+.colum {
+	flex-direction: column;
+}
+
 .container {
 	z-index: 500;
 	display: flex;
