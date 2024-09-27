@@ -14,5 +14,5 @@ export default async function DashboardOrderEdit({ params: { id } }: Props) {
 	if (!order.success) {
 		return notFound();
 	}
-	return <DashboardOrderDetails order={order.data} />;
+	return <DashboardOrderDetails order={order.data} id={id} />;
 }
