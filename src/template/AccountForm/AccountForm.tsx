@@ -2,7 +2,6 @@
 import { Field, Form, Formik, FormikProps } from 'formik';
 import Image from 'next/image';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import * as yup from 'yup';
 
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
@@ -13,19 +12,13 @@ import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
 import PhoneInputField from '@/components/phoneInputField/PhoneInputField';
 import { updateProfile } from '@/services/dashboard/users/dashboard.users.service';
 import { useUser } from '@/store/user/User.store';
-import {
-	addressValid,
-	cityValid,
-	countryValid,
-	emailValid,
-	latNameValid,
-	nameValid,
-	passwordValid,
-	phoneValid,
-	postalCodeValid,
-} from '@/validation/checkout/validation';
 
 import styles from './AccountForm.module.scss';
+import {
+	accountInitialValues,
+	accountValidationSchema,
+} from '@/validation/account/accountValidation';
+import Loading from '@/components/loading/Loading';
 
 export interface IFormValuesProfile {
 	first_name?: string;
@@ -36,11 +29,15 @@ export interface IFormValuesProfile {
 	shipping_city?: string;
 	shipping_address?: string;
 	shipping_postcode?: string;
-	currentPassword?: string;
-	newPassword?: string;
+	old_password?: string;
+	password?: string;
 	confirmPassword?: string;
 }
 
+type TUser = Omit<
+	IUser,
+	'id' | 'avatar' | 'is_staff' | 'is_active' | 'image' | 'user_role'
+>;
 export default function AccountForm() {
 	const user = useUser((state) => state.user);
 	const setUser = useUser((state) => state.setUser);
@@ -77,6 +74,9 @@ export default function AccountForm() {
 		} else {
 			setIsLoading(false);
 			setError(res?.error.message || 'Something went wrong');
+			setTimeout(() => {
+				setError('');
+			}, 4000);
 		}
 	};
 
@@ -93,33 +93,39 @@ export default function AccountForm() {
 		}
 	};
 
+	const updateUserFields = (user: IUser) => {
+		setPreview(user.avatar);
+		ref.current!.setValues({
+			first_name: user.first_name,
+			last_name: user.last_name,
+			email: user.email,
+			phone_number: user.phone_number,
+			shipping_country: user.shipping_country || '',
+			shipping_city: user.shipping_city || '',
+			shipping_address: user.shipping_address || '',
+			shipping_postcode: user.shipping_postcode || '',
+		});
+		(Object.keys(accountInitialValues) as (keyof TUser)[])
+			.slice(0, -3)
+			.forEach((field) => {
+				if (
+					user[field] !== undefined &&
+					user[field] !== null &&
+					user[field] !== ''
+				) {
+					ref.current!.touched[field] = true;
+				}
+			});
+	};
+
 	useEffect(() => {
 		if (user && ref.current) {
-			setPreview(user.avatar);
-			ref.current.setValues({
-				first_name: user.first_name,
-				last_name: user.last_name,
-				email: user.email,
-				phone_number: user.phone_number,
-				shipping_country: user.shipping_country || '',
-				shipping_city: user.shipping_city || '',
-				shipping_address: user.shipping_address || '',
-				shipping_postcode: user.shipping_postcode || '',
-			});
-			ref.current.touched.first_name = true;
-			ref.current.touched.last_name = true;
-			ref.current.touched.email = true;
-			ref.current.touched.phone_number = true;
-
-			ref.current.touched.shipping_country = true;
-			ref.current.touched.shipping_city = true;
-			ref.current.touched.shipping_address = true;
-			ref.current.touched.shipping_postcode = true;
+			updateUserFields(user);
 		}
 	}, [user]);
 
 	if (!user) {
-		return <div>Loading...</div>;
+		return <Loading />;
 	}
 	return (
 		<div className={styles.container}>
@@ -148,38 +154,8 @@ export default function AccountForm() {
 			</div>
 			<Formik
 				innerRef={ref}
-				validationSchema={yup
-					.object({
-						first_name: nameValid.optional(),
-						last_name: latNameValid.optional(),
-						email: emailValid.optional(),
-						phone_number: phoneValid.optional(),
-						shipping_country: countryValid.optional(),
-						shipping_city: cityValid.optional(),
-						shipping_address: addressValid.optional(),
-						shipping_postcode: postalCodeValid.optional(),
-						currentPassword: passwordValid.optional(),
-						newPassword: passwordValid.optional(),
-						confirmPassword: yup
-							.string()
-							.required('Confirm Password is required')
-							.oneOf([yup.ref('newPassword')], 'Passwords must match')
-							.optional(),
-					})
-					.required()}
-				initialValues={{
-					first_name: '',
-					last_name: '',
-					email: '',
-					phone_number: '',
-					shipping_country: '',
-					shipping_city: '',
-					shipping_address: '',
-					shipping_postcode: '',
-					currentPassword: '',
-					newPassword: '',
-					confirmPassword: '',
-				}}
+				validationSchema={accountValidationSchema}
+				initialValues={accountInitialValues}
 				onSubmit={handleSubmit}
 			>
 				{() => (
@@ -264,14 +240,14 @@ export default function AccountForm() {
 							<InputPassword
 								className={styles.input}
 								title={'Current Password'}
-								name={'currentPassword'}
+								name={'old_password'}
 								placeholder={'Current Password'}
 							/>
 							<div className={styles.inputContainer}>
 								<InputPassword
 									className={styles.input}
 									title={'New Password'}
-									name={'newPassword'}
+									name={'password'}
 									placeholder={'New Password'}
 								/>
 								<InputPassword
