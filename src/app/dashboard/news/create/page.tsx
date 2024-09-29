@@ -15,7 +15,7 @@ import Textarea from '@/components/textarea/Textarea';
 import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
-import Select from '@/components/select/Select';
+import CustomSelect from '@/components/CustomSelect/CustomSelect';
 import { createNews } from '@/services/dashboard/news/dashbpard.news.service';
 import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import { typesOfNews } from '@/utils/consts/consts';
@@ -52,10 +52,14 @@ export default function DashboardNewsCreate() {
 		values: FormikValues,
 		actions: FormikHelpers<{ title: string; content: string; type: string }>,
 	) => {
+		const newValues = {
+			...values,
+			type: typesOfNews.find((el) => el.name === values.type)?.id as string,
+		};
 		setIsLoading(true);
 		const formData = new FormData();
 
-		Object.entries(values).forEach(([key, value]) => {
+		Object.entries(newValues).forEach(([key, value]) => {
 			if (value != '') {
 				formData.append(key, value);
 			}
@@ -146,11 +150,11 @@ export default function DashboardNewsCreate() {
 
 						<div className={styles.formWrapper}>
 							<div className={styles.form}>
-								<Select
+								<CustomSelect
 									name={'type'}
 									options={typesOfNews}
-									text={'Type'}
-									defaultValue={typesOfNews[0]}
+									title={'Type'}
+									placeholder={'Type'}
 								/>
 								<Input
 									name={'title'}
