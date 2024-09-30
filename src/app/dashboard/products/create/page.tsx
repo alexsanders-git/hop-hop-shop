@@ -13,7 +13,6 @@ import Input from '@/components/Input/Input';
 import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
-import Select from '@/components/select/Select';
 import Textarea from '@/components/textarea/Textarea';
 import {
 	createProduct,
@@ -37,6 +36,7 @@ import {
 	initialValuesEditForm,
 	validationSchemaEditForm,
 } from '@/validation/dashboard/editProduct/editProductValidation';
+import CustomSelect from '@/components/CustomSelect/CustomSelect';
 
 interface FormValues {
 	name: string;
@@ -168,7 +168,7 @@ export default function DashboardProductsCreate() {
 		setIsLoading(true);
 		const res = await createProduct({
 			...values,
-			category: values.category === '0' ? null : values.category,
+			category: values.category === '10000' ? null : values.category,
 		});
 		const formData = new FormData();
 
@@ -291,9 +291,11 @@ export default function DashboardProductsCreate() {
 										placeholder={'Enter Product Name'}
 									/>
 									{/* eslint-disable */}
-									<Select
+									<CustomSelect
 										className={categoriesLoading ? styles.inactive : ''}
 										name={'category'}
+										title={'Category'}
+										isLoading={categoriesLoading}
 										options={
 											categories
 												? categories
@@ -303,11 +305,12 @@ export default function DashboardProductsCreate() {
 														}))
 														.concat({
 															name: 'No Category',
-															id: 0,
+															id: 10000,
 														})
-												: null
+														.reverse()
+												: []
 										}
-										text={'Product Category'}
+										placeholder={'Category'}
 									/>
 									{/* eslint-enable*/}
 									<Textarea

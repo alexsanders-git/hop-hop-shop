@@ -69,7 +69,7 @@ export const updateProduct = async (
 	data: {
 		name: string;
 		description: string;
-		category: number;
+		category: number | null;
 		price: number;
 		SKU?: number;
 	},

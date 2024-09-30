@@ -18,9 +18,11 @@ export const removeCouponById = async (id: number) => {
 		method: 'DELETE',
 	});
 };
-export const createCoupon = async (
-	data: Omit<ICoupon, 'valid_from' | 'id'>,
-) => {
+export const createCoupon = async (data: {
+	[p: string]: any;
+	valid_to: any;
+	active: boolean;
+}) => {
 	return await fetchWithAuth<ICoupon>('cart/coupon/', {
 		method: 'POST',
 		body: JSON.stringify(data),
@@ -29,7 +31,7 @@ export const createCoupon = async (
 
 export const updateCoupon = async (
 	id: number,
-	data: Omit<ICoupon, 'valid_from' | 'id'>,
+	data: { [p: string]: any; valid_to: any; active: boolean },
 ) => {
 	return await fetchWithAuth<ICoupon>(`cart/coupon/${id}/`, {
 		method: 'PATCH',

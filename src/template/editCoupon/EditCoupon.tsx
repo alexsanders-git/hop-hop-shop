@@ -1,6 +1,6 @@
 'use client';
 
-import { Form, Formik } from 'formik';
+import { Form, Formik, FormikValues } from 'formik';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -10,7 +10,7 @@ import Input from '@/components/Input/Input';
 import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
-import Select from '@/components/select/Select';
+import CustomSelect from '@/components/CustomSelect/CustomSelect';
 import {
 	removeCouponById,
 	updateCoupon,
@@ -40,33 +40,37 @@ export default function EditCoupon(props: IProps) {
 		}, 2000);
 	};
 
+	const submitForm = async (values: FormikValues) => {
+		setIsLoading(true);
+		const res = await updateCoupon(coupon.id, {
+			...values,
+			valid_to: values.valid_to.split('-').reverse().join('-'),
+			active: values.active === 'Active',
+		});
+		if (res.success) {
+			setIsLoading(false);
+			setSuccess('Coupon updated successfully');
+			await revalidateData();
+		} else if (!res.success) {
+			setIsLoading(false);
+			setError(res.error.message);
+			setTimeout(() => {
+				setError('');
+			}, 5000);
+		}
+	};
+
 	return (
 		<Formik
 			initialValues={{
 				code: coupon.code,
 				discount: coupon.discount,
-				active: `${coupon.active}`,
+				active: coupon.active ? 'Active' : 'Inactive',
 				valid_to: coupon.valid_to,
 			}}
 			validationSchema={validationSchemaCoupon}
 			onSubmit={async (values) => {
-				setIsLoading(true);
-				const res = await updateCoupon(coupon.id, {
-					...values,
-					valid_to: values.valid_to.split('-').reverse().join('-'),
-					active: values.active === 'true',
-				});
-				if (res.success) {
-					setIsLoading(false);
-					setSuccess('Coupon updated successfully');
-					await revalidateData();
-				} else if (!res.success) {
-					setIsLoading(false);
-					setError(res.error.message);
-					setTimeout(() => {
-						setError('');
-					}, 5000);
-				}
+				await submitForm(values);
 			}}
 		>
 			{({ isValid }) => (
@@ -115,18 +119,15 @@ export default function EditCoupon(props: IProps) {
 									type={'text'}
 									placeholder={'Enter coupon name'}
 								/>
-								<Select
+								<CustomSelect
 									className={styles.select}
-									defaultValue={{
-										name: coupon.active ? 'Active' : 'Inactive',
-										id: coupon.active ? 'true' : 'false',
-									}}
 									name={'active'}
 									options={[
 										{ name: 'Active', id: 'true' },
 										{ name: 'Inactive', id: 'false' },
-									].filter((item) => (item.id === 'true') !== coupon.active)}
-									text={'Status'}
+									]}
+									title={'Status'}
+									placeholder={'Select status'}
 								/>
 							</div>
 							<div className={styles.couponWrapper}>

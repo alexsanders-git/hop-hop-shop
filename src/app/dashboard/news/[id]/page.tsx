@@ -10,7 +10,6 @@ type Props = {
 
 export default async function DashboardNewsId({ params: { id } }: Props) {
 	const news = await getNewsById(id);
-	console.log(news);
 
 	if (!news.success) {
 		return notFound();
