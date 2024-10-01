@@ -17,8 +17,9 @@ import PhoneInputField from '@/components/phoneInputField/PhoneInputField';
 import Textarea from '@/components/textarea/Textarea';
 
 import styles from './ContactUsForm.module.scss';
+import { sendContactMessage } from '@/services/fetchData';
 
-export interface IFormValuesProfile {
+export interface IFormValuesContactUs {
 	first_name?: string;
 	last_name?: string;
 	email?: string;
@@ -26,8 +27,13 @@ export interface IFormValuesProfile {
 	message: string;
 }
 
-const handleSubmit = (values: IFormValuesProfile) => {
-	console.log('Form Values:', values);
+const handleSubmit = async (values: IFormValuesContactUs) => {
+	try {
+		const response = await sendContactMessage(values);
+		console.log(response);
+	} catch (error) {
+		console.log(error);
+	}
 };
 
 export default function ContactUsForm() {
@@ -86,7 +92,7 @@ export default function ContactUsForm() {
 									name={'phone_number'}
 									placeholder={'+38 066 666 66 66'}
 									title={'Phone Number'}
-									component={PhoneInputField<IFormValuesProfile>}
+									component={PhoneInputField<IFormValuesContactUs>}
 								/>
 							</div>
 						</div>

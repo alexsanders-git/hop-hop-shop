@@ -1,3 +1,5 @@
+import { IFormValuesContactUs } from '../app/(frontend)/contact-us/ContactUsForm/ContactUsForm';
+
 export async function fetchData<T>(
 	endpoint: string,
 	options?: RequestInit,
@@ -52,4 +54,22 @@ export const getAllCategories = async (): Promise<
 	IResponseJson<ICategory[]>
 > => {
 	return await fetchData<ICategory[]>('shop/categories/all/');
+};
+
+export const sendContactMessage = async (
+	data: IFormValuesContactUs,
+): Promise<IResponseJson<IFormValuesContactUs>> => {
+	return await fetchData<any>('contact-us/', {
+		method: 'POST',
+		body: JSON.stringify({
+			first_name: data.first_name,
+			last_name: data.last_name,
+			email: data.email,
+			phone: data.phone_number,
+			message: data.message,
+		}),
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
 };
