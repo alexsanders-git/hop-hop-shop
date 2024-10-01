@@ -1,5 +1,5 @@
 'use client';
-import { Form, Formik, FormikProps } from 'formik';
+import { Form, Formik, FormikProps, FormikValues } from 'formik';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
@@ -15,21 +15,14 @@ import Textarea from '@/components/textarea/Textarea';
 import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
-import Select from '@/components/select/Select';
+import CustomSelect from '@/components/CustomSelect/CustomSelect';
 import {
-	createNews,
 	deleteNews,
 	updateNews,
 } from '@/services/dashboard/news/dashbpard.news.service';
 import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
+import { typesOfNews } from '@/utils/consts/consts';
 
-const typesOfNews = [
-	{ name: 'Default', id: 'default' },
-	{ name: 'The Hottest', id: 'hottest' },
-	{ name: 'HopHop choice', id: 'choice' },
-	{ name: 'One Love', id: 'love' },
-	{ name: 'Customer Secret', id: 'secret' },
-];
 interface IProps {
 	news: INews;
 }
@@ -66,13 +59,47 @@ export default function DashboardNewsEdit(props: IProps) {
 		}
 	};
 
+	const submitForm = async (values: FormikValues, actions: any) => {
+		setIsLoading(true);
+		const newValues = {
+			...values,
+			type: typesOfNews.find((el) => el.name === values.type)?.id as string,
+		};
+		const formData = new FormData();
+
+		Object.entries(newValues).forEach(([key, value]) => {
+			if (value != '') {
+				formData.append(key, value);
+			}
+		});
+
+		if (selectedFile) {
+			formData.append('image', selectedFile);
+		}
+		const res = await updateNews(news.id, formData);
+		if (res.success) {
+			setIsLoading(false);
+			setSuccess(true);
+			setError('');
+			actions.resetForm();
+			await revalidateFunc('/dashboard/news');
+			await revalidateFunc('/dashboard/news/[id]', 'page');
+			setTimeout(() => {
+				setSuccess(false);
+				router.push('/dashboard/news');
+			}, 2000);
+		} else {
+			setError(res.error.message || 'Something Was Wrong');
+		}
+	};
+
 	useEffect(() => {
 		if (ref.current) {
 			setPreview(news.image);
 			ref.current.setValues({
 				title: news.title,
 				content: news.content,
-				type: news.type,
+				type: typesOfNews.find((el) => el.id === news.type)?.name as string,
 			});
 
 			ref.current.touched.title = true;
@@ -96,37 +123,11 @@ export default function DashboardNewsEdit(props: IProps) {
 					type: categoryValid('Type'),
 				})
 				.required()}
-			onSubmit={async (values, { resetForm }) => {
-				setIsLoading(true);
-				const formData = new FormData();
-
-				Object.entries(values).forEach(([key, value]) => {
-					if (value != '') {
-						formData.append(key, value);
-					}
-				});
-
-				if (selectedFile) {
-					formData.append('image', selectedFile);
-				}
-				const res = await updateNews(news.id, formData);
-				if (res.success) {
-					setIsLoading(false);
-					setSuccess(true);
-					setError('');
-					resetForm();
-					await revalidateFunc('/dashboard/news');
-					await revalidateFunc('/dashboard/news/[id]', 'page');
-					setTimeout(() => {
-						setSuccess(false);
-						router.push('/dashboard/news');
-					}, 2000);
-				} else {
-					setError(res.error.message || 'Something Was Wrong');
-				}
+			onSubmit={async (values, actions) => {
+				await submitForm(values, actions);
 			}}
 		>
-			{({ isValid, dirty, resetForm }) => (
+			{({ isValid, dirty }) => (
 				<Form className={styles.wrapper}>
 					{isLoading && <Loader />}
 
@@ -170,11 +171,11 @@ export default function DashboardNewsEdit(props: IProps) {
 
 					<div className={styles.formWrapper}>
 						<div className={styles.form}>
-							<Select
+							<CustomSelect
 								name={'type'}
 								options={typesOfNews}
-								text={'Type'}
-								defaultValue={typesOfNews[0]}
+								title={'Type'}
+								placeholder={'Type'}
 							/>
 							<Input
 								name={'title'}

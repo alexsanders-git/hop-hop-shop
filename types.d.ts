@@ -157,8 +157,12 @@ interface IOrderDetails {
 	}[];
 	subtotal_price: number;
 	total_price: number;
-	coupon: number;
-	discount: number;
+	coupon: number | null;
+	discount: number | null;
+	order_status: string;
+	payment_type: string;
+	payment_status: string;
+	payment_id: string;
 }
 
 interface INews {

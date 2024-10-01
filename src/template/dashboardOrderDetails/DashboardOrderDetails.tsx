@@ -10,9 +10,12 @@ import { formatDate } from '@/utils/func/formatDate';
 import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
+import { updateOderById } from '@/services/dashboard/orders/dashboard.orders.service';
+import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 
 export interface IProps {
 	order: IOrderDetails;
+	id: string;
 }
 
 const colum = [
@@ -23,15 +26,58 @@ const colum = [
 	{ name: 'Total' },
 ];
 
-const status = ['Pending', 'Processing', 'Completed', 'Canceled'];
+const status = [
+	{
+		name: 'Pending',
+		value: 'pending',
+	},
+	{
+		name: 'In Progress',
+		value: 'in_progress',
+	},
+	{
+		name: 'In Transit',
+		value: 'in_transit',
+	},
+	{
+		name: 'Delivered',
+		value: 'delivered',
+	},
+	{
+		name: 'Canceled',
+		value: 'canceled',
+	},
+];
 
 export default function DashboardOrderDetails(props: IProps) {
-	const { order } = props;
+	const { order, id } = props;
 	const { ref, isShow, setIsShow } = useOutside(false);
-	const [ordersStatus, setOrdersStatus] = useState<string>(status[0]);
+	const [ordersStatus, setOrdersStatus] = useState<string>(
+		status.filter((item) => item.value === order.order_status)[0].name,
+	);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string>('');
 	const [success, setSuccess] = useState<string>('');
+
+	const changeOrderStatus = async (data: string) => {
+		setIsLoading(true);
+		const res = await updateOderById(id, data);
+		if (res.data) {
+			await revalidateFunc('/dashboard/orders');
+			await revalidateFunc('/dashboard/orders/[id]', 'page');
+			setIsLoading(false);
+			setSuccess('Order status has been changed');
+			setTimeout(() => {
+				setSuccess('');
+			}, 3000);
+		} else {
+			setIsLoading(false);
+			setError(res.error.message || 'Something went wrong');
+			setTimeout(() => {
+				setError('');
+			}, 3000);
+		}
+	};
 	return (
 		<div className={styles.wrapper}>
 			{isLoading && <Loader />}
@@ -63,18 +109,21 @@ export default function DashboardOrderDetails(props: IProps) {
 								<div className={styles.suggestionsWrapper}>
 									<div className={styles.suggestionsWrapperScrollBar}>
 										<div className={styles.suggestionsContainer}>
-											{status.map((suggestion, index) => (
-												<div
-													key={index}
-													className={styles.suggestionItem}
-													onClick={() => {
-														setOrdersStatus(suggestion);
-														setIsShow(false);
-													}}
-												>
-													{suggestion}
-												</div>
-											))}
+											{status
+												.filter((item) => item.value !== order.order_status)
+												.map((suggestion, index) => (
+													<div
+														key={index}
+														className={styles.suggestionItem}
+														onClick={async () => {
+															await changeOrderStatus(suggestion.value);
+															setOrdersStatus(suggestion.name);
+															setIsShow(false);
+														}}
+													>
+														{suggestion.name}
+													</div>
+												))}
 										</div>
 									</div>
 								</div>
@@ -103,10 +152,9 @@ export default function DashboardOrderDetails(props: IProps) {
 				</div>
 				<div className={styles.userInfo_container}>
 					<h4>Payment</h4>
-					<span>Not ready in Back</span>
-					{/*<span>Credit card, John Doe</span>*/}
-					{/*<span>1234 1234 1234 1234</span>*/}
-					{/*<span>+38 066 666 66 66</span>*/}
+					<span>{order.payment_id}</span>
+					<span>{order.payment_type}</span>
+					<span>{order.payment_status}</span>
 				</div>
 			</div>
 			<div className={styles.table}>

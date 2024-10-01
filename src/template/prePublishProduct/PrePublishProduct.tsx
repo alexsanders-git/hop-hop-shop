@@ -17,12 +17,13 @@ import 'swiper/css/thumbs';
 import 'swiper/css/pagination';
 
 export interface InterfacePrePublishProduct {
-	product: IProduct;
+	product: IProduct | null;
 	setShowPrePublish: (showPrePublish: boolean) => void;
 }
 
 export default function PrePublishProduct(props: InterfacePrePublishProduct) {
 	const { product, setShowPrePublish } = props;
+	if (product === null) return null;
 	const imagesArr = getImages(product.images);
 	return (
 		<div className={styles.publishContainer}>

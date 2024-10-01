@@ -18,9 +18,11 @@ import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
 import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import Loader from '@/components/Loader/Loader';
+import { getProfileOrderId } from '@/utils/paths/profile.paths';
 
 interface IProps {
 	orders: IResponse<IOrders>;
+	type?: 'profile' | 'dashboard';
 }
 
 interface IDashboardItem {
@@ -29,10 +31,11 @@ interface IDashboardItem {
 	setError: (text: string | null) => void;
 	setSuccess: (text: string | null) => void;
 	setIsLoading: (isLoading: boolean) => void;
+	type?: 'profile' | 'dashboard';
 }
 
 export default function DashboardTableOrders(props: IProps) {
-	const { orders } = props;
+	const { orders, type = 'dashboard' } = props;
 
 	const [newData, setNewData] = useState<IResponse<IOrders>>(orders);
 	const [error, setError] = useState<string | null>(null);
@@ -75,6 +78,7 @@ export default function DashboardTableOrders(props: IProps) {
 								setSuccess={setSuccess}
 								setError={setError}
 								setIsLoading={setIsLoading}
+								type={type}
 							/>
 						))}
 					</ul>
@@ -99,7 +103,14 @@ export default function DashboardTableOrders(props: IProps) {
 }
 
 function DashboardItem(props: IDashboardItem) {
-	const { setNewData, item, setSuccess, setError, setIsLoading } = props;
+	const {
+		setNewData,
+		item,
+		setSuccess,
+		setError,
+		setIsLoading,
+		type = 'dashboard',
+	} = props;
 	const [isShow, setIsShow] = useState<boolean>(false);
 	return (
 		<>
@@ -148,8 +159,16 @@ function DashboardItem(props: IDashboardItem) {
 					{formatDate(item.created_at)}
 				</div>
 				<div className={`${styles.col} ${styles.col7}`}>
-					<RemoveButton callback={() => setIsShow(true)} />
-					<EditButton callback={() => getDashboardOrdersId(item.id)} />
+					{type === 'dashboard' && (
+						<RemoveButton callback={() => setIsShow(true)} />
+					)}
+					<EditButton
+						callback={() =>
+							type === 'dashboard'
+								? getDashboardOrdersId(item.id)
+								: getProfileOrderId(item.id)
+						}
+					/>
 				</div>
 			</li>
 		</>

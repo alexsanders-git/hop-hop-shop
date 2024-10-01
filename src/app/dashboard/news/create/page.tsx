@@ -1,7 +1,7 @@
 'use client';
-import { Form, Formik } from 'formik';
+import { Form, Formik, FormikHelpers, FormikValues } from 'formik';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import * as yup from 'yup';
 
 import CreateDashboardHeader from '@/components/dashboard/createDashboardHeader/CreateDashboardHeader';
@@ -15,10 +15,11 @@ import Textarea from '@/components/textarea/Textarea';
 import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
-import Select from '@/components/select/Select';
+import CustomSelect from '@/components/CustomSelect/CustomSelect';
 import { createNews } from '@/services/dashboard/news/dashbpard.news.service';
 import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import { typesOfNews } from '@/utils/consts/consts';
+import { useUnsavedChanges } from '@/hooks/useCloseWindow';
 
 export default function DashboardNewsCreate() {
 	const [modal, setModal] = useState<boolean>(false);
@@ -28,6 +29,10 @@ export default function DashboardNewsCreate() {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [success, setSuccess] = useState(false);
 	const [error, setError] = useState('');
+	const [unsaved, setUnsaved] = useState<boolean>(false);
+	const { isModalVisible, confirmNavigation, cancelNavigation } =
+		useUnsavedChanges(unsaved);
+
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files && event.target.files.length > 0) {
 			setSelectedFile(event.target.files[0]);
@@ -40,6 +45,43 @@ export default function DashboardNewsCreate() {
 				};
 				reader.readAsDataURL(file);
 			}
+		}
+	};
+
+	const submitForm = async (
+		values: FormikValues,
+		actions: FormikHelpers<{ title: string; content: string; type: string }>,
+	) => {
+		const newValues = {
+			...values,
+			type: typesOfNews.find((el) => el.name === values.type)?.id as string,
+		};
+		setIsLoading(true);
+		const formData = new FormData();
+
+		Object.entries(newValues).forEach(([key, value]) => {
+			if (value != '') {
+				formData.append(key, value);
+			}
+		});
+
+		if (selectedFile) {
+			formData.append('image', selectedFile);
+		}
+		const res = await createNews(formData);
+		if (res.success) {
+			setIsLoading(false);
+			setSuccess(true);
+			setError('');
+			actions.resetForm();
+			await revalidateFunc('/dashboard/news');
+			await revalidateFunc('/dashboard/news/[id]', 'page');
+			setTimeout(() => {
+				setSuccess(false);
+				router.push('/dashboard/news');
+			}, 2000);
+		} else {
+			setError(res.error.message || 'Something Was Wrong');
 		}
 	};
 
@@ -57,97 +99,86 @@ export default function DashboardNewsCreate() {
 					type: categoryValid('Type'),
 				})
 				.required()}
-			onSubmit={async (values, { resetForm }) => {
-				setIsLoading(true);
-				const formData = new FormData();
-
-				Object.entries(values).forEach(([key, value]) => {
-					if (value != '') {
-						formData.append(key, value);
-					}
-				});
-
-				if (selectedFile) {
-					formData.append('image', selectedFile);
-				}
-				const res = await createNews(formData);
-				if (res.success) {
-					setIsLoading(false);
-					setSuccess(true);
-					setError('');
-					resetForm();
-					await revalidateFunc('/dashboard/news');
-					await revalidateFunc('/dashboard/news/[id]', 'page');
-					setTimeout(() => {
-						setSuccess(false);
-						router.push('/dashboard/news');
-					}, 2000);
-				} else {
-					setError(res.error.message || 'Something Was Wrong');
-				}
-			}}
+			onSubmit={async (values, actions) => submitForm(values, actions)}
 		>
-			{({ isValid, dirty, resetForm }) => (
-				<Form className={styles.wrapper}>
-					{isLoading && <Loader />}
+			{({ isValid, dirty, resetForm, values, initialValues }) => {
+				// eslint-disable-next-line react-hooks/rules-of-hooks
+				useEffect(() => {
+					const hasFormChanged =
+						JSON.stringify(values) !== JSON.stringify(initialValues);
+					const hasChanges = hasFormChanged || !!selectedFile;
+					setUnsaved(hasChanges);
+					// eslint-disable-next-line
+				}, [values, initialValues, selectedFile]);
+				return (
+					<Form className={styles.wrapper}>
+						{isLoading && <Loader />}
+						{success && <MessageSuccess text={'Your News Added!'} />}
+						{error !== '' && <MessageError text={error} />}
 
-					{success && <MessageSuccess text={'Your News Added!'} />}
-					{error !== '' && <MessageError text={error} />}
-					{modal && (
-						<ModalConfirmation
-							reset={() => {
-								setModal(false);
-								setSelectedFile(null);
-								resetForm();
-								setPreview(null);
+						{modal && (
+							<ModalConfirmation
+								reset={() => {
+									setModal(false);
+									setSelectedFile(null);
+									resetForm();
+									setPreview(null);
+								}}
+								closeModal={() => setModal(false)}
+								text={'Are you sure?'}
+							/>
+						)}
+						{isModalVisible && (
+							<ModalConfirmation
+								type={'unsaved'}
+								className={styles.height}
+								reset={() => cancelNavigation()}
+								closeModal={() => confirmNavigation()}
+							/>
+						)}
+						<CreateDashboardHeader
+							title={'Add news'}
+							callbackApply={() => {}}
+							callbackDelete={() => {
+								setModal(true);
 							}}
-							closeModal={() => setModal(false)}
-							text={'Are you sure?'}
+							disabledDelete={false}
+							disabledApply={!(isValid && dirty && selectedFile)}
+							typeApply={'submit'}
+							typeDelete={'button'}
 						/>
-					)}
 
-					<CreateDashboardHeader
-						title={'Add news'}
-						callbackApply={() => {}}
-						callbackDelete={() => {
-							setModal(true);
-						}}
-						disabledDelete={false}
-						disabledApply={!(isValid && dirty && selectedFile)}
-						typeApply={'submit'}
-						typeDelete={'button'}
-					/>
-
-					<div className={styles.formWrapper}>
-						<div className={styles.form}>
-							<Select
-								name={'type'}
-								options={typesOfNews}
-								text={'Type'}
-								defaultValue={typesOfNews[0]}
-							/>
-							<Input
-								name={'title'}
-								title={'Title'}
-								type={'text'}
-								placeholder={'Enter title'}
-							/>
-							<Textarea
-								title={'Content'}
-								name={'content'}
-								rows={10}
-								placeholder={'Enter description'}
+						<div className={styles.formWrapper}>
+							<div className={styles.form}>
+								<CustomSelect
+									name={'type'}
+									options={typesOfNews}
+									title={'Type'}
+									placeholder={'Type'}
+								/>
+								<Input
+									name={'title'}
+									title={'Title'}
+									type={'text'}
+									placeholder={'Enter title'}
+								/>
+								<Textarea
+									title={'Content'}
+									name={'content'}
+									rows={10}
+									placeholder={'Enter description'}
+								/>
+							</div>
+							<DashboardUploadImage
+								handleFileChange={handleFileChange}
+								preview={preview}
+								setPreview={setPreview}
+								text={'News Image'}
 							/>
 						</div>
-						<DashboardUploadImage
-							handleFileChange={handleFileChange}
-							preview={preview}
-							setPreview={setPreview}
-							text={'News Image'}
-						/>
-					</div>
-				</Form>
-			)}
+					</Form>
+				);
+			}}
 		</Formik>
 	);
 }

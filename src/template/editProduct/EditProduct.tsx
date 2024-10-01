@@ -11,12 +11,11 @@ import Button from '@/components/Button/Button';
 import CreateDashboardHeader from '@/components/dashboard/createDashboardHeader/CreateDashboardHeader';
 import DashboardUploadedImage from '@/components/dashboard/dashboardUploadedImage/DashboardUploadedImage';
 import ModalConfirmation from '@/components/dashboard/modalConfirmation/ModalСonfirmation';
-import UploadedFileBlock from '@/components/dashboard/uploadedFileBlock/UploadedFileBlock';
 import Input from '@/components/Input/Input';
 import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
-import Select from '@/components/select/Select';
+import CustomSelect from '@/components/CustomSelect/CustomSelect';
 import Textarea from '@/components/textarea/Textarea';
 import {
 	removeProduct,
@@ -31,6 +30,7 @@ import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
 import { useFetch } from '@/hooks/useFetch';
+import UploadedFileBlockOld from '@/components/dashboard/UploadedFileBlockOld/UploadedFileBlockOld';
 
 export interface IProps {
 	product: IProduct;
@@ -39,7 +39,7 @@ export interface IProps {
 interface FormValues {
 	name: string;
 	description: string;
-	category: number;
+	category: string;
 	price: number;
 }
 
@@ -51,7 +51,9 @@ interface IImage {
 export default function EditProduct(props: IProps) {
 	const { product } = props;
 
-	const { data: categories } = useFetch<ICategory[]>({
+	const { data: categories, loading: categoriesLoading } = useFetch<
+		ICategory[]
+	>({
 		endpoint: 'shop/categories/all/',
 		options: {
 			method: 'GET',
@@ -71,9 +73,6 @@ export default function EditProduct(props: IProps) {
 	const fileInputRef = useRef<null | HTMLInputElement>(null);
 	const router = useRouter();
 	const [showPrePublish, setShowPrePublish] = useState<boolean>(false);
-
-	// const { isModalVisible, confirmNavigation, cancelNavigation } =
-	// 	useUnsavedChanges(false);
 
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files) {
@@ -127,6 +126,64 @@ export default function EditProduct(props: IProps) {
 		await revalidateFunc('/product/[id]', 'page');
 		await revalidateFunc('/', 'layout');
 	};
+
+	const handleSubmit = async (values: FormValues, actions: any) => {
+		setIsLoading(true);
+		if (selectedFiles.length) {
+			const res = await updateProduct(product.id, {
+				...values,
+				category:
+					categories?.filter((item) => item.name === values.category)[0]?.id ||
+					null,
+			});
+			const formData = new FormData();
+
+			if (selectedFiles) {
+				selectedFiles.forEach((file) => {
+					formData.append('uploaded_images', file);
+				});
+			}
+
+			if (res.success && formData) {
+				const resUpload = await updateProductImage(res.data.id, formData);
+
+				if (resUpload.success) {
+					setIsLoading(false);
+					setSuccess('Product was updated');
+					actions.resetForm();
+					setSelectedFiles([]);
+					setPreviews([]);
+					await revalidateData();
+					setTimeout(() => {
+						router.push('/dashboard/products');
+						setSuccess('');
+					}, 2000);
+				} else if (!resUpload.success) {
+					setIsLoading(false);
+					setError(resUpload.error.message);
+				}
+			}
+		} else {
+			const res = await updateProduct(product.id, {
+				...values,
+				category:
+					categories?.filter((item) => item.name === values.category)[0]?.id ||
+					null,
+			});
+			if (res.success) {
+				setIsLoading(false);
+				setSuccess('Product was updated');
+				actions.resetForm();
+				setSelectedFiles([]);
+				setPreviews([]);
+				await revalidateData();
+				setTimeout(() => {
+					setSuccess('');
+					router.push('/dashboard/products');
+				}, 2000);
+			}
+		}
+	};
 	return (
 		<>
 			{/* eslint-disable */}
@@ -165,7 +222,7 @@ export default function EditProduct(props: IProps) {
 				initialValues={{
 					name: product.name,
 					description: product.description ? product.description : '',
-					category: product.category?.id || 0,
+					category: product.category?.name || 'No Category',
 					price: product.price,
 				}}
 				validationSchema={yup
@@ -176,53 +233,8 @@ export default function EditProduct(props: IProps) {
 						price: categoryValid('Price'),
 					})
 					.required()}
-				onSubmit={async (values, { resetForm }) => {
-					setIsLoading(true);
-
-					if (selectedFiles.length) {
-						const res = await updateProduct(product.id, values);
-						const formData = new FormData();
-
-						if (selectedFiles) {
-							selectedFiles.forEach((file) => {
-								formData.append('uploaded_images', file);
-							});
-						}
-
-						if (res.success && formData) {
-							const resUpload = await updateProductImage(res.data.id, formData);
-
-							if (resUpload.success) {
-								setIsLoading(false);
-								setSuccess('Product was updated');
-								resetForm();
-								setSelectedFiles([]);
-								setPreviews([]);
-								await revalidateData();
-								setTimeout(() => {
-									router.push('/dashboard/products');
-									setSuccess('');
-								}, 2000);
-							} else if (!resUpload.success) {
-								setIsLoading(false);
-								setError(resUpload.error.message);
-							}
-						}
-					} else {
-						const res = await updateProduct(product.id, values);
-						if (res.success) {
-							setIsLoading(false);
-							setSuccess('Product was updated');
-							resetForm();
-							setSelectedFiles([]);
-							setPreviews([]);
-							await revalidateData();
-							setTimeout(() => {
-								setSuccess('');
-								router.push('/dashboard/products');
-							}, 2000);
-						}
-					}
+				onSubmit={async (values, actions) => {
+					await handleSubmit(values, actions);
 				}}
 			>
 				{({ isValid, dirty, resetForm }) => (
@@ -277,12 +289,11 @@ export default function EditProduct(props: IProps) {
 									placeholder={'Enter Product Name'}
 								/>
 								{/* eslint-disable */}
-								<Select
-									defaultValue={{
-										name: product.category?.name || 'No category',
-										id: product.category?.id || 0,
-									}}
+								<CustomSelect
+									className={categoriesLoading ? styles.inactive : ''}
 									name={'category'}
+									title={'Category'}
+									isLoading={categoriesLoading}
 									options={
 										categories
 											? categories
@@ -290,10 +301,14 @@ export default function EditProduct(props: IProps) {
 														name: item.name,
 														id: item.id,
 													}))
-													.filter((item) => item.id !== product.category?.id)
-											: null
+													.concat({
+														name: 'No Category',
+														id: 10000,
+													})
+													.reverse()
+											: []
 									}
-									text={'Product Category'}
+									placeholder={'Category'}
 								/>
 								{/* eslint-enable*/}
 								<Textarea
@@ -363,7 +378,7 @@ export default function EditProduct(props: IProps) {
 									previews
 										.slice(1)
 										.map((preview, index) => (
-											<UploadedFileBlock
+											<UploadedFileBlockOld
 												key={index}
 												image={preview}
 												index={index + 1}
