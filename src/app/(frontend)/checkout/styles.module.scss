@@ -25,9 +25,10 @@
 }
 
 .second {
-	width: 500px;
+	max-width: 500px;
+	width: 100%;
 	@media only screen and (max-width: $media-xxl) {
-		min-width: 350px;
+		//min-width: 350px;
 	}
 	@media only screen and (max-width: $media-lg) {
 		display: none;

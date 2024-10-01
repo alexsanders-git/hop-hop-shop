@@ -103,7 +103,7 @@ export default function DashboardOrderDetails(props: IProps) {
 								className={styles.searchInput}
 							>
 								<span>{ordersStatus}</span>
-								<ChevronUp className={`${isShow && styles.rotate}`} />
+								<ChevronUp className={`${!isShow && styles.rotate}`} />
 							</div>
 							{isShow && (
 								<div className={styles.suggestionsWrapper}>

@@ -405,7 +405,7 @@ export default function DashboardProductsCreate() {
 											<input
 												ref={fileInputRef}
 												onChange={handleFileChange}
-												accept="image/png, image/jpeg"
+												accept="image/png, image/jpeg, image/heic"
 												className={styles.file}
 												type="file"
 												multiple={true}
