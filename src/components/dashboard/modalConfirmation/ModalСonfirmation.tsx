@@ -43,7 +43,7 @@ export default function ModalConfirmation(props: IProps) {
 						}}
 						style={'secondary'}
 						className={styles.btn}
-						text={'Cancel'}
+						text={type === 'confirm' ? 'Cancel' : 'Discard changes'}
 					/>
 					<Button
 						onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
@@ -51,7 +51,7 @@ export default function ModalConfirmation(props: IProps) {
 						}}
 						style={'primary'}
 						className={styles.btn}
-						text={type === 'confirm' ? 'Delete' : 'Save'}
+						text={type === 'confirm' ? 'Delete' : 'Continue editing'}
 					/>
 				</div>
 			</div>

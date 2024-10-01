@@ -1,3 +1,5 @@
+@import "src/styles/media.scss";
+
 .bgWrapper {
 	background: rgba(25, 44, 50, 0.9);
 	width: 100%;
@@ -34,22 +36,37 @@
 	border: 2px solid var(--primary-color);
 	box-shadow: 2px 2px 0 2px var(--primary-color);
 	gap: 15px;
+	@media only screen and (max-width: 500px) {
+		flex-direction: column;
+	}
 
 	span {
 		font-size: 32px;
 		font-weight: 300;
 		line-height: 46px;
+		@media only screen and (max-width: 500px) {
+			font-size: 27px;
+			line-height: 36px;
+		}
+	}
+
+	@media only screen and (max-width: 500px) {
+		margin: 0 20px;
 	}
 }
 
 .wrapper {
 	display: flex;
 	gap: 15px;
+	flex-wrap: wrap;
 
 	.btn {
 		padding: 5px 25px;
 		font-size: 20px;
 		font-weight: 400;
 		line-height: 38px;
+		@media only screen and (max-width: 500px) {
+			width: 100%;
+		}
 	}
 }

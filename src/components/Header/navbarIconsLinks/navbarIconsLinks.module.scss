@@ -72,7 +72,7 @@
 	flex-direction: column;
 	box-shadow: 2px 2px 0 2px var(--primary-color);
 	border: 2px solid var(--primary-color);
-	border-radius: 10px;
+	border-radius: 13px;
 	top: 70px;
 	width: 170px;
 	z-index: 5000;
@@ -136,7 +136,7 @@
 		@include header-links-states;
 	}
 
-	.test {
+	.linksContainer {
 		width: 0;
 		height: 0;
 		border-left: 15px solid transparent;

@@ -7,6 +7,7 @@ import { londrinaSolid, robotoCondensed } from '@/styles/fonts/fonts';
 import styles from './styles.module.scss';
 import ButtonLink from '@/components/ButtonLink/ButtonLink';
 import { useUser } from '@/store/user/User.store';
+import shortText from '@/utils/func/shortText';
 
 export default function Order() {
 	const subtotalPrice = useCart((state) => state.cart?.subtotal_price || 0);
@@ -36,7 +37,9 @@ export default function Order() {
 							key={key}
 							className={`${styles.productWrapper} ${robotoCondensed.className}`}
 						>
-							<span className={styles.name}>{item.product.name}</span>
+							<span className={styles.name}>
+								{shortText(item.product.name, 20)}
+							</span>
 							<div className={styles.productContainer}>
 								<span className={styles.price}>${item.product.price}</span>
 								<span className={styles.qty}>Quantity: {item.quantity}</span>

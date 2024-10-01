@@ -63,7 +63,7 @@ function UserLink() {
 			</Link>
 			{user && isShow && (
 				<div className={styles.linksWrapper}>
-					<div className={styles.test}></div>
+					<div className={styles.linksContainer}></div>
 					<Link href="/account/account" onClick={() => setIsShow(false)}>
 						My Account
 					</Link>
