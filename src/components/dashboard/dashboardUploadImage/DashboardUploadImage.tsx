@@ -13,14 +13,23 @@ export interface IProps {
 	handleFileChange: (event: ChangeEvent<HTMLInputElement>) => void;
 	className?: string;
 	setPreview: (preview: string | null) => void;
+	type?: 'default' | 'edit';
 }
 
 export default function DashboardUploadImage(props: IProps) {
-	const { text, preview, handleFileChange, className = '', setPreview } = props;
+	const {
+		text,
+		preview,
+		handleFileChange,
+		className = '',
+		setPreview,
+		type = 'default',
+	} = props;
 	const fileInputRef = useRef<null | HTMLInputElement>(null);
 	const [isHovered, setIsHovered] = useState<boolean>(false);
+	const editing = isHovered && type === 'edit' && styles.edit;
 	return (
-		<div className={styles.uploadImage}>
+		<div className={`${styles.uploadImage}`}>
 			<span className={`${styles.text} ${robotoCondensed.className}`}>
 				{text}
 			</span>
@@ -35,7 +44,7 @@ export default function DashboardUploadImage(props: IProps) {
 						setIsHovered(false);
 					}
 				}}
-				className={styles.imageContainer}
+				className={`${styles.imageContainer} ${editing} `}
 			>
 				{isHovered && preview && (
 					<div
