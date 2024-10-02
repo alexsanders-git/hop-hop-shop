@@ -23,7 +23,7 @@
 	aspect-ratio: 1;
 	border-radius: 100%;
 	border-width: 4px;
-	border-color: var(--black-color);
+	border-color: var(--primary-color);
 	box-shadow: 0 4px 0 4px #2a2f2d;
 	position: relative;
 	overflow: hidden;
@@ -193,7 +193,7 @@
 	padding: 12px 36px;
 	font-size: 36px;
 	line-height: 1.06;
-	color: var(--black-color);
+	color: var(--primary-color);
 
 	@media only screen and (max-width: $media-lg) {
 		font-size: 26px;

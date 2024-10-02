@@ -169,6 +169,7 @@ export default function EditCategory(props: IProps) {
 							preview={preview}
 							setPreview={setPreview}
 							text={'Category Image'}
+							type={'edit'}
 						/>
 					</div>
 				</Form>

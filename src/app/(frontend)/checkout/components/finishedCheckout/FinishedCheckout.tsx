@@ -12,6 +12,7 @@ import { useCheckout } from '@/store/checkout/Checkout.store';
 import { IResponseCheckout } from '@/types/response/response';
 
 import styles from './styles.module.scss';
+import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 
 export default function FinishedCheckout() {
 	const [open, setOpen] = useState<boolean>(false);
@@ -47,10 +48,11 @@ export default function FinishedCheckout() {
 				onClick={async () => {
 					if (paymentMethod === 'card') {
 						const res = await fetchWithCookies<IResponseCheckout>(
-							'/checkout/card/',
+							'/checkout/',
 							{
 								method: 'POST',
 								body: JSON.stringify({
+									payment_type: paymentMethod,
 									first_name: personalData!.name,
 									last_name: personalData!.lastname,
 									email: personalData!.email,
@@ -70,6 +72,7 @@ export default function FinishedCheckout() {
 						);
 						if (res.success) {
 							fetchCart();
+							await revalidateFunc('/dashboard/orders');
 							navigate.push(
 								`/thanks-for-order?order_id=${res.data.payment_id}`,
 							);
