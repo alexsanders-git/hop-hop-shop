@@ -23,6 +23,9 @@ const refreshAuthToken = async (isFile: boolean) => {
 			method: 'POST',
 			headers: prepareHeaders(isFile),
 			credentials: 'include',
+			body: JSON.stringify({
+				refresh: Cookies.get(CookiesEnums.refresh_token),
+			}),
 		});
 
 		if (refreshResponse.ok) {
@@ -36,6 +39,7 @@ const refreshAuthToken = async (isFile: boolean) => {
 				credentials: 'include',
 			});
 			Cookies.remove(CookiesEnums.access_token);
+			Cookies.remove(CookiesEnums.refresh_token);
 			Cookies.remove(UserEnum.user);
 			return false;
 		}
