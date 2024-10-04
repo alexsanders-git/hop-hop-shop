@@ -23,6 +23,7 @@ import tnt from '../../../../../../public/delivery/tnt.png';
 import united from '../../../../../../public/delivery/united.png';
 import usp from '../../../../../../public/delivery/usp.png';
 import { useUser } from '@/store/user/User.store';
+import PlacesSearch from '@/app/(frontend)/checkout/components/delivery/Test';
 
 export default function Delivery() {
 	const [opened, setOpened] = useState(false);
@@ -94,6 +95,7 @@ export default function Delivery() {
 										/>
 									))}
 								</div>
+								<PlacesSearch />
 								<div className={styles.inputContainer}>
 									<Input
 										className={styles.input}
