@@ -25,7 +25,7 @@
 	flex-direction: column;
 	gap: 12px;
 
-	@media only screen and (max-width: $media-md) {
+	@media only screen and (max-width:$media-md) {
 		top: 20px;
 		right: 20px;
 	}
@@ -73,7 +73,7 @@
 	font-weight: 700;
 	line-height: 1.1;
 	text-transform: capitalize;
-	word-break: break-word;
+
 	@media only screen and (max-width: $media-xxl) {
 		font-size: 20px;
 	}
@@ -107,7 +107,7 @@
 .category {
 	font-size: 20px;
 	line-height: 1.1;
-	word-break: break-word;
+
 	@media only screen and (max-width: $media-xxl) {
 		font-size: 18px;
 	}

@@ -3,11 +3,10 @@
 
 .section {
 	margin: 24px 0 80px 0;
-	min-height: 100vh;
+	height: 100vh;
 }
 
 .title {
-	word-break: break-word;
 	@include section-heading;
 }
 
