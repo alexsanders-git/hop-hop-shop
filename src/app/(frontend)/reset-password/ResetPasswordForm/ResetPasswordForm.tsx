@@ -93,6 +93,7 @@ export default function ResetPasswordForm() {
 				<ActionModal
 					ref={successModalRef}
 					show={isSuccessModalOpen}
+					iconSrc={'/thanksPageIllustration.svg'}
 					onClose={() => setIsSuccessModalOpen(false)}
 					title={'Woohoo! You did it!'}
 					text={`You've successfully reset your password. You're ready to rock and

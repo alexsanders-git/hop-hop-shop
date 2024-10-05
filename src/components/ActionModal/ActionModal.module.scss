@@ -21,43 +21,53 @@
 	max-width: 540px;
 	border: 2px solid var(--primary-color);
 	box-shadow: 4px 4px 0 0 var(--primary-color);
-	display: grid;
-	grid-template-columns: auto 1fr;
-	gap: 20px;
-	align-items: center;
-
-	&.error {
-		gap: 10px;
-	}
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	position: relative;
 
 	@media only screen and (max-width: $media-md) {
-		max-width: 328px;
-		grid-template-columns: 1fr 1fr;
-		grid-template-rows: auto auto;
-		grid-gap: 16px;
 		padding: 20px;
 
-		&.error {
-			grid-template-columns: auto 1fr;
-			grid-gap: 0;
-			align-items: end;
-		}
 	}
+}
+
+.closeIcon {
+	position: absolute;
+	top: 28px;
+	right: 28px;
+	background: none;
+	border: none;
+	font-size: 24px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	transition: var(--transition);
+
+	@media only screen and (max-width: $media-md) {
+		top: 20px;
+		right: 20px;
+	}
+
+	&:hover {
+		transform: scale(1.25);
+		color: var(--gray-color);
+	}
+}
+
+.upperPartWrapper {
+	display: flex;
+	gap: 20px;
+	justify-content: space-between;
 }
 
 .textPart {
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
-	align-items: flex-start;
-	grid-column: 1;
-	grid-row: 1;
-
-	@media only screen and (max-width: $media-md) {
-		&.error {
-			margin-bottom: 40px;
-		}
-	}
 }
 
 .title {
@@ -74,51 +84,27 @@
 .subtitle {
 	font-weight: 400;
 	font-size: 22px;
-	line-height: 1.09;
-	max-width: 260px;
+	max-width: 272px;
 	width: 100%;
 
 	@media only screen and (max-width: $media-md) {
+		max-width: 187px;
 		font-size: 14px;
 		line-height: 1.14;
 	}
 }
 
 .imageWrapper {
+	align-self: center;
 	display: flex;
-	align-items: center;
 	justify-content: center;
-	grid-column: 2;
-	grid-row: 1 / span 2;
-
-	&.error {
-		margin-bottom: -35px;
-		align-self: end;
-		height: 100%;
-
-		img {
-			object-fit: contain;
-		}
-	}
 
 	@media only screen and (max-width: $media-md) {
-		grid-column: 2;
-		grid-row: 1;
 		justify-content: flex-end;
-		width: 56px;
-		height: 100px;
 
-		&.error {
-			grid-column: 2;
-			grid-row: 1 / span 2;
-			width: 105px;
-			height: fit-content;
-			margin-bottom: -20px;
-			margin-left: -15px;
-
-			img {
-				object-fit: contain;
-			}
+		img {
+			width: 75px;
+			height: 75px;
 		}
 	}
 }
@@ -126,24 +112,15 @@
 .closeButton {
 	font-size: 36px;
 	line-height: 1.06;
-	justify-self: end;
-	grid-column: 1;
+	width: 100%;
 	text-align: center;
 
 	@media only screen and (max-width: $media-md) {
-		grid-column: 1 / span 2;
-		grid-row: 2;
 		font-size: 20px;
 		line-height: 1.1;
 		width: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-
-		&.error {
-			justify-self: end;
-			grid-column: 1;
-			text-align: center;
-		}
 	}
 }
