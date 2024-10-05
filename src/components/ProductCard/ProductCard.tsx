@@ -61,17 +61,13 @@ export default function ProductCard({
 
 				{showCategory && (
 					<div className={styles.category}>
-						{product?.category?.id ? (
+						{product?.category?.id && (
 							<Link
 								href={`/category/${product.category.id}`}
 								className={robotoCondensed.className}
 							>
 								{product.category.name}
 							</Link>
-						) : (
-							<span className={`${robotoCondensed.className}`}>
-								No category
-							</span>
 						)}
 					</div>
 				)}

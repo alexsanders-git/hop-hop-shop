@@ -61,19 +61,13 @@ export default async function ProductPage({ params: { id } }: Props) {
 						<div className={styles.info__wrapper}>
 							<div className={styles.info__title}>
 								<h1 className={styles.title}>{product?.data.name}</h1>
-								{product?.data?.category ? (
+								{product?.data?.category && (
 									<Link
 										href={`/category/${product?.data.category?.id}`}
 										className={`${styles.subTitle} ${styles.subTitleLink} ${robotoCondensed.className}`}
 									>
 										{product?.data.category?.name}
 									</Link>
-								) : (
-									<span
-										className={`${styles.subTitle} ${robotoCondensed.className}`}
-									>
-										No category
-									</span>
 								)}
 							</div>
 							<span className={styles.price}>${product?.data.price}</span>

@@ -73,6 +73,7 @@ export default function LoginForm() {
 				<ActionModal
 					ref={successModalRef}
 					show={isSuccessModalOpen}
+					iconSrc={'/thanksPageIllustration.svg'}
 					title="Thank you!"
 					text="If this is a registered email address, an email will be sent to the address provided."
 					type={'success'}
@@ -83,6 +84,7 @@ export default function LoginForm() {
 				<ActionModal
 					ref={errorModalRef}
 					show={isErrorModalOpen}
+					iconSrc={'/unSuccessIllustration_wrong.svg'}
 					title="Oh no!"
 					text="Looks like you entered an email that’s doing the cha-cha instead of following the rules. Please try again!"
 					type={'error'}

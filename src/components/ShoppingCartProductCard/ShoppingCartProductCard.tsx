@@ -40,15 +40,13 @@ export default function ShoppingCartProductCard(
 						>
 							{product.name}
 						</Link>
-						{product.category?.name ? (
+						{product.category?.name && (
 							<Link
 								href={`/category/${product.category.id}`}
 								className={styles.productName}
 							>
 								{product.category.name}
 							</Link>
-						) : (
-							<span className={styles.productName}>No category</span>
 						)}
 					</div>
 					<button
