@@ -9,7 +9,7 @@ const PlacesSearch = () => {
 
 	const { isLoaded, loadError } = useLoadScript({
 		// googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,
-		googleMapsApiKey: 'AIzaSyCX0w6Vm2VaxvIRgY9R9Z03JSUG_bydYiQ',
+		googleMapsApiKey: 'AIzaSyBu7lzNDZ8I0UVQO6-NRxKchOQBhQ8YVOU',
 		libraries,
 	});
 	const handleInputChange = async (
