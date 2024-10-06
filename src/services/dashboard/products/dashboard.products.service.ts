@@ -27,7 +27,7 @@ export const getDashboardProducts = async (
 export const createProduct = async (data: {
 	name: string;
 	description: string;
-	category: string | null;
+	category: number | null;
 	price: string;
 	SKU?: number;
 }) => {

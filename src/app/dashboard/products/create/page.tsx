@@ -168,7 +168,9 @@ export default function DashboardProductsCreate() {
 		setIsLoading(true);
 		const res = await createProduct({
 			...values,
-			category: values.category === '10000' ? null : values.category,
+			category:
+				categories?.filter((item) => item.name === values.category)[0]?.id ||
+				null,
 		});
 		const formData = new FormData();
 

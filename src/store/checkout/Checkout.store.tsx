@@ -24,7 +24,7 @@ interface IActions {
 
 	setPersonalData: (personalData: IPersonalData) => void;
 	setDeliveryAddress: (deliveryAddress: IDeliveryAddress) => void;
-	setCreditCard: (creditCard: ICreditCard) => void;
+	setCreditCard: (creditCard: ICreditCard | null) => void;
 }
 
 const partialize = (state: IState) => ({
