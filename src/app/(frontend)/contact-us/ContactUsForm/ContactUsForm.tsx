@@ -36,12 +36,16 @@ export default function ContactUsForm() {
 		setIsShow: setSuccessModalOpen,
 	} = useOutside(false);
 
-	const handleSubmit = async (values: IFormValuesContactUs) => {
+	const handleSubmit = async (
+		values: IFormValuesContactUs,
+		{ resetForm }: { resetForm: () => void },
+	) => {
 		try {
 			const response = await sendContactMessage(values);
 			console.log(response);
 			if (response.success) {
 				setSuccessModalOpen(true);
+				resetForm();
 			}
 		} catch (error) {
 			console.log(error);
