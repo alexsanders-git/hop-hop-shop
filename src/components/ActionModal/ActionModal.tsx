@@ -49,7 +49,7 @@ const ActionModal = forwardRef(function ActionModal(
 				</div>
 				<ButtonLink
 					href={'/'}
-					text={'Let s shop!'}
+					text="Let's shop!"
 					className={`${styles.closeButton} ${type === 'error' ? styles.error : ''}`}
 				></ButtonLink>
 			</div>
