@@ -18,6 +18,8 @@ import Textarea from '@/components/textarea/Textarea';
 
 import styles from './ContactUsForm.module.scss';
 import { sendContactMessage } from '@/services/fetchData';
+import ActionModal from '@/components/ActionModal/ActionModal';
+import useOutside from '@/hooks/useOutside';
 
 export interface IFormValuesContactUs {
 	first_name?: string;
@@ -27,16 +29,29 @@ export interface IFormValuesContactUs {
 	message: string;
 }
 
-const handleSubmit = async (values: IFormValuesContactUs) => {
-	try {
-		const response = await sendContactMessage(values);
-		console.log(response);
-	} catch (error) {
-		console.log(error);
-	}
-};
-
 export default function ContactUsForm() {
+	const {
+		ref: contactUsModalRef,
+		isShow: contactUsModalOpen,
+		setIsShow: setSuccessModalOpen,
+	} = useOutside(false);
+
+	const handleSubmit = async (
+		values: IFormValuesContactUs,
+		{ resetForm }: { resetForm: () => void },
+	) => {
+		try {
+			const response = await sendContactMessage(values);
+			console.log(response);
+			if (response.success) {
+				setSuccessModalOpen(true);
+				resetForm();
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<div className={styles.formContainer}>
 			<Formik
@@ -113,6 +128,17 @@ export default function ContactUsForm() {
 					</Form>
 				)}
 			</Formik>
+			{contactUsModalOpen && (
+				<ActionModal
+					ref={contactUsModalRef}
+					show={contactUsModalOpen}
+					iconSrc={'/emailIconWithAt.svg'}
+					title="We’ll contact you ASAP"
+					text="We usually reply within 48 hours. Meanwhile, check out our site — you might find something cooler than our support!"
+					type={'success'}
+					onClose={() => setSuccessModalOpen(false)}
+				/>
+			)}
 		</div>
 	);
 }

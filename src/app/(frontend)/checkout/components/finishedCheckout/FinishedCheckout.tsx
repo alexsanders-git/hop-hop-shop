@@ -17,6 +17,7 @@ import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 export default function FinishedCheckout() {
 	const [open, setOpen] = useState<boolean>(false);
 	const creditCard = useCheckout((state) => state.creditCard);
+	const setCreditCard = useCheckout((state) => state.setCreditCard);
 	const deliveryAddress = useCheckout((state) => state.deliveryAddress);
 	const personalData = useCheckout((state) => state.personalData);
 	const paymentMethod = useCheckout((state) => state.checkout.paymentMethod);
@@ -70,6 +71,7 @@ export default function FinishedCheckout() {
 						);
 						if (res.success) {
 							fetchCart();
+							setCreditCard(null);
 							await revalidateFunc('/dashboard/orders');
 							navigate.push(
 								`/thanks-for-order?order_id=${res.data.payment_id}`,
