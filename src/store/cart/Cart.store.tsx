@@ -63,7 +63,7 @@ export const useCart = create<IState & IActions>()(
 						const res = await fetchData<IResponseGetCart>(
 							`cart/subtract/${id}/`,
 							{
-								method: 'POST',
+								method: 'DELETE',
 							},
 						);
 						if (res.success) {
@@ -115,10 +115,13 @@ export const useCart = create<IState & IActions>()(
 
 				deleteCoupon: async () => {
 					try {
-						const res = await fetchData<IResponseGetCart>(
-							'cart/coupon/remove',
+						const res = await fetchWithCookies<IResponseCouponApply>(
+							'/cart/coupon/remove/',
 							{
 								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json',
+								},
 							},
 						);
 						if (res.success) {

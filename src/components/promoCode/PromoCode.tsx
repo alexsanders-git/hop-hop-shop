@@ -1,5 +1,4 @@
 'use client';
-import { Check } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { useDebounce } from '@/hooks/useDebounce';
@@ -83,7 +82,7 @@ export default function PromoCode(props: InterfacePromoCode) {
 							{data?.error && (
 								<div className={styles.errorMessage}>{data.error}</div>
 							)}
-							{data?.message === 'success' && (
+							{coupon && (
 								<button
 									className={styles.deleteCoupon}
 									onClick={handleDeleteCoupon}
