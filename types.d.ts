@@ -62,10 +62,10 @@ interface IPersonalData {
 }
 
 interface IDeliveryAddress {
-	shipping_country: string | null;
-	shipping_city: string | null;
 	shipping_address: string | null;
 	shipping_postcode: string | null;
+	shipping_country?: string | null;
+	shipping_city?: string | null;
 }
 
 interface ICreditCard {

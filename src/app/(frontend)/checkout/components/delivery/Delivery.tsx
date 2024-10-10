@@ -9,12 +9,7 @@ import ReadyData from '@/app/(frontend)/checkout/components/readyData/ReadyData'
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
 import { useCheckout } from '@/store/checkout/Checkout.store';
-import {
-	addressValid,
-	cityValid,
-	countryValid,
-	postalCodeValid,
-} from '@/validation/checkout/validation';
+import { postalCodeValid } from '@/validation/checkout/validation';
 
 import styles from './styles.module.scss';
 import dhl from '../../../../../../public/delivery/dhl.png';
@@ -23,6 +18,7 @@ import tnt from '../../../../../../public/delivery/tnt.png';
 import united from '../../../../../../public/delivery/united.png';
 import usp from '../../../../../../public/delivery/usp.png';
 import { useUser } from '@/store/user/User.store';
+import AddressesSelect from '@/components/AdressesSelect/AddressesSelect';
 
 export default function Delivery() {
 	const [opened, setOpened] = useState(false);
@@ -36,17 +32,17 @@ export default function Delivery() {
 	const deliveryImages = [dhl, fedEx, united, usp, tnt];
 
 	useEffect(() => {
-		if (user && ref.current && user.shipping_country && user.shipping_city) {
+		if (user && ref.current) {
 			ref.current.setValues({
-				shipping_country: user.shipping_country,
-				shipping_city: user.shipping_city,
 				shipping_address: user.shipping_address,
 				shipping_postcode: user.shipping_postcode,
 			});
-			ref.current.touched.shipping_country = true;
-			ref.current.touched.shipping_city = true;
-			ref.current.touched.shipping_address = true;
-			ref.current.touched.shipping_postcode = true;
+			if (user.shipping_address) {
+				ref.current.touched.shipping_address = true;
+			}
+			if (user.shipping_postcode) {
+				ref.current.touched.shipping_postcode = true;
+			}
 		}
 	}, [user]);
 
@@ -55,15 +51,11 @@ export default function Delivery() {
 			innerRef={ref}
 			validationSchema={yup
 				.object({
-					shipping_country: countryValid,
-					shipping_city: cityValid,
-					shipping_address: addressValid,
+					// shipping_address: addressValid,
 					shipping_postcode: postalCodeValid,
 				})
 				.required()}
 			initialValues={{
-				shipping_country: '',
-				shipping_city: '',
 				shipping_address: '',
 				shipping_postcode: '',
 			}}
@@ -94,38 +86,19 @@ export default function Delivery() {
 										/>
 									))}
 								</div>
-								<div className={styles.inputContainer}>
-									<Input
-										className={styles.input}
-										title={'Country'}
-										type={'text'}
-										name={'shipping_country'}
-										placeholder={'country'}
-									/>
-									<Input
-										className={styles.input}
-										title={'City'}
-										type={'text'}
-										name={'shipping_city'}
-										placeholder={'city'}
-									/>
-								</div>
-								<div className={styles.inputContainer}>
-									<Input
-										className={styles.input}
-										title={'Address'}
-										type={'text'}
-										name={'shipping_address'}
-										placeholder={'address'}
-									/>
-									<Input
-										className={styles.input}
-										title={'Postal Code'}
-										type={'text'}
-										name={'shipping_postcode'}
-										placeholder={'postal code'}
-									/>
-								</div>
+								<AddressesSelect
+									title={'Address'}
+									name={'shipping_address'}
+									placeholder={'Enter your address'}
+									initialValue={user?.shipping_address || ''}
+								/>
+								<Input
+									className={styles.input}
+									title={'Postal Code'}
+									type={'text'}
+									name={'shipping_postcode'}
+									placeholder={'postal code'}
+								/>
 								<Button
 									className={styles.button}
 									disabled={!(isValid && dirty)}
@@ -137,8 +110,6 @@ export default function Delivery() {
 						)}
 						{opened && (
 							<ReadyData
-								firstText={ref?.current?.values?.shipping_country}
-								secondText={ref?.current?.values.shipping_city}
 								thirdText={ref?.current?.values.shipping_address}
 								fourText={ref?.current?.values.shipping_postcode}
 								setOpened={() => setOpened(!opened)}
