@@ -57,9 +57,7 @@ export default function FinishedCheckout() {
 									last_name: personalData!.lastname,
 									email: personalData!.email,
 									phone: personalData!.phone_number,
-									shipping_country: deliveryAddress!.shipping_country,
-									shipping_city: deliveryAddress!.shipping_city,
-									shipping_address: deliveryAddress!.shipping_city,
+									shipping_address: deliveryAddress!.shipping_address,
 									shipping_postcode: deliveryAddress!.shipping_postcode,
 									card_information: {
 										card_number: creditCard!.cardNumber,
