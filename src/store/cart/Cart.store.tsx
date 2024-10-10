@@ -20,7 +20,7 @@ interface IActions {
 	subtractItemFromCart: (id: number) => Promise<void>;
 	removeItemFromCart: (id: number) => Promise<void>;
 	addCoupon: (coupon: string) => Promise<string>;
-	deleteCoupon: (id: number) => Promise<void>;
+	deleteCoupon: () => Promise<void>;
 }
 
 export const useCart = create<IState & IActions>()(
@@ -113,18 +113,21 @@ export const useCart = create<IState & IActions>()(
 					}
 				},
 
-				deleteCoupon: async (id: number) => {
+				deleteCoupon: async () => {
 					try {
-						const res = await fetchData<IResponseGetCart>(`cart/coupon/${id}`, {
-							method: 'DELETE',
-						});
+						const res = await fetchData<IResponseGetCart>(
+							'cart/coupon/remove',
+							{
+								method: 'POST',
+							},
+						);
 						if (res.success) {
 							await useCart.getState().fetchCart();
 						} else if (!res.success) {
 							console.error(res.error.message);
 						}
 					} catch (error) {
-						console.error('Failed to delete coupon:', error);
+						console.error('Failed to remove coupon:', error);
 					}
 				},
 			})),

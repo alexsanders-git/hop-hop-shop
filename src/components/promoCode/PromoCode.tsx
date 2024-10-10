@@ -14,7 +14,7 @@ export interface InterfacePromoCode {
 	setOpen: (open: boolean) => void;
 	className?: string;
 	disabled?: boolean;
-	coupon: { name: string; discount: number; id: number } | null;
+	coupon: { name: string; discount: number } | null;
 }
 
 export default function PromoCode(props: InterfacePromoCode) {
@@ -47,7 +47,7 @@ export default function PromoCode(props: InterfacePromoCode) {
 
 	const handleDeleteCoupon = async () => {
 		if (coupon) {
-			await deleteCoupon(coupon.id);
+			await deleteCoupon();
 			setValue('');
 		}
 	};
