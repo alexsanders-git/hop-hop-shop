@@ -20,6 +20,7 @@ interface IActions {
 	subtractItemFromCart: (id: number) => Promise<void>;
 	removeItemFromCart: (id: number) => Promise<void>;
 	addCoupon: (coupon: string) => Promise<string>;
+	deleteCoupon: () => Promise<void>;
 }
 
 export const useCart = create<IState & IActions>()(
@@ -109,6 +110,24 @@ export const useCart = create<IState & IActions>()(
 						return '';
 					} else if (!res.success) {
 						return res.error.message;
+					}
+				},
+
+				deleteCoupon: async () => {
+					try {
+						const res = await fetchData<IResponseGetCart>(
+							'cart/coupon/remove',
+							{
+								method: 'POST',
+							},
+						);
+						if (res.success) {
+							await useCart.getState().fetchCart();
+						} else if (!res.success) {
+							console.error(res.error.message);
+						}
+					} catch (error) {
+						console.error('Failed to remove coupon:', error);
 					}
 				},
 			})),

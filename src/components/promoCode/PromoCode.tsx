@@ -7,6 +7,7 @@ import { useCart } from '@/store/cart/Cart.store';
 
 import styles from './styles.module.scss';
 import DiscountArrow from '../../../public/payment/discountArrow.svg';
+import Image from 'next/image';
 
 export interface InterfacePromoCode {
 	open: boolean;
@@ -27,6 +28,7 @@ export default function PromoCode(props: InterfacePromoCode) {
 
 	const debouncedValue = useDebounce(value, 700);
 	const addCoupon = useCart((state) => state.addCoupon);
+	const deleteCoupon = useCart((state) => state.deleteCoupon);
 
 	useEffect(() => {
 		const fetchProduct = async () => {
@@ -42,6 +44,13 @@ export default function PromoCode(props: InterfacePromoCode) {
 			fetchProduct();
 		}
 	}, [addCoupon, coupon, debouncedValue]);
+
+	const handleDeleteCoupon = async () => {
+		if (coupon) {
+			await deleteCoupon();
+			setValue('');
+		}
+	};
 
 	return (
 		<div className={styles.wrapper}>
@@ -73,6 +82,15 @@ export default function PromoCode(props: InterfacePromoCode) {
 							/>
 							{data?.error && (
 								<div className={styles.errorMessage}>{data.error}</div>
+							)}
+							{data?.message === 'success' && (
+								<button
+									className={styles.deleteCoupon}
+									onClick={handleDeleteCoupon}
+								>
+									<p>Cancel Code</p>
+									<Image src="/basket.svg" width={24} height={24} alt={''} />
+								</button>
 							)}
 						</div>
 					</div>
