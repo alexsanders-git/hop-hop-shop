@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import { useDebounce } from '@/hooks/useDebounce';
 import { useCart } from '@/store/cart/Cart.store';
@@ -19,35 +19,51 @@ export interface InterfacePromoCode {
 export default function PromoCode(props: InterfacePromoCode) {
 	const { disabled = false, setOpen, open, className = '', coupon } = props;
 	const [value, setValue] = useState<string>('');
+	const [isRemoved, setIsRemoved] = useState(false);
 
 	const [data, setData] = useState<{
 		message?: string;
 		error?: string;
 	}>();
 
-	const debouncedValue = useDebounce(value, 700);
+	const debouncedValue = useDebounce(value, 500);
 	const addCoupon = useCart((state) => state.addCoupon);
 	const deleteCoupon = useCart((state) => state.deleteCoupon);
 
 	useEffect(() => {
 		const fetchProduct = async () => {
-			const couponData = await addCoupon(debouncedValue);
-			if (couponData === '') {
-				setData({ message: 'Success' });
-			} else {
-				setData({ error: couponData });
+			if (!isRemoved && debouncedValue && !coupon) {
+				const couponData = await addCoupon(debouncedValue);
+				if (couponData === '') {
+					setData({ message: 'Success' });
+				} else {
+					setData({ error: couponData });
+				}
 			}
 		};
 
-		if (debouncedValue !== '' && !coupon) {
+		if (debouncedValue !== '' && !coupon && !isRemoved) {
 			fetchProduct();
 		}
-	}, [addCoupon, coupon, debouncedValue]);
+
+		if (isRemoved) {
+			setValue('');
+		}
+	}, [addCoupon, coupon, debouncedValue, isRemoved]);
 
 	const handleDeleteCoupon = async () => {
-		if (coupon) {
-			await deleteCoupon();
+		setIsRemoved(true);
+		const res = await deleteCoupon();
+		if (res) {
 			setValue('');
+			setData({});
+		}
+	};
+
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+		setValue(e.target.value);
+		if (isRemoved) {
+			setIsRemoved(false);
 		}
 	};
 
@@ -73,8 +89,8 @@ export default function PromoCode(props: InterfacePromoCode) {
 						<div className={styles.inputWrapper}>
 							<input
 								readOnly={!!coupon}
-								onChange={(e) => setValue(e.target.value)}
-								value={value || coupon?.name}
+								onChange={handleChange}
+								value={coupon ? coupon.name : value}
 								type={'text'}
 								placeholder={'Enter code'}
 								className={`${styles.input} ${data?.error && styles.inputError} ${data?.message && styles.inputSuccess} ${coupon?.discount && styles.inputSuccess}`}
