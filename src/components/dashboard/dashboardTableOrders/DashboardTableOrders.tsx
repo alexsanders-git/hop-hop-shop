@@ -159,9 +159,6 @@ function DashboardItem(props: IDashboardItem) {
 					{formatDate(item.created_at)}
 				</div>
 				<div className={`${styles.col} ${styles.col7}`}>
-					{type === 'dashboard' && (
-						<RemoveButton callback={() => setIsShow(true)} />
-					)}
 					<EditButton
 						callback={() =>
 							type === 'dashboard'
@@ -169,6 +166,9 @@ function DashboardItem(props: IDashboardItem) {
 								: getProfileOrderId(item.id)
 						}
 					/>
+					{type === 'dashboard' && (
+						<RemoveButton callback={() => setIsShow(true)} />
+					)}
 				</div>
 			</li>
 		</>
