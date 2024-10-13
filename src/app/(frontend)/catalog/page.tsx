@@ -2,7 +2,7 @@
 import Pagination from '@/components/dashboard/pagination/Pagination';
 import styles from './styles.module.scss';
 import ProductCard from '@/components/ProductCard/ProductCard';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import Filters from '@/components/Filters/Filters';
 import { useCatalog } from '@/store/filters/Catalog.store';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -13,6 +13,14 @@ import Loading from '@/components/loading/Loading';
 import { MAX_PRICE, MIN_PRICE } from '@/utils/consts/consts';
 
 export default function CatalogPage() {
+	return (
+		<Suspense fallback={<Loading />}>
+			<CatalogPageContent />
+		</Suspense>
+	);
+}
+
+function CatalogPageContent() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const pathname = usePathname();
@@ -62,6 +70,7 @@ export default function CatalogPage() {
 
 	useEffect(() => {
 		fetchData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		page,
 		sorting,
