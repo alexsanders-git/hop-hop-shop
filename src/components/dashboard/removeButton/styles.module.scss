@@ -6,7 +6,12 @@
 	svg {
 		width: 24px;
 		height: 24px;
-		@include icons-state;
+		transition: var(--transition);
+		color: var(--primary-color);;
+
+		&:hover {
+			color: #90353b;
+		}
 	}
 
 	@media screen and (max-width: $media-lg) {

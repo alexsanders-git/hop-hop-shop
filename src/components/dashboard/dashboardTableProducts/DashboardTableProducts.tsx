@@ -139,8 +139,8 @@ function DashboardItem(props: IDashboardItem) {
 				</div>
 				<div className={`${styles.col} ${styles.col4}`}>{item.price}$</div>
 				<div className={`${styles.col} ${styles.col5}`}>
-					<RemoveButton callback={() => setIsShow(true)} />
 					<EditButton callback={() => getDashboardProductsId(item.id)} />
+					<RemoveButton callback={() => setIsShow(true)} />
 				</div>
 			</li>
 		</>
