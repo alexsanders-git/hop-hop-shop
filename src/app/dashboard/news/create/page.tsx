@@ -82,6 +82,9 @@ export default function DashboardNewsCreate() {
 			}, 2000);
 		} else {
 			setError(res.error.message || 'Something Was Wrong');
+			setTimeout(() => {
+				setError('');
+			}, 3000);
 		}
 	};
 
