@@ -46,20 +46,16 @@
 	position: relative;
 	z-index: 60;
 
-	.value, .opacity {
-		font-size: 21px;
-		font-weight: 700;
-		line-height: 1.1;
-		text-align: left;
-	}
+	font-size: 21px;
+	font-weight: 700;
+	line-height: 1.1;
+	text-align: left;
 
 
 	@media only screen and (max-width: $media-lg) {
 		padding: 9px 16px;
-		.value, .opacity {
-			font-size: 16px;
-			line-height: 18px;
-		}
+		font-size: 16px;
+		line-height: 18px;
 	}
 	@media only screen and (max-width: $media-md) {
 		box-shadow: 2px 2px 0 2px var(--primary-color);
@@ -157,4 +153,10 @@
 
 .loader {
 	background: transparent;
+}
+
+.placeholder {
+	&::placeholder {
+		opacity: 0.5;
+	}
 }

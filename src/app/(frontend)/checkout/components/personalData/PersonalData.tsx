@@ -49,7 +49,6 @@ export default function PersonalData() {
 			ref.current.touched.phone_number = true;
 		}
 	}, [user]);
-
 	return (
 		<div className={styles.container}>
 			<div className={styles.content}>
