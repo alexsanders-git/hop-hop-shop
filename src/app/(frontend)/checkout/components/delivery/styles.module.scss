@@ -52,10 +52,6 @@
 		}
 	}
 
-	.input:nth-child(1),
-	.input:nth-child(3) {
-		margin-right: 20px;
-	}
 
 	@media only screen and (max-width: $media-xl) {
 		margin-bottom: 0;
