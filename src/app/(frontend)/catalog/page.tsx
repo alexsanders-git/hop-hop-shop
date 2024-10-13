@@ -10,6 +10,7 @@ import { getCatalogData } from '@/services/catalog/catalog.service';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import { useDebounce } from '@/hooks/useDebounce';
 import Loading from '@/components/loading/Loading';
+import { MAX_PRICE, MIN_PRICE } from '@/utils/consts/consts';
 
 export default function CatalogPage() {
 	const searchParams = useSearchParams();
@@ -38,9 +39,9 @@ export default function CatalogPage() {
 			setIsLoading(true);
 			const sortValue = sorting?.value ? `&ordering=${sorting.value}` : '';
 			const minValue =
-				debouncedMinPrice > 0 ? `&price_min=${debouncedMinPrice}` : '';
+				debouncedMinPrice > MIN_PRICE ? `&price_min=${debouncedMinPrice}` : '';
 			const maxValue =
-				debouncedMaxPrice > 0 ? `&price_max=${debouncedMaxPrice}` : '';
+				debouncedMaxPrice < MAX_PRICE ? `&price_max=${debouncedMaxPrice}` : '';
 			const searchValue =
 				debouncedSearch.length > 0 ? `&name=${debouncedSearch}` : '';
 
@@ -71,7 +72,11 @@ export default function CatalogPage() {
 	]);
 
 	if (isLoading) {
-		return <Loading />;
+		return (
+			<div style={{ minHeight: '100vh' }}>
+				<Loading />
+			</div>
+		);
 	}
 
 	return (
@@ -87,14 +92,13 @@ export default function CatalogPage() {
 				/>
 			</div>
 			<div className={styles.body}>
-				<div className={styles.filters}>
-					<Filters />
-				</div>
+				<Filters />
 				<div className={styles.data}>
 					<div className={styles.products}>
 						{data?.items.map((product) => (
 							<div className={styles.product} key={product.id}>
 								<ProductCard
+									type={'catalog'}
 									product={product}
 									showCategory={true}
 									showButtons={{ favorite: true, cart: true, checkout: true }}
@@ -110,9 +114,7 @@ export default function CatalogPage() {
 							pageSize={10}
 							onPageChange={async (newPage) => {
 								setPage(newPage);
-								router.replace(`${pathname}?page=${newPage}`, {
-									// shallow: true,
-								});
+								router.replace(`${pathname}?page=${newPage}`);
 							}}
 						/>
 					</div>

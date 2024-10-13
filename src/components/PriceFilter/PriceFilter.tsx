@@ -5,14 +5,15 @@ import { useCatalog } from '@/store/filters/Catalog.store';
 import { getTrackBackground, Range } from 'react-range';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { MAX_PRICE, MIN_PRICE } from '@/utils/consts/consts';
 
 export default function PriceFilter() {
 	const { minPrice, maxPrice } = useCatalog((state) => state.catalog);
 	const setPriceRange = useCatalog((state) => state.setPriceRange);
 	const STEP = 1;
 	const rtl = false;
-	const MIN = 0;
-	const MAX = 100;
+	const MIN = MIN_PRICE;
+	const MAX = MAX_PRICE;
 
 	const router = useRouter();
 	const searchParams = useSearchParams();
@@ -143,9 +144,11 @@ export default function PriceFilter() {
 								onBlur={handleInputBlur}
 								placeholder={'0'}
 								className={`${robotoCondensed.className} ${styles.input}`}
+								min={MIN}
 							/>
 							<div className={styles.line}></div>
 							<input
+								max={MAX}
 								type="text"
 								value={maxPrice}
 								onChange={(e) => handleInputChange(1, e.target.value)}

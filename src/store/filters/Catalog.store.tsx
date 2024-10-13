@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
+import { MAX_PRICE, MIN_PRICE } from '@/utils/consts/consts';
 
 interface ISorting {
 	name: string;
@@ -14,7 +15,6 @@ interface ICategory {
 
 interface IState {
 	catalog: {
-		filters: any | null;
 		sorting: ISorting | null;
 		category: ICategory | null;
 		minPrice: number;
@@ -34,11 +34,10 @@ export const useCatalog = create<IState & IActions>()(
 		persist(
 			immer((set) => ({
 				catalog: {
-					filters: null,
 					sorting: null,
 					category: null,
-					minPrice: 0,
-					maxPrice: 100,
+					minPrice: MIN_PRICE,
+					maxPrice: MAX_PRICE,
 				},
 				setSorting: (payload) =>
 					set((state) => {
@@ -58,8 +57,8 @@ export const useCatalog = create<IState & IActions>()(
 						state.catalog.category = null;
 						state.catalog.sorting = null;
 						state.catalog.category = null;
-						state.catalog.maxPrice = 100;
-						state.catalog.minPrice = 0;
+						state.catalog.maxPrice = MAX_PRICE;
+						state.catalog.minPrice = MIN_PRICE;
 					}),
 			})),
 			{

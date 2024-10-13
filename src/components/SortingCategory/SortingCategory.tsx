@@ -39,10 +39,25 @@ export default function SortingCategory() {
 	// Отримуємо сортування з URL і зберігаємо його у Zustand
 	useEffect(() => {
 		const sortFromURL = searchParams.get('category');
-		if (sortFromURL && sortFromURL !== category?.value) {
-			setCategory({ name: 'category', value: sortFromURL });
+		console.log(sortFromURL);
+
+		// Перевіряємо, чи змінювалося сортування в Zustand
+		// І не сетаємо його з URL, якщо воно вже існує або збігається зі станом
+		if (!sortFromURL && category) {
+			// Якщо в URL немає сортування, але в стані воно є — очищуємо його
+			setCategory(null);
+		} else if (sortFromURL && sortFromURL !== category?.value) {
+			// Якщо в URL є нове сортування, але в стані інше або порожнє
+			if (!categoriesLoading) {
+				const name = data?.find((item) => item.value === sortFromURL)?.name;
+				console.log(
+					'hz',
+					data?.find((item) => item.value === sortFromURL)?.name,
+				);
+				setCategory({ name: name || '', value: sortFromURL });
+			}
 		}
-	}, [searchParams, category]);
+	}, [searchParams, setCategory, category, categoriesLoading]);
 
 	const handleSortChange = (item: ICategoryLocal) => {
 		setCategory(item); // Оновлюємо стан у Zustand

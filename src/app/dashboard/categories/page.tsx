@@ -10,7 +10,6 @@ import styles from './styles.module.scss';
 
 export default async function DashboardCategories() {
 	const categories = await getDashboardCategoriesServer();
-	console.log(categories);
 	if (!categories.success) {
 		return notFound();
 	}

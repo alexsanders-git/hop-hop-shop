@@ -7,11 +7,38 @@ import { robotoCondensed } from '@/styles/fonts/fonts';
 import Sorting from '@/components/Sorting/Sorting';
 import SortingCategory from '@/components/SortingCategory/SortingCategory';
 import PriceFilter from '@/components/PriceFilter/PriceFilter';
+import { MAX_PRICE, MIN_PRICE } from '@/utils/consts/consts';
 
 interface IProps {
 	disabled?: boolean;
 	isLoading?: boolean;
 }
+
+// Утиліта для оновлення URL
+const updateUrl = (
+	param: string,
+	searchParams: URLSearchParams,
+	router: any,
+	pathname: string,
+) => {
+	searchParams.delete(param);
+	router.replace(`${pathname}?${searchParams.toString()}`);
+};
+
+const FilterItem = ({
+	label,
+	onClear,
+}: {
+	label: string;
+	onClear: () => void;
+}) => (
+	<div
+		className={`${styles.reset} ${styles.opacity} ${robotoCondensed.className}`}
+	>
+		<span>{label}</span>
+		<X onClick={onClear} />
+	</div>
+);
 
 export default function Filters({
 	disabled = false,
@@ -29,33 +56,16 @@ export default function Filters({
 	const searchParams = useSearchParams();
 	const pathname = usePathname();
 
-	// Функція для видалення параметра з URL
-	const updateUrl = (param: string) => {
-		const currentParams = new URLSearchParams(searchParams.toString());
-		currentParams.delete(param);
-		router.replace(`${pathname}?${currentParams.toString()}`);
+	const handleClear = (param: string, clearAction: () => void) => {
+		updateUrl(
+			param,
+			new URLSearchParams(searchParams.toString()),
+			router,
+			pathname,
+		);
+		clearAction();
 	};
 
-	// Обробник для очищення категорії
-	const handleClearCategory = () => {
-		updateUrl('category'); // Видаляємо параметр з URL
-		setCategory(null); // Очищуємо в Zustand
-	};
-
-	// Обробник для очищення сортування
-	const handleClearSorting = () => {
-		updateUrl('ordering'); // Видаляємо параметр з URL
-		setSorting(null); // Очищуємо в Zustand
-	};
-
-	// Обробник для очищення цінового діапазону
-	const handleClearPrice = () => {
-		updateUrl('minPrice'); // Видаляємо параметри minPrice і maxPrice з URL
-		updateUrl('maxPrice');
-		setPriceRange(0, 100); // Очищуємо в Zustand
-	};
-
-	// Функція для скидання всіх фільтрів
 	const resetAllFilters = () => {
 		resetAll();
 		router.replace('/catalog');
@@ -86,30 +96,33 @@ export default function Filters({
 										</div>
 									)}
 									{category?.name && (
-										<div
-											className={`${styles.reset} ${styles.opacity} ${robotoCondensed.className}`}
-										>
-											<span>{category.name}</span>
-											<X color="#192C32" onClick={handleClearCategory} />
-										</div>
+										<FilterItem
+											label={category.name}
+											onClear={() =>
+												handleClear('category', () => setCategory(null))
+											}
+										/>
 									)}
 									{sorting?.name && (
-										<div
-											className={`${styles.reset} ${styles.opacity} ${robotoCondensed.className}`}
-										>
-											<span>{sorting.name}</span>
-											<X color="#192C32" onClick={handleClearSorting} />
-										</div>
+										<FilterItem
+											label={sorting.name}
+											onClear={() =>
+												handleClear('ordering', () => setSorting(null))
+											}
+										/>
 									)}
-									{minPrice > 0 && maxPrice && (
-										<div
-											className={`${styles.reset} ${styles.opacity} ${robotoCondensed.className}`}
-										>
-											<span>
-												{minPrice}-{maxPrice}
-											</span>
-											<X color="#192C32" onClick={handleClearPrice} />
-										</div>
+									{maxPrice < MAX_PRICE && (
+										<FilterItem
+											label={`${minPrice}-${maxPrice}$`}
+											onClear={() => {
+												handleClear('minPrice', () =>
+													setPriceRange(MIN_PRICE, MAX_PRICE),
+												);
+												handleClear('maxPrice', () =>
+													setPriceRange(MIN_PRICE, MAX_PRICE),
+												);
+											}}
+										/>
 									)}
 								</div>
 								<Sorting />
