@@ -20,6 +20,7 @@ import { createNews } from '@/services/dashboard/news/dashbpard.news.service';
 import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import { typesOfNews } from '@/utils/consts/consts';
 import { useUnsavedChanges } from '@/hooks/useCloseWindow';
+import NewsToolbar from '@/components/NewsToolbar/NewsToolbar';
 
 export default function DashboardNewsCreate() {
 	const [modal, setModal] = useState<boolean>(false);
@@ -150,6 +151,7 @@ export default function DashboardNewsCreate() {
 
 						<div className={styles.formWrapper}>
 							<div className={styles.form}>
+								<NewsToolbar />
 								<CustomSelect
 									name={'type'}
 									options={typesOfNews}
