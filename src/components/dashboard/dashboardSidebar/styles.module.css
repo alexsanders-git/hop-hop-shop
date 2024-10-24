@@ -1,0 +1,40 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  max-width: 240px;
+  width: 100%;
+  border-right: 2px solid var(--primary-color);
+  border-left: 2px solid var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
+}
+@media screen and (max-width: 1200px) {
+  .sidebar {
+    display: none;
+  }
+}
+.sidebar ul {
+  padding: 0;
+}
+.sidebar li {
+  list-style: none;
+}
+
+.link {
+  display: block;
+  border-bottom: 2px solid var(--primary-color);
+  cursor: pointer;
+  padding: 19px 0 19px 28px;
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 36px;
+  color: var(--primary-color);
+}
+.link:hover {
+  background-color: var(--gray-color);
+  color: var(--white-color);
+}
+
+.active {
+  background-color: var(--primary-color);
+  color: var(--beige-color);
+}/*# sourceMappingURL=styles.module.css.map */

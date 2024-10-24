@@ -43,3 +43,9 @@ export const getCouponById = async (id: string) => {
 		method: 'GET',
 	});
 };
+
+export const getAllMessagesDashboard = async () => {
+	return await fetchWithAuth<IResponse<IMessages>>('contact-us/', {
+		method: 'GET',
+	});
+};

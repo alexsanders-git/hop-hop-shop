@@ -9,6 +9,7 @@ const prepareHeaders = (isFile: boolean) => {
 
 	const token = Cookies.get(CookiesEnums.access_token);
 	if (token) {
+		console.log(token);
 		headers.set('Authorization', `Bearer ${token}`);
 	}
 	if (!isFile) {
@@ -68,6 +69,9 @@ export const fetchWithAuth = async <T>(
 			headers: prepareHeaders(isFile),
 			credentials: 'include',
 		});
+		// console.log('===========TEST===========');
+		// console.log(response);
+		// console.log('===========TEST===========');
 
 		if (response.status === 401) {
 			const tokenRefreshed = await refreshAuthToken(isFile);

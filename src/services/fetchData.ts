@@ -73,3 +73,25 @@ export const sendContactMessage = async (
 		},
 	});
 };
+
+export const getAllMessagesDashboard = async (): Promise<
+	IResponseJson<IMessages>
+> => {
+	return await fetchData<any>('contact-us/', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+};
+
+export const getMessageById = async (
+	id: string,
+): Promise<IResponseJson<IMessages>> => {
+	return await fetchData<any>(`contact-us/${id}`, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+};

@@ -6,4 +6,5 @@ export const sidebarLinks = [
 	{ name: 'Users', path: '/dashboard/users' },
 	{ name: 'News', path: '/dashboard/news' },
 	{ name: 'Coupons', path: '/dashboard/coupons' },
+	{ name: 'Messages', path: '/dashboard/messages' },
 ];
