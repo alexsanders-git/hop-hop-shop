@@ -52,8 +52,7 @@ export default function MessagesTable(props: IProps) {
 							</div>
 							<div className={`${styles.col} ${styles.col4}`}>{item.email}</div>
 							<div className={`${styles.col} ${styles.col5}`}>{item.phone}</div>
-							<div className={`${styles.col} ${styles.col6}`}>{item.email}</div>
-							<div className={`${styles.col} ${styles.col7}`}>
+							<div className={`${styles.col} ${styles.col6}`}>
 								<EditButton callback={() => getDashboardMessagesId(item.id)} />
 								<RemoveButton callback={() => alert('I am not ready yet')} />
 							</div>
