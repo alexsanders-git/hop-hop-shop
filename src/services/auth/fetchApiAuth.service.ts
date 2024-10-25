@@ -4,7 +4,7 @@ import { CookiesEnums, UserEnum } from '@/utils/enums/cookiesEnums';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL + '/';
 
-const prepareHeaders = (isFile: boolean) => {
+export const prepareHeaders = (isFile: boolean) => {
 	const headers = new Headers();
 
 	const token = Cookies.get(CookiesEnums.access_token);

@@ -3,26 +3,27 @@ import { useState } from 'react';
 
 import EditButton from '@/components/dashboard/editButton/editButton';
 import Pagination from '@/components/dashboard/pagination/Pagination';
-import { getDashboardUsers } from '@/services/dashboard/users/dashboard.users.service';
 import { robotoCondensed } from '@/styles/fonts/fonts';
-import { getDashboardUsersId } from '@/utils/paths/dashboard/dashboard.paths';
+import { getDashboardMessagesId } from '@/utils/paths/dashboard/dashboard.paths';
 
 import styles from './styles.module.scss';
+import { getMessagesDashboardClient } from '@/services/dashboard/messages/dashboard.messages.service';
+import RemoveButton from '@/components/dashboard/removeButton/RemoveButton';
 
 interface IProps {
-	users: IResponse<IUser>;
+	data: IResponse<IMessages>;
 }
 
-export default function DashboardTableUsers(props: IProps) {
-	const { users } = props;
-	const [newData, setNewData] = useState<IResponse<IUser>>(users);
+export default function MessagesTable(props: IProps) {
+	const { data } = props;
+	const [newData, setNewData] = useState(data);
+
 	const header = [
-		{ name: 'User ID' },
-		{ name: 'Name' },
-		{ name: 'Lastname' },
-		{ name: 'Role' },
-		{ name: 'Phone' },
+		{ name: 'ID' },
+		{ name: 'First Name' },
+		{ name: 'Last Name' },
 		{ name: 'Email' },
+		{ name: 'Phone' },
 		{ name: 'Actions' },
 	];
 
@@ -49,15 +50,12 @@ export default function DashboardTableUsers(props: IProps) {
 							<div className={`${styles.col} ${styles.col3}`}>
 								{item.last_name}
 							</div>
-							<div className={`${styles.col} ${styles.col4}`}>
-								{item.user_role}
-							</div>
-							<div className={`${styles.col} ${styles.col5}`}>
-								{item.phone_number}
-							</div>
+							<div className={`${styles.col} ${styles.col4}`}>{item.email}</div>
+							<div className={`${styles.col} ${styles.col5}`}>{item.phone}</div>
 							<div className={`${styles.col} ${styles.col6}`}>{item.email}</div>
 							<div className={`${styles.col} ${styles.col7}`}>
-								<EditButton callback={() => getDashboardUsersId(item.id)} />
+								<EditButton callback={() => getDashboardMessagesId(item.id)} />
+								<RemoveButton callback={() => alert('I am not ready yet')} />
 							</div>
 						</li>
 					))}
@@ -70,7 +68,7 @@ export default function DashboardTableUsers(props: IProps) {
 					totalCount={newData?.items_count}
 					pageSize={10}
 					onPageChange={async (page) => {
-						const res = await getDashboardUsers(page);
+						const res = await getMessagesDashboardClient(page);
 						if (res.success) {
 							setNewData(res.data);
 						}
