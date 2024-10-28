@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 
+import ButtonToTop from '@/components/ButtonToTop/ButtonToTop';
 import Container from '@/components/Container/Container';
 import Footer from '@/components/Footer/Footer';
 import Header from '@/components/Header/Header';
 
+import '@/styles/globals.scss';
 import '@/styles/reset.scss';
 import '@/styles/variables.scss';
-import '@/styles/globals.scss';
 
 import styles from './page.module.scss';
 
@@ -26,6 +27,7 @@ export default function FrontendLayout({
 					<div className={styles.wrapper}>{children}</div>
 				</Container>
 			</main>
+			<ButtonToTop />
 			<Footer />
 		</>
 	);
