@@ -1,7 +1,13 @@
 import Image from 'next/image';
+import type { Metadata } from 'next';
+
 import ContactUsForm from './ContactUsForm/ContactUsForm';
 
 import styles from './page.module.scss';
+
+export const metadata: Metadata = {
+	title: 'Contact Us - HopHopShop',
+};
 
 export default function ContactUsPage() {
 	return (

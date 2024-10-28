@@ -1,7 +1,7 @@
-import Container from '@/components/Container/Container';
+import type { Metadata } from 'next';
+
 import ContentBlock from '@/components/ContentBlock/ContentBlock';
-import Footer from '@/components/Footer/Footer';
-import Header from '@/components/Header/Header';
+
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './page.module.scss';
@@ -93,6 +93,10 @@ const data = {
 			listType: '',
 		},
 	],
+};
+
+export const metadata: Metadata = {
+	title: 'Cookies Policy - HopHopShop',
 };
 
 export default function CookiesPolicy() {

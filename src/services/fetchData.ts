@@ -34,11 +34,18 @@ export const getCategoriesById = async (
 	return await fetchData<ICategory>(`shop/categories/${id}`);
 };
 
+export const getProductById = async (
+	id: string,
+): Promise<IResponseJson<IProduct>> => {
+	return await fetchData<IProduct>(`shop/products/${id}/`);
+};
+
 export const getProductsByCategory = async (
 	id: string,
 ): Promise<IResponseJson<IResponse<IProduct>>> => {
 	return await fetchData<IResponse<IProduct>>(`shop/products/?category=${id}`);
 };
+
 export const getLatestArrivalProducts = async (): Promise<
 	IResponseJson<IProduct[]>
 > => {
@@ -50,6 +57,7 @@ export const getPopularProducts = async (): Promise<
 > => {
 	return await fetchData<IProduct[]>('shop/products/popular/');
 };
+
 export const getAllCategories = async (): Promise<
 	IResponseJson<ICategory[]>
 > => {

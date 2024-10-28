@@ -1,9 +1,14 @@
 import Image from 'next/image';
+import type { Metadata } from 'next';
 
 import ButtonLink from '@/components/ButtonLink/ButtonLink';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './page.module.scss';
+
+export const metadata: Metadata = {
+	title: 'Page not found - HopHopShop',
+};
 
 export default function Page() {
 	return (

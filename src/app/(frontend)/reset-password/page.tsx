@@ -1,8 +1,13 @@
 import Image from 'next/image';
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
 
 import styles from './page.module.scss';
 import ResetPasswordForm from './ResetPasswordForm/ResetPasswordForm';
+
+export const metadata: Metadata = {
+	title: 'Reset Password - HopHopShop',
+};
 
 export default function ResetPasswordPage({
 	searchParams,
