@@ -3,6 +3,9 @@
 import { useState } from 'react';
 
 import styles from './styles.module.scss';
+import type { Metadata } from 'next';
+import { getCouponById } from '@/services/dashboard/coupons/dashboard.coupons.service';
+import { notFound } from 'next/navigation';
 
 interface Message {
 	id: number;
@@ -13,6 +16,8 @@ interface Message {
 	message: string;
 	quickAnswer: string;
 }
+
+// TODO: Add metadata
 
 export default function MessageDetails() {
 	const [message, setMessage] = useState<Message | null>(null);

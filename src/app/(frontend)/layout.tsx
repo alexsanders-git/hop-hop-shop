@@ -11,7 +11,7 @@ import '@/styles/globals.scss';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
-	title: 'HopHopShop',
+	title: process.env.NEXT_PUBLIC_APP_NAME,
 	description: 'Where Every Hop Counts for Cool EDC Gear!',
 };
 

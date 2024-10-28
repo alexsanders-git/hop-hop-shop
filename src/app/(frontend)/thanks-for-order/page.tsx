@@ -5,6 +5,11 @@ import ButtonLink from '@/components/ButtonLink/ButtonLink';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './page.module.scss';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+	title: `Thanks Page - ${process.env.NEXT_PUBLIC_APP_NAME}`,
+};
 
 export default function ThanksPage() {
 	return (

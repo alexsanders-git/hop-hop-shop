@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import ProductCard from '@/components/ProductCard/ProductCard';
@@ -11,6 +12,18 @@ type Props = {
 		id: string;
 	};
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const category = await getCategoriesById(params.id);
+
+	if (!category.success) {
+		return notFound();
+	}
+
+	return {
+		title: `${category.data.name} - ${process.env.NEXT_PUBLIC_APP_NAME}`,
+	};
+}
 
 export default async function CategoryPage({ params: { id } }: Props) {
 	const category = await getCategoriesById(id);

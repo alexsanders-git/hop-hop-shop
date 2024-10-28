@@ -1,7 +1,12 @@
 import Image from 'next/image';
+import type { Metadata } from 'next';
 
 import styles from '@/app/(frontend)/login/styles.module.scss';
 import LoginForm from '@/template/LoginForm/LoginForm';
+
+export const metadata: Metadata = {
+	title: `Login - ${process.env.NEXT_PUBLIC_APP_NAME}`,
+};
 
 export default function Login() {
 	return (
