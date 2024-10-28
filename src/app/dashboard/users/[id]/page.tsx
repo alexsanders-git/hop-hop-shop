@@ -24,7 +24,7 @@ export async function generateMetadata({
 	}
 
 	return {
-		title: `Edit ${user.data.first_name} ${user.data.last_name} - HopHopShop Dashboard`,
+		title: `Edit ${user.data.first_name} ${user.data.last_name} - ${process.env.NEXT_PUBLIC_APP_NAME} Dashboard`,
 	};
 }
 

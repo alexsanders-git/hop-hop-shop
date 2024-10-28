@@ -10,7 +10,7 @@ import PersonalData from '@/app/(frontend)/checkout/components/personalData/Pers
 import styles from './styles.module.scss';
 
 export const metadata: Metadata = {
-	title: 'Checkout - HopHopShop',
+	title: `Checkout - ${process.env.NEXT_PUBLIC_APP_NAME}`,
 };
 
 export default function Checkout() {

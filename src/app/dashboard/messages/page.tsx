@@ -10,7 +10,7 @@ import { getMessagesDashboardServer } from '@/services/dashboard/messages/dashbo
 import styles from './styles.module.scss';
 
 export const metadata: Metadata = {
-	title: 'Messages - HopHopShop Dashboard',
+	title: `Messages - ${process.env.NEXT_PUBLIC_APP_NAME} Dashboard`,
 };
 
 export default async function DashboardMessages() {

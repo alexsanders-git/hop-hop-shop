@@ -9,7 +9,7 @@ import styles from './styles.module.scss';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-	title: 'Orders - HopHopShop Dashboard',
+	title: `Orders - ${process.env.NEXT_PUBLIC_APP_NAME} Dashboard`,
 };
 
 export default async function DashboardOrders() {

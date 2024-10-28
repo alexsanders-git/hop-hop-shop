@@ -8,7 +8,7 @@ import styles from './page.module.scss';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-	title: 'Thanks Page - HopHopShop',
+	title: `Thanks Page - ${process.env.NEXT_PUBLIC_APP_NAME}`,
 };
 
 export default function ThanksPage() {

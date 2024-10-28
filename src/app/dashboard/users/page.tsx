@@ -9,7 +9,7 @@ import { getUsersDashboardServer } from '@/services/dashboard/users/dashboard.us
 import styles from './styles.module.scss';
 
 export const metadata: Metadata = {
-	title: 'Users - HopHopShop Dashboard',
+	title: `Users - ${process.env.NEXT_PUBLIC_APP_NAME} Dashboard`,
 };
 
 export default async function DashboardUsers() {

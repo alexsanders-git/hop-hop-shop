@@ -6,7 +6,7 @@ import ContactUsForm from './ContactUsForm/ContactUsForm';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
-	title: 'Contact Us - HopHopShop',
+	title: `Contact Us - ${process.env.NEXT_PUBLIC_APP_NAME}`,
 };
 
 export default function ContactUsPage() {

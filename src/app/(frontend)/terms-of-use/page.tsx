@@ -151,7 +151,7 @@ const data = {
 };
 
 export const metadata: Metadata = {
-	title: 'Terms Of Use - HopHopShop',
+	title: `Terms Of Use - ${process.env.NEXT_PUBLIC_APP_NAME}`,
 };
 
 export default function TermsOfUse() {

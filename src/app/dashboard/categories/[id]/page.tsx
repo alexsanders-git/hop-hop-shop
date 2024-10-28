@@ -20,7 +20,7 @@ export async function generateMetadata({
 	}
 
 	return {
-		title: `Edit ${category.data.name} - HopHopShop Dashboard`,
+		title: `Edit ${category.data.name} - ${process.env.NEXT_PUBLIC_APP_NAME} Dashboard`,
 	};
 }
 

@@ -10,7 +10,7 @@ import { getDashboardProductsCreate } from '@/utils/paths/dashboard/dashboard.pa
 import styles from './styles.module.scss';
 
 export const metadata: Metadata = {
-	title: 'Products - HopHopShop Dashboard',
+	title: `Products - ${process.env.NEXT_PUBLIC_APP_NAME} Dashboard`,
 };
 
 export default async function DashboardProducts() {

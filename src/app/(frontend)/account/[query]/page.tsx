@@ -13,7 +13,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { query } = params;
 	return {
-		title: `${capitalizeFirstLetter(query)} - HopHopShop`,
+		title: `${capitalizeFirstLetter(query)} - ${process.env.NEXT_PUBLIC_APP_NAME}`,
 	};
 }
 export default async function AccountPage({ params: { query } }: Props) {

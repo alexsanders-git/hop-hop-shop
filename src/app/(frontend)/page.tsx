@@ -6,7 +6,7 @@ import TopSales from '@/template/TopSales/TopSales';
 import CategoryGridSection from '@/template/category-grid-section';
 
 export const metadata: Metadata = {
-	title: 'Home - HopHopShop',
+	title: `Home - ${process.env.NEXT_PUBLIC_APP_NAME}`,
 };
 
 export default function Home() {

@@ -10,7 +10,7 @@ import { getDashboardCouponsCreate } from '@/utils/paths/dashboard/dashboard.pat
 import styles from './styles.module.scss';
 
 export const metadata: Metadata = {
-	title: 'Coupons - HopHopShop Dashboard',
+	title: `Coupons - ${process.env.NEXT_PUBLIC_APP_NAME} Dashboard`,
 };
 
 export default async function DashboardCoupons() {

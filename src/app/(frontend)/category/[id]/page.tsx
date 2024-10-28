@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	}
 
 	return {
-		title: `${category.data.name} - HopHopShop`,
+		title: `${category.data.name} - ${process.env.NEXT_PUBLIC_APP_NAME}`,
 	};
 }
 

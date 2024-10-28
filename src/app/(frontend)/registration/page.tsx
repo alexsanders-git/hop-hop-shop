@@ -7,7 +7,7 @@ import { robotoCondensed } from '@/styles/fonts/fonts';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
-	title: 'Registration - HopHopShop',
+	title: `Registration - ${process.env.NEXT_PUBLIC_APP_NAME}`,
 };
 
 export default function Registration() {

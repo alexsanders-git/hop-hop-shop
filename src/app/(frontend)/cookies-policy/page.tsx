@@ -96,7 +96,7 @@ const data = {
 };
 
 export const metadata: Metadata = {
-	title: 'Cookies Policy - HopHopShop',
+	title: `Cookies Policy - ${process.env.NEXT_PUBLIC_APP_NAME}`,
 };
 
 export default function CookiesPolicy() {

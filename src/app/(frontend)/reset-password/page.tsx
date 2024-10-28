@@ -6,7 +6,7 @@ import styles from './page.module.scss';
 import ResetPasswordForm from './ResetPasswordForm/ResetPasswordForm';
 
 export const metadata: Metadata = {
-	title: 'Reset Password - HopHopShop',
+	title: `Reset Password - ${process.env.NEXT_PUBLIC_APP_NAME}`,
 };
 
 export default function ResetPasswordPage({

@@ -12,7 +12,7 @@ import { getDashboardCategoriesCreate } from '@/utils/paths/dashboard/dashboard.
 import styles from './styles.module.scss';
 
 export const metadata: Metadata = {
-	title: 'Categories - HopHopShop Dashboard',
+	title: `Categories - ${process.env.NEXT_PUBLIC_APP_NAME} Dashboard`,
 };
 
 export default async function DashboardCategories() {

@@ -5,7 +5,7 @@ import styles from '@/app/(frontend)/login/styles.module.scss';
 import LoginForm from '@/template/LoginForm/LoginForm';
 
 export const metadata: Metadata = {
-	title: 'Login - HopHopShop',
+	title: `Login - ${process.env.NEXT_PUBLIC_APP_NAME}`,
 };
 
 export default function Login() {
