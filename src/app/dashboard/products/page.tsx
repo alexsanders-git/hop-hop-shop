@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import DashboardHeadLine from '@/components/dashboard/dashboardHeadLine/DashboardHeadLine';
@@ -7,6 +8,10 @@ import { getProductsDashboardServer } from '@/services/dashboard/products/dashbo
 import { getDashboardProductsCreate } from '@/utils/paths/dashboard/dashboard.paths';
 
 import styles from './styles.module.scss';
+
+export const metadata: Metadata = {
+	title: 'Products - HopHopShop Dashboard',
+};
 
 export default async function DashboardProducts() {
 	const products = await getProductsDashboardServer();
