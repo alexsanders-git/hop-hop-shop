@@ -25,9 +25,11 @@ export default function FrontendLayout({
 			<main className={styles.main}>
 				<Container>
 					<div className={styles.wrapper}>{children}</div>
+					<div className={styles.buttonToTop}>
+						<ButtonToTop />
+					</div>
 				</Container>
 			</main>
-			<ButtonToTop />
 			<Footer />
 		</>
 	);
