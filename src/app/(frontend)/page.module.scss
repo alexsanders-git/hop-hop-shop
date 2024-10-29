@@ -1,4 +1,4 @@
-@import "../../styles/media";
+@import '../../styles/media';
 
 .main {
 	flex: 1 1 auto;
@@ -15,4 +15,9 @@
 	border-bottom: 2px solid var(--primary-color);
 	padding-top: 70px;
 	position: relative;
+}
+
+.buttonToTop {
+	display: flex;
+	justify-content: flex-end;
 }
