@@ -73,3 +73,9 @@ export const sendContactMessage = async (
 		},
 	});
 };
+
+export const getTopNews = async (
+	type: string,
+): Promise<IResponseJson<IResponse<INews>>> => {
+	return await fetchData<IResponse<INews>>(`news/news/?type=${type}`);
+};
