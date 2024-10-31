@@ -22,7 +22,7 @@ export default async function TopNews() {
 	}
 
 	return (
-		<section id="category">
+		<section>
 			<SectionContainer>
 				<h2 className={styles.title}>TOP News</h2>
 			</SectionContainer>

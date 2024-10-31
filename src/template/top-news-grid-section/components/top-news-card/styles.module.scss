@@ -21,12 +21,13 @@
 
 .newsImage {
 	object-fit: cover;
-	-webkit-mask-size: cover;
 	-webkit-mask-position: center;
 	-webkit-mask-repeat: no-repeat;
-	mask-size: cover;
+	-webkit-mask-size: contain;
 	mask-position: center;
 	mask-repeat: no-repeat;
+	object-position: center;
+	mask-size: contain;
 }
 
 .theHottestContainer {
@@ -47,7 +48,7 @@
 	width: 100%;
 	height: 100%;
 	background-image: url('/news/theHottestLine.svg');
-	background-size: cover;
+	background-size: contain;
 	background-position: center;
 	background-repeat: no-repeat;
 }
@@ -70,7 +71,7 @@
 	width: 100%;
 	height: 100%;
 	background-image: url('/news/hopHopChoiceLine.svg');
-	background-size: cover;
+	background-size: contain;
 	background-position: center;
 	background-repeat: no-repeat;
 }
@@ -93,14 +94,14 @@
 	width: 100%;
 	height: 100%;
 	background-image: url('/news/hopHopChoiceLine.svg');
-	background-size: cover;
+	background-size: contain;
 	background-position: center;
 	background-repeat: no-repeat;
 	background-image: url('/news/oneLoveLine.svg');
 }
 
 .customerSecretContainer {
-	width: 35%;
+	width: 45%;
 	aspect-ratio: 3 / 4;
 	position: relative;
 }
@@ -116,7 +117,7 @@
 .customerSecretContainer::after {
 	width: 100%;
 	height: 100%;
-	background-size: cover;
+	background-size: contain;
 	background-position: center;
 	background-repeat: no-repeat;
 	background-image: url('/news/customerSecretLine.svg');
