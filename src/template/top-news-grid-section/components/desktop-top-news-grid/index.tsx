@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import TopNewsGridCard from '../top-news-card';
 
 import styles from './styles.module.scss';
@@ -44,9 +45,12 @@ export default function DesktopTopNewsGrid({
 				</a>
 			</div>
 			<div className={styles.middle}>
-				<picture>
-					<img src={'/news/magazineDesktop.svg'} alt="Magazine" />
-				</picture>
+				<Image
+					src={'/news/magazineDesktop.svg'}
+					alt="Magazine"
+					width={0}
+					height={0}
+				/>
 			</div>
 			<div className={styles.column}>
 				<a

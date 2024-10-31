@@ -1,5 +1,6 @@
 import shortText from '@/utils/func/shortText';
 
+import Image from 'next/image';
 import styles from './styles.module.scss';
 
 interface IProps {
@@ -24,10 +25,11 @@ export default function TopNewsGridCard({
 				<h1>{title}</h1>
 			</div>
 			<picture className={`${typeContainer} ${styles.imageContainer}`}>
-				<img
+				<Image
 					src={`/news/${type}Image.png`}
 					alt="Market"
 					className={`${typeImage} ${styles.newsImage}`}
+					fill
 				/>
 			</picture>
 			<div className={styles.description}>

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import TopNewsGridCard from '../top-news-card';
 
 import styles from './styles.module.scss';
@@ -18,9 +19,12 @@ export default function MobileTopNewsGrid({
 	return (
 		<div className={styles.container}>
 			<div className={styles.left}>
-				<picture>
-					<img src={'/news/magazineMobile.svg'} alt="Magazine" />
-				</picture>
+				<Image
+					src={'/news/magazineMobile.svg'}
+					alt="Magazine"
+					width={0}
+					height={0}
+				/>
 			</div>
 			<div className={styles.column}>
 				<a
