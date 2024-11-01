@@ -79,3 +79,9 @@ export const getTopNews = async (
 ): Promise<IResponseJson<IResponse<INews>>> => {
 	return await fetchData<IResponse<INews>>(`news/news/?type=${type}`);
 };
+
+export const getAllNews = async (
+	page: number,
+): Promise<IResponseJson<IResponse<INews[]>>> => {
+	return await fetchData<IResponse<INews[]>>(`news/news?page=${page}`);
+};
