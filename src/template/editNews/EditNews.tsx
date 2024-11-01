@@ -11,7 +11,6 @@ import Input from '@/components/Input/Input';
 import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
-import Textarea from '@/components/textarea/Textarea';
 import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
@@ -22,6 +21,8 @@ import {
 } from '@/services/dashboard/news/dashbpard.news.service';
 import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import { typesOfNews } from '@/utils/consts/consts';
+import { robotoCondensed } from '@/styles/fonts/fonts';
+import EditorNews from '@/components/dashboard/EditorNews/EditorNews';
 
 interface IProps {
 	news: INews;
@@ -183,12 +184,14 @@ export default function DashboardNewsEdit(props: IProps) {
 								type={'text'}
 								placeholder={'Enter title'}
 							/>
-							<Textarea
-								title={'Content'}
-								name={'content'}
-								rows={10}
-								placeholder={'Enter description'}
-							/>
+							<div className={`${styles.inputWrapper}`}>
+								<span
+									className={`${styles.title} ${robotoCondensed.className}`}
+								>
+									Description
+								</span>
+								<EditorNews name="content" value={news.content} />
+							</div>
 						</div>
 						<DashboardUploadImage
 							handleFileChange={handleFileChange}

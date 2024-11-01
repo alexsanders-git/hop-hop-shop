@@ -31,9 +31,13 @@
 }
 
 .theHottestContainer {
-	width: 50%;
+	width: 45%;
 	aspect-ratio: 3 / 4;
 	position: relative;
+
+	@media only screen and (max-width: $media-md) {
+		width: 60%;
+	}
 }
 
 .theHottestImage {
@@ -47,16 +51,20 @@
 .theHottestContainer::after {
 	width: 100%;
 	height: 100%;
-	background-image: url('/news/theHottestLine.svg');
 	background-size: contain;
 	background-position: center;
 	background-repeat: no-repeat;
+	background-image: url('/news/theHottestLine.svg');
 }
 
 .hopHopChoiceContainer {
 	width: 50%;
 	aspect-ratio: 4.5 / 4;
 	position: relative;
+
+	@media only screen and (max-width: $media-md) {
+		width: 60%;
+	}
 }
 
 .hopHopChoiceImage {
@@ -70,16 +78,20 @@
 .hopHopChoiceContainer::after {
 	width: 100%;
 	height: 100%;
-	background-image: url('/news/hopHopChoiceLine.svg');
 	background-size: contain;
 	background-position: center;
 	background-repeat: no-repeat;
+	background-image: url('/news/hopHopChoiceLine.svg');
 }
 
 .oneLoveContainer {
 	width: 50%;
 	aspect-ratio: 4.6 / 4;
 	position: relative;
+
+	@media only screen and (max-width: $media-md) {
+		width: 60%;
+	}
 }
 
 .oneLoveImage {
@@ -93,7 +105,6 @@
 .oneLoveContainer::after {
 	width: 100%;
 	height: 100%;
-	background-image: url('/news/hopHopChoiceLine.svg');
 	background-size: contain;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -104,6 +115,10 @@
 	width: 45%;
 	aspect-ratio: 3 / 4;
 	position: relative;
+
+	@media only screen and (max-width: $media-md) {
+		width: 60%;
+	}
 }
 
 .customerSecretImage {
