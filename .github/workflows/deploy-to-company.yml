@@ -26,7 +26,8 @@ jobs:
 
           # Видаляємо вміст папки front і копіюємо новий вміст
           rm -rf front
-          cp -R ../hop-hop-shop/* front/
+          mkdir front
+          cp -R ../* front/
 
           # Коміт та пуш у компанійський репозиторій
           git add .
