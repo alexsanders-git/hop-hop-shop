@@ -1,12 +1,5 @@
-import OrderDetailsPictures from '@/components/OrderDetailsPictures/OrderDetailsPictures';
-import SectionContainer from '@/components/SectionContainer/SectionContainer';
+import styles from './styles.module.scss';
 
-export default async function TestPage() {
-	return (
-		<section>
-			<SectionContainer>
-				<OrderDetailsPictures />
-			</SectionContainer>
-		</section>
-	);
+export default function Test() {
+	return <div className={styles.container}></div>;
 }
