@@ -1,11 +1,10 @@
-@import "../../styles/media";
+@import '../../styles/media';
 
 .main {
 	flex: 1 1 auto;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	min-height: 100vh;
 }
 
 .wrapper {
@@ -17,3 +16,9 @@
 	padding-top: 70px;
 	position: relative;
 }
+
+.buttonToTop {
+	display: flex;
+	justify-content: flex-end;
+}
+

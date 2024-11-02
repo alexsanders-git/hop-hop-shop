@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import DashboardHeadLine from '@/components/dashboard/dashboardHeadLine/DashboardHeadLine';
@@ -6,6 +7,10 @@ import EmptyDataBlock from '@/components/dashboard/emptyDataBlock/EmptyDataBlock
 import { getUsersDashboardServer } from '@/services/dashboard/users/dashboard.users.service';
 
 import styles from './styles.module.scss';
+
+export const metadata: Metadata = {
+	title: `Users - ${process.env.NEXT_PUBLIC_APP_NAME} Dashboard`,
+};
 
 export default async function DashboardUsers() {
 	const users = await getUsersDashboardServer();

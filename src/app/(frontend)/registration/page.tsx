@@ -1,6 +1,14 @@
-import styles from '@/app/(frontend)/registration/styles.module.scss';
-import { robotoCondensed } from '@/styles/fonts/fonts';
+import type { Metadata } from 'next';
+
 import RegistrationForm from '@/template/RegistrationForm/RegistrationForm';
+
+import { robotoCondensed } from '@/styles/fonts/fonts';
+
+import styles from './page.module.scss';
+
+export const metadata: Metadata = {
+	title: `Registration - ${process.env.NEXT_PUBLIC_APP_NAME}`,
+};
 
 export default function Registration() {
 	return (

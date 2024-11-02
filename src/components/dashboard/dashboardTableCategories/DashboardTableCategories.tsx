@@ -139,8 +139,8 @@ function DashboardItem(props: IDashboardItem) {
 					{truncateText(item.description, 60)}
 				</div>
 				<div className={`${styles.col} ${styles.col4}`}>
-					<RemoveButton callback={() => setIsShow(true)} />
 					<EditButton callback={() => getDashboardCategoriesId(item.id)} />
+					<RemoveButton callback={() => setIsShow(true)} />
 				</div>
 			</li>
 		</>

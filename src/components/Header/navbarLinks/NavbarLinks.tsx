@@ -1,10 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+import React from 'react';
+
 import { usePathname, useRouter } from 'next/navigation';
 
 import styles from './NavbarLinks.module.scss';
-import React from 'react';
 
 export default function NavbarLinks() {
 	const router = useRouter();
@@ -24,7 +25,7 @@ export default function NavbarLinks() {
 
 	return (
 		<ul className={styles.nav}>
-			<Link href="#" className={styles.nav_link}>
+			<Link href="/news" className={styles.nav_link}>
 				NEWS
 			</Link>
 			<Link

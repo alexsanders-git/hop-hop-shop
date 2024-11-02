@@ -1,5 +1,12 @@
 'use client';
-import { Form, Formik, FormikHelpers, FormikValues } from 'formik';
+import {
+	Field,
+	Form,
+	Formik,
+	FormikHelpers,
+	FormikValues,
+	useFormikContext,
+} from 'formik';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect, useState } from 'react';
 import * as yup from 'yup';
@@ -11,7 +18,6 @@ import Input from '@/components/Input/Input';
 import Loader from '@/components/Loader/Loader';
 import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
-import Textarea from '@/components/textarea/Textarea';
 import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
@@ -20,6 +26,8 @@ import { createNews } from '@/services/dashboard/news/dashbpard.news.service';
 import { revalidateFunc } from '@/utils/func/revalidate/revalidate';
 import { typesOfNews } from '@/utils/consts/consts';
 import { useUnsavedChanges } from '@/hooks/useCloseWindow';
+import { robotoCondensed } from '@/styles/fonts/fonts';
+import EditorNews from '@/components/dashboard/EditorNews/EditorNews';
 
 export default function DashboardNewsCreate() {
 	const [modal, setModal] = useState<boolean>(false);
@@ -82,6 +90,9 @@ export default function DashboardNewsCreate() {
 			}, 2000);
 		} else {
 			setError(res.error.message || 'Something Was Wrong');
+			setTimeout(() => {
+				setError('');
+			}, 3000);
 		}
 	};
 
@@ -162,12 +173,14 @@ export default function DashboardNewsCreate() {
 									type={'text'}
 									placeholder={'Enter title'}
 								/>
-								<Textarea
-									title={'Content'}
-									name={'content'}
-									rows={10}
-									placeholder={'Enter description'}
-								/>
+								<div className={`${styles.inputWrapper}`}>
+									<span
+										className={`${styles.title} ${robotoCondensed.className}`}
+									>
+										Description
+									</span>
+									<EditorNews name="content" />
+								</div>
 							</div>
 							<DashboardUploadImage
 								handleFileChange={handleFileChange}

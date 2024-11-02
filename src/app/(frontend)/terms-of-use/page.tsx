@@ -2,6 +2,7 @@ import ContentBlock from '@/components/ContentBlock/ContentBlock';
 import { robotoCondensed } from '@/styles/fonts/fonts';
 
 import styles from './page.module.scss';
+import type { Metadata } from 'next';
 
 const data = {
 	sections: [
@@ -147,6 +148,10 @@ const data = {
 			],
 		},
 	],
+};
+
+export const metadata: Metadata = {
+	title: `Terms Of Use - ${process.env.NEXT_PUBLIC_APP_NAME}`,
 };
 
 export default function TermsOfUse() {

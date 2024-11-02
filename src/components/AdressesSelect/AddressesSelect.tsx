@@ -146,7 +146,7 @@ const AddressesSelect = (props: IProps) => {
 				<input
 					{...field}
 					{...rest}
-					className={`${styles.select} ${isValidClass}`}
+					className={`${robotoCondensed.className} ${styles.select} ${isValidClass} ${searchValue.length === 0 && styles.placeholder}`}
 					value={searchValue}
 					onChange={handleInputChange}
 					onClick={handleToggleSelect}

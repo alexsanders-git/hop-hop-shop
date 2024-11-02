@@ -146,8 +146,8 @@ function DashboardItem(props: IDashboardItem) {
 					{formatDate(item.valid_to)}
 				</div>
 				<div className={`${styles.col} ${styles.col7}`}>
-					<RemoveButton callback={() => setIsShow(true)} />
 					<EditButton callback={() => getDashboardCouponsId(item.id)} />
+					<RemoveButton callback={() => setIsShow(true)} />
 				</div>
 			</li>
 		</>

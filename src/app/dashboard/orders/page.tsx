@@ -6,6 +6,11 @@ import EmptyDataBlock from '@/components/dashboard/emptyDataBlock/EmptyDataBlock
 import { getOrdersDashboardServer } from '@/services/dashboard/orders/dashboard.orders.service';
 
 import styles from './styles.module.scss';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+	title: `Orders - ${process.env.NEXT_PUBLIC_APP_NAME} Dashboard`,
+};
 
 export default async function DashboardOrders() {
 	const orders = await getOrdersDashboardServer();

@@ -1,3 +1,5 @@
+import type { Metadata } from 'next';
+
 import CheckoutHeader from '@/app/(frontend)/checkout/components/checkoutHeader/CheckoutHeader';
 import Delivery from '@/app/(frontend)/checkout/components/delivery/Delivery';
 import FinishedCheckout from '@/app/(frontend)/checkout/components/finishedCheckout/FinishedCheckout';
@@ -6,6 +8,10 @@ import Payment from '@/app/(frontend)/checkout/components/payment/Payment';
 import PersonalData from '@/app/(frontend)/checkout/components/personalData/PersonalData';
 
 import styles from './styles.module.scss';
+
+export const metadata: Metadata = {
+	title: `Checkout - ${process.env.NEXT_PUBLIC_APP_NAME}`,
+};
 
 export default function Checkout() {
 	return (

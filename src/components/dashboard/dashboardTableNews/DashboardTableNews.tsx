@@ -220,8 +220,8 @@ function DashboardItem(props: IDashboardItem) {
 					{formatDate(item.created_at)}
 				</div>
 				<div className={`${styles.col} ${styles.col5}`}>
-					<RemoveButton callback={() => setIsShow(true)} />
 					<EditButton callback={() => getDashboardNewsId(item.id)} />
+					<RemoveButton callback={() => setIsShow(true)} />
 				</div>
 			</li>
 		</>
