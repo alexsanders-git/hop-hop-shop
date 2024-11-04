@@ -93,3 +93,9 @@ export const getAllNews = async (
 ): Promise<IResponseJson<IResponse<INews[]>>> => {
 	return await fetchData<IResponse<INews[]>>(`news/news?page=${page}`);
 };
+
+export const getNewsById = async (
+	id: string,
+): Promise<IResponseJson<INews>> => {
+	return await fetchData<INews>(`news/news/${id}`);
+};
