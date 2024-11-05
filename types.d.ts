@@ -1,4 +1,12 @@
 interface IResponse<T> {
+	returned_orders_growth: any;
+	returned_orders: any;
+	completed_orders_growth: any;
+	completed_orders: any;
+	active_orders_growth: any;
+	active_orders: any;
+	total_orders_growth: any;
+	total_orders: any;
 	items: T[];
 	items_count: number;
 	pagination: IPagination;
