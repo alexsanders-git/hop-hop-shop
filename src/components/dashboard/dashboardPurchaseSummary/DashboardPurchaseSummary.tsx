@@ -20,7 +20,7 @@ export default function DashboardPurchaseSummary() {
 		const fetchStatistics = async () => {
 			try {
 				const periodInDays =
-					period === 'month' ? 1 : period === 'halfYear' ? 182 : 365;
+					period === 'month' ? 30 : period === 'halfYear' ? 182 : 365;
 				const fetchedStatistics =
 					await getDashboardOrderStatistics(periodInDays);
 				if (fetchedStatistics.success) {
