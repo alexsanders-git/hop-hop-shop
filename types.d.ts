@@ -95,9 +95,9 @@ interface IOrders {
 }
 
 enum UserRole {
-	User = 'User';
-	Admin = 'Admin';
-	Owner = 'Owner';
+	User = 'User',
+	Admin = 'Admin',
+	Owner = 'Owner',
 }
 
 interface IPagination {
