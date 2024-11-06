@@ -1,4 +1,4 @@
-import DashboardPurchaseSummary from '@/components/dashboard/dashboardPurchaseSummary/DashboardPurchaseSummary';
+import { DashboardPurchaseSummary } from '@/components/dashboard/dashboardPurchaseSummary';
 import styles from './styles.module.scss';
 import { getOrdersDashboardServer } from '@/services/dashboard/orders/dashboard.orders.service';
 import DashboardTableOrders from '@/components/dashboard/dashboardTableOrders/DashboardTableOrders';

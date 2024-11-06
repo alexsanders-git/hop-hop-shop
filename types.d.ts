@@ -1,12 +1,4 @@
 interface IResponse<T> {
-	returned_orders_growth: any;
-	returned_orders: any;
-	completed_orders_growth: any;
-	completed_orders: any;
-	active_orders_growth: any;
-	active_orders: any;
-	total_orders_growth: any;
-	total_orders: any;
 	items: T[];
 	items_count: number;
 	pagination: IPagination;
@@ -103,9 +95,9 @@ interface IOrders {
 }
 
 enum UserRole {
-	User = 'User',
-	Admin = 'Admin',
-	Owner = 'Owner',
+	User = 'User';
+	Admin = 'Admin';
+	Owner = 'Owner';
 }
 
 interface IPagination {
@@ -190,4 +182,15 @@ interface INews {
 	type: string;
 	image: string;
 	created_at: string;
+}
+
+interface IOrderStatisitcs {
+	total_orders: number;
+	active_orders: number;
+	completed_orders: number;
+	returned_orders: number;
+	total_orders_growth: number;
+	active_orders_growth: number;
+	completed_orders_growth: number;
+	returned_orders_growth: number
 }

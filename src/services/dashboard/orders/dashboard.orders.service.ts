@@ -34,7 +34,7 @@ export const updateOderById = async (id: string, data: string) => {
 };
 
 export const getDashboardOrderStatistics = async (days: number) => {
-	return await fetchWithAuthServer<IResponse<IOrders>>(
+	return await fetchWithAuthServer<IOrderStatisitcs>(
 		`checkout/order-statistics/?period=${days}`,
 		{
 			method: 'GET',

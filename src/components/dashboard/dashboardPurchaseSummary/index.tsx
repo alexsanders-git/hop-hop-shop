@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 'use client';
 import React, { useEffect, useState } from 'react';
 import styles from './styles.module.scss';
@@ -12,7 +11,7 @@ interface StatisticItem {
 	percentage: number;
 }
 
-export default function DashboardPurchaseSummary() {
+export function DashboardPurchaseSummary() {
 	const [period, setPeriod] = useState('month');
 	const [statistics, setStatistics] = useState<StatisticItem[]>([]);
 	const [comparisonDate, setComparisonDate] = useState('');
@@ -123,7 +122,7 @@ const DashboardTableSelector: React.FC<DashboardTableSelectorProps> = ({
 								? 'Month'
 								: option === 'halfYear'
 									? 'Half Year'
-									: 'year'}
+									: 'Year'}
 						</div>
 					))}
 				</div>
