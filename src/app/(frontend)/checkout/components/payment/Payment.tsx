@@ -10,8 +10,6 @@ import CreditCard from '@/app/(frontend)/checkout/components/creditCard/CreditCa
 import { useCart } from '@/store/cart/Cart.store';
 import { useCheckout } from '@/store/checkout/Checkout.store';
 
-import { cryptoPaymentInit } from '@/services/crypto/crypto.service';
-
 import { validationSchemaCreditCard } from '@/validation/creditCard/creditCard.validation';
 
 import styles from './styles.module.scss';

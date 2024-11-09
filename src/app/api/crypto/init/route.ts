@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Client, resources } from 'coinbase-commerce-node';
+import { Client, resources, CreateCharge } from 'coinbase-commerce-node';
 
 // Ініціалізація Coinbase API
 Client.init(String(process.env.COINBASE_API));
@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
 	const { totalPrice } = await request.json();
 
 	try {
-		const chargeData = {
+		const chargeData: CreateCharge = {
 			name: 'HopHopShop',
 			description: 'Where Every Hop Counts for Cool EDC Gear!',
 			pricing_type: 'fixed_price',
