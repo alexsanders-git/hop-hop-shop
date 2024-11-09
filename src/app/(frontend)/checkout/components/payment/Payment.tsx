@@ -2,14 +2,19 @@
 import { useFormik } from 'formik';
 import { useState } from 'react';
 
+import Button from '@/components/Button/Button';
 import Accordion from '@/app/(frontend)/checkout/components/accordion/Accordion';
 import ReadyData from '@/app/(frontend)/checkout/components/readyData/ReadyData';
-import Button from '@/components/Button/Button';
+import CreditCard from '@/app/(frontend)/checkout/components/creditCard/CreditCard';
+
+import { useCart } from '@/store/cart/Cart.store';
 import { useCheckout } from '@/store/checkout/Checkout.store';
+
+import { cryptoPaymentInit } from '@/services/crypto/crypto.service';
+
 import { validationSchemaCreditCard } from '@/validation/creditCard/creditCard.validation';
 
 import styles from './styles.module.scss';
-import CreditCard from '@/app/(frontend)/checkout/components/creditCard/CreditCard';
 
 type CreditCardType = 'card' | 'googlePay' | 'coinbase' | 'paypal';
 
@@ -27,6 +32,34 @@ export default function Payment() {
 	const paymentMethod = useCheckout((state) => state.checkout.paymentMethod);
 	const setPaymentMethod = useCheckout((state) => state.setPaymentMethod);
 	const setCreditCard = useCheckout((state) => state.setCreditCard);
+	const fetchCart = useCart((state) => state?.fetchCart);
+
+	const coinbasePayment = async () => {
+		// const cart = await fetchCart();
+
+		// TODO: Get cart
+		// TODO: Get user data
+		// TODO: Create order in DB
+		// TODO: Add preloader
+
+		try {
+			const res = await fetch('/api/crypto/init', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ totalPrice: '0.01' }),
+			});
+
+			if (!res.ok) {
+				throw new Error('Failed to initiate payment');
+			}
+
+			const data = await res.json();
+
+			window.open(data.charge.hosted_url, '_blank');
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	const onSubmit = (values: ICreditCard) => {
 		setCreditCard(values);
@@ -56,7 +89,7 @@ export default function Payment() {
 								className={`${styles.typeImageWrapper} ${item.type !== paymentMethod ? styles.inactive : ''}`}
 								onClick={() => {
 									setPaymentMethod(item.type);
-									if (item.type !== 'card') {
+									if (item.type !== 'card' && item.type !== 'coinbase') {
 										alert('This payment method is not available yet');
 									}
 								}}
@@ -69,7 +102,13 @@ export default function Payment() {
 							</div>
 						))}
 					</div>
+
 					{paymentMethod === 'card' && <CreditCard formik={formik} />}
+
+					{paymentMethod === 'coinbase' && (
+						<Button text="Pay With Crtpto" onClick={coinbasePayment} />
+					)}
+
 					<Button
 						className={styles.button}
 						onClick={formik.submitForm}

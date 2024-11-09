@@ -24,6 +24,7 @@
 		"@tiptap/react": "^2.8.0",
 		"@tiptap/starter-kit": "^2.8.0",
 		"aos": "^2.3.4",
+		"coinbase-commerce-node": "^1.0.4",
 		"formik": "^2.4.6",
 		"heic2any": "^0.0.4",
 		"husky": "^9.0.11",

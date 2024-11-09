@@ -1,17 +1,11 @@
-'use client';
-
 import SectionContainer from '@/components/SectionContainer/SectionContainer';
 
 import styles from './styles.module.scss';
 
-export default function Test() {
-	const onClickHandler = () => {
-		console.log('test');
-	};
-
+export default async function Test() {
 	return (
 		<SectionContainer>
-			<button onClick={() => onClickHandler()}>TEST</button>
+			<div>TEST</div>
 		</SectionContainer>
 	);
 }
