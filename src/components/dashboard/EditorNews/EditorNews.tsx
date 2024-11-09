@@ -3,11 +3,11 @@ import styles from './styles.module.scss';
 import { Editor, EditorContent, useEditor } from '@tiptap/react';
 import React, { useCallback, useState } from 'react';
 import { Image as LucideIcon, Link as LucideLink } from 'lucide-react';
-import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import TextAlign from '@tiptap/extension-text-align';
-import Image from '@tiptap/extension-image';
-import Link from '@tiptap/extension-link';
+import { StarterKit } from '@tiptap/starter-kit';
+import { Underline } from '@tiptap/extension-underline';
+import { TextAlign } from '@tiptap/extension-text-align';
+import { Image } from '@tiptap/extension-image';
+import { Link } from '@tiptap/extension-link';
 import { useFormikContext } from 'formik';
 
 interface IProps {

@@ -141,6 +141,7 @@ interface ItemProps {
 const calculateComparisonDate = (period: string) => {
 	const now = new Date();
 	switch (period) {
+
 		case 'month':
 			now.setMonth(now.getMonth() - 1);
 			break;
