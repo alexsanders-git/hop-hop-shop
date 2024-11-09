@@ -82,8 +82,8 @@ interface DashboardTableSelectorProps {
 }
 
 const DashboardTableSelector: React.FC<DashboardTableSelectorProps> = ({
-	                                                                       onPeriodChange,
-                                                                       }) => {
+	onPeriodChange,
+}) => {
 	const [selectedPeriod, setSelectedPeriod] = useState('month');
 	const [isVisible, setIsVisible] = useState(false);
 	return (
