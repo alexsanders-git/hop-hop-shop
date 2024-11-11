@@ -129,3 +129,32 @@
 	white-space: pre-wrap;
 	box-sizing: border-box;
 }
+
+.buttonsContainer{
+	display: flex;
+	flex-direction:row;
+	justify-content: flex-end;
+}
+
+.deleteButton {
+	max-width: 250px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	font-weight: 300;
+	margin-right: 30px;
+	font-size: 18px;
+	line-height: 1.67;
+	text-decoration: underline;
+	color: var(--gray-color);
+
+	@media only screen and (max-width: $media-lg) {
+		max-width: 200px;
+	}
+
+	@media only screen and (max-width: $media-md) {
+		max-width: 150px;
+		font-size: 18px;
+	}
+}

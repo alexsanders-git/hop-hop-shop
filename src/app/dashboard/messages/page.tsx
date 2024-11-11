@@ -15,11 +15,9 @@ export const metadata: Metadata = {
 
 export default async function DashboardMessages() {
 	const messages = await getMessagesDashboardServer();
-
 	if (!messages.success) {
 		notFound();
 	}
-
 	return (
 		<div className={styles.wrapper}>
 			<DashboardHeadLine
@@ -27,7 +25,6 @@ export default async function DashboardMessages() {
 				compact={true}
 				text={'Messages'}
 			/>
-
 			{messages.data.items.length > 0 ? (
 				<MessagesTable data={messages.data} />
 			) : (

@@ -17,7 +17,6 @@ interface IProps {
 export default function MessagesTable(props: IProps) {
 	const { data } = props;
 	const [newData, setNewData] = useState(data);
-
 	const header = [
 		{ name: 'ID' },
 		{ name: 'First Name' },
@@ -26,7 +25,6 @@ export default function MessagesTable(props: IProps) {
 		{ name: 'Phone' },
 		{ name: 'Actions' },
 	];
-
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.container}>
