@@ -104,6 +104,7 @@ export default function DashboardItem({
 											? `/dashboard/${dashboardName}/${item.id}`
 											: `/account/${dashboardName}/${item.id}`
 									}
+									type={dashboardName === 'messages' ? 'view' : 'edit'}
 								/>
 								{shouldShowRemoveButton(dashboardName, restrictedNames) &&
 								type === 'dashboard' ? (
@@ -116,9 +117,7 @@ export default function DashboardItem({
 							shortText(
 								column.key === 'created_at'
 									? formatDate(getNestedValue(item, column.key))
-									: typeof getNestedValue(item, column.key) === 'string'
-										? getNestedValue(item, column.key)
-										: `${getNestedValue(item, column.key)}`,
+									: `${getNestedValue(item, column.key)}`,
 							)
 						)}
 					</div>
