@@ -16,7 +16,7 @@
 	padding-top: 6px;
 	background-color: var(--beige-color);
 	transition: var(--transition);
-	animation: bounce 1s ease-in-out infinite;
+	animation: bounce 0.98s ease-in-out infinite;
 
 	svg {
 		width: 35px;
@@ -70,15 +70,5 @@
 
 .hidden {
 	opacity: 0;
-	animation: hideButton 0.3s ease;
 	pointer-events: none;
-}
-
-@keyframes hideButton {
-	0% {
-		opacity: 1;
-	}
-	100% {
-		opacity: 0;
-	}
 }

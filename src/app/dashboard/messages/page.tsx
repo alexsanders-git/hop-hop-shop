@@ -3,10 +3,10 @@ import { notFound } from 'next/navigation';
 
 import DashboardHeadLine from '@/components/dashboard/dashboardHeadLine/DashboardHeadLine';
 import EmptyDataBlock from '@/components/dashboard/emptyDataBlock/EmptyDataBlock';
-import MessagesTable from '@/components/dashboard/dashboard-table-messages';
 
 import { getMessagesDashboardServer } from '@/services/dashboard/messages/dashboard.messages.service';
 
+import DashboardTable from '@/components/dashboard/dashboardTable/DashboardTable';
 import styles from './styles.module.scss';
 
 export const metadata: Metadata = {
@@ -26,7 +26,17 @@ export default async function DashboardMessages() {
 				text={'Messages'}
 			/>
 			{messages.data.items.length > 0 ? (
-				<MessagesTable data={messages.data} />
+				<DashboardTable
+					columns={[
+						{ key: 'id', label: 'ID' },
+						{ key: 'first_name', label: 'First Name' },
+						{ key: 'last_name', label: 'Last Name' },
+						{ key: 'email', label: 'Email' },
+						{ key: 'phone', label: 'Phone' },
+						{ key: 'actions', label: 'Actions' },
+					]}
+					data={messages.data}
+				/>
 			) : (
 				<EmptyDataBlock />
 			)}
