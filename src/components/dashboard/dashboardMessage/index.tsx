@@ -13,7 +13,11 @@ const MessageDetails = () => {
 				resetForm();
 			}}
 		>
-			{({ handleReset, isValid }: FormikProps<{ quickAnswer: string }>) => (
+			{({
+				handleReset,
+				isValid,
+				dirty,
+			}: FormikProps<{ quickAnswer: string }>) => (
 				<Form>
 					<div className={styles.detailsWrapper}>
 						<label htmlFor="quickAnswer" className={styles.detailsLabel}>
@@ -39,7 +43,7 @@ const MessageDetails = () => {
 							type="submit"
 							className={styles.saveButton}
 							text="Send Message"
-							disabled={!isValid}
+							disabled={!(isValid && dirty)}
 						/>
 					</div>
 				</Form>
