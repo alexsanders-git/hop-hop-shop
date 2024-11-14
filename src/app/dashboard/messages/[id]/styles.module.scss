@@ -1,4 +1,4 @@
- @import 'src/styles/media';
+@import 'src/styles/media';
 
 .pageWrapper {
 	position: relative;
@@ -106,25 +106,6 @@
 	font-size: 21px;
 	line-height: 1.13;
 	letter-spacing: -0.02em;
-	word-wrap: break-word;
-	white-space: pre-wrap;
-	box-sizing: border-box;
-}
-
-.quickAnswerArea {
-	border: 2px solid var(--primary-color);
-	box-shadow: 3px 3px 0 3px var(--primary-color);
-	border-radius: 32px;
-	padding: 16px;
-	width: 100%;
-	min-height: 350px;
-	height: fit-content;
-	background-color: var(--lightgreen-color);
-	font-weight: 700;
-	font-size: 21px;
-	line-height: 1.13;
-	letter-spacing: -0.02em;
-	color: var(--gray-color);
 	word-wrap: break-word;
 	white-space: pre-wrap;
 	box-sizing: border-box;

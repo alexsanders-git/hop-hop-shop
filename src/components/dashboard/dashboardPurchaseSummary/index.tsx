@@ -56,7 +56,6 @@ export function DashboardPurchaseSummary() {
 		setComparisonDate(calculateComparisonDate(period));
 		fetchStatistics();
 	}, [period]);
-
 	return (
 		<>
 			<DashboardTableSelector
@@ -100,7 +99,7 @@ const DashboardTableSelector: React.FC<DashboardTableSelectorProps> = ({
 						? 'Month'
 						: selectedPeriod === 'halfYear'
 							? 'Half Year'
-							: 'year'}
+							: 'Year'}
 				</div>
 				<ChevronUp
 					className={`${styles.chevron} ${isVisible ? styles.rotate : ''}`}
