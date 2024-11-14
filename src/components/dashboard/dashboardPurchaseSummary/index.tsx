@@ -139,6 +139,7 @@ interface ItemProps {
 
 const calculateComparisonDate = (period: string) => {
 	const now = new Date();
+	/* eslint-disable */
 	switch (period) {
 		case 'month':
 			now.setMonth(now.getMonth() - 1);
@@ -152,6 +153,7 @@ const calculateComparisonDate = (period: string) => {
 		default:
 			break;
 	}
+	/* eslint-enable */
 	return now.toLocaleString('en-US', { month: 'long', year: 'numeric' });
 };
 

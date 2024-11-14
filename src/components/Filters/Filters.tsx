@@ -73,10 +73,13 @@ export default function Filters({
 
 	return (
 		<div
-			className={`${styles.selectWrapper} ${disabled || (isLoading && styles.disabled)}`}
+			className={`${styles.selectWrapper} ${!isShow && styles.borderNone} ${disabled || (isLoading && styles.disabled)}`}
 		>
 			<div className={styles.selectContainer}>
-				<div className={`${styles.select}`} onClick={() => setIsShow(!isShow)}>
+				<div
+					className={`${styles.select} ${!isShow && styles.borderNoneSelect} `}
+					onClick={() => setIsShow(!isShow)}
+				>
 					<span className={`${robotoCondensed.className} ${styles.value}`}>
 						Filters
 					</span>
