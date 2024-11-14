@@ -1,5 +1,10 @@
+.wrapper {
+	width: 100%;
+	padding: 0 20px 20px;
+	border-bottom: 2px solid #7A8E98;
+}
+
 .container {
-	padding: 0 25px;
 }
 
 .track {
@@ -27,12 +32,6 @@
 	background-color: var(--yellow-color);
 }
 
-.wrapper {
-	width: 100%;
-	border-bottom: 2px solid #7A8E98;
-	padding: 20px 0;
-}
-
 .rangeContainer {
 
 }
@@ -41,7 +40,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-
+width: 100%;
 	.line {
 		width: 16px;
 		height: 2px;

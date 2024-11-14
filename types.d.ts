@@ -192,5 +192,5 @@ interface IOrderStatisitcs {
 	total_orders_growth: number;
 	active_orders_growth: number;
 	completed_orders_growth: number;
-	returned_orders_growth: number
+	returned_orders_growth: number;
 }

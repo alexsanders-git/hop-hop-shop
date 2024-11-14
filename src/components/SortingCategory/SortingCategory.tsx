@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCatalog } from '@/store/filters/Catalog.store';
 import { useFetch } from '@/hooks/useFetch';
 import Loader from '@/components/Loader/Loader';
-import shortText from '@/utils/func/shortText'; // Zustand для зберігання стану
+import shortText from '@/utils/func/shortText';
 
 interface ICategoryLocal {
 	name: string;
@@ -57,6 +57,7 @@ export default function SortingCategory() {
 				setCategory({ name: name || '', value: sortFromURL });
 			}
 		}
+		// eslint-disable-next-line
 	}, [searchParams, setCategory, category, categoriesLoading]);
 
 	const handleSortChange = (item: ICategoryLocal) => {

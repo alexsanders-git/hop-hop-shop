@@ -1,8 +1,5 @@
 import { DashboardPurchaseSummary } from '@/components/dashboard/dashboardPurchaseSummary';
 import styles from './styles.module.scss';
-import { getOrdersDashboardServer } from '@/services/dashboard/orders/dashboard.orders.service';
-import DashboardTableOrders from '@/components/dashboard/dashboardTableOrders/DashboardTableOrders';
-import EmptyDataBlock from '@/components/dashboard/emptyDataBlock/EmptyDataBlock';
 
 export default async function Dashboard() {
 	// need rewrite DashboardTableOrders?
