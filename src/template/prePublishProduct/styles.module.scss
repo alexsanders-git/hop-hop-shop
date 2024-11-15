@@ -79,16 +79,20 @@
 	background: var(--lightblue-color);
 	border: 2px solid var(--primary-color);
 	padding: 60px 40px;
+	height: 850px;
 
-	@media only screen and (max-width: 1100px) {
-		flex-direction: column;
+	@media only screen and (max-width: $media-xxl) {
+		height: 550px;
 	}
 
 	@media only screen and (max-width: $media-xl) {
+		height: 500px;
 		padding: 40px 20px;
 	}
 
 	@media only screen and (max-width: 1100px) {
+		flex-direction: column;
+		height: 100%;
 		padding: 20px;
 	}
 
