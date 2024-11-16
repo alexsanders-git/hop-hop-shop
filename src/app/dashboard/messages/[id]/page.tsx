@@ -28,13 +28,19 @@ export default async function MessageDetailsPage(props: IMessageProps) {
 				</div>
 				<div className={styles.detailsWrapper}>
 					<p className={styles.detailsLabel}>E-Mail</p>
-					<a href={`mailto:${message?.email}`} className={styles.details}>
+					<a
+						href={`mailto:${message?.email}`}
+						className={`${styles.details} ${styles.link}`}
+					>
 						{message?.email}
 					</a>
 				</div>
 				<div className={styles.detailsWrapper}>
 					<p className={styles.detailsLabel}>Phone Number</p>
-					<a href={`tel:${message?.phone}`} className={styles.details}>
+					<a
+						href={`tel:${message?.phone}`}
+						className={`${styles.details} ${styles.link}`}
+					>
 						{message?.phone}
 					</a>
 				</div>
