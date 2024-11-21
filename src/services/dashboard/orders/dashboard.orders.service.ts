@@ -26,7 +26,7 @@ export const getDashboardOrders = async (page: number) => {
 	);
 };
 
-export const updateOderById = async (id: string, data: string) => {
+export const updateOrderById = async (id: string, data: string) => {
 	return await fetchWithAuth<IOrderDetails>(`checkout/orders/${id}`, {
 		method: 'PATCH',
 		body: JSON.stringify({ order_status: data }),
