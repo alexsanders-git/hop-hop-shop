@@ -130,3 +130,31 @@
 		}
 	}
 }
+
+.orderSummary {
+	border-top: 2px solid var(--primary-color);
+	justify-content: end;
+	display: grid;
+	font-size: 20px;
+	padding-right: 24px;
+
+	@media screen and (max-width: $media-lg) {
+		font-size: 16px;
+	}
+	@media screen and (max-width: $media-md) {
+		font-size: 12px;
+		width: 800px;
+	}
+
+	ul {
+		padding: 12px;
+
+		li {
+			padding: 6px;
+
+			strong {
+				font-weight: 600;
+			}
+		}
+	}
+}
