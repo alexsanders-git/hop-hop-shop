@@ -104,7 +104,11 @@ export default function DashboardItem({
 											? `/dashboard/${dashboardName}/${item.id}`
 											: `/account/${dashboardName}/${item.id}`
 									}
-									type={dashboardName === 'messages' ? 'view' : 'edit'}
+									type={
+										dashboardName === 'messages' || dashboardName === 'orders'
+											? 'view'
+											: 'edit'
+									}
 								/>
 								{shouldShowRemoveButton(dashboardName, restrictedNames) &&
 								type === 'dashboard' ? (

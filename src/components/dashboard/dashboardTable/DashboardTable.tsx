@@ -6,6 +6,7 @@ import MessageError from '@/components/messageError/MessageError';
 import MessageSuccess from '@/components/messageSuccess/MessageSuccess';
 import Pagination from '../pagination/Pagination';
 import DashboardItem from './DashboardItem';
+import { DashboardTableOrder } from './DashboardTableOrder';
 
 import useDashboardNameFromUrl from '@/utils/func/useDashboardNameFromUrl';
 import { getDashboardServerFunc } from '@/utils/getDashboardServerFunc';
@@ -22,20 +23,30 @@ interface IPagination {
 }
 
 interface IData {
-	items: IDataItem[];
-	items_count: number;
-	pagination: IPagination;
+	items?: IDataItem[];
+	items_count?: number;
+	pagination?: IPagination;
+}
+
+interface IOrderSummary {
+	subtotal_price: number;
+	total_price: number;
+	tax_percent: number;
+	shipping_rate: number;
+	discount: number | null;
 }
 
 interface ITableProps {
 	columns: Array<{ key: string; label: string }>;
 	data: IData;
 	type?: 'profile' | 'dashboard';
+	orderSummary?: IOrderSummary;
 }
 
 export default function DashboardTable({
 	columns,
 	data,
+	orderSummary,
 	type = 'dashboard',
 }: ITableProps) {
 	const dashboardName = useDashboardNameFromUrl();
@@ -89,14 +100,19 @@ export default function DashboardTable({
 							/>
 						))}
 					</ul>
+					{orderSummary ? (
+						<DashboardTableOrder orderSummary={orderSummary} />
+					) : null}
 				</div>
-				<Pagination
-					num_pages={newData.pagination.num_pages}
-					currentPage={newData.pagination.current_page}
-					totalCount={newData.items_count}
-					pageSize={10}
-					onPageChange={handlePageChange}
-				/>
+				{data.pagination ? (
+					<Pagination
+						num_pages={newData.pagination.num_pages}
+						currentPage={newData.pagination.current_page}
+						totalCount={newData.items_count}
+						pageSize={10}
+						onPageChange={handlePageChange}
+					/>
+				) : null}
 			</div>
 		</>
 	);
