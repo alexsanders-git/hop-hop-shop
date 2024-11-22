@@ -145,6 +145,8 @@ interface IResponseJson<T> {
 }
 
 interface IOrderDetails {
+	tax_percent: number;
+	shipping_rate: number;
 	id: number;
 	created_at: string;
 	customer: null | IUser;
