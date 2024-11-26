@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { forwardRef, Ref } from 'react';
+import { forwardRef, ReactNode, Ref } from 'react';
 import CloseIcon from '../../../public/closIconForModal.svg';
 
 import { robotoCondensed } from '@/styles/fonts/fonts';
@@ -10,15 +10,25 @@ import styles from './ActionModal.module.scss';
 interface ModalProps {
 	show: boolean;
 	title: string;
-	text: string;
+	text: string | ReactNode;
 	type: 'success' | 'error';
 	iconSrc: string;
 	className?: string;
 	onClose: () => void;
+	children?: ReactNode;
 }
 
 const ActionModal = forwardRef(function ActionModal(
-	{ show, title, text, type, iconSrc, className = '', onClose }: ModalProps,
+	{
+		show,
+		title,
+		text,
+		type,
+		iconSrc,
+		className = '',
+		onClose,
+		children,
+	}: ModalProps,
 	ref: Ref<HTMLDivElement>,
 ) {
 	if (!show) return null;
@@ -53,6 +63,7 @@ const ActionModal = forwardRef(function ActionModal(
 					text="Let's shop!"
 					className={`${styles.closeButton} ${type === 'error' ? styles.error : ''}`}
 				></ButtonLink>
+				{children}
 			</div>
 		</div>
 	);

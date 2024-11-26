@@ -1,4 +1,4 @@
-@import "src/styles/media";
+@import 'src/styles/media';
 
 .form {
 	display: flex;
@@ -18,14 +18,12 @@
 	@media screen and (max-width: 395px) {
 		gap: 25px;
 	}
-
 }
 
 .inputWrapper {
 	display: flex;
 	gap: 25px;
 	width: 638px;
-
 
 	@media screen and (max-width: $media-md) {
 		width: 90%;
@@ -55,10 +53,10 @@
 	}
 	@media screen and (max-width: 600px) {
 		width: 100%;
-
 	}
 
-	button, .buttonLink {
+	button,
+	.buttonLink {
 		font-size: 34px;
 		font-weight: 400;
 		line-height: 38px;
@@ -69,7 +67,7 @@
 		}
 	}
 
-	.checkbox span{
+	.checkbox span {
 		font-size: 24px;
 		font-weight: 300;
 		line-height: 32.04px;
@@ -89,7 +87,6 @@
 			line-height: 24px;
 		}
 	}
-
 
 	.google {
 		display: flex;
@@ -114,14 +111,13 @@
 			width: 48px;
 			height: 48px;
 			cursor: pointer;
-			border: 2px solid #192C32;
-			background: #DFE7EB;
+			border: 2px solid #192c32;
+			background: #dfe7eb;
 			border-radius: 15px;
 			box-shadow: 2px 2px 0 2px var(--primary-color);
 		}
 	}
 }
-
 
 .phoneInputWrapper {
 	width: 100%;
@@ -134,7 +130,6 @@
 
 		&::placeholder {
 			opacity: 0.5;
-
 		}
 	}
 
@@ -154,7 +149,6 @@
 		margin-bottom: 7px;
 	}
 }
-
 
 .error {
 	width: 100%;
@@ -183,10 +177,23 @@
 	font-weight: 300;
 
 	@media screen and (max-width: $media-lg) {
-        font-size: 20px;
+		font-size: 20px;
 	}
 	@media screen and (max-width: $media-md) {
 		line-height: 24px;
 	}
+}
 
+.recendTimer {
+	text-align: center;
+	width: 100%;
+	color: #507178;
+	font-size: 24px;
+	font-weight: 300;
+	line-height: 40px;
+	text-decoration-line: underline;
+	text-decoration-style: solid;
+	text-underline-position: from-font;
+	text-decoration-skip-ink: none;
+	cursor:default;
 }
