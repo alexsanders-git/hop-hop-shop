@@ -1,0 +1,20 @@
+@import "src/styles/media";
+
+.actionModal {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 1360px;
+	height: 100%;
+	z-index: 1000;
+    @media only screen and (max-width: 1450px) {
+		width: calc(100% - 40px * 2);
+	}
+    @media only screen and (max-width: $media-md) {
+		width: calc(100% - 20px * 2);
+	}
+    @media only screen and (max-width: $media-xs) {
+		width: calc(100% - 10px * 2);
+	}
+}

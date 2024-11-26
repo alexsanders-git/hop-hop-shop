@@ -12,7 +12,7 @@ export const removeOrderById = async (id: number) => {
 		method: 'DELETE',
 	});
 };
-export const getOderById = async (id: number) => {
+export const getOrderById = async (id: number) => {
 	return await fetchWithAuthServer<IOrderDetails>(`checkout/orders/${id}`, {
 		method: 'GET',
 	});
@@ -26,7 +26,7 @@ export const getDashboardOrders = async (page: number) => {
 	);
 };
 
-export const updateOderById = async (id: string, data: string) => {
+export const updateOrderById = async (id: string, data: string) => {
 	return await fetchWithAuth<IOrderDetails>(`checkout/orders/${id}`, {
 		method: 'PATCH',
 		body: JSON.stringify({ order_status: data }),

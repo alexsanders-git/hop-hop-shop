@@ -86,3 +86,21 @@ export const fetchWithAuth = async <T>(
 		throw error;
 	}
 };
+
+export const emailVerify = async (token: string): Promise<boolean> => {
+	try {
+		const response = await fetch(
+			`${baseUrl}auth/email-verify/?token=${token}`,
+			{
+				method: 'GET',
+				headers: {
+					Accept: 'application/json',
+				},
+			},
+		);
+		return response.ok;
+	} catch (error) {
+		console.log('Error verifying token:', error);
+		throw error;
+	}
+};
