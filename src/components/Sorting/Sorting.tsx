@@ -1,9 +1,9 @@
-import styles from './styles.module.scss';
-import { Check, ChevronUp } from 'lucide-react';
-import { robotoCondensed } from '@/styles/fonts/fonts';
-import { useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCatalog } from '@/store/filters/Catalog.store';
+import { robotoCondensed } from '@/styles/fonts/fonts';
+import { Check, ChevronUp } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import styles from './styles.module.scss';
 
 export interface InterfaceISortingItem {
 	name: string;
@@ -77,7 +77,11 @@ export default function Sorting() {
 					<div className={styles.items}>
 						{sortingItems.map((item, index) => (
 							<div
-								onClick={() => handleSortChange(item)}
+								onClick={() => {
+									!selected
+										? handleSortChange(item)
+										: handleSortChange({ name: '', value: '' });
+								}}
 								key={index}
 								className={styles.item}
 							>
