@@ -1,7 +1,7 @@
+import { MAX_PRICE, MIN_PRICE } from '@/utils/consts/consts';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import { MAX_PRICE, MIN_PRICE } from '@/utils/consts/consts';
 
 interface ISorting {
 	name: string;
@@ -54,7 +54,6 @@ export const useCatalog = create<IState & IActions>()(
 					}),
 				resetAll: () =>
 					set((state) => {
-						state.catalog.category = null;
 						state.catalog.sorting = null;
 						state.catalog.category = null;
 						state.catalog.maxPrice = MAX_PRICE;

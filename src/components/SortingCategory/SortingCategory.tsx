@@ -1,12 +1,12 @@
-import styles from './styles.module.scss';
-import { Check, ChevronUp } from 'lucide-react';
-import { robotoCondensed } from '@/styles/fonts/fonts';
-import { useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCatalog } from '@/store/filters/Catalog.store';
-import { useFetch } from '@/hooks/useFetch';
 import Loader from '@/components/Loader/Loader';
-import shortText from '@/utils/func/shortText';
+import { useFetch } from '@/hooks/useFetch';
+import { useCatalog } from '@/store/filters/Catalog.store';
+import { robotoCondensed } from '@/styles/fonts/fonts';
+import shortText from '@/utils/func/shortText'; // Zustand для зберігання стану
+import { Check, ChevronUp } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import styles from './styles.module.scss';
 
 interface ICategoryLocal {
 	name: string;
@@ -39,7 +39,6 @@ export default function SortingCategory() {
 	// Отримуємо сортування з URL і зберігаємо його у Zustand
 	useEffect(() => {
 		const sortFromURL = searchParams.get('category');
-		console.log(sortFromURL);
 
 		// Перевіряємо, чи змінювалося сортування в Zustand
 		// І не сетаємо його з URL, якщо воно вже існує або збігається зі станом
@@ -57,8 +56,7 @@ export default function SortingCategory() {
 				setCategory({ name: name || '', value: sortFromURL });
 			}
 		}
-		// eslint-disable-next-line
-	}, [searchParams, setCategory, category, categoriesLoading]);
+	}, [searchParams, setCategory, category, categoriesLoading, data]);
 
 	const handleSortChange = (item: ICategoryLocal) => {
 		setCategory(item); // Оновлюємо стан у Zustand
@@ -94,7 +92,11 @@ export default function SortingCategory() {
 						{data &&
 							data.map((item, index) => (
 								<div
-									onClick={() => handleSortChange(item)}
+									onClick={() => {
+										!selected
+											? handleSortChange(item)
+											: handleSortChange({ name: '', value: '' });
+									}}
 									key={index}
 									className={styles.item}
 								>
