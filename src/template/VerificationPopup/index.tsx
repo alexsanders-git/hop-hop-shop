@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import ActionModal from '../ActionModal/ActionModal';
+import ActionModal from '../../components/ActionModal/ActionModal';
 import styles from './styles.module.scss';
 import { emailVerify } from '@/services/auth/fetchApiAuth.service';
 
 const VerificationPopup = () => {
-	const searchParams = useSearchParams();
-	const token = searchParams.get('token');
+	const token = useSearchParams().get('token');
 	const [isPopupVisible, setIsPopupVisible] = useState(false);
 
 	useEffect(() => {
