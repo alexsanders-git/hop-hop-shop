@@ -15,6 +15,7 @@ interface ModalProps {
 	iconSrc: string;
 	className?: string;
 	onClose: () => void;
+	buttonAction?: () => void;
 	children?: ReactNode;
 }
 
@@ -28,6 +29,7 @@ const ActionModal = forwardRef(function ActionModal(
 		className = '',
 		onClose,
 		children,
+		buttonAction,
 	}: ModalProps,
 	ref: Ref<HTMLDivElement>,
 ) {
@@ -58,11 +60,13 @@ const ActionModal = forwardRef(function ActionModal(
 						/>
 					</div>
 				</div>
-				<ButtonLink
-					href={'/'}
-					text="Let's shop!"
-					className={`${styles.closeButton} ${type === 'error' ? styles.error : ''}`}
-				></ButtonLink>
+				<div onClick={buttonAction}>
+					<ButtonLink
+						href={'/'}
+						text="Let's shop!"
+						className={`${styles.closeButton} ${type === 'error' ? styles.error : ''}`}
+					/>
+				</div>
 				{children}
 			</div>
 		</div>

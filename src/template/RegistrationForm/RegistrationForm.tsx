@@ -49,7 +49,7 @@ export default function RegistrationForm() {
 
 	useEffect(() => {
 		let countdown: NodeJS.Timeout | null = null;
-		if (isSuccessModalOpen && !isResendAvailable) {
+		if (isSuccessModalOpen) {
 			setTimer(59);
 			countdown = setInterval(() => {
 				setTimer((prev) => {
@@ -158,6 +158,7 @@ export default function RegistrationForm() {
 					);
 					if (res.success) {
 						setIsLoading(false);
+						setIsSuccessModalOpen(true);
 						Cookies.set(
 							CookiesEnums.access_token,
 							res.data.access_token.value,
@@ -176,7 +177,6 @@ export default function RegistrationForm() {
 							},
 						);
 						setUser(res.data.user);
-						setIsSuccessModalOpen(true);
 					} else if (!res.success) {
 						setIsLoading(false);
 						setError(res.error.message);
