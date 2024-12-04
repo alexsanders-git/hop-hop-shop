@@ -18,3 +18,18 @@ export const getMessageDashboardClient = async (id: number) => {
 		method: 'GET',
 	});
 };
+
+interface ISendMessage {
+	email: string;
+	message: string;
+}
+
+export const sendQuickAnswer = async (data: ISendMessage) => {
+	return await fetchWithAuth('contact-us/quick-answer/', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+	});
+};
