@@ -27,28 +27,14 @@ export const fetchWithCookies = async <T>(
 };
 
 export const Logout = async () => {
-	const baseURL = process.env.NEXT_PUBLIC_API_URL;
-	const token = Cookies.get(CookiesEnums.access_token);
-
 	try {
-		const response = await fetch(`${baseURL}/auth/logout/`, {
-			credentials: 'include',
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${token}`,
-			},
-		});
-		if (response.status === 204 || response.status === 200) {
-			Cookies.remove(CookiesEnums.access_token);
-			Cookies.remove(CookiesEnums.refresh_token);
-			Cookies.remove(UserEnum.user);
-			return true;
-		} else {
-			return false;
-		}
+		Cookies.remove(CookiesEnums.access_token);
+		Cookies.remove(CookiesEnums.refresh_token);
+		Cookies.remove(UserEnum.user);
+		console.log('removed');
+		return true;
 	} catch (error) {
-		console.error('Fetch failed:', error);
-		return error;
+		console.error('LogOut failed:', error);
+		return false;
 	}
 };

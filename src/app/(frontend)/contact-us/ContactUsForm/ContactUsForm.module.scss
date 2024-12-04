@@ -48,3 +48,48 @@
 .messageWrapper {
  margin-bottom: 35px;
 }
+
+
+
+
+.messageWrapper {
+	border: 2px solid var(--primary-color);
+	box-shadow: 3px 3px 0 3px var(--primary-color);
+	border-radius: 32px;
+	padding: 16px;
+	width: 100%;
+	background-color: var(--lightgreen-color);
+	position: relative;
+}
+.messageArea{
+	height: fit-content;
+	width: 100%;
+	height: 230px;
+	
+	font-weight: 700;
+	font-size: 22px;
+	line-height: 1.13;
+	line-height: 1.13;
+	letter-spacing: 2.2px;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+	box-sizing: border-box;
+	color: var(--primary-color);
+	margin-bottom: 15px;
+
+	&::placeholder{
+		color: var(--gray-color);
+	}
+}
+
+.characterCounter {
+	position: absolute;
+	right: 15px;
+	bottom: 5px;
+	z-index: 9999;
+
+	font-family: var(--font-roboto);
+	font-size: 18px;
+	font-weight: 700;
+	color:#507178;
+}

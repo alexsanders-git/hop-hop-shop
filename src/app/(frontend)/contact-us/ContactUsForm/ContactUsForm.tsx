@@ -14,7 +14,6 @@ import {
 import Input from '@/components/Input/Input';
 import Button from '@/components/Button/Button';
 import PhoneInputField from '@/components/phoneInputField/PhoneInputField';
-import Textarea from '@/components/textarea/Textarea';
 
 import styles from './ContactUsForm.module.scss';
 import { sendContactMessage } from '@/services/fetchData';
@@ -73,60 +72,78 @@ export default function ContactUsForm() {
 				}}
 				onSubmit={handleSubmit}
 			>
-				{() => (
-					<Form>
-						<div className={styles.credentialsWrapper}>
-							<div className={styles.inputContainer}>
-								<Input
-									className={styles.input}
-									title={'First Name'}
-									type={'text'}
-									name={'first_name'}
-									placeholder={'Alex'}
-								/>
-								<Input
-									className={styles.input}
-									title={'Last Name'}
-									type={'text'}
-									name={'last_name'}
-									placeholder={'Black'}
-								/>
+				{({ setFieldValue, values }) => {
+					const maxCharacters = 1500;
+
+					const handleInputChange = (
+						e: React.ChangeEvent<HTMLTextAreaElement>,
+					) => {
+						const { value } = e.target;
+						if (value.length <= maxCharacters) {
+							setFieldValue('message', value);
+						}
+					};
+
+					return (
+						<Form>
+							<div className={styles.credentialsWrapper}>
+								<div className={styles.inputContainer}>
+									<Input
+										className={styles.input}
+										title={'First Name'}
+										type={'text'}
+										name={'first_name'}
+										placeholder={'Alex'}
+									/>
+									<Input
+										className={styles.input}
+										title={'Last Name'}
+										type={'text'}
+										name={'last_name'}
+										placeholder={'Black'}
+									/>
+								</div>
+								<div
+									className={`${styles.inputContainer} ${styles.withPhoneInput}`}
+								>
+									<Input
+										className={styles.input}
+										title={'E-mail'}
+										type={'email'}
+										name={'email'}
+										placeholder={'exname@mail.com'}
+									/>
+									<Field
+										className={styles.input}
+										name={'phone_number'}
+										placeholder={'+38 066 666 66 66'}
+										title={'Phone Number'}
+										component={PhoneInputField<IFormValuesContactUs>}
+									/>
+								</div>
 							</div>
-							<div
-								className={`${styles.inputContainer} ${styles.withPhoneInput}`}
-							>
-								<Input
-									className={styles.input}
-									title={'E-mail'}
-									type={'email'}
-									name={'email'}
-									placeholder={'exname@mail.com'}
-								/>
+							<div className={styles.messageWrapper}>
 								<Field
-									className={styles.input}
-									name={'phone_number'}
-									placeholder={'+38 066 666 66 66'}
-									title={'Phone Number'}
-									component={PhoneInputField<IFormValuesContactUs>}
+									as="textarea"
+									id="message"
+									name="message"
+									placeholder="Quick Answer"
+									value={values.message}
+									className={styles.messageArea}
+									onChange={handleInputChange}
 								/>
+								<div className={styles.characterCounter}>
+									{values.message.length}/{maxCharacters}
+								</div>
 							</div>
-						</div>
-						<div className={styles.messageWrapper}>
-							<Textarea
-								name={'message'}
-								placeholder={'Write Your Message'}
-								title={'Message'}
-								className={styles.messageArea}
-								rows={6}
+							<Button
+								type="submit"
+								className={styles.sendMessageButton}
+								text="Send Message"
 							/>
-						</div>
-						<Button
-							type="submit"
-							className={styles.sendMessageButton}
-							text="Send Message"
-						/>
-					</Form>
-				)}
+						</Form>
+					);
+				}}
 			</Formik>
 			{contactUsModalOpen && (
 				<ActionModal

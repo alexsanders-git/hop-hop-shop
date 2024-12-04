@@ -13,7 +13,7 @@ function NavbarIconsLinks() {
 	const logout = async () => {
 		const res = await Logout();
 		if (res) {
-			router.push('/');
+			router.push('/login');
 		}
 	};
 

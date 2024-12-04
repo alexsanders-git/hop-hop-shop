@@ -49,7 +49,12 @@ export default async function MessageDetailsPage(props: IMessageProps) {
 				<p className={styles.detailsLabel}>Message Text</p>
 				<p className={styles.messageWrapper}>{message?.message}</p>
 			</div>
-			<MessageDetails />
+			<div className={styles.detailsWrapper}>
+				<label htmlFor="quickAnswer" className={styles.detailsLabel}>
+					Quick Answer
+				</label>
+				<MessageDetails email={message?.email} />
+			</div>
 		</div>
 	);
 }
