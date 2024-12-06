@@ -18,6 +18,9 @@ interface ICategory {
 
 interface IImage {
 	image: string;
+	id: number;
+	frontend_id: string;
+	order: number;
 }
 
 interface IProductAttributes {

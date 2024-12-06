@@ -9,7 +9,6 @@ import * as yup from 'yup';
 import image from '@/assets/png/Newdescription.png';
 import Button from '@/components/Button/Button';
 import CreateDashboardHeader from '@/components/dashboard/createDashboardHeader/CreateDashboardHeader';
-import DashboardUploadedImage from '@/components/dashboard/dashboardUploadedImage/DashboardUploadedImage';
 import ModalConfirmation from '@/components/dashboard/modalConfirmation/ModalСonfirmation';
 import Input from '@/components/Input/Input';
 import Loader from '@/components/Loader/Loader';
@@ -30,7 +29,15 @@ import { categoryValid } from '@/validation/dashboard/category/validation';
 
 import styles from './styles.module.scss';
 import { useFetch } from '@/hooks/useFetch';
-import UploadedFileBlockOld from '@/components/dashboard/UploadedFileBlockOld/UploadedFileBlockOld';
+import { CircleX } from 'lucide-react';
+import { closestCenter, DndContext, DragEndEvent } from '@dnd-kit/core';
+import {
+	arrayMove,
+	SortableContext,
+	verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import UploadedFileBlock from '@/components/dashboard/uploadedFileBlock/UploadedFileBlock';
+import { IPreview } from '@/app/dashboard/products/create/page';
 
 export interface IProps {
 	product: IProduct;
@@ -41,11 +48,6 @@ interface FormValues {
 	description: string;
 	category: string;
 	price: number;
-}
-
-interface IImage {
-	image: string;
-	id: number;
 }
 
 export default function EditProduct(props: IProps) {
@@ -65,9 +67,7 @@ export default function EditProduct(props: IProps) {
 	const [error, setError] = useState<string>('');
 	const [modal, setModal] = useState<boolean>(false);
 	const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-	const [previews, setPreviews] = useState<{ image: string; name: string }[]>(
-		[],
-	);
+	const [previews, setPreviews] = useState<IImage[]>([]);
 	const formikRef = useRef<FormikProps<FormValues>>(null);
 	const [images, setImages] = useState(product.images as IImage[]);
 	const fileInputRef = useRef<null | HTMLInputElement>(null);
@@ -77,12 +77,15 @@ export default function EditProduct(props: IProps) {
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files) {
 			const filesArray = Array.from(event.target.files);
-			setImages([]);
+
+			// Очищуємо попередні previews і selectedFiles
+			setPreviews([]);
 			setSelectedFiles(filesArray);
+
 			const previewsArray = filesArray.map((file) => {
 				const reader = new FileReader();
 				reader.readAsDataURL(file);
-				return new Promise<{ image: string; name: string }>((resolve) => {
+				return new Promise<IImage>((resolve) => {
 					reader.onloadend = () => {
 						resolve({ image: reader.result as string, name: file.name });
 					};
@@ -120,6 +123,53 @@ export default function EditProduct(props: IProps) {
 		}
 	};
 
+	const handleRemoveImage = (preview: IPreview) => {
+		const newPreviews = previews.filter((item) => item.id !== preview.id);
+		setPreviews(newPreviews);
+		const newSelectedFiles = selectedFiles.filter(
+			(item) => item.id !== preview.fileId,
+		);
+		setSelectedFiles(newSelectedFiles);
+	};
+
+	const changeImagePosition = (index: number) => {
+		// Копіюємо масиви для previews та selectedFiles
+		const newPreviews = [...previews];
+		const newSelectedFiles = [...selectedFiles];
+
+		// Міняємо місцями перший елемент і елемент за вказаним індексом
+		const tempPreview = newPreviews[0];
+		newPreviews[0] = newPreviews[index];
+		newPreviews[index] = tempPreview;
+
+		const tempFile = newSelectedFiles[0];
+		newSelectedFiles[0] = newSelectedFiles[index];
+		newSelectedFiles[index] = tempFile;
+
+		// Оновлюємо стейт з новими масивами
+		setPreviews(newPreviews);
+		setSelectedFiles(newSelectedFiles);
+	};
+
+	const onDragEnd = (event: DragEndEvent) => {
+		const { active, over } = event;
+		if (over?.id) {
+			if (active.id === over.id) {
+				return;
+			}
+			setPreviews((previews) => {
+				const oldIndex = previews.findIndex(
+					(preview) => preview.id === active.id,
+				);
+
+				const newIndex = previews.findIndex(
+					(preview) => preview.id === over.id,
+				);
+				return arrayMove(previews, oldIndex, newIndex);
+			});
+		}
+	};
+
 	const revalidateData = async () => {
 		await revalidateFunc('/dashboard/products');
 		await revalidateFunc('/dashboard/products/[id]', 'page');
@@ -129,48 +179,30 @@ export default function EditProduct(props: IProps) {
 
 	const handleSubmit = async (values: FormValues, actions: any) => {
 		setIsLoading(true);
+		const res = await updateProduct(product.id, {
+			...values,
+			category:
+				categories?.filter((item) => item.name === values.category)[0]?.id ||
+				null,
+		});
+
+		const formData = new FormData();
+
+		// Додаємо нові зображення у форматі FormData
 		if (selectedFiles.length) {
-			const res = await updateProduct(product.id, {
-				...values,
-				category:
-					categories?.filter((item) => item.name === values.category)[0]?.id ||
-					null,
+			selectedFiles.forEach((file) => {
+				formData.append('uploaded_images', file);
 			});
-			const formData = new FormData();
 
-			if (selectedFiles) {
-				selectedFiles.forEach((file) => {
-					formData.append('uploaded_images', file);
-				});
-			}
+			// Додаємо рядок frontend_ids у форматі через кому
+			const frontendIdsString = selectedFiles.map((_, i) => i).join(',');
+			formData.append('frontend_ids', frontendIdsString);
+		}
 
-			if (res.success && formData) {
-				const resUpload = await updateProductImage(res.data.id, formData);
-
-				if (resUpload.success) {
-					setIsLoading(false);
-					setSuccess('Product was updated');
-					actions.resetForm();
-					setSelectedFiles([]);
-					setPreviews([]);
-					await revalidateData();
-					setTimeout(() => {
-						router.push('/dashboard/products');
-						setSuccess('');
-					}, 2000);
-				} else if (!resUpload.success) {
-					setIsLoading(false);
-					setError(resUpload.error.message);
-				}
-			}
-		} else {
-			const res = await updateProduct(product.id, {
-				...values,
-				category:
-					categories?.filter((item) => item.name === values.category)[0]?.id ||
-					null,
-			});
-			if (res.success) {
+		if (res.success && formData) {
+			const resUpload = await updateProductImage(res.data.id, formData);
+			if (resUpload.success) {
+				// Очищуємо стани та перенаправляємо після успішного оновлення
 				setIsLoading(false);
 				setSuccess('Product was updated');
 				actions.resetForm();
@@ -178,12 +210,15 @@ export default function EditProduct(props: IProps) {
 				setPreviews([]);
 				await revalidateData();
 				setTimeout(() => {
-					setSuccess('');
 					router.push('/dashboard/products');
+					setSuccess('');
 				}, 2000);
+			} else {
+				setError(resUpload.error.message);
 			}
 		}
 	};
+
 	return (
 		<>
 			{/* eslint-disable */}
@@ -339,6 +374,64 @@ export default function EditProduct(props: IProps) {
 								</div>
 							</div>
 							<div className={styles.imageWrapper}>
+								{previews.length > 0 && (
+									<div
+										onMouseEnter={() => {
+											if (previews[0].image) {
+												setIsHovered(true);
+											}
+										}}
+										onMouseLeave={() => {
+											if (previews[0].image) {
+												setIsHovered(false);
+											}
+										}}
+										className={styles.firstPreview}
+									>
+										{isHovered && previews[0].image && (
+											<div
+												onClick={() => {
+													handleRemoveImage(previews[0]);
+												}}
+												className={styles.removeImage}
+											>
+												<CircleX />
+											</div>
+										)}
+										<Image
+											className={styles.firstImage}
+											width={480}
+											height={470}
+											src={previews[0].image}
+											alt={previews[0].name}
+										/>
+									</div>
+								)}
+								{previews.length > 0 ? (
+									<DndContext
+										collisionDetection={closestCenter}
+										onDragEnd={onDragEnd}
+									>
+										<SortableContext
+											items={previews}
+											strategy={verticalListSortingStrategy}
+										>
+											{previews.map((preview, index) => {
+												return (
+													<UploadedFileBlock
+														visibility={index === 0}
+														key={preview.id}
+														preview={preview}
+														handleRemoveImage={() => handleRemoveImage(preview)}
+														changeImagePosition={() =>
+															changeImagePosition(index)
+														}
+													/>
+												);
+											})}
+										</SortableContext>
+									</DndContext>
+								) : null}
 								<div className={styles.uploadImage}>
 									<span
 										className={`${styles.text} ${robotoCondensed.className}`}
@@ -349,7 +442,7 @@ export default function EditProduct(props: IProps) {
 										<input
 											ref={fileInputRef}
 											onChange={handleFileChange}
-											accept="image/png, image/jpeg"
+											accept="image/png, image/jpeg, image/heic"
 											className={styles.file}
 											type="file"
 											multiple={true}
@@ -364,36 +457,9 @@ export default function EditProduct(props: IProps) {
 										</div>
 									</div>
 								</div>
-
-								{images.length > 0 &&
-									images.map((img, index) => (
-										<DashboardUploadedImage
-											key={index}
-											index={index}
-											handleRemoveImages={handleRemoveImages}
-											image={img}
-										/>
-									))}
-								{previews.length > 1 &&
-									previews
-										.slice(1)
-										.map((preview, index) => (
-											<UploadedFileBlockOld
-												key={index}
-												image={preview}
-												index={index + 1}
-												handleRemoveImage={handleRemovePreview}
-											/>
-										))}
 								<div className={styles.buttonWrapper}>
 									<Button
-										disabled={
-											!(
-												isValid &&
-												dirty &&
-												(selectedFiles.length >= 0 || images.length >= 0)
-											)
-										}
+										disabled={!(isValid && dirty && selectedFiles.length > 0)}
 										text={'Show pre-publish view'}
 										style={'secondary'}
 										onClick={() => setShowPrePublish(true)}

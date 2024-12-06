@@ -52,7 +52,7 @@ export interface IPreview {
 	fileId: string;
 }
 
-interface FileWithId {
+export interface FileWithId {
 	id: string;
 	file: File;
 }
@@ -81,7 +81,7 @@ export default function DashboardProductsCreate() {
 	const fileInputRef = useRef<null | HTMLInputElement>(null);
 	const router = useRouter();
 	const [isHovered, setIsHovered] = useState<boolean>(false);
-
+	console.log(selectedFiles);
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files) {
 			const filesArray = Array.from(event.target.files || []);
@@ -179,6 +179,10 @@ export default function DashboardProductsCreate() {
 				formData.append('uploaded_images', file.file);
 			});
 		}
+
+		const frontendIdsString = selectedFiles.map((file) => file.id).join(',');
+		formData.append('frontend_ids', frontendIdsString);
+
 		if (res.success && formData) {
 			const resUpload = await createProductImage(res.data.id, formData);
 
